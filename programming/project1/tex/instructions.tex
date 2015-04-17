@@ -1,49 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage[cm]{fullpage}
-\usepackage{mathtools} %includes amsmath
-\usepackage{amsfonts}
-\usepackage{listings}
-\lstset{basicstyle=\ttfamily\small}
-\lstset{literate={~} {$\sim$}{1}}
-\lstset{showstringspaces=false}
-\usepackage{lmodern}
-\usepackage{scrextend}
-\usepackage{enumitem}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{tikz}
-\usepackage{soul}
-\usepackage{bm}
-\newcommand{\ttf}[1]{{\ttfamily #1}}
-\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
-\newcommand{\s}{\textbackslash}
-\renewcommand{\sp}{\ \ \ \ \ \ \ \ \ \ }
-\newcommand{\pt}{\partial}
-\newcommand{\fr}[2]{\dfrac{#1}{#2}}
-\newcommand{\pr}[1]{\left(#1\right)}
-\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
-\newcommand{\ma}[1]{\left(\begin{matrix}#1\end{matrix}\right)}
-\newcommand{\ar}[1]{\ensuremath{\begin{matrix} #1 \end{matrix}}}
-\newcommand{\pd}[3]{\ensuremath{ \dfrac{ \partial^{#1} #2 }{\partial #3 ^{#1}}}}
-\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
-\newcommand{\eth}{\ensuremath{^\text{th}}}
-\newcommand{\ld}{\ensuremath{\ldots}}
-\newcommand{\vd}{\ensuremath{\vdots}}
-\newcommand{\dd}{\ensuremath{\ddots}}
-\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
-\newcommand{\Nu}{\ensuremath{\mathrm{Nu}}}
-\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
-\newcommand{\Y}{\ensuremath{\Psi}}
-\newcommand{\y}{\ensuremath{\psi}}
-\newcommand{\si}{\ensuremath{\sigma}}
-\newcommand{\w}{\ensuremath{\omega}}
-\renewcommand{\d}{\ensuremath{\delta}}
-\newcommand{\D}{\ensuremath{\Delta}}
-\newcommand{\la}{\ensuremath{\lambda}}
-\newcommand{\La}{\ensuremath{\Lambda}}
-\newcommand{\tl}[1]{\ensuremath{\tilde{#1}}}
-\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
-\newcommand{\e}{\ensuremath{\bm\varepsilon}}
+\usepackage{mystyle}
 
 \title{Programming Project 1: Vibrational Frequencies and Normal Modes}
 \author{}
@@ -745,15 +701,15 @@ The total molecular energy at equilibrium is the sum of translational, rotationa
 \begin{figure}[htp]
 	\centering
 	\begin{tabular}{|ccc|}\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_0.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_0.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_0.pdf}\\front view&side view&top view\\\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_1.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_1.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_1.pdf}\\front view&side view&top view\\\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_2.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_2.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_2.pdf}\\front view&side view&top view\\\hline
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_0.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_0.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_0.pdf}\\front view&side view&top view\\\hline&&\\
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_1.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_1.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_1.pdf}\\front view&side view&top view\\\hline&&\\
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_2.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_2.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_2.pdf}\\front view&side view&top view\\\hline
 	\end{tabular}
 \end{figure}
 \newpage
@@ -762,15 +718,15 @@ The total molecular energy at equilibrium is the sum of translational, rotationa
 \begin{figure}[htp]
 	\centering
 	\begin{tabular}{|ccc|}\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_3.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_3.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_3.pdf}\\front view&side view&top view\\\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_4.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_4.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_4.pdf}\\front view&side view&top view\\\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_5.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_5.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_5.pdf}\\front view&side view&top view\\\hline
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_3.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_3.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_3.pdf}\\front view&side view&top view\\\hline&&\\
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_4.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_4.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_4.pdf}\\front view&side view&top view\\\hline&&\\
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_5.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_5.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_5.pdf}\\front view&side view&top view\\\hline
 	\end{tabular}
 \end{figure}
 \newpage
@@ -779,15 +735,15 @@ The total molecular energy at equilibrium is the sum of translational, rotationa
 \begin{figure}[htp]
 	\centering
 	\begin{tabular}{|ccc|}\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_6.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_6.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_6.pdf}\\front view&side view&top view\\\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_7.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_7.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_7.pdf}\\front view&side view&top view\\\hline&&\\
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-0_8.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{0-90_8.pdf}&
-	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{90-0_8.pdf}\\front view&side view&top view\\\hline
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_6.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_6.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_6.pdf}\\front view&side view&top view\\\hline&&\\
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_7.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_7.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_7.pdf}\\front view&side view&top view\\\hline&&\\
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-0_8.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/0-90_8.pdf}&
+	\includegraphics[width=5.5cm,clip=true,trim=3cm 2cm 3cm 2cm]{images/90-0_8.pdf}\\front view&side view&top view\\\hline
 	\end{tabular}
 \end{figure}
 
