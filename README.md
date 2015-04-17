@@ -31,7 +31,7 @@ summer-program
 │
 ├───programming
 │   │
-│   ├───project1
+│   ├───1
 │   │   │   instructions.pdf
 │   │   │
 │   │   ├───Bob
@@ -41,7 +41,7 @@ summer-program
 │   │   │   code.py
 │   │   ...
 │   │
-│   ├───project2
+│   ├───2
 │   ...
 │
 └───presentations
