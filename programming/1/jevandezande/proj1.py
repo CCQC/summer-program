@@ -1,12 +1,12 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import sys
 sys.path.insert(0, '../extra-files')
 from masses import get_mass
-import numpy as np
-import scipy.linalg as la
+sys.path.insert(0, '../../0/jevandezande')
 from molecule import Molecule
-from pprint import pprint
+import numpy as np
+import numpy.linalg as la
 
 # Read molecule
 mol = Molecule(open('../extra-files/molecule.xyz').read(), 'Bohr')
