@@ -1,10 +1,25 @@
-\usepackage[cm]{fullpage}
-\usepackage{mathtools} %includes amsmath
-\usepackage{amsfonts}
+\ProvidesPackage{mystyle}
+
+\usepackage[margin=1in]{geometry}
+
+\usepackage{tikz}
+\usepackage{amsmath}
+
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\small}
 \lstset{literate={~} {$\sim$}{1}}
 \lstset{showstringspaces=false}
+\lstset{language=Python}
+
+\newcommand{\linp}{\lstinputlisting}
+\newcommand{\linl}{\lstinline}
+
+
+
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{listings}
 \usepackage{lmodern}
 \usepackage{scrextend}
 \usepackage{enumitem}
@@ -13,11 +28,14 @@
 \usepackage{tikz}
 \usepackage{soul}
 \usepackage{bm}
-\newcommand{\ttf}[1]{{\ttfamily #1}}
+
 \newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\tl}[1]{\ensuremath{\tilde{#1}}}
+\newcommand{\pt}{\partial}
+
+\newcommand{\ttf}[1]{{\ttfamily #1}}
 \newcommand{\s}{\textbackslash}
 \renewcommand{\sp}{\ \ \ \ \ \ \ \ \ \ }
-\newcommand{\pt}{\partial}
 \newcommand{\fr}[2]{\dfrac{#1}{#2}}
 \newcommand{\pr}[1]{\left(#1\right)}
 \newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
@@ -40,6 +58,5 @@
 \newcommand{\D}{\ensuremath{\Delta}}
 \newcommand{\la}{\ensuremath{\lambda}}
 \newcommand{\La}{\ensuremath{\Lambda}}
-\newcommand{\tl}[1]{\ensuremath{\tilde{#1}}}
 \newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
 \newcommand{\e}{\ensuremath{\bm\varepsilon}}

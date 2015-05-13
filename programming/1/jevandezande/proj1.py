@@ -2,13 +2,12 @@
 
 import sys
 sys.path.insert(0, '../extra-files')
-from masses import get_mass
 sys.path.insert(0, '../../0/jevandezande')
+from masses import get_mass
 from molecule import Molecule
 import numpy as np
-import numpy.linalg as la
 
-# Read molecule
+# Create a molecule
 mol = Molecule(open('../extra-files/molecule.xyz').read(), 'Bohr')
 mol.to_angstrom()
 
@@ -37,7 +36,7 @@ Ht = M * H * M
 # Diagonalize the Hessian
 # \Tilde H = L \Lambda L^T
 
-k, L = la.eigh(Ht)
+k, L = np.linalg.eigh(Ht)
 
 # \lambda_a = \omega^2
 
@@ -54,10 +53,10 @@ out = ''
 line_form = '{:2s}' + '{: >15.10f}'*6 + '\n'
 for a, k_a in enumerate(k):
     if k_a < 0:
-        out += '{}\n{: >7.2f}i cm^-1\n'.format(mol.num, np.sqrt(-k_a) * convert)
+        out += '{}\n{: >7.2f}i cm^-1\n'.format(len(mol), np.sqrt(-k_a) * convert)
     else:
-        out += '{}\n{: >7.2f}  cm^-1\n'.format(mol.num, np.sqrt(k_a) * convert)
-    for i in range(mol.num):
+        out += '{}\n{: >7.2f}  cm^-1\n'.format(len(mol), np.sqrt(k_a) * convert)
+    for i in range(len(mol)):
         atom = mol.atoms[i]
         x, y, z = mol.geom[i]
         dx = Q[3*i, a]
