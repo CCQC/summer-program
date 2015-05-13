@@ -74,9 +74,21 @@ class Molecule:
             self.units = "Angstrom"
             self.geom /= 1.889725989
 
+    def copy(self):
+        """
+        Generates a copy of the current molecule
+        """
+        return Molecule(str(self), self.units)
+
 
 if __name__ == "__main__":
     mol = Molecule(open("../../1/extra-files/molecule.xyz").read())
     print(mol)
     mol.to_bohr()
     print(mol)
+
+    a = mol.copy()
+    print(a)
+    a.geom[0][0] += 5
+    print(a.geom[0][0])
+    print(mol.geom[0][0])

@@ -1,0 +1,37 @@
+\ProvidesPackage{mystyle}
+
+\usepackage[margin=1in]{geometry}
+
+\usepackage{tikz}
+\usepackage{amsmath}
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small}
+\lstset{literate={~} {$\sim$}{1}}
+\lstset{showstringspaces=false}
+\lstset{language=Python}
+
+\newcommand{\linp}{\lstinputlisting}
+\newcommand{\linl}{\lstinline}
+
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{lmodern}
+\usepackage{scrextend}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\newcommand{\ttf}[1]{{\ttfamily #1}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\s}{\textbackslash}
+\renewcommand{\sp}{\ \ \ \ \ \ \ \ \ \ }
+\newcommand{\pt}{\partial}
+\newcommand{\fr}[2]{\dfrac{#1}{#2}}
+\newcommand{\pr}[1]{\left(#1\right)}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\ma}[1]{\left(\begin{matrix}#1\end{matrix}\right)}
+\newcommand{\pd}[3]{\ensuremath{ \dfrac{ \partial^{#1} #2 }{\partial #3 ^{#1}}}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
