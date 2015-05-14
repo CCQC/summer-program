@@ -8,11 +8,11 @@
 \maketitle
 
 \section*{Description}
-The aim of this programming project is compute harmonic vibrational frequencies
+The aim of this programming project is to compute harmonic vibrational frequencies
 using second derivatives of the potential energy surface. See
 section~\ref{background} for details on the theory.
 
-In essence, the task of this project is boils down to two steps:
+In essence, the task of this project boils down to two steps:
 \begin{enumerate}
     \item formation of the mass-weighted Hessian matrix, which has elements
 \begin{align}
@@ -62,11 +62,11 @@ vibrational modes, there will be three {\it translational normal coordinates}
 for which $\la_A=0$ and three {\it rotational normal coordinates} (two for
 linear systems) for which $\la_A=0$ holds at an equilibrium geometry.
 
-In order to complete this project you will need a hessian, molecule, code you
-wrote to extract information from an xyz file, and a file called \ttf{masses.py}
-containing masses for the most stable isotope of every element will also be
-provided. The files are available in the aptly named folder
-\texttt{extra-files/}.
+In order to complete this project you will need a hessian, a molecule, and the
+code you wrote to extract information from an xyz file. A file called
+\ttf{masses.py} containing masses for the most stable isotope of every
+element will also be provided. The files are available in the aptly named
+folder \texttt{extra-files/}.
 
 \newpage
 \section{Procedure}
@@ -77,8 +77,8 @@ Python where the necessary files are (obviously change the name to yours).
 \linp[firstline=1, lastline=5]{../jevandezande/proj1.py}
 
 \subsection{Read in the molecule}
-Import your script, read in the file \texttt{molecule.xyz} and convert to
-Angstroms.
+Import your script, read in the file \texttt{molecule.xyz} and convert the units
+to Angstroms.
 
 \subsection{Read in the Hessian matrix}
 Read in each of the elements of the hessian matrix (\texttt{hessian.dat}) and
@@ -423,7 +423,7 @@ corresponds to a Cartesian displacement by
 where the $\bm{l}_A$ represent column vectors of $\bo{L}$, i.e.
 $\bo{L}=\ma{\bm{l}_1&\ld&\bm{l}_{3N}}$. We see that each $Q_A$ corresponds to a
 collective displacement $\D\bo{X}=\bo{M}^{-\frac{1}{2}}\bm{l}_A$ of several
-nuclei. The noral coordinates for water are included in an appendix to this
+nuclei. The normal coordinates for water are included in an appendix to this
 handout, and a more detailed interpretation of what these motions represent
 will be given in the next section. Note that the Hessian matrix $\bo{H}$
 changes continuously across the potential energy surface, so that each point on
@@ -646,7 +646,7 @@ coordinates would actually require linear combinations of rotational modes
 (section \ref{rot}) with vibrational ones (section \ref{vib}), and these
 motions are in general coupled to each other. For our purposes, we will simply
 note one can, to a good first approximation, ignore the interference of
-rotations when considering vibrational motion. \footnote{This briefly discussed
+rotations when considering vibrational motion. \footnote{This is briefly discussed
 in N.\ V.\ Cohan and H.\ F.\ Hameka, {\it J. Chem. Phys.} 45, 4392 (1966).}
 
 The remaining $3N-6$ coordinates ($3N-5$ for linear molecules) will always have
