@@ -2,6 +2,7 @@ from __future__ import print_function
 import psi4
 import numpy as np
 
+
 class MP2:
     """
     MP2 class
@@ -15,7 +16,8 @@ class MP2:
         self.gao = rhf_obj.g
         self.ehf = rhf_obj.E
 
-        self.transform_integrals_noddy()
+        self.transform_integrals()
+        #self.transform_integrals_noddy()
         #self.transform_integrals_einsum()
 
     def compute_energy(self):
@@ -73,3 +75,44 @@ class MP2:
         C = self.C
         self.gmo = np.einsum('PQRS,Pp,Qq,Rr,Ss->pqrs', gao, C, C, C, C)
 
+    def transform_integrals(self):
+        """
+        Transform integrals the efficient way O(N^5)
+        """
+        gao = self.gao
+        nbf = self.nbf
+        C = self.C
+
+        g = np.zeros(gao.shape)
+        for mu in range(nbf):
+            for nu in range(nbf):
+                for rho in range(nbf):
+                    for s in range(nbf):
+                        for sigma in range(nbf):
+                            g[mu, nu, rho, s] += gao[mu, nu, rho, sigma]*C[sigma, s]
+
+        gmo = np.zeros(gao.shape)
+        for mu in range(nbf):
+            for nu in range(nbf):
+                for r in range(nbf):
+                    for s in range(nbf):
+                        for rho in range(nbf):
+                            gmo[mu, nu, r, s] += g[mu, nu, rho, s]*C[rho, r]
+
+        g.fill(0)
+        for mu in range(nbf):
+            for q in range(nbf):
+                for r in range(nbf):
+                    for s in range(nbf):
+                        for nu in range(nbf):
+                            g[mu, q, r, s] += gmo[mu, nu, r, s]*C[nu, q]
+
+        gmo.fill(0)
+        for p in range(nbf):
+            for q in range(nbf):
+                for r in range(nbf):
+                    for s in range(nbf):
+                        for mu in range(nbf):
+                            gmo[p, q, r, s] += g[mu, q, r, s]*C[mu, p]
+
+        self.gmo = gmo
