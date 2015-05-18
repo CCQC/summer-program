@@ -85,6 +85,7 @@ class RHF:
 
         psi4.print_out('RHF Energy: ' + str(E))
 
+        self.e  = e
         self.C = C
         self.E = E
 
