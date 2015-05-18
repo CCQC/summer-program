@@ -16,6 +16,7 @@ double_displace_form = 'disp/a{}_{}{}.a{}_{}{}'
 
 input_form = """molecule {{
 {}
+units bohr
 }}
 
 set {{
@@ -137,7 +138,7 @@ for atom1, coord1 in np.ndindex(mol.geom.shape):
         if atom1 == atom2 and coord1 == coord2:
             print(atom1, coord1)
             H[3*atom1 + coord1][3*atom2 + coord2] = \
-                (E1(atom1, coord1, '+') + E1(atom2, coord2, '-') - e0)/DISP**2
+                (E1(atom1, coord1, '+') + E1(atom2, coord2, '-') - e0)/(DISP**2)
         else:
             print(atom1, coord1, atom2, coord2)
             H[3*atom1 + coord1][3*atom2 + coord2] = \
@@ -145,9 +146,9 @@ for atom1, coord1 in np.ndindex(mol.geom.shape):
                 + E2(atom1, coord1, atom2, coord2, '-', '-')
                 - E1(atom1, coord1, '+') - E1(atom1, coord1, '-')
                 - E1(atom2, coord2, '+') - E1(atom2, coord2, '-')
-                + 2*e0) / 2*DISP**2
+                + 2*e0) / (2*DISP**2)
 
 
 hess_form = '{: 5.3f} '*len(mol)*3
-out = '\n'.join([hess_form.format(*row) for row in hess_form])
+out = '\n'.join([hess_form.format(*row) for row in H])
 print(out)
