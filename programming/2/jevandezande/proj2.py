@@ -21,8 +21,8 @@ units bohr
 
 set {{
     basis sto-3g
-    e_converge      10
-    d_converge      10
+    e_convergence   10
+    d_convergence   10
 }}
 
 energy('{}')
@@ -129,20 +129,20 @@ e0 = get_energy('disp/e0.out')
 print("E0: " + str(e0))
 
 # Iterate over all pairs of coordinates in the upper triangle
-#for q1, q2 in cwr(range(3*len(mol)), r=2):
-#    # Displace forwards and back
-#    for disp in [DISP, -DISP]:
-#        sign = '+' if disp > 0 else '-'
-#        if q1 == q2:
-#            print(q1)
-#            inp_name = single_displace_form.format(q1, sign) + '.in'
-#            displaced = displace(mol, q1, disp, q2, 0)
-#        else:
-#            print(q1, q2)
-#            inp_name = double_displace_form.format(q1, sign, q2, sign) + '.in'
-#            displaced = displace(mol, q1, disp, q2, disp)
-#        write_input(inp_name, displaced)
-#        run(inp_name)
+for q1, q2 in cwr(range(3*len(mol)), r=2):
+    # Displace forwards and back
+    for disp in [DISP, -DISP]:
+        sign = '+' if disp > 0 else '-'
+        if q1 == q2:
+            print(q1, sign)
+            inp_name = single_displace_form.format(q1, sign) + '.in'
+            displaced = displace(mol, q1, disp, q2, 0)
+        else:
+            print(q1, q2, sign)
+            inp_name = double_displace_form.format(q1, sign, q2, sign) + '.in'
+            displaced = displace(mol, q1, disp, q2, disp)
+        write_input(inp_name, displaced)
+        run(inp_name)
 
 
 # Form an empty Hessian matrix
