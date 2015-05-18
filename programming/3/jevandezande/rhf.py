@@ -25,7 +25,7 @@ class RHF:
         self.g = np.array(mints.ao_eri())
 
         # Determine the number of electrons and the number of doubly occupied orbitals
-        self.nelec = 0
+        self.nelec = -mol.molecular_charge()
         for A in range(mol.natom()):
             self.nelec += int(mol.Z(A))
         if mol.multiplicity() != 1 or self.nelec % 2:
