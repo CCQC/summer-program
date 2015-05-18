@@ -20,7 +20,9 @@ units bohr
 }}
 
 set {{
-    basis 3-21G
+    basis sto-3g
+    e_converge      10
+    d_converge      10
 }}
 
 energy('{}')
