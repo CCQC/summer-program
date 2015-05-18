@@ -27,7 +27,7 @@ class RHF:
         # Determine the number of electrons and the number of doubly occupied orbitals
         self.nelec = 0
         for A in range(mol.natom()):
-            self.nelec += mol.Z(A)
+            self.nelec += int(mol.Z(A))
         if mol.multiplicity() != 1 or self.nelec % 2:
             raise Exception("This code only allows closed-shell molecules")
         self.ndocc = self.nelec / 2
