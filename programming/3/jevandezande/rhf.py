@@ -83,7 +83,7 @@ class RHF:
 
             psi4.print_out(scf_form.format(i, E))
 
-        psi4.print_out('RHF Energy: ' + str(E))
+        psi4.print_out('RHF Energy: {:20.15f}\n'.format(E))
 
         self.e  = e
         self.C = C
