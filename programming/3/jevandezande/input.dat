@@ -1,4 +1,4 @@
-molecule {
+molecule mol {
     0   1
     O
     H   1   0.96
@@ -13,9 +13,8 @@ set {
 }
 
 # Used to initialize everything
-energy('scf')
+mol.update_geometry()
 
-mol = psi4.get_active_molecule()
 mints = psi4.MintsHelper()
 
 # Call your restricted Hartree-Fock code here
