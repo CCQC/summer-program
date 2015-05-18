@@ -85,6 +85,8 @@ class RHF:
 
         psi4.print_out('RHF Energy: ' + str(E))
 
+        self.C = C
+
         return E
 
     def build_fock(self, D):
