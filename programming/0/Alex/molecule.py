@@ -41,6 +41,14 @@ class Molecule(object):
         """
         return len(self.atoms)
 
+    def ang_to_bohr(self):
+        if self.units == "Angstrom":
+            self.coords *= 1.889725989
+
+    def bohr_to_ang(self):
+        if self.units == "Bohr":
+            self.coords /= 1.889725989
+
     def __str__(self):
         """
         Format the molecule in a nice way
@@ -53,4 +61,5 @@ if __name__ == "__main__":
     geom_str = open("../../extra-files/molecule.xyz").read()
     mol = Molecule(geom_str)
     print(len(mol))
+    
 
