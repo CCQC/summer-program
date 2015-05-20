@@ -1,0 +1,40 @@
+import numpy as np
+
+class Molecule(object):
+    """
+    A simple molecule
+    """
+
+    def __init__(self, geom_str, units="Angstrom"):
+        """
+        Make a new molecule
+
+        :param geom_str: a string of the desired geometry
+        :param units: units of the geometry, Bohr or Angstrom
+        """
+
+        self.units = units
+        self.read(geom_str)
+
+    def read(self, geom_str):
+        """
+        Reads in the molecular geometry
+        :param geom_str: a string containing molecular geometry
+        """
+        lines = geom_str.strip().split("\n")
+        num = int(lines[0])
+        atoms = []
+        coords = []
+
+        for line in lines[2:]:
+            atom, x, y, z = line.split()
+            atoms.append(atom)
+            coords.append([float(x), float(y), float(z)])
+
+        self.atoms = atoms
+        self.coords = np.array(coords)
+
+
+if __name__ == "__main__":
+    geom_str = open("../../extra-files/molecule.xyz").read()
+    mol = Molecule(geom_str)
