@@ -34,7 +34,23 @@ class Molecule(object):
         self.atoms = atoms
         self.coords = np.array(coords)
 
+    def __len__(self):
+        """
+
+        :return: the length of the molecule
+        """
+        return len(self.atoms)
+
+    def __str__(self):
+        """
+        Format the molecule in a nice way
+        """
+        line_form = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n"
+        out = "{:d}\n{:s}\n".format(len(self)), self.unite
+
 
 if __name__ == "__main__":
     geom_str = open("../../extra-files/molecule.xyz").read()
     mol = Molecule(geom_str)
+    print(len(mol))
+
