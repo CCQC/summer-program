@@ -1,5 +1,6 @@
 __author__ = 'Adam'
 
+import numpy as np
 
 class Molecule(object):
     """
@@ -29,14 +30,46 @@ class Molecule(object):
             atom, x, y, z = line.split()
             atoms.append(atom)
             coords.append([float(x),float(y),float(z)])
+        self.atoms = atoms
+        self.coords = np.array(coords)
+        print("Atoms Present: ")
         print(atoms)
-        print(coords)
+        print ("Atomic Coordinates:")
+        print(self.coords)
+    def __len__(self):
+        """
+        Gives the number of atoms in the molecule
+        :return:
+        """
+        return len(self.atoms) #redefines length function
 
 
+    def ang_to_bohr(self):
+        """
+         Converts units from Angstrom to Bohr
+        """
+        if self.units == "Angstrom":
+            self.units = "Bohr"
+            self.coords *= 1.889725989
+            print("These are the units in Bohr: ")
+            return self.coords
 
 
+    def bohr_to_ang(self):
+        """
+        Converts bohr to ang
+        """
+        if self.units == "Bohr":
+            self.units = "Angstrom"
+            self.coords /= 1.889725989
+            print("These are the units in Angstroms: ")
+            return self.coords
 
 if __name__ == "__main__":
-    geom_str = open("../../extra-files/molecule.xyz").read()
-    print(geom_str)
-    mol = Molecule(geom_str)
+    mol = Molecule(open("../../extra-files/molecule.xyz").read())
+    print("The length of this molecule is" ,len(mol))
+    print(mol.ang_to_bohr())
+    print(mol.bohr_to_ang())
+
+
+

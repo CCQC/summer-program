@@ -36,7 +36,6 @@ class Molecule:
         """
         Reads a geometry string and saves the results
         :param geom_str:
-        
         Generates the following object variables
         :self.atoms: a list of the atoms
         :self.geom: a numpy array with the first index corresponding to the atom
