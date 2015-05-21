@@ -31,6 +31,7 @@ class Molecule(object):
             atoms.append(atom)
             coords.append([float(x), float(y), float(z)])
 
+        self.num = num
         self.atoms = atoms
         self.coords = np.array(coords)
 
@@ -43,10 +44,12 @@ class Molecule(object):
 
     def ang_to_bohr(self):
         if self.units == "Angstrom":
+            self.units = "Bohr"
             self.coords *= 1.889725989
 
     def bohr_to_ang(self):
         if self.units == "Bohr":
+            self.units = "Angstrom"
             self.coords /= 1.889725989
 
     def __str__(self):
@@ -54,12 +57,20 @@ class Molecule(object):
         Format the molecule in a nice way
         """
         line_form = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n"
-        out = "{:d}\n{:s}\n".format(len(self)), self.unite
+        out = "{:d}\n{:s}\n".format(len(self), self.units)
+        for atom, xyz in zip(self.atoms,self.coords):
+            out += line_form.format(atom, xyz)
 
+    def print(self):
+        print(self.num)
+        print(self.atoms)
+        print(self.coords)
 
 if __name__ == "__main__":
     geom_str = open("../../extra-files/molecule.xyz").read()
     mol = Molecule(geom_str)
-    print(len(mol))
-    
+    mol.ang_to_bohr()
+    mol.print()
+
+
 
