@@ -1,7 +1,7 @@
 Summer Program
 ==============
 
-Repository for all summer program related programming and presentations.
+Repository for all summer program related programming.
 
 Git
 ---
@@ -29,25 +29,16 @@ Organization
 summer-program
 │   README.md
 │
-├───programming
+├───0
+│   │   instructions.pdf
 │   │
-│   ├───1
-│   │   │   instructions.pdf
-│   │   │
-│   │   ├───Bob
-│   │   │   code.py
-│   │   │
-│   │   ├───Jill
-│   │   │   code.py
-│   │   ...
+│   ├───Bob
+│   │   code.py
 │   │
-│   ├───2
+│   ├───Jill
+│   │   code.py
 │   ...
 │
-└───presentations
-    │
-    ├───scf
-    │   scf.tex
-    │   scf.pdf
-    ...
+├───1
+...
 ```
