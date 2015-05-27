@@ -20,6 +20,9 @@ A few helpful hints
 * Always remember to use `git pull` before doing a `git push`, otherwise it 
 may give you an error message if your local repository is not up to date with
 the one on github.
+* When commiting code, always provide at least a one-line summary of the
+changes you made. If you need to write more, follow the [following
+guidelines](http://chris.beams.io/posts/git-commit/)
 
 
 Organization
