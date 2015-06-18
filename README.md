@@ -1,7 +1,20 @@
 Summer Program
 ==============
 
-Repository for all summer program related programming and presentations.
+Repository for all summer program related programming. If you have any questions,
+remember that Google and [Stack Overflow](http://stackoverflow.com/) are your best
+friends.
+
+Python
+------
+Download the [Anaconda package with Python3.4](http://continuum.io/downloads#34)
+(you'll have to click on 'I want Python3.4'). To learn how to code Python, use
+[Learn Python the Hard Way](http://learnpythonthehardway.org/book/). It will take
+time, but this is the best resource I have found, as it skips all the hand-holding
+that other resources do. One note, all print lines will need parantheses, a major
+change from Python2. Also, starting on excersise 6, see if you can learn how to use
+the [string format](https://docs.python.org/3.5/library/string.html#string-formatting)
+instead of the '%' to format strings.
 
 Git
 ---
@@ -20,6 +33,9 @@ A few helpful hints
 * Always remember to use `git pull` before doing a `git push`, otherwise it 
 may give you an error message if your local repository is not up to date with
 the one on github.
+* When commiting code, always provide at least a one-line summary of the
+changes you made. If you need to write more, follow the [following
+guidelines](http://chris.beams.io/posts/git-commit/)
 
 
 Organization
@@ -29,25 +45,16 @@ Organization
 summer-program
 │   README.md
 │
-├───programming
+├───0
+│   │   instructions.pdf
 │   │
-│   ├───1
-│   │   │   instructions.pdf
-│   │   │
-│   │   ├───Bob
-│   │   │   code.py
-│   │   │
-│   │   ├───Jill
-│   │   │   code.py
-│   │   ...
+│   ├───Bob
+│   │   code.py
 │   │
-│   ├───2
+│   ├───Jill
+│   │   code.py
 │   ...
 │
-└───presentations
-    │
-    ├───scf
-    │   scf.tex
-    │   scf.pdf
-    ...
+├───1
+...
 ```
