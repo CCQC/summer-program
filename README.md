@@ -9,13 +9,13 @@ Projects
 --------
 
 <ol start="0">
-  <li>[Molecule Class](https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf)</li>
-  <li>[Vibrational Frequencies](https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf)</li>
-  <li>[Finite-difference Hessians](https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf)</li>
-  <li>[RHF](https://github.com/CCQC/summer-program/blob/master/3/instructions.pdf)</li>
-  <li>[RMP2](https://github.com/CCQC/summer-program/blob/master/4/instructions.pdf)</li>
-  <li>[UHF](https://github.com/CCQC/summer-program/blob/master/5/instructions.pdf)</li>
-  <li>[MP2](https://github.com/CCQC/summer-program/blob/master/6/instructions.pdf)</li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf">Molecule Class</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf">Vibrational Frequencies</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf">Finite-difference Hessians</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/3/instructions.pdf">Closed-shell RHF</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/4/instructions.pdf">Closed-shell MP2</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/5/instructions.pdf">UHF</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/6/instructions.pdf">MP2</a></li>
 </ol>
 
 
