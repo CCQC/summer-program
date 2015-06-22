@@ -11,7 +11,7 @@ Projects
 <ol start="0">
   <li><a href="https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf">Molecule Class</a></li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf">Vibrational Frequencies</a></li>
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf">Finite-difference Hessians</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf">Numerical Hessian</a></li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/3/instructions.pdf">Closed-shell RHF</a></li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/4/instructions.pdf">Closed-shell MP2</a></li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/5/instructions.pdf">UHF</a></li>
