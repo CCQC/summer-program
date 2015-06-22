@@ -48,10 +48,10 @@ summer-program
 ├───0
 │   │   instructions.pdf
 │   │
-│   ├───Bob
+│   ├───username1
 │   │   code.py
 │   │
-│   ├───Jill
+│   ├───username2
 │   │   code.py
 │   ...
 │
