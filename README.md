@@ -62,10 +62,12 @@ summer-program
 Contents
 --------
 
-0. Molecule Class
-1. Vibrational Frequencies
-2. Finite-difference Hessians
-3. RHF
-4. R-MP2
-5. UHF (spin-orbital)
-6. MP2 (spin-orbital)
+<ol start="0">
+  <li>Molecule Class</li>
+  <li>Vibrational Frequencies</li>
+  <li>Finite-difference Hessians</li>
+  <li>RHF</li>
+  <li>RMP2</li>
+  <li>UHF</li>
+  <li>MP2</li>
+</ol>
