@@ -5,6 +5,20 @@ Repository for all summer program related programming. If you have any questions
 remember that Google and [Stack Overflow](http://stackoverflow.com/) are your best
 friends.
 
+Projects
+--------
+
+<ol start="0">
+  <li>[Molecule Class](https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf)</li>
+  <li>[Vibrational Frequencies](https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf)</li>
+  <li>[Finite-difference Hessians](https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf)</li>
+  <li>[RHF](https://github.com/CCQC/summer-program/blob/master/3/instructions.pdf)</li>
+  <li>[RMP2](https://github.com/CCQC/summer-program/blob/master/4/instructions.pdf)</li>
+  <li>[UHF](https://github.com/CCQC/summer-program/blob/master/5/instructions.pdf)</li>
+  <li>[MP2](https://github.com/CCQC/summer-program/blob/master/6/instructions.pdf)</li>
+</ol>
+
+
 Python
 ------
 Download the [Anaconda package with Python3.4](http://continuum.io/downloads#34)
@@ -59,15 +73,3 @@ summer-program
 ...
 ```
 
-Contents
---------
-
-<ol start="0">
-  <li>Molecule Class</li>
-  <li>Vibrational Frequencies</li>
-  <li>Finite-difference Hessians</li>
-  <li>RHF</li>
-  <li>RMP2</li>
-  <li>UHF</li>
-  <li>MP2</li>
-</ol>
