@@ -1,6 +1,6 @@
 import sys
 sys.path.insert(0, '../extra-files')
-sys.path.insert(0, '../../0/Adam')
+sys.path.insert(0, '../../0/adabbott')
 
 from molecule import Molecule
 
