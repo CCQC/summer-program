@@ -20,7 +20,7 @@ class UHF:
       self.X = np.matrix(la.inv(la.sqrtm(S)))              # orthogonalizer (X=S^-1/2)
 
       self.Vnu  = mol.nuclear_repulsion_energy()
-      self.nocc = int( sum(mol.Z(A) for A in range(mol.natom())) - mol.molecular_charge() ) # num e- = sum_A Z_A - mol. charge
+      self.nocc = int( sum(mol.Z(A) for A in range(mol.natom())) - mol.molecular_charge() ) # num e- = sum(Z_A) - mol. charge
 
 
     def compute_energy(self):
