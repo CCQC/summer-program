@@ -33,19 +33,18 @@ class UHF:
         v = np.einsum('mnrs,ns', g, D)   # e- field  v_mu,nu = sum_rh,si <mu nu||rh si> D_nu,si
         F = h + v                        # build fock matrix
 
-        tF = X*F*X                       # transform to orthogonalized AO basis
+        tF    = X*F*X                    # transform to orthogonalized AO basis
         e, tC = la.eigh(tF)              # diagonalize
-        C = X * tC                       # backtransform
-        oC = C[:,:nocc]                  # get occupied MO coefficients
-        D = oC * oC.T                    # build density matrix
+        C     = X * tC                   # backtransform
+        oC    = C[:,:nocc]               # get occupied MO coefficients
+        D     = oC * oC.T                # build density matrix
 
         E  = np.trace((h + v/2)*D) + Vnu # compute energy by tracing with density matrix
 
-        dE = E - self.E
         self.E, self.C = E, C # save MO coefficients and energy
-
-        print('{:-3d}{:20.15f}{:20.15f}'.format(i, E, dE))
-        if(np.fabs(dE) < psi4.get_global_option('E_CONVERGENCE')): break
+        dE = E - self.E       # get change in energy
+        print('{:-3d}{:20.15f}{:20.15f}'.format(i, E, dE)) # print progress
+        if(np.fabs(dE) < psi4.get_global_option('E_CONVERGENCE')): break # quit if converged
 
       return self.E
 
