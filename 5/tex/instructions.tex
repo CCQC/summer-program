@@ -10,45 +10,146 @@
 
 \maketitle
 
-\section*{Working Equations}
-
+\noindent
+\bmit{Spatial AO basis $\{\x_\mu\}$ integrals.}
 \begin{align}
-  \bo{X}
-=&\
-  \bo{S}^{-\frac{1}{2}}
-\\
-  D_{\mu\nu}
-=&\
-  \sum_{i=1}^{n_\text{occ}}
-  C_{\mu i}^* C_{\nu i}
-\\
+\label{space-ao-ints}
+&
+  \ol{S}_{\mu\nu}
+=
+  \ip{\x_{\mu}|\x_{\nu}}
+&&
+  \ol{T}_{\mu\nu}
+=
+  -\tfrac{1}{2}\ip{\x_{\mu}|\nabla_1^2|\x_{\nu}}
+&&
+  \ol{V}_{\mu\nu}
+=
+  \sum_A\ip{\x_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\x_{\nu}}
+&&
+  (\mu\nu|\rho\si)
+=
+  \ip{\x_\mu\x_\rho|\fr{1}{|\bo{r}_1-\bo{r}_2|}|\x_\nu\x_\si}
+\end{align}
+
+
+\noindent
+\bmit{Spin-AO basis $\{\x_\mu\a\}\cup\{\x_\mu\b\}$ integrals.}
+\begin{align}
+\label{spin-ao-ints-1}
+&
+  \bo{S}
+=
+  \ma{\ol{\bo{S}}&0\\0&\ol{\bo{S}}}
+&&
+  \bo{T}
+=
+  \ma{\ol{\bo{T}}&0\\0&\ol{\bo{T}}}
+&&
+  \bo{V}
+=
+  \ma{\ol{\bo{V}}&0\\0&\ol{\bo{V}}}
+&&
+  \bo{G}
+=
+  \ma{\ol{\bo{G}}&0\\0&\ol{\bo{G}}}
+&&
+  (\bo{G})_{\mu\nu}
+=
+  \ma{(\ol{\bo{G}})_{\mu\nu}&0\\0&(\ol{\bo{G}})_{\mu\nu}}
+\end{align}
+\begin{align}
+\label{spin-ao-ints-2}
+&
+\text{where $\ol{\bo{G}}$ represents $(\mu\nu|\rho\si)$ viewed as a matrix of matrices:}
+\ \ 
+  \ol{\bo{G}}
+=
+  \ma{(\ol{\bo{G}})_{\mu\nu}},
+\ \ 
+  (\ol{\bo{G}})_{\mu\nu}
+=
+  [((\ol{\bo{G}})_{\mu\nu})_{\rho\si}]
+=
+  [(\mu\nu|\rho\si)]
+\end{align}
+
+
+\noindent
+\bmit{Working equations.}
+\begin{align}
+\label{fock-matrix}
+&&
   F_{\mu\nu}
 =&\
   h_{\mu\nu}
 +
-  \sum_{\rho\si}
-  \ip{\mu\rho||\nu\si}
-  D_{\rho\si}
-\\
-  E
-=&\
-  \sum_{\mu\nu}
-  (h_{\mu\nu}+\tfrac{1}{2}v_{\mu\nu})D_{\mu\nu}
-\sp\text{where }
+  v_{\mu\nu}
+\sp
+  h_{\mu\nu}
+=
+  T_{\mu\nu}+V_{\mu\nu}
+\sp
   v_{\mu\nu}
 =
   \sum_{\rho\si}
   \ip{\mu\rho||\nu\si}
   D_{\rho\si}
+\sp
+  D_{\mu\nu}
+=
+  \sum_{i=1}^{n_\text{occ}}
+  C_{\mu i}^* C_{\nu i}
+\\
+\label{energy}
+&&
+  E
+=&\
+  E_e
++
+  V_\mathrm{Nu}
+\sp
+  E_e
+=
+  \sum_{\mu\nu}
+  (h_{\mu\nu}+\tfrac{1}{2}v_{\mu\nu})D_{\mu\nu}
+\\
+\label{orthogonalizer}
+&&
+  \bo{X}
+=&\
+  \bo{S}^{-\frac{1}{2}}
+\sp
+  \bo{\tl{F}}
+=
+  \bo{X}\bo{F}\bo{X}
+\sp
+  \bo{C}
+=
+  \bo{X}
+  \bo{\tl{C}}
 \end{align}
 
-\section*{Procedure}
+\subsection*{Procedure}
 
+\bmit{Initialization.}
 \begin{enumerate}
-  \item Read in AO basis integrals
-  \item Transform integrals from spatial AO basis $\{\x_\mu\}$ to space-spin AO basis $\{\x_\mu\a,\x_\mu\b\}$
+  \item Read in nuclear repulsion energy ($V_\mathrm{Nu}$) from the Molecule object
+  \item Read in AO basis integrals from LibMints (eq. \ref{space-ao-ints})
+  \item Transform integrals from spatial AO basis to spin-AO basis (eq. \ref{spin-ao-ints-1} and \ref{spin-ao-ints-2})
+  \item Form orthogonalizer $\bo{X}$ (eq. \ref{orthogonalizer})
+\end{enumerate}
+
+\noindent
+\bmit{Iteration to self-consistency.}
+\begin{enumerate}
   \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $F_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
-  \item 
+  \item\label{loop} Build Fock matrix (eq.~\ref{fock-matrix})
+  \item Transform $\bo{F}\mapsto\bo{\tl{F}}$ to orthogonalized AO basis (eq.~\ref{orthogonalizer})
+  \item Diagonalize $\bo{\tl{F}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$
+  \item Backtransform $\bo{\tl{C}}\mapsto\bo{C}$ to original AO basis (eq.~\ref{orthogonalizer})
+  \item Build density matrix $\bo{D}$ (eq.~\ref{fock-matrix})
+  \item If energy (eq.~\ref{energy}) not converged, return to step \ref{loop}.
 \end{enumerate}
 
 \end{document}
