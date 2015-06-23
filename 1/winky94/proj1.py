@@ -8,7 +8,7 @@ import numpy as np
 mol = Molecule(open('../extra-files/molecule.xyz').read(), 'Bohr')
 mol.bohr_to_ang()
 
-lines = open('../extra-files/hessian.dat').read().split('/n')
+lines = open('../extra-files/hessian.dat').readlines()
 
 H = []
 
@@ -28,4 +28,6 @@ M = np.diag(M)
 
 mwH = M * H * M
 
-print(mwH)
+E = np.linalg.eigh(mwH)
+
+print(E)
