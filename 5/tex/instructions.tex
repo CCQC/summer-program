@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[fleqn]{article}
 \usepackage{mystyle}
 
 \title{Programming Project 5: UHF\\
@@ -10,5 +10,45 @@
 
 \maketitle
 
+\section*{Working Equations}
+
+\begin{align}
+  \bo{X}
+=&\
+  \bo{S}^{-\frac{1}{2}}
+\\
+  D_{\mu\nu}
+=&\
+  \sum_{i=1}^{n_\text{occ}}
+  C_{\mu i}^* C_{\nu i}
+\\
+  F_{\mu\nu}
+=&\
+  h_{\mu\nu}
++
+  \sum_{\rho\si}
+  \ip{\mu\rho||\nu\si}
+  D_{\rho\si}
+\\
+  E
+=&\
+  \sum_{\mu\nu}
+  (h_{\mu\nu}+\tfrac{1}{2}v_{\mu\nu})D_{\mu\nu}
+\sp\text{where }
+  v_{\mu\nu}
+=
+  \sum_{\rho\si}
+  \ip{\mu\rho||\nu\si}
+  D_{\rho\si}
+\end{align}
+
+\section*{Procedure}
+
+\begin{enumerate}
+  \item Read in AO basis integrals
+  \item Transform integrals from spatial AO basis $\{\x_\mu\}$ to space-spin AO basis $\{\x_\mu\a,\x_\mu\b\}$
+  \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $F_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
+  \item 
+\end{enumerate}
 
 \end{document}
