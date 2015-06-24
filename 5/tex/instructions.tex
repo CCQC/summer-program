@@ -12,11 +12,11 @@
 \maketitle
 \vspace{-1cm}
 \noindent
-See exercises to guide you through the derivation of equations \ref{space-ao-ints}--\ref{orthogonalizer}.\\
+See exercises to guide you through the derivation of equations \ref{spin-ao-ints-1}--\ref{orthogonalizer}.\\
 
 \noindent
 \bmit{Integrals.}
-For spatial AO basis $\{\x_1,\cd,\x_m\}$, let $\{\xi_1,\cd,\xi_{2m}\}$, where $\xi_\mu=\x_\mu\a$ and $\xi_{\mu+m}=\x_\mu\b$, be the spin-AO basis.
+For spatial AO basis $\{\x_1,\cd,\x_m\}$, the spin-AO basis is $\{\xi_1,\cd,\xi_{2m}\}$, where $\xi_\mu=\x_\mu\a$ and $\xi_{\mu+m}=\x_\mu\b$.
 \begin{gather}
 \begin{aligned}
 \label{space-ao-ints}
@@ -35,8 +35,10 @@ For spatial AO basis $\{\x_1,\cd,\x_m\}$, let $\{\xi_1,\cd,\xi_{2m}\}$, where $\
 &&
   (\x_\mu\x_\nu|\x_\rho\x_\si)
 =
-  \ip{\x_\mu\x_\rho|\fr{1}{|\bo{r}_1-\bo{r}_2|}|\x_\nu\x_\si}
-\\
+  \ip{\x_\mu\x_\rho|\fr{1}{r_{12}}|\x_\nu\x_\si}
+\end{aligned}\\
+\begin{aligned}
+\label{spin-ao-ints}
 &
   S_{\mu\nu}
 =
@@ -52,7 +54,7 @@ For spatial AO basis $\{\x_1,\cd,\x_m\}$, let $\{\xi_1,\cd,\xi_{2m}\}$, where $\
 &&
   (\xi_\mu\xi_\nu|\xi_\rho\xi_\si)
 =
-  \ip{\xi_\mu\xi_\rho|\fr{1}{|\bo{r}_1-\bo{r}_2|}|\xi_\nu\xi_\si}
+  \ip{\xi_\mu\xi_\rho|\fr{1}{r_{12}}|\xi_\nu\xi_\si}
 \end{aligned}\\[5pt]
 \begin{aligned}
 \label{spin-ao-ints-1}
