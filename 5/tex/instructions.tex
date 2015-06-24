@@ -80,7 +80,7 @@
 \begin{align}
 \label{fock-matrix}
 &&
-  F_{\mu\nu}
+  f_{\mu\nu}
 =&\
   h_{\mu\nu}
 +
@@ -120,9 +120,9 @@
 =&\
   \bo{S}^{-\frac{1}{2}}
 \sp
-  \bo{\tl{F}}
+  \bo{\tl{f}}
 =
-  \bo{X}\bo{F}\bo{X}
+  \bo{X}\bo{f}\bo{X}
 \sp
   \bo{C}
 =
@@ -145,8 +145,8 @@
 \begin{enumerate}
   \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $F_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
   \item\label{loop} Build Fock matrix (eq.~\ref{fock-matrix})
-  \item Transform $\bo{F}\mapsto\bo{\tl{F}}$ to orthogonalized AO basis (eq.~\ref{orthogonalizer})
-  \item Diagonalize $\bo{\tl{F}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$
+  \item Transform $\bo{f}\mapsto\bo{\tl{f}}$ to orthogonalized AO basis (eq.~\ref{orthogonalizer})
+  \item Diagonalize $\bo{\tl{f}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$
   \item Backtransform $\bo{\tl{C}}\mapsto\bo{C}$ to original AO basis (eq.~\ref{orthogonalizer})
   \item Build density matrix $\bo{D}$ (eq.~\ref{fock-matrix})
   \item If energy (eq.~\ref{energy}) not converged, return to step \ref{loop}.
