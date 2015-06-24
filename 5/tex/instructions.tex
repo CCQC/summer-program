@@ -135,8 +135,8 @@
 \bmit{Initialization.}
 \begin{enumerate}
   \item Read in nuclear repulsion energy ($V_\mathrm{Nu}$) from the Molecule object
-  \item Read in AO basis integrals from LibMints (eq. \ref{space-ao-ints})
-  \item Transform integrals from spatial AO basis to spin-AO basis (eq. \ref{spin-ao-ints-1} and \ref{spin-ao-ints-2})
+  \item Read in spatial AO basis integrals from LibMints (eq. \ref{space-ao-ints})
+  \item Determine spin-AO basis integrals from spatial AO basis integrals (eq. \ref{spin-ao-ints-1} and \ref{spin-ao-ints-2})
   \item Form orthogonalizer $\bo{X}$ (eq. \ref{orthogonalizer})
 \end{enumerate}
 
@@ -149,7 +149,7 @@
   \item Diagonalize $\bo{\tl{f}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$
   \item Backtransform $\bo{\tl{C}}\mapsto\bo{C}$ to original AO basis (eq.~\ref{orthogonalizer})
   \item Build density matrix $\bo{D}$ (eq.~\ref{fock-matrix})
-  \item If energy (eq.~\ref{energy}) not converged, return to step \ref{loop}.
+  \item If the energy (eq.~\ref{energy}) is not converged, return to step \ref{loop}.
 \end{enumerate}
 
 \end{document}

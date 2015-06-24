@@ -31,18 +31,18 @@ class UHF:
 
       for i in range(psi4.get_option('SCF', 'MAXITER')):
         v = np.einsum('mrns,rs', g, D)   # e- field  v_mu,nu = sum_rh,si <mu rh||mu si> D_rh,si
-        F = h + v                        # build fock matrix
+        f = h + v                        # build fock matrix
 
-        tF    = X*F*X                    # transform to orthogonalized AO basis
-        e, tC = la.eigh(tF)              # diagonalize
+        tf    = X*f*X                    # transform to orthogonalized AO basis
+        e, tC = la.eigh(tf)              # diagonalize
         C     = X * tC                   # backtransform
         oC    = C[:,:nocc]               # get occupied MO coefficients
         D     = oC * oC.T                # build density matrix
 
         E  = np.trace((h + v/2)*D) + Vnu # compute energy by tracing with density matrix
 
-        self.E, self.C = E, C # save MO coefficients and energy
         dE = E - self.E       # get change in energy
+        self.E, self.C = E, C # save MO coefficients and energy
         print('{:-3d}{:20.15f}{:20.15f}'.format(i, E, dE)) # print progress
         if(np.fabs(dE) < psi4.get_global_option('E_CONVERGENCE')): break # quit if converged
 

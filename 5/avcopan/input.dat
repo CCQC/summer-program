@@ -9,7 +9,7 @@ molecule mol {
 
 set {
   basis sto-3g
-  e_convergence  10
+  e_convergence 10
   scf_type pk
   MAXITER 50
 }
@@ -25,4 +25,6 @@ from uhf import UHF
 uhf = UHF(mol, mints)
 uhf.compute_energy()
 
-#run energy('uhf') to check your answer
+# check your answer
+print('Compare to:')
+print('   {:20.15f}'.format(energy('uhf')))
