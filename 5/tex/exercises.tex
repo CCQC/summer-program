@@ -10,6 +10,37 @@
 \maketitle
 
 \begin{enumerate}
+  \item Derive the Hartree-Fock energy expression
+\begin{align}
+  \ip{\F|\op{H}_e|\F}
+=
+  \sum_i^n
+  h_{ii}
++
+  \sum_{i<j}^n
+  \ip{ij||ij}
+\end{align}
+by expanding the Hartree-Fock determinant as
+\begin{align}
+&
+  \F(1\cd n)
+=
+  \fr{1}{\sqrt{n!}}
+  \sum_{i_1\cd i_n}^n
+  \e_{i_1\cd i_n}
+  \y_{i_1}(1)\cd\y_{i_n}(n)
+\end{align}
+where $\e_{i_1\cd i_n}$ is the Levi-Civita permutation tensor, given by
+\begin{align}
+  \e_{i_1\cd i_n}
+=
+  \left\{\ar{
+    +1&\text{if $(i_1\cd i_n)$ is an even permutation of $(1\cd n)$}\\
+    -1&\text{if $(i_1\cd i_n)$ is an odd permutation of $(1\cd n)$}\\
+    0&\text{otherwise.}
+  }\right.
+\end{align}
+
   \item Let $\ol{\bo{S}}$, $\ol{\bo{T}}$, and $\ol{\bo{V}}$ be one-electron integrals with respect to the spatial AO basis $\{\x_\mu\}$.
 \begin{align}
 \label{space-ao-ints}
@@ -99,17 +130,7 @@
   C_{\mu i}^*C_{\nu i}
 \end{align}
   where $D_{\mu\nu}$ is called the Hartree-Fock density matrix.\footnote{This is the spin-AO-basis representation of the one-particle reduced density matrix of a Hartree-Fock determinant.}
-\item Show that the electronic part of the Hartree-Fock energy
-\begin{align}
-  \ip{\F|\op{H}_e|\F}
-=
-  \sum_i^n
-  h_{ii}
-+
-  \sum_{i<j}^n
-  \ip{ij||ij}
-\end{align}
-  can be expanded in terms of spin-AO basis integrals as follows.
+\item Show that the Hartree-Fock energy can be expanded in terms of spin-AO basis integrals as follows.
 \begin{align}
   \ip{\F|\op{H}_e|\F}
 =
