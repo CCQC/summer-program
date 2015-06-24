@@ -1,5 +1,6 @@
 \documentclass[fleqn]{article}
 \usepackage{mystyle}
+\usepackage{amsmath}
 
 \title{Programming Project 5: UHF\\
 \textit{Unrestricted Hartree-Fock\\(spin-orbital)}}
@@ -9,12 +10,15 @@
 \begin{document}
 
 \maketitle
+\vspace{-1cm}
 \noindent
 See exercises to guide you through the derivation of equations \ref{space-ao-ints}--\ref{orthogonalizer}.\\
 
 \noindent
-\bmit{Spatial AO basis $\{\x_\mu\}$ integrals.}
-\begin{align}
+\bmit{Integrals.}
+For spatial AO basis $\{\x_1,\cd,\x_m\}$, let $\{\xi_1,\cd,\xi_{2m}\}$, where $\xi_\mu=\x_\mu\a$ and $\xi_{\mu+m}=\x_\mu\b$, be the spin-AO basis.
+\begin{gather}
+\begin{aligned}
 \label{space-ao-ints}
 &
   \ol{S}_{\mu\nu}
@@ -29,15 +33,28 @@ See exercises to guide you through the derivation of equations \ref{space-ao-int
 =
   \sum_A\ip{\x_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\x_{\nu}}
 &&
-  (\mu\nu|\rho\si)
+  (\x_\mu\x_\nu|\x_\rho\x_\si)
 =
   \ip{\x_\mu\x_\rho|\fr{1}{|\bo{r}_1-\bo{r}_2|}|\x_\nu\x_\si}
-\end{align}
-
-
-\noindent
-\bmit{Spin-AO basis $\{\x_\mu\a\}\cup\{\x_\mu\b\}$ integrals.}
-\begin{align}
+\\
+&
+  S_{\mu\nu}
+=
+  \ip{\xi_{\mu}|\xi_{\nu}}
+&&
+  T_{\mu\nu}
+=
+  -\tfrac{1}{2}\ip{\xi_{\mu}|\nabla_1^2|\xi_{\nu}}
+&&
+  V_{\mu\nu}
+=
+  \sum_A\ip{\xi_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\xi_{\nu}}
+&&
+  (\xi_\mu\xi_\nu|\xi_\rho\xi_\si)
+=
+  \ip{\xi_\mu\xi_\rho|\fr{1}{|\bo{r}_1-\bo{r}_2|}|\xi_\nu\xi_\si}
+\end{aligned}\\[5pt]
+\begin{aligned}
 \label{spin-ao-ints-1}
 &
   \bo{S}
@@ -59,23 +76,31 @@ See exercises to guide you through the derivation of equations \ref{space-ao-int
   (\bo{G})_{\mu\nu}
 =
   \ma{(\ol{\bo{G}})_{\mu\nu}&0\\0&(\ol{\bo{G}})_{\mu\nu}}
-\end{align}
-\begin{align}
+\end{aligned}\\[7pt]
+\begin{aligned}
 \label{spin-ao-ints-2}
 &
-\text{where $\ol{\bo{G}}$ represents $(\mu\nu|\rho\si)$ viewed as a matrix of matrices:}
-\ \ 
+\text{where}
+\
   \ol{\bo{G}}
 =
-  \ma{(\ol{\bo{G}})_{\mu\nu}},
-\ \ 
-  (\ol{\bo{G}})_{\mu\nu}
+  \ma{\ol{\bo{G}}_{\mu\nu}},
+\
+  \ol{\bo{G}}_{\mu\nu}
 =
-  [((\ol{\bo{G}})_{\mu\nu})_{\rho\si}]
+  [(\x_\mu\x_\nu|\x_\rho\x_\si)]
+\
+\text{and}
+\
+  \bo{G}
 =
-  [(\mu\nu|\rho\si)]
-\end{align}
-
+  \ma{\bo{G}_{\mu\nu}},
+\
+  \bo{G}_{\mu\nu}
+=
+  [(\xi_\mu\xi_\nu|\xi_\rho\xi_\si)]
+\end{aligned}
+\end{gather}
 
 \noindent
 \bmit{Working equations.}
@@ -95,13 +120,13 @@ See exercises to guide you through the derivation of equations \ref{space-ao-int
   v_{\mu\nu}
 =
   \sum_{\rho\si}
-  \ip{\mu\rho||\nu\si}
-  D_{\rho\si}
+  \ip{\xi_\mu\xi_\rho||\xi_\nu\xi_\si}
+  D_{\si\rho}
 \sp
   D_{\mu\nu}
 =
   \sum_{i=1}^{n_\text{occ}}
-  C_{\mu i}^* C_{\nu i}
+  C_{\mu i} C_{\nu i}^*
 \\
 \label{energy}
 &&
@@ -114,7 +139,7 @@ See exercises to guide you through the derivation of equations \ref{space-ao-int
   E_e
 =
   \sum_{\mu\nu}
-  (h_{\mu\nu}+\tfrac{1}{2}v_{\mu\nu})D_{\mu\nu}
+  (h_{\mu\nu}+\tfrac{1}{2}v_{\mu\nu})D_{\nu\mu}
 \\
 \label{orthogonalizer}
 &&
@@ -132,6 +157,7 @@ See exercises to guide you through the derivation of equations \ref{space-ao-int
   \bo{\tl{C}}
 \end{align}
 
+
 \subsection*{Procedure}
 
 \bmit{Initialization.}
@@ -145,7 +171,7 @@ See exercises to guide you through the derivation of equations \ref{space-ao-int
 \noindent
 \bmit{Iteration to self-consistency.}
 \begin{enumerate}
-  \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $F_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
+  \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $f_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
   \item\label{loop} Build Fock matrix (eq.~\ref{fock-matrix})
   \item Transform $\bo{f}\mapsto\bo{\tl{f}}$ to orthogonalized AO basis (eq.~\ref{orthogonalizer})
   \item Diagonalize $\bo{\tl{f}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$

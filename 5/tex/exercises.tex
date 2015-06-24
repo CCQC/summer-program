@@ -1,4 +1,4 @@
-\documentclass[fleqn,12pt]{article}
+\documentclass[fleqn,11pt]{article}
 \usepackage{mystyle}
 
 \title{Programming Project 5 Exercises}
@@ -41,7 +41,7 @@ where $\e_{i_1\cd i_n}$ is the Levi-Civita permutation tensor, given by
   }\right.
 \end{align}
 
-  \item Let $\ol{\bo{S}}$, $\ol{\bo{T}}$, and $\ol{\bo{V}}$ be one-electron integrals with respect to the spatial AO basis $\{\x_\mu\}$.
+  \item Let $\ol{\bo{S}}$, $\ol{\bo{T}}$, and $\ol{\bo{V}}$ be one-electron integrals with respect to the spatial AO basis $\{\x_1,\cd,\x_m\}$.
 \begin{align}
 \label{space-ao-ints}
 &
@@ -57,7 +57,23 @@ where $\e_{i_1\cd i_n}$ is the Levi-Civita permutation tensor, given by
 =
   \sum_A\ip{\x_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\x_{\nu}}
 \end{align}
-  Explain why their spin-orbital counterparts $\bo{S}$, $\bo{T}$, $\bo{V}$ have the following block-diagonal structure
+  Explain why their counterparts $\bo{S}$, $\bo{T}$, $\bo{V}$ with respect to the spin-AO basis $\{\xi_1,\cd,\xi_{2m}\}$, where $\xi_\mu=\x_\mu\a$ and $\xi_{\mu+m}=\x_\mu\b$,
+\begin{align}
+\label{space-ao-ints}
+&
+  S_{\mu\nu}
+=
+  \ip{\xi_{\mu}|\xi_{\nu}}
+&&
+  T_{\mu\nu}
+=
+  -\tfrac{1}{2}\ip{\xi_{\mu}|\nabla_1^2|\xi_{\nu}}
+&&
+  V_{\mu\nu}
+=
+  \sum_A\ip{\xi_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\xi_{\nu}}
+\end{align}
+have the following block-diagonal structure.
 \begin{align}
 \label{spin-ao-ints-1}
 &
@@ -73,9 +89,8 @@ where $\e_{i_1\cd i_n}$ is the Levi-Civita permutation tensor, given by
 =
   \ma{\ol{\bo{V}}&0\\0&\ol{\bo{V}}}
 \end{align}
-  in the spin-AO basis $\{\x_\mu\a\}\cup\{\x_\mu\b\}$.
-  \item The two-electron integrals $(\mu\nu|\rho\si)$ make a 4-index tensor, which can be viewed as a matrix $\ol{\bo{G}}=[\ol{\bo{G}}_{\mu\nu}]$ of matrices $\ol{\bo{G}}_{\mu\nu}=[(\mu\nu|\rho\si)]$.
-  Explain why the spatial AO basis integral tensor $\ol{\bo{G}}$ is related to its spin-AO counterpart $\bo{G}$ via
+  \item The two-electron integrals $(\x_\mu\x_\nu|\x_\rho\x_\si)$ make up a 4-index tensor, which can be viewed as a matrix $\ol{\bo{G}}=[\ol{\bo{G}}_{\mu\nu}]$ of matrices $\ol{\bo{G}}_{\mu\nu}=[(\x_\mu\x_\nu|\x_\rho\x_\si)]$.
+  Explain why the spatial AO basis integral tensor $\ol{\bo{G}}$ is related to its spin-AO counterpart $\bo{G}$, where $\bo{G}=[\bo{G}_{\mu\nu}]$ and $\bo{G}_{\mu\nu}=[(\xi_\mu\xi_\nu|\xi_\rho\xi_\si)]$, via
 \begin{align}
 &&
   \bo{G}
@@ -122,12 +137,12 @@ where $\e_{i_1\cd i_n}$ is the Levi-Civita permutation tensor, given by
   h_{\mu\nu}
 +
   \sum_{\rho\si}
-  \ip{\mu\rho||\nu\si}D_{\rho\si}
+  \ip{\mu\rho||\nu\si}D_{\si\rho}
 &&
   D_{\mu\nu}
 =
   \sum_{i=1}^n
-  C_{\mu i}^*C_{\nu i}
+  C_{\mu i}C_{\nu i}^*
 \end{align}
   where $D_{\mu\nu}$ is called the Hartree-Fock density matrix.\footnote{This is the spin-AO-basis representation of the one-particle reduced density matrix of a Hartree-Fock determinant.}
 \item Show that the Hartree-Fock energy can be expanded in terms of spin-AO basis integrals as follows.
@@ -135,12 +150,12 @@ where $\e_{i_1\cd i_n}$ is the Levi-Civita permutation tensor, given by
   \ip{\F|\op{H}_e|\F}
 =
   \sum_{\mu\nu}
-  h_{\mu\nu}D_{\mu\nu}
+  h_{\mu\nu}D_{\nu\mu}
 +
   \fr{1}{2}
   \sum_{\mu\nu\rho\si}
   \ip{\mu\rho||\nu\si}
-  D_{\mu\nu}D_{\rho\si}
+  D_{\nu\mu}D_{\si\rho}
 \end{align}
 \end{enumerate}
 
