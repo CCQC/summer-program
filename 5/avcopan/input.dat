@@ -27,4 +27,4 @@ uhf.compute_energy()
 
 # check your answer
 print('Compare to:')
-print('   {:20.15f}'.format(energy('uhf')))
+print('{:27.15f}'.format(energy('uhf')))

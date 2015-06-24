@@ -6,7 +6,6 @@ import scipy.linalg as la
 class UHF:
 
     def __init__(self, mol, mints):
-
       # compute and process integrals (blocking functions defined below)
       T = block_oei(mints.ao_kinetic())
       S = block_oei(mints.ao_overlap())
@@ -41,9 +40,9 @@ class UHF:
 
         E  = np.trace((h + v/2)*D) + Vnu # compute energy by tracing with density matrix
 
-        dE = E - self.E       # get change in energy
-        self.E, self.C = E, C # save MO coefficients and energy
-        print('{:-3d}{:20.15f}{:20.15f}'.format(i, E, dE)) # print progress
+        dE = E - self.E                  # get change in energy
+        self.E, self.C, self.e = E, C, e # save energy, MO coefficients, and orbital energies
+        print('UHF {:-3d}{:20.15f}{:20.15f}'.format(i, E, dE)) # print progress
         if(np.fabs(dE) < psi4.get_global_option('E_CONVERGENCE')): break # quit if converged
 
       return self.E

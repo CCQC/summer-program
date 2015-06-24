@@ -1,15 +1,18 @@
+# doublet H2O+
+
 molecule mol {
-    0   1
-    O
-    H   1   0.96
-    H   1   0.96    2   104.5
+  1 2
+  O
+  H 1 0.96
+  H 1 0.96 2 104.5
 }
 
 set {
-    basis sto-3g
-    e_convergence  10
-    scf_type pk
-    MAXITER 50
+  reference uhf
+  basis sto-3g
+  e_convergence 10
+  scf_type pk
+  MAXITER 50
 }
 
 # Used to initialize everything
@@ -17,9 +20,12 @@ mol.update_geometry()
 
 mints = psi4.MintsHelper()
 
-# Call your restricted Hartree-Fock code here
-from uhf import UHF
-my_uhf = UHF(mol, mints)
+# Call your Hartree-Fock code here
+from mp2 import MP2
 
-energy = my_uhf.compute_energy()
-print(energy)
+mp2 = MP2(mol, mints)
+mp2.compute_energy()
+
+# check your answer
+print('Compare to:')
+print('{:27.15f}'.format(energy('conv-mp2')))
