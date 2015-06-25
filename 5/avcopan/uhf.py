@@ -42,11 +42,10 @@ class UHF:
         E  = np.trace((h + v/2)*D) + Vnu # compute energy by tracing with density matrix
 
         dE = E - self.E                  # get change in energy
-        self.E = E
+        self.E, self.C, self.e = E, C, e # save these for later
         print('UHF {:-3d}{:20.15f}{:20.15f}'.format(i, E, dE)) # print progress
         if(np.fabs(dE) < psi4.get_global_option('E_CONVERGENCE')): break # quit if converged
 
-      self.f, self.C, self.e = f, C, e # save Fock matrix, MO coefficients, and orbital energies to object
       return self.E
 
 

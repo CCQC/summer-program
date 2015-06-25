@@ -30,6 +30,7 @@ class CIS:
           Hn[P,Q] = (e[a] - e[i])*(i==j)*(a==b) + g[a,j,i,b]
       E, C = la.eigh(Hn)
 
+      print('CIS:')
       print('{:>6s}{:>20s}'.format('State','Energy (Eh)'))
       for K in range(ndet):
         print('{:6d}{:20.15f}'.format(K, E[K]))
