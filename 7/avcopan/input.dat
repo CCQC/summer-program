@@ -1,10 +1,10 @@
 # doublet H2O+
 
 molecule mol {
-  1 2
+  0 1
   O
-  H 1 0.96
-  H 1 0.96 2 104.5
+  H 1 1.1
+  H 1 1.1 2 104.0
 }
 
 set {

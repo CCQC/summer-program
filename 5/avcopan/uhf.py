@@ -6,7 +6,7 @@ import scipy.linalg as la
 class UHF:
 
     def __init__(self, mol, mints):
-      self.nbf  = 2 * mints.basisset().nbf()
+      self.norb = 2 * mints.basisset().nbf()
       # compute and process integrals (blocking functions defined below)
       T = block_oei(mints.ao_kinetic())
       S = block_oei(mints.ao_overlap())

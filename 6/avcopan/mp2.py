@@ -16,12 +16,12 @@ class MP2:
 
     def compute_energy(self):
       uhf = self.uhf
-      e, nocc, nbf, g = uhf.e, uhf.nocc, uhf.nbf, self.g
+      e, nocc, norb, g = uhf.e, uhf.nocc, uhf.norb, self.g
       Ec = 0.0
       for i in range(0,nocc):
         for j in range(0,nocc):
-          for a in range(nocc,nbf):
-            for b in range(nocc,nbf):
+          for a in range(nocc,norb):
+            for b in range(nocc,norb):
               Ec += (1./4) * g[i,j,a,b]**2 / (e[i]+e[j]-e[a]-e[b])
       self.E = uhf.E + Ec
       print('{:7s}{:>20s}{:>20s}'.format('MP2','E','Ec'))
@@ -47,47 +47,47 @@ def transform_tei_einsum(gao, C):
   return np.einsum('PQRS,Pp,Qq,Rr,Ss->pqrs', gao, C, C, C, C)
 
 def transform_tei_forloop_n8(gao, C):
-  nbf = gao.shape[0]
+  norb = gao.shape[0]
   g = np.zeros(gao.shape)
-  for p in range(nbf):
-    for q in range(nbf):
-      for r in range(nbf):
-        for s in range(nbf):
-          for mu in range(nbf):
-            for nu in range(nbf):
-              for rh in range(nbf):
-                for si in range(nbf):
+  for p in range(norb):
+    for q in range(norb):
+      for r in range(norb):
+        for s in range(norb):
+          for mu in range(norb):
+            for nu in range(norb):
+              for rh in range(norb):
+                for si in range(norb):
                   g[p,q,r,s] += gao[mu,nu,rh,si] * C[mu,p] * C[nu,q] * C[rh,r] * C[si,s]
   return g
 
 def transform_tei_forloop_n5(gao, C):
-  nbf = gao.shape[0]
+  norb = gao.shape[0]
   g1 = np.zeros(gao.shape)
   g2 = np.zeros(gao.shape)
-  for mu in range(nbf):
-    for nu in range(nbf):
-      for rh in range(nbf):
-        for s in range(nbf):
-          for si in range(nbf):
+  for mu in range(norb):
+    for nu in range(norb):
+      for rh in range(norb):
+        for s in range(norb):
+          for si in range(norb):
             g1[mu,nu,rh,s] += gao[mu,nu,rh,si] * C[si,s]
-  for mu in range(nbf):
-    for nu in range(nbf):
-      for r in range(nbf):
-        for s in range(nbf):
-          for rh in range(nbf):
+  for mu in range(norb):
+    for nu in range(norb):
+      for r in range(norb):
+        for s in range(norb):
+          for rh in range(norb):
             g2[mu,nu,r,s] += g1[mu,nu,rh,s] * C[rh,r]
   g1.fill(0)
-  for mu in range(nbf):
-    for q in range(nbf):
-      for r in range(nbf):
-        for s in range(nbf):
-          for nu in range(nbf):
+  for mu in range(norb):
+    for q in range(norb):
+      for r in range(norb):
+        for s in range(norb):
+          for nu in range(norb):
             g1[mu,q,r,s] += g2[mu,nu,r,s] * C[nu,q]
   g2.fill(0)
-  for p in range(nbf):
-    for q in range(nbf):
-      for r in range(nbf):
-        for s in range(nbf):
-          for mu in range(nbf):
+  for p in range(norb):
+    for q in range(norb):
+      for r in range(norb):
+        for s in range(norb):
+          for mu in range(norb):
             g2[p,q,r,s] += g1[mu,q,r,s] * C[mu,p]
   return g2
