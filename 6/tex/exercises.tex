@@ -11,38 +11,162 @@
 
 \begin{enumerate}
   \item
-  Given a solved $0\eth$ order approximation $\op{H}\ord{0}\Y\ord{0}=E\ord{0}\Y\ord{0}$ to the full Schr\"odinger equation $\op{H}\Y=E\Y$, the exact solution is (in principle) given by $\Y=\sum_{n=0}^{\infty}\Y\ord{n}, E=\sum_{n=0}^{\infty}E\ord{n}$, where each $n\eth$ order correction is obtained from the RSPT equations
-\begin{align*}
+  Given a solved $0\eth$ order approximation $\op{H}\ord{0}\Y_K\ord{0}=E_K\ord{0}\Y_K\ord{0}$ to the full Schr\"odinger equation $\op{H}\Y_K=E_K\Y_K$, the exact solutions are given by $\Y_K=\sum_{n=0}^{\infty}\Y_K\ord{n}, E_K=\sum_{n=0}^{\infty}E_K\ord{n}$.
+Each $n\eth$ order correction $\Y_K\ord{n}, E_K\ord{n}$ is obtained from the RSPT equations, which can be written as
+\begin{align}
+\label{rspt-equation}
 &&
-  \op{H}\ord{0}\Y\ord{n}
-+
-  \op{W}\ord{1}\Y\ord{n-1}
+  (\op{H}\ord{0}-E_K\ord{0})\Y\ord{n}_K
 =
-  \sum_{p=0}^n
-  E\ord{n-p}\Y\ord{p}
-\end{align*}
+  \sum_{p=0}^{n-1}E\ord{n-p}_K\Y\ord{p}_K
+-
+  \op{W}\ord{1}\Y\ord{n-1}_K
+\end{align}
 where $\op{W}\ord{1}=\op{H}-\op{H}\ord{0}$ is the perturbation.
 Show that, assuming $\ip{\Y\ord{0}|\Y\ord{n}}=0$ for all $n$ (intermediate normalization), the $n\eth$ order energy is given by
 \begin{align}
 &&
-  E\ord{n}
+  E\ord{n}_K
 =
-  \ip{\Y\ord{0}|\op{W}\ord{1}|\Y\ord{n-1}}\ .
+  \ip{\Y\ord{0}_K|\op{W}\ord{1}|\Y\ord{n-1}_K}\ .
 \end{align}
 
-  Writing the Hamiltonian $\op{H}=\op{H}\ord{0}+\op{W}\ord{1}$
-  
-  Given a 0\eth\ order problem
+
+\item The $\Y\ord{1}$ RSPT equation (equation~\ref{rspt-equation} with $n=1$) is given by
+\begin{align}
+\label{rspt-equation-1st-order}
+&&
+  (\op{H}\ord{0}-E_K\ord{0})\Y_K\ord{1}
+=
+  (E_K\ord{1}-\op{W}\ord{1})\Y_K\ord{0}\ .
+\end{align}
+Using equation \ref{rspt-equation-1st-order}, show that the expansion coefficients of $\Y_K\ord{1}$ in the basis of $0\eth$ order functions $\{\Y_L\ord{0}\}$
 \begin{align*}
 &&
-  \op{H}\ord{0}\Y\ord{0}
+  \Y_K\ord{1}
 =
-  E\ord{0}\Y\ord{0}
+  \sum_{L\neq K}
+  \Y_L\ord{0} c_{LK}\ord{1}
 \end{align*}
-the RSPT 
+are given by
+\begin{align}
+&&
+  c_{LK}\ord{1}
+=
+  \fr{\ip{\Y_L\ord{0}|\op{W}\ord{1}|\Y_K\ord{0}}}{E_L\ord{0}-E_K\ord{0}}\ .
+\end{align}
+
+\item Show that the RSPT energy up to second order is given by
+\begin{align}
+  E_K\ord{0}
++
+  E_K\ord{1}
++
+  E_K\ord{2}
+=
+  \ip{\Y_K\ord{0}|\op{H}|\Y_K\ord{0}}
++
+  \sum_{L\neq K}
+  \fr{\ip{\Y_K\ord{0}|\op{W}\ord{1}|\Y_L\ord{0}}\ip{\Y_L\ord{0}|\op{W}\ord{1}|\Y_K\ord{0}}}{E_L\ord{0}-E_K\ord{0}}\ .
+\end{align}
+
+\item
+Let the $0\eth$ order electronic Hamiltonian be given by
 \begin{align*}
-  \op{H}_0
+&&
+  \op{H}_e\ord{0}
+=
+  \sum_{i=1}^n
+  \op{f}(i)
+=
+  \sum_{i=1}^n
+  \op{h}(i)
++
+  \sum_{i=1}^n
+  \sum_{k=1}^n
+  (\op{J}_k(i)-\op{K}_k(i))
 \end{align*}
+where $\op{f}(1)$ is the Fock operator.
+Show that, if $\{\y_p\}$ is a set of canonical spin-orbitals
+\begin{align*}
+&&
+  \op{f}(1)\y_p(1)
+= 
+  \ev_p\y_p(1)
+\end{align*}
+then the determinants formed from these orbitals satisfy
+\begin{align*}
+&&
+  \op{H}_e\ord{0}
+  \F_{(p_1\cd p_n)}
+=
+  E_{(p_1\cd p_n)}\ord{0}
+  \F_{(p_1\cd p_n)}
+\
+  \text{ where }
+\
+  E_{(p_1\cd p_n)}\ord{0}
+=
+  \sum_{k=1}^n \ev_{p_k}\ .
+\end{align*}
+
+\item In M\o ller-Plesset perturbation theory, the exact electronic Hamiltonian
+\begin{align*}
+&&
+  \op{H}_e
+=
+  \sum_{i=1}^n
+  \op{h}(i)
++
+  \fr{1}{2}
+  \sum_{ij}^n
+  \op{g}(i,j)
+\end{align*}
+is approximated by a sum of one-particle Fock operators $\op{f}(i)$.
+\begin{align*}
+&&
+  \op{H}_e\ord{0}
+=
+  \sum_{i=1}^n
+  \op{f}(i)
+=
+  \sum_{i=1}^n
+  \op{h}(i)
++
+  \sum_{i=1}^n
+  \sum_{k=1}^n
+  (\op{J}_k(i)-\op{K}_k(i))
+\end{align*}
+Show that, given a spin-orbital basis $\{\y_p\}$ which satisfies 
+\begin{align}
+&&
+  \op{f}(1)\y_p(1)
+=
+  \ev_p\y_p(1)
+\end{align}
+the determinants $\{\F,\F_i^a,\F_{ij}^{ab},\F_{ijk}^{abc},\cd\}$ formed from these orbitals provide $0\eth$ order solutions for the state $\Y_K$ of interest given by
+\begin{align}
+&
+  \op{H}_e\ord{0}\F
+=
+  \mathcal{E}\F
+&&
+  \op{H}_e\ord{0}\F_i^a
+=
+  \mathcal{E}_i^a\F_i^a
+&&
+  \op{H}_e\ord{0}\F_{ij}^{ab}
+=
+  \mathcal{E}_{ij}^{ab}\F_{ij}^{ab}
+&&
+  \op{H}_e\ord{0}\F_{ijk}^{abc}
+=
+  \mathcal{E}_{ijk}^{abc}\F_{ijk}^{abc}
+&&
+  \etc
+\end{align}
+where $\mathcal{E}_{ijk\cd}^{abc\cd}$ is the sum of the orbital energies for $\F_{ijk\cd}^{abc\cd}$.
 \end{enumerate}
+
 
 \end{document}
