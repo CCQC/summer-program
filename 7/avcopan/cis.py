@@ -38,10 +38,7 @@ class CIS:
 
 
 def transform_tei(gao, C):
-  return np.einsum('Pp,Pqrs->pqrs', C, 
+  return np.einsum('Pp,Pqrs->pqrs', C,
            np.einsum('Qq,PQrs->Pqrs', C,
              np.einsum('Rr,PQRs->PQrs', C,
-               np.einsum('Ss,PQRS->PQRs', C, gao)
-             )
-           )
-         )
+               np.einsum('Ss,PQRS->PQRs', C, gao))))

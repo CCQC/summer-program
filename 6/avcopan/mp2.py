@@ -30,13 +30,10 @@ class MP2:
 
 def transform_tei(gao, C):
   # g_pqrs = sum_P C_Pp (sum_Q C_Qq (sum_R C_Rr (sum_S C_Ss gao_PQRS)))
-  return np.einsum('Pp,Pqrs->pqrs', C, 
+  return np.einsum('Pp,Pqrs->pqrs', C,
            np.einsum('Qq,PQrs->Pqrs', C,
              np.einsum('Rr,PQRs->PQrs', C,
-               np.einsum('Ss,PQRS->PQRs', C, gao)
-             )
-           )
-         )
+               np.einsum('Ss,PQRS->PQRs', C, gao))))
 
 
 
