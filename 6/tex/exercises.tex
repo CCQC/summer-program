@@ -1,0 +1,48 @@
+\documentclass[fleqn,11pt]{article}
+\usepackage{mystyle}
+
+\title{Programming Project 6 Exercises}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+  \item
+  Given a solved $0\eth$ order approximation $\op{H}\ord{0}\Y\ord{0}=E\ord{0}\Y\ord{0}$ to the full Schr\"odinger equation $\op{H}\Y=E\Y$, the exact solution is (in principle) given by $\Y=\sum_{n=0}^{\infty}\Y\ord{n}, E=\sum_{n=0}^{\infty}E\ord{n}$, where each $n\eth$ order correction is obtained from the RSPT equations
+\begin{align*}
+&&
+  \op{H}\ord{0}\Y\ord{n}
++
+  \op{W}\ord{1}\Y\ord{n-1}
+=
+  \sum_{p=0}^n
+  E\ord{n-p}\Y\ord{p}
+\end{align*}
+where $\op{W}\ord{1}=\op{H}-\op{H}\ord{0}$ is the perturbation.
+Show that, assuming $\ip{\Y\ord{0}|\Y\ord{n}}=0$ for all $n$ (intermediate normalization), the $n\eth$ order energy is given by
+\begin{align}
+&&
+  E\ord{n}
+=
+  \ip{\Y\ord{0}|\op{W}\ord{1}|\Y\ord{n-1}}\ .
+\end{align}
+
+  Writing the Hamiltonian $\op{H}=\op{H}\ord{0}+\op{W}\ord{1}$
+  
+  Given a 0\eth\ order problem
+\begin{align*}
+&&
+  \op{H}\ord{0}\Y\ord{0}
+=
+  E\ord{0}\Y\ord{0}
+\end{align*}
+the RSPT 
+\begin{align*}
+  \op{H}_0
+\end{align*}
+\end{enumerate}
+
+\end{document}

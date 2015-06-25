@@ -75,9 +75,12 @@ For spatial AO basis $\{\x_1,\cd,\x_m\}$, the spin-AO basis is $\{\xi_1,\cd,\xi_
 =
   \ma{\ol{\bo{G}}&0\\0&\ol{\bo{G}}}
 &&
-  (\bo{G})_{\mu\nu}
+  \bo{G}_{\xi,\xi'}
 =
-  \ma{(\ol{\bo{G}})_{\mu\nu}&0\\0&(\ol{\bo{G}})_{\mu\nu}}
+  \bo{G}_{\x\w,\x'\w'}
+=
+  \d_{\w\w'}
+  \ma{\ol{\bo{G}}_{\x\x'}&0\\0&\ol{\bo{G}}_{\x\x'}}
 \end{aligned}\\[7pt]
 \begin{aligned}
 \label{spin-ao-ints-2}
@@ -86,9 +89,9 @@ For spatial AO basis $\{\x_1,\cd,\x_m\}$, the spin-AO basis is $\{\xi_1,\cd,\xi_
 \
   \ol{\bo{G}}
 =
-  \ma{\ol{\bo{G}}_{\mu\nu}},
+  [\ol{\bo{G}}_{\x_\mu\x_\nu}],
 \
-  \ol{\bo{G}}_{\mu\nu}
+  \ol{\bo{G}}_{\x_\mu\x_\nu}
 =
   [(\x_\mu\x_\nu|\x_\rho\x_\si)]
 \
@@ -96,9 +99,9 @@ For spatial AO basis $\{\x_1,\cd,\x_m\}$, the spin-AO basis is $\{\xi_1,\cd,\xi_
 \
   \bo{G}
 =
-  \ma{\bo{G}_{\mu\nu}},
+  [\bo{G}_{\xi_\mu\xi_\nu}],
 \
-  \bo{G}_{\mu\nu}
+  \bo{G}_{\xi_\mu\xi_\nu}
 =
   [(\xi_\mu\xi_\nu|\xi_\rho\xi_\si)]
 \end{aligned}
@@ -187,7 +190,8 @@ For spatial AO basis $\{\x_1,\cd,\x_m\}$, the spin-AO basis is $\{\xi_1,\cd,\xi_
   \item Diagonalize $\bo{\tl{f}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$ (eq.~\ref{orthogonalizer})
   \item Backtransform $\bo{\tl{C}}\mapsto\bo{C}$ to original AO basis (eq.~\ref{orthogonalizer})
   \item Build density matrix $\bo{D}$ (eq.~\ref{fock-matrix})
-  \item If the energy (eq.~\ref{energy}) is not converged, return to step \ref{loop}.
+  \item Evaluate energy (eq.~\ref{energy}).
+  \item If the energy is not converged, return to step \ref{loop}.
 \end{enumerate}
 
 \end{document}

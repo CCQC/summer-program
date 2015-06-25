@@ -1,12 +1,45 @@
-\documentclass{article}
-\usepackage{geometry}
+\documentclass[fleqn]{article}
+\usepackage{mystyle}
+\usepackage{amsmath}
+
 \title{Programming Project 6: MP2\\
 \textit{Second-order M\o ller-Plesset perturbation theory\\(spin-orbital)}}
 \author{}
 \date{}
+
 \begin{document}
 
 \maketitle
+\vspace{-1cm}
+\noindent
+Let $\{\y_p\}$ be canonical Hartree-Fock spin-orbitals with orbital energies $\{\ev_p\}$ and basis expansion coefficients $C_{\mu p}$.
+\begin{align}
+\label{tei-transformation}
+&&
+  \ip{\y_p\y_q|\y_r\y_s}
+=
+  \sum_{\mu\nu\rho\si}
+  C_{\mu p}^*C_{\nu q}^* C_{\rho r}C_{\si s}
+  \ip{\xi_\mu\xi_\nu|\xi_\rho\xi_\si}
+\end{align}
+\begin{align}
+\label{mp2-energy}
+&&
+  E\ord{2}
+=
+  \fr{1}{4}
+  \sum_{ijab}
+  \fr{|\ip{\y_i\y_j||\y_a\y_b}|^2}
+     {\ev_i+\ev_j-\ev_a-\ev_b}
+\end{align}
 
+
+\subsection*{Procedure}
+
+\begin{enumerate}
+  \item Run canonical spin-orbital Hartree-Fock code to obtain MO coefficients $\{C_{\mu p}\}$ and orbital energies $\{\ev_p\}$.
+  \item Transform two-electron integrals from the spin-AO basis $\{\xi_\mu\}$ to the spin-MO basis $\{\y_p\}$ (equation \ref{tei-transformation})
+  \item Evaluate MP2 energy expression (equation \ref{mp2-energy})
+\end{enumerate}
 
 \end{document}

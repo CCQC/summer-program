@@ -89,17 +89,20 @@ have the following block-diagonal structure.
 =
   \ma{\ol{\bo{V}}&0\\0&\ol{\bo{V}}}
 \end{align}
-  \item The two-electron integrals $(\x_\mu\x_\nu|\x_\rho\x_\si)$ make up a 4-index tensor, which can be viewed as a matrix $\ol{\bo{G}}=[\ol{\bo{G}}_{\mu\nu}]$ of matrices $\ol{\bo{G}}_{\mu\nu}=[(\x_\mu\x_\nu|\x_\rho\x_\si)]$.
-  Explain why the spatial AO basis integral tensor $\ol{\bo{G}}$ is related to its spin-AO counterpart $\bo{G}$, where $\bo{G}=[\bo{G}_{\mu\nu}]$ and $\bo{G}_{\mu\nu}=[(\xi_\mu\xi_\nu|\xi_\rho\xi_\si)]$, via
+  \item The two-electron integrals $(\x_\mu\x_\nu|\x_\rho\x_\si)$ make up a 4-index tensor, which can be viewed as a matrix $\ol{\bo{G}}=[\ol{\bo{G}}_{\x_\mu\x_\nu}]$ of matrices $\ol{\bo{G}}_{\x_\mu\x_\nu}=[(\x_\mu\x_\nu|\x_\rho\x_\si)]$.
+  Explain why the spatial AO basis integral tensor $\ol{\bo{G}}$ is related to its spin-AO counterpart $\bo{G}$, where $\bo{G}=[\bo{G}_{\xi_\mu\xi_\nu}]$ and $\bo{G}_{\xi_\mu\xi_\nu}=[(\xi_\mu\xi_\nu|\xi_\rho\xi_\si)]$, via
 \begin{align}
 &&
   \bo{G}
 =
   \ma{\ol{\bo{G}}&0\\0&\ol{\bo{G}}}
 &&
-  \bo{G}_{\mu\nu}
+  \bo{G}_{\xi,\xi'}
 =
-  \ma{\ol{\bo{G}}_{\mu\nu}&0\\0&\ol{\bo{G}}_{\mu\nu}}
+  \bo{G}_{\x\w,\x'\w'}
+=
+  \d_{\w\w'}
+  \ma{\ol{\bo{G}}_{\x\x'}&0\\0&\ol{\bo{G}}_{\x\x'}}
 \end{align}
   i.e. it has a block-diagonal structure with respect to each pair of indices.
   Note that this is one case where the index-ordering of chemist's notation has some advantages over physicist's notation.
