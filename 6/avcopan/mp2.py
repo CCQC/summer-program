@@ -50,11 +50,8 @@ def transform_tei_forloop_n8(gao, C):
   nbf = gao.shape[0]
   g = np.zeros(gao.shape)
   for p in range(nbf):
-    print(p)
     for q in range(nbf):
-      print(q)
       for r in range(nbf):
-        print(r)
         for s in range(nbf):
           for mu in range(nbf):
             for nu in range(nbf):
