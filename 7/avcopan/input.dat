@@ -10,7 +10,7 @@ molecule mol {
 set {
   reference uhf
   basis sto-3g
-  e_convergence 13
+  e_convergence 10
   scf_type pk
   MAXITER 50
 }
@@ -21,11 +21,8 @@ mol.update_geometry()
 mints = psi4.MintsHelper()
 
 # Call your Hartree-Fock code here
-from mp2 import MP2
+from cis import CIS
 
-mp2 = MP2(mol, mints)
-mp2.compute_energy()
+cis = CIS(mol, mints)
+cis.compute_excitation_energies()
 
-# check your answer
-print('Compare to:')
-print('{:27.15f}'.format(energy('conv-mp2')))

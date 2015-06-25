@@ -1,0 +1,58 @@
+    -----------------------------------------------------------------------
+          Psi4: An Open-Source Ab Initio Electronic Structure Package
+                              Psi4 0.2.15 Driver
+
+                          Git: Rev {master} 380e8da 
+
+    J. M. Turney, A. C. Simmonett, R. M. Parrish, E. G. Hohenstein,
+    F. A. Evangelista, J. T. Fermann, B. J. Mintz, L. A. Burns, J. J. Wilke,
+    M. L. Abrams, N. J. Russ, M. L. Leininger, C. L. Janssen, E. T. Seidl,
+    W. D. Allen, H. F. Schaefer, R. A. King, E. F. Valeev, C. D. Sherrill,
+    and T. D. Crawford, WIREs Comput. Mol. Sci. 2, 556-565 (2012)
+    (doi: 10.1002/wcms.93)
+
+                         Additional Contributions by
+    A. E. DePrince, M. Saitow, U. Bozkaya, A. Yu. Sokolov
+    -----------------------------------------------------------------------
+
+
+    Psi4 started on: Wed Jun 24 20:01:34 2015
+
+    Process ID:   6941
+    PSI4DATADIR: /home/avcopan/Packages/psi4/lib
+    Memory level set to 256.000 MB
+
+  ==> Input File <==
+
+--------------------------------------------------------------------------
+# doublet H2O+
+
+molecule mol {
+  1 2
+  O
+  H 1 0.96
+  H 1 0.96 2 104.5
+}
+
+set {
+  reference uhf
+  basis sto-3g
+  e_convergence 10
+  scf_type pk
+  MAXITER 50
+}
+
+# Used to initialize everything
+mol.update_geometry()
+
+mints = psi4.MintsHelper()
+
+# Call your Hartree-Fock code here
+from cis import CIS
+
+cis = CIS(mol, mints)
+cis.compute_excitation_energies()
+
+--------------------------------------------------------------------------
+
+*** PSI4 exiting successfully. Buy a developer a beer!

@@ -1,6 +1,8 @@
 import psi4
 import numpy as np
 import scipy.linalg as la
+import sys
+sys.path.append("../../5/avcopan/")
 from uhf import UHF
 
 
@@ -14,7 +16,7 @@ class MP2:
 
     def compute_energy(self):
       uhf = self.uhf
-      e, nocc, nbf, g = uhf.e, uhf.nocc, len(uhf.e), self.g
+      e, nocc, nbf, g = uhf.e, uhf.nocc, uhf.nbf, self.g
       Ec = 0.0
       for i in range(0,nocc):
         for j in range(0,nocc):
