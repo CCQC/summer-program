@@ -11,3 +11,7 @@ __pycache__
 # Latex stuff
 *.log
 *.aux
+
+# Psi files
+*.clean
+timer.dat
