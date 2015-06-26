@@ -18,7 +18,8 @@ Projects
      (<a href="https://github.com/CCQC/summer-program/blob/master/5/exercises.pdf">Exercises</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/6/instructions.pdf">MP2</a>
      (<a href="https://github.com/CCQC/summer-program/blob/master/6/exercises.pdf">Exercises</a>)</li>
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/7/instructions.pdf">CIS</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/7/instructions.pdf">CIS</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/7/exercises.pdf">Exercises</a>)</li>
 </ol>
 
 
