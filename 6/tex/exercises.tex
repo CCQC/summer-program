@@ -11,8 +11,9 @@
 
 \begin{enumerate}
   \item
-  Given a solved $0\eth$ order approximation $\op{H}\ord{0}\Y_K\ord{0}=E_K\ord{0}\Y_K\ord{0}$ to the full Schr\"odinger equation $\op{H}\Y_K=E_K\Y_K$, the exact solutions are given by $\Y_K=\sum_{n=0}^{\infty}\Y_K\ord{n}, E_K=\sum_{n=0}^{\infty}E_K\ord{n}$.
-Each $n\eth$ order correction $\Y_K\ord{n}, E_K\ord{n}$ is obtained from the RSPT equations, which can be written as
+  \bmit{Rayleigh-Schr\"odinger perturbation theory.}
+  Given a $0\eth$ order approximation $\op{H}\ord{0}\Y_K\ord{0}=E_K\ord{0}\Y_K\ord{0}$ to the full Schr\"odinger equation $\op{H}\Y_K=E_K\Y_K$, the exact wavefunctions and energies of well-behaved systems can be expanded in terms of their $0\eth$ order counterparts using Rayleigh-Schr\"odinger perturbation theory.
+  The $n\eth$ order wavefunction and energy corrections, $\Y_K\ord{n}$ and $E_K\ord{n}$, in the perturbation expansions, $\Y_K=\Y_K\ord{0}+\sum_{n=1}^{\infty}\Y_K\ord{n}$ and $E_K=E_K\ord{0}+\sum_{n=1}^{\infty}E_K\ord{n}$, can be obtained from the RSPT equations
 \begin{align}
 \label{rspt-equation}
 &&
@@ -20,15 +21,15 @@ Each $n\eth$ order correction $\Y_K\ord{n}, E_K\ord{n}$ is obtained from the RSP
 =
   \sum_{p=0}^{n-1}E\ord{n-p}_K\Y\ord{p}_K
 -
-  \op{W}\ord{1}\Y\ord{n-1}_K
+  \op{W}\Y\ord{n-1}_K
 \end{align}
-where $\op{W}\ord{1}=\op{H}-\op{H}\ord{0}$ is the perturbation.
-Show that, assuming $\ip{\Y\ord{0}|\Y\ord{n}}=0$ for all $n$ (intermediate normalization), the $n\eth$ order energy is given by
+where $\op{W}\equiv\op{H}-\op{H}\ord{0}$.
+Show that, assuming $\ip{\Y\ord{0}|\Y\ord{n}}=0$ for $n\geq1$ (intermediate normalization), the $n\eth$ order energy correction is given by
 \begin{align}
 &&
   E\ord{n}_K
 =
-  \ip{\Y\ord{0}_K|\op{W}\ord{1}|\Y\ord{n-1}_K}\ .
+  \ip{\Y\ord{0}_K|\op{W}|\Y\ord{n-1}_K}\ .
 \end{align}
 
 
@@ -38,9 +39,9 @@ Show that, assuming $\ip{\Y\ord{0}|\Y\ord{n}}=0$ for all $n$ (intermediate norma
 &&
   (\op{H}\ord{0}-E_K\ord{0})\Y_K\ord{1}
 =
-  (E_K\ord{1}-\op{W}\ord{1})\Y_K\ord{0}\ .
+  (E_K\ord{1}-\op{W})\Y_K\ord{0}\ .
 \end{align}
-Using equation \ref{rspt-equation-1st-order}, show that the expansion coefficients of $\Y_K\ord{1}$ in the basis of $0\eth$ order functions $\{\Y_L\ord{0}\}$
+Using equation \ref{rspt-equation-1st-order}, show that the expansion coefficients of $\Y_K\ord{1}$ in the basis of $0\eth$ order solutions $\{\Y_L\ord{0}\}$
 \begin{align*}
 &&
   \Y_K\ord{1}
@@ -53,11 +54,12 @@ are given by
 &&
   c_{LK}\ord{1}
 =
-  \fr{\ip{\Y_L\ord{0}|\op{W}\ord{1}|\Y_K\ord{0}}}{E_L\ord{0}-E_K\ord{0}}\ .
+  \fr{\ip{\Y_L\ord{0}|\op{W}|\Y_K\ord{0}}}{E_L\ord{0}-E_K\ord{0}}\ .
 \end{align}
 
 \item Show that the RSPT energy up to second order is given by
 \begin{align}
+&&
   E_K\ord{0}
 +
   E_K\ord{1}
@@ -67,50 +69,13 @@ are given by
   \ip{\Y_K\ord{0}|\op{H}|\Y_K\ord{0}}
 +
   \sum_{L\neq K}
-  \fr{\ip{\Y_K\ord{0}|\op{W}\ord{1}|\Y_L\ord{0}}\ip{\Y_L\ord{0}|\op{W}\ord{1}|\Y_K\ord{0}}}{E_L\ord{0}-E_K\ord{0}}\ .
+  \fr{\ip{\Y_K\ord{0}|\op{W}|\Y_L\ord{0}}\ip{\Y_L\ord{0}|\op{W}|\Y_K\ord{0}}}{E_L\ord{0}-E_K\ord{0}}\ .
 \end{align}
 
-\item
-Let the $0\eth$ order electronic Hamiltonian be given by
-\begin{align*}
-&&
-  \op{H}_e\ord{0}
-=
-  \sum_{i=1}^n
-  \op{f}(i)
-=
-  \sum_{i=1}^n
-  \op{h}(i)
-+
-  \sum_{i=1}^n
-  \sum_{k=1}^n
-  (\op{J}_k(i)-\op{K}_k(i))
-\end{align*}
-where $\op{f}(1)$ is the Fock operator.
-Show that, if $\{\y_p\}$ is a set of canonical spin-orbitals
-\begin{align*}
-&&
-  \op{f}(1)\y_p(1)
-= 
-  \ev_p\y_p(1)
-\end{align*}
-then the determinants formed from these orbitals satisfy
-\begin{align*}
-&&
-  \op{H}_e\ord{0}
-  \F_{(p_1\cd p_n)}
-=
-  E_{(p_1\cd p_n)}\ord{0}
-  \F_{(p_1\cd p_n)}
-\
-  \text{ where }
-\
-  E_{(p_1\cd p_n)}\ord{0}
-=
-  \sum_{k=1}^n \ev_{p_k}\ .
-\end{align*}
 
-\item In M\o ller-Plesset perturbation theory, the exact electronic Hamiltonian
+\item
+  \bmit{M\o ller-Plesset perturbation theory.}
+When the exact electronic Hamiltonian
 \begin{align*}
 &&
   \op{H}_e
@@ -122,7 +87,7 @@ then the determinants formed from these orbitals satisfy
   \sum_{ij}^n
   \op{g}(i,j)
 \end{align*}
-is approximated by a sum of one-particle Fock operators $\op{f}(i)$.
+is approximated by a sum of one-particle Fock operators $\op{f}(i)$
 \begin{align*}
 &&
   \op{H}_e\ord{0}
@@ -137,14 +102,15 @@ is approximated by a sum of one-particle Fock operators $\op{f}(i)$.
   \sum_{k=1}^n
   (\op{J}_k(i)-\op{K}_k(i))
 \end{align*}
-Show that, given a spin-orbital basis $\{\y_p\}$ which satisfies 
+the RSPT approach is called M\o ller-Plesset perturbation theory.
+Show that, given spin-orbitals satisfying 
 \begin{align}
 &&
   \op{f}(1)\y_p(1)
 =
-  \ev_p\y_p(1)
+  \ev_p\y_p(1)\sp \text{(canonical Hartree-Fock equations)},
 \end{align}
-the determinants $\{\F,\F_i^a,\F_{ij}^{ab},\F_{ijk}^{abc},\cd\}$ formed from these orbitals provide $0\eth$ order solutions for the state $\Y_K$ of interest given by
+the determinants $\{\F,\F_i^a,\F_{ij}^{ab},\F_{ijk}^{abc},\ld\}$ formed from them provide $0\eth$ order solutions of the form
 \begin{align}
 &
   \op{H}_e\ord{0}\F
@@ -166,6 +132,45 @@ the determinants $\{\F,\F_i^a,\F_{ij}^{ab},\F_{ijk}^{abc},\cd\}$ formed from the
   \etc
 \end{align}
 where $\mathcal{E}_{ijk\cd}^{abc\cd}$ is the sum of the orbital energies for $\F_{ijk\cd}^{abc\cd}$.
+
+\item Show that the M\o ller-Plesset energy is given to second order by\\[5pt]
+$\ds
+  E\ord{0}
++
+  E\ord{1}
++
+  E\ord{2}
+=
+  E_0
++
+  \sum_{\miniar{a\\i}}
+  \fr{|\ip{\F|\op{W}|\F_i^a}|^2}{\ev_i-\ev_a}
++
+  \sum_{\miniar{a<b\\i<j}}
+  \fr{|\ip{\F|\op{W}|\F_{ij}^{ab}}|^2}{\ev_i+\ev_j-\ev_a-\ev_b}
++
+  \sum_{\miniar{a<b<c\\i<j<k}}
+  \fr{|\ip{\F|\op{W}|\F_{ijk}^{abc}}|^2}{\ev_i+\ev_j+\ev_k-\ev_a-\ev_b-\ev_c}
++
+  \cd
+$\\[5pt]
+where $E_0=\ip{\F|\op{H}_e|\F}$ is the Hartree-Fock energy.\footnote{Note that $E_0$ is \underline{not} $\mathcal{E}$, the sum of $\F$'s orbital energies}
+
+\item Use Slater's rules and Brillouin's theorem to show that the second-order M\o ller-Plesset (MP2) energy can be simplified to the following expression.
+\begin{align}
+&&
+  E\ord{0}
++
+  E\ord{1}
++
+  E\ord{2}
+=
+  E_0
++
+  \fr{1}{4}
+  \sum_{ijab}
+  \fr{|\ip{ij||ab}|^2}{\ev_i+\ev_j-\ev_a-\ev_b}
+\end{align}
 \end{enumerate}
 
 
