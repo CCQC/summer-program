@@ -1,0 +1,234 @@
+    -----------------------------------------------------------------------
+          Psi4: An Open-Source Ab Initio Electronic Structure Package
+                              Psi4 0.2.33 Driver
+
+                          Git: Rev {master} 67e3933 
+
+    J. M. Turney, A. C. Simmonett, R. M. Parrish, E. G. Hohenstein,
+    F. A. Evangelista, J. T. Fermann, B. J. Mintz, L. A. Burns, J. J. Wilke,
+    M. L. Abrams, N. J. Russ, M. L. Leininger, C. L. Janssen, E. T. Seidl,
+    W. D. Allen, H. F. Schaefer, R. A. King, E. F. Valeev, C. D. Sherrill,
+    and T. D. Crawford, WIREs Comput. Mol. Sci. 2, 556-565 (2012)
+    (doi: 10.1002/wcms.93)
+
+                         Additional Contributions by
+    A. E. DePrince, M. Saitow, U. Bozkaya, A. Yu. Sokolov
+    -----------------------------------------------------------------------
+
+
+    Psi4 started on: Tue Jul  7 16:06:52 2015
+
+    Process ID:   5651
+    PSI4DATADIR: /Users/avery/bin/psi4/objdir/interfaces/share/psi
+    Memory level set to 256.000 MB
+
+  ==> Input File <==
+
+--------------------------------------------------------------------------
+set basis cc-pVDZ
+
+molecule h20 {
+0 1
+O 0.000000 0.005000 -0.134504
+H 0.000000 -1.684917 1.067336
+H 0.000000 1.684917 1.067336
+units bohr
+}
+
+energy('scf')--------------------------------------------------------------------------
+
+*** tstart() called on s172-20-46-h184.paws.uga.edu
+*** at Tue Jul  7 16:06:52 2015
+
+
+         ---------------------------------------------------------
+                                   SCF
+            by Justin Turney, Rob Parrish, and Andy Simmonett
+                              RHF Reference
+                        1 Threads,    256 MiB Core
+         ---------------------------------------------------------
+
+  ==> Geometry <==
+
+    Molecular point group: cs
+    Full point group: Cs
+
+    Geometry (in Bohr), charge = 0, multiplicity = 1:
+
+       Center              X                  Y                   Z       
+    ------------   -----------------  -----------------  -----------------
+           O         -0.000559574366     0.134503771294     0.000000000000
+           H          1.689357425634    -1.067336228706     0.000000000000
+           H         -1.680476574366    -1.067336228706     0.000000000000
+
+  Running in cs symmetry.
+
+  Rotational constants: A =     23.28292  B =     10.52000  C =      7.24601 [cm^-1]
+  Rotational constants: A = 698004.28379  B = 315381.76326  C = 217229.97117 [MHz]
+  Nuclear repulsion =    8.027626559986315
+
+  Charge       = 0
+  Multiplicity = 1
+  Electrons    = 10
+  Nalpha       = 5
+  Nbeta        = 5
+
+  ==> Algorithm <==
+
+  SCF Algorithm Type is DF.
+  DIIS enabled.
+  MOM disabled.
+  Fractional occupation disabled.
+  Guess Type is CORE.
+  Energy threshold   = 1.00e-06
+  Density threshold  = 1.00e-06
+  Integral threshold = 0.00e+00
+
+  ==> Primary Basis <==
+
+  Basis Set: CC-PVDZ
+    Number of shells: 12
+    Number of basis function: 24
+    Number of Cartesian functions: 25
+    Spherical Harmonics?: true
+    Max angular momentum: 2
+
+  ==> Pre-Iterations <==
+
+   -------------------------------------------------------
+    Irrep   Nso     Nmo     Nalpha   Nbeta   Ndocc  Nsocc
+   -------------------------------------------------------
+     A'        18      18       0       0       0       0
+     A"         6       6       0       0       0       0
+   -------------------------------------------------------
+    Total      24      24       5       5       5       0
+   -------------------------------------------------------
+
+ OEINTS: Overlap, kinetic, potential, dipole, and quadrupole integrals
+         stored in file 35.
+
+  ==> Integral Setup <==
+
+  ==> DFJK: Density-Fitted J/K Matrices <==
+
+    J tasked:                  Yes
+    K tasked:                  Yes
+    wK tasked:                  No
+    OpenMP threads:              1
+    Integrals threads:           1
+    Memory (MB):               183
+    Algorithm:                Core
+    Integral Cache:           NONE
+    Schwarz Cutoff:          1E-12
+    Fitting Condition:       1E-12
+
+   => Auxiliary Basis Set <=
+
+  Basis Set: 
+    Number of shells: 42
+    Number of basis function: 116
+    Number of Cartesian functions: 131
+    Spherical Harmonics?: true
+    Max angular momentum: 3
+
+  Minimum eigenvalue in the overlap matrix is 4.7135905025E-02.
+  Using Symmetric Orthogonalization.
+  SCF Guess: Core (One-Electron) Hamiltonian.
+
+  ==> Iterations <==
+
+                           Total Energy        Delta E     RMS |[F,P]|
+
+    Occupation by irrep:
+             Ap   App 
+    DOCC [     5,    0 ]
+
+   @DF-RHF iter   1:   -68.98808594317471   -6.89881e+01   1.47701e-01 
+    Occupation by irrep:
+             Ap   App 
+    DOCC [     4,    1 ]
+
+   @DF-RHF iter   2:   -69.76506613544636   -7.76980e-01   1.34883e-01 DIIS
+   @DF-RHF iter   3:   -75.79209093230584   -6.02702e+00   3.67197e-02 DIIS
+   @DF-RHF iter   4:   -75.97240559119805   -1.80315e-01   9.68172e-03 DIIS
+   @DF-RHF iter   5:   -75.98973105294175   -1.73255e-02   1.09783e-03 DIIS
+   @DF-RHF iter   6:   -75.99006501761826   -3.33965e-04   6.57326e-04 DIIS
+   @DF-RHF iter   7:   -75.99013888638819   -7.38688e-05   7.84449e-05 DIIS
+   @DF-RHF iter   8:   -75.99014134413177   -2.45774e-06   3.13824e-05 DIIS
+   @DF-RHF iter   9:   -75.99014149488978   -1.50758e-07   2.41837e-06 DIIS
+   @DF-RHF iter  10:   -75.99014149817550   -3.28572e-09   1.08517e-06 DIIS
+   @DF-RHF iter  11:   -75.99014149847690   -3.01398e-10   1.96895e-07 DIIS
+
+  ==> Post-Iterations <==
+
+    Orbital Energies (a.u.)
+    -----------------------
+
+    Doubly Occupied:                                                      
+
+       1Ap   -20.570447     2Ap    -1.275805     3Ap    -0.638653  
+       4Ap    -0.533134     1App   -0.484268  
+
+    Virtual:                                                              
+
+       5Ap     0.158087     6Ap     0.231535     7Ap     0.720998  
+       8Ap     0.729845     9Ap     1.169144     2App    1.189528  
+      10Ap     1.260785     3App    1.440473    11Ap     1.510775  
+       4App    1.677492    12Ap     1.790215    13Ap     1.896845  
+      14Ap     2.168072    15Ap     2.207853     5App    3.159699  
+       6App    3.228723    16Ap     3.309562    17Ap     3.757978  
+      18Ap     3.970543  
+
+    Final Occupation by Irrep:
+             Ap   App 
+    DOCC [     4,    1 ]
+
+  Energy converged.
+
+  @DF-RHF Final Energy:   -75.99014149847690
+
+   => Energetics <=
+
+    Nuclear Repulsion Energy =              8.0276265599863148
+    One-Electron Energy =                -121.0309390582393405
+    Two-Electron Energy =                  37.0131709997761291
+    DFT Exchange-Correlation Energy =       0.0000000000000000
+    Empirical Dispersion Energy =           0.0000000000000000
+    PCM Polarization Energy =               0.0000000000000000
+    EFP Energy =                            0.0000000000000000
+    Total Energy =                        -75.9901414984769019
+
+    Alert: EFP and PCM quantities not currently incorporated into SCF psivars.
+
+Properties will be evaluated at   0.000000,   0.000000,   0.000000 Bohr
+  ==> Properties <==
+
+
+Properties computed using the SCF density matrix
+
+  Nuclear Dipole Moment: (a.u.)
+     X:     0.0044      Y:    -1.0586      Z:     0.0000
+
+  Electronic Dipole Moment: (a.u.)
+     X:    -0.0023      Y:     0.2367      Z:     0.0000
+
+  Dipole Moment: (a.u.)
+     X:     0.0021      Y:    -0.8220      Z:     0.0000     Total:     0.8220
+
+  Dipole Moment: (Debye)
+     X:     0.0054      Y:    -2.0893      Z:     0.0000     Total:     2.0893
+
+
+  Saving occupied orbitals to File 180.
+
+*** tstop() called on s172-20-46-h184.paws.uga.edu at Tue Jul  7 16:06:52 2015
+Module time:
+	user time   =       0.19 seconds =       0.00 minutes
+	system time =       0.01 seconds =       0.00 minutes
+	total time  =          0 seconds =       0.00 minutes
+Total time:
+	user time   =       0.19 seconds =       0.00 minutes
+	system time =       0.01 seconds =       0.00 minutes
+	total time  =          0 seconds =       0.00 minutes
+
+*** PSI4 exiting successfully. Buy a developer a beer!
