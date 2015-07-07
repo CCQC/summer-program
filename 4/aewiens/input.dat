@@ -1,0 +1,25 @@
+import psi4
+from mp2 import MP2
+
+molecule {
+    O
+    H 1 0.96
+    H 1 0.96 2 104.5
+}
+
+set basis STO-3G
+set scf_type pk
+set e_convergence 12
+set mp2_type conv
+
+Eref= energy('mp2')
+
+mol = psi4.get_active_molecule()
+mints = psi4.MintsHelper()
+
+mp2 = MP2(mol, mints)
+Emp2 = mp2.get_energy()
+
+print Eref
+print Emp2
+
