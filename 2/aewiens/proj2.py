@@ -49,6 +49,7 @@ get_energy("X0X0_00",atoms,coords)
 ####   Single Displacements   ####
 ##################################
 
+"""
 for i in range(3*N):
 	forward = "X%dX0_10" % i
 	coords_f = coords
@@ -60,6 +61,7 @@ for i in range(3*N):
 	coords_r = coords
 	coords_r[i] = coords_r[i] - 0.005
 	get_energy(reverse,atoms,coords_r)
+"""
 
 
 #####################################
@@ -69,12 +71,23 @@ for i in range(3*N):
 ###########   BUG   #################
 
 for i in range(3*N):
+	for j in range(3*N):
+		f = "X%dX%d_11" % (i,j)
+		coords_new = coords
+		coords_new[i] = coords_new[i] + 0.005
+		coords_new[j] = coords_new[j] + 0.005
+		get_energy(f,atoms,coords_new)
+
+"""
+for i in range(3*N):
 	for j in range(i+1,3*N):
 		forward2 = "X%dX%d_11" % (i,j) 
 		coords_f2 = coords
 		coords_f2[i] = coords_f2[i] + 0.005
 		coords_f2[j] = coords_f2[i] + 0.005
+		get_energy("X0X1_11",atoms,coords_f2)
 		get_energy(forward2,atoms,coords_f2)
+	"""
 """
 		reverse2 = "X%dX%d_-1-1" % (i,j) 
 		coords_r2 = coords

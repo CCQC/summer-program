@@ -1,0 +1,32 @@
+# doublet H20+
+
+import psi4
+from rhf import RHF
+
+molecule mol {
+   O 
+   H 1 0.96
+   H 1 0.96 2 104.5
+   }
+
+set {
+    basis sto-3g
+    scf_type pk
+    e_convergence 12
+	 MAXITER 50
+    mp2_type conv
+    }
+
+Eref = energy('uhf')
+
+# initialize molecule object and integrals library
+
+mol = psi4.get_active_molecule()
+mints = psi4.MintsHelper()
+
+# call Hartree-Fock code here
+rhf = RHF(mol,mints)
+E = rhf.get_energy()
+
+print Eref
+print E
