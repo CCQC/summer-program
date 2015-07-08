@@ -15,7 +15,6 @@ mol = Molecule(f,"Bohr")
 mol.angs()
 atoms = mol.atoms
 geom  = mol.geom
-#print  geom
 N = mol.__len__()
 
 
@@ -31,11 +30,8 @@ for i in atoms:
 M = np.diag(m) 					     # as a matrix
 
 
-################### mass-weight the Hessian
+################### mass-weight the Hessian & get eigenvalues/ vectors
 mH = M*H0*M
-
-
-################### get eigenvalues of mH
 e, l = la.eigh(mH)
 
 ########################  unit conversions
