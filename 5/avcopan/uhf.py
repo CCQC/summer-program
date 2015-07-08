@@ -30,7 +30,7 @@ class UHF:
       self.E = 0.0
 
       for i in range(psi4.get_option('SCF', 'MAXITER')):
-        v = np.einsum('mrns,rs', g, D)   # e- field  v_mu,nu = sum_rh,si <mu rh||mu si> D_rh,si
+        v = np.einsum('mrns,sr', g, D)   # e- field  v_mu,nu = sum_rh,si <mu rh||mu si> D_si,rh
         f = h + v                        # build fock matrix
 
         tf    = X*f*X                    # transform to orthogonalized AO basis
