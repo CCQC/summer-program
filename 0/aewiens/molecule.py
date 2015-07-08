@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import numpy as np
+from scipy import linalg as la
 
 class Molecule:
    """
@@ -19,6 +20,8 @@ class Molecule:
       """
       self.atoms = [i[0] for i in geom_str[2:]]
       self.geom = np.array([ [float(i.split()[j]) for j in range(1,4)] for i in geom_str[2:] ])
+      N = len(self.geom)
+      self.coords = [self.geom[i][j] for i in range(N) for j in range(3)]
 
    def __str__(self):
       """
@@ -40,9 +43,8 @@ class Molecule:
       """
       return the geometry in bohr
       """
-      conv = 1.889725989
       if self.units == "Angstrom":
-         self.geom = [ [i[0]*conv, i[1]*conv, i[2]*conv] for i in self.geom]
+         self.geom = la.funm(self.geom, lambda x : x* 1.889725989).round(15)
          self.units == "Bohr"
       return self.geom
 
@@ -50,17 +52,16 @@ class Molecule:
       """
       return the geometry in Angstroms
       """
-      conv = 1.889725989
       if self.units == "Bohr":
-         self.geom = [ [i[0]/conv, i[1]/conv, i[2]/conv] for i in self.geom]
+         self.geom = la.funm(self.geom, lambda x : x/1.889725989).round(15)
          self.units = "Angstrom"
-      return self.geom 
+      return self.geom
 
 #### Example of an input
-#f = open("molecule.xyz","r")
-#f = f.readlines()
+f = open("../../1/extra-files/molecule.xyz","r")
+f = f.readlines()
 
-#mol = Molecule(f)
+mol = Molecule(f)
 
 #print mol.geom
 #print mol.atoms
