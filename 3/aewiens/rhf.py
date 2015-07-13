@@ -39,8 +39,8 @@ class RHF:
         E = self.E
 
         for i in range(maxiter):
-            J= np.einsum("ijkl,jl->ik",G,D)
-            K = np.einsum("ijkl,jk->il",G,D)
+            J= np.einsum("ikjl,kl->ij",G,D)
+            K = np.einsum("iklj,kl->ij",G,D)
             F = H+J-0.5*K      # start with F = Hcore
             tF = X*F*X
             e, tC = la.eigh(tF)
