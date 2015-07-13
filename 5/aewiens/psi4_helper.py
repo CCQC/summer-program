@@ -7,13 +7,13 @@
 
 import psi4
 
-def get_docc(mol):
-# get # of doubly occupied orbitals from psi4 molecule class
+def get_nocc(mol):
+####  get # of occupied SPIN orbitals from psi4 molecule class
     char = mol.molecular_charge()
     nelec = -char
     for A in range(mol.natom()):
         nelec += mol.Z(A)
-    return int(nelec / 2)
+    return int(nelec)
 
 def get_nbf(mints):
 # get # of basis functions from psi4 mints library
