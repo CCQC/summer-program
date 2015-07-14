@@ -15,7 +15,7 @@ __pycache__
 # Psi files
 *.clean
 timer.dat
-*/input.dat
+input.dat
 output.dat
 
 # Misc 
