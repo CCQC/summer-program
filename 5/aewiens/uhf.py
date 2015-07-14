@@ -68,6 +68,8 @@ class UHF:
          #### save the object variables we changed in this iteration
          self.D = D
          self.E = E
+         self.e = e
+         self.C = C
 
          if dE < self.conv: break
       return self.E
