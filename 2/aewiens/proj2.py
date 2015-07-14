@@ -1,30 +1,28 @@
 #!/usr/bin/python
 
 import os
+import re
 import sys
-
 sys.path.insert(0, '../../0/aewiens/')
-from molecule import Molecule
 
-############################
+from molecule import Molecule
+import numpy as np
+
+h = 0.005
+
 ####  Read in geometry  ####
-############################
 
 f = open("../../1/extra-files/molecule.xyz","r").readlines()
 mol = Molecule(f)
-#mol.bohr()
-geom = mol.geom
-atoms = mol.atoms
+mol.bohr()
 N = mol.__len__()
 coords = []
 for i in range(N):
 	for j in range(N):
-		coords.append(geom[i][j])
+		coords.append(mol.geom[i][j])
 
 
-############################
-####  Make input files  #### 
-############################
+####  function: make and run input files  #### 
 
 def get_energy(dirname,labels,coords):
 	os.mkdir(dirname)
@@ -38,61 +36,59 @@ def get_energy(dirname,labels,coords):
 	os.system('psi4')
 	os.chdir('..')
 
-######################################
-####  Reference Configuration    ####
-######################################
+#### function: find energy from output files ####
 
-get_energy("X0X0_00",atoms,coords)
+def E(i,j,hi,hj):
+   dirname = "X%dX%d_%d%d" % (i,j,hi,hj)
+   f = open("%s/output.dat" % dirname, "r").readlines()
+   lines = (' ').join(f)
+   line = re.findall("Total Energy\s=\s+-\d+.\d+",lines)
+   return float(line[0].split()[3])
 
+####  Run reference configuration    ####
 
-##################################
-####   Single Displacements   ####
-##################################
+#get_energy("X0X0_00",mol.atoms,coords)
+E0 = E(0,0,0,0)
 
-"""
-for i in range(3*N):
-	forward = "X%dX0_10" % i
-	coords_f = coords
-	coords_f[i] = coords_f[i] + 0.005
-	get_energy(forward,atoms,coords_f)
-
-
-	reverse = "X%dX0_-10" % i
-	coords_r = coords
-	coords_r[i] = coords_r[i] - 0.005
-	get_energy(reverse,atoms,coords_r)
-"""
-
-
-#####################################
-####   Double Displacements    ######
-#####################################
-
-###########   BUG   #################
+####   Run single displacements   ####
 
 for i in range(3*N):
-	for j in range(3*N):
-		f = "X%dX%d_11" % (i,j)
-		coords_new = coords
-		coords_new[i] = coords_new[i] + 0.005
-		coords_new[j] = coords_new[j] + 0.005
-		get_energy(f,atoms,coords_new)
+   forward = "X%dX0_10" % i
+   coords_f = [j for j in mol.coords]
+   coords_f[i] +=  h
+   #get_energy(forward,mol.atoms,coords_f)
 
-"""
+   reverse = "X%dX0_-10" % i
+   coords_r = [j for j in mol.coords]
+   coords_r[i] -=  h
+   #get_energy(reverse,mol.atoms,coords_r)
+
+
+####   Run double displacements    ######
+
 for i in range(3*N):
-	for j in range(i+1,3*N):
-		forward2 = "X%dX%d_11" % (i,j) 
-		coords_f2 = coords
-		coords_f2[i] = coords_f2[i] + 0.005
-		coords_f2[j] = coords_f2[i] + 0.005
-		get_energy("X0X1_11",atoms,coords_f2)
-		get_energy(forward2,atoms,coords_f2)
-	"""
-"""
-		reverse2 = "X%dX%d_-1-1" % (i,j) 
-		coords_r2 = coords
-		coords_r2[i] = coords_r2[i] - 0.005
-		coords_r2[j] = coords_r2[j] - 0.005
-		#get_energy(reverse2,atoms,coords_r2)
-"""
-		
+   for j in range(i):
+      f = "X%dX%d_11" % (i,j)
+      coords_f2 = [k for k in mol.coords]
+      coords_f2[i] += h
+      coords_f2[j] += h 
+      #get_energy(f,mol.atoms,coords_f2)
+
+      r = "X%dX%d_-1-1" % (i,j)
+      coords_r2 = [l for l in mol.coords]
+      coords_r2[i] -= h
+      coords_r2[j] -= h 
+      #get_energy(r,mol.atoms,coords_r2)
+
+H = np.zeros((3*N,3*N))
+for i in range(3*N):
+   a = E(i,0,1,0)
+   b = E(i,0,-1,0)
+   c = 2*E0
+   print ((a + b)-c)/(h**2)
+#   print (a + b - c)/(h**2)
+   #H[i,i]= (E(i,0,1,0)+E(i,0,-1,0)-2*E0)/(h**2)
+   #for j in range(0,i):
+   #   H[i,j] = H[j,i] = (E(i,j,1,1)+E(i,j,-1,-1)-E(i,0,1,0)-E(j,0,1,0)-E(j,0,-1,0)-E(i,0,-1,0)+2*E0)/(h**2)
+
+#np.savetxt("hessian.txt",H,"%15.7f"," ","\n")

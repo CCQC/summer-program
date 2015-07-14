@@ -15,6 +15,11 @@ __pycache__
 # Psi files
 *.clean
 timer.dat
+*/input.dat
+output.dat
 
-# Hessian directories
+# Misc 
+# (Hessian projects)
 2/aewiens/X*
+2/aewiens/hessian.txt
+1/aewiens/modes.xyz
