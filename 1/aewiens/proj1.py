@@ -8,7 +8,6 @@ import masses
 from molecule import Molecule
 
 import numpy as np
-from scipy import linalg as la
 
 
 #####  Read in the molecule
@@ -35,7 +34,7 @@ mH = M*H0*M
 
 
 #####  Diagonalize Hessian
-e, l = la.eigh(mH)
+e, l = np.linalg.eigh(mH)
 
 
 #####  Eigenvectors --> vibrational modes
@@ -50,9 +49,14 @@ c = 29979245800.0                                              # speed of light,
 conv =  np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)  # dimensional analysis
 
 
-#####   get frequencies and print to frequencies.txt
-#       \lambda_a = \omega_a^2 / conv^2
-freq = [conv*np.sqrt(i) for i in e]
+#####   get frequencies
+#####   lambda_a = omega_a^2 / conv^2
+freq = []
+for i in e:
+    if i <0:
+        freq.append((-i)**0.5*conv)
+    else:
+        freq.append(i**0.5*conv)
 
 
 #####    visualize vibrational modes
