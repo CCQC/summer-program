@@ -5,6 +5,7 @@ Repository for all summer program related programming. If you have any questions
 remember that Google and [Stack Overflow](http://stackoverflow.com/) are your best
 friends.
 
+
 Projects
 --------
 
@@ -27,12 +28,15 @@ Python
 ------
 Download the [Anaconda package with Python3.4](http://continuum.io/downloads#34)
 (you'll have to click on 'I want Python3.4'). To learn how to code Python, use
-[Learn Python the Hard Way](http://learnpythonthehardway.org/book/). It will take
-time, but this is the best resource I have found, as it skips all the hand-holding
-that other resources do. One note, all print lines will need parantheses, a major
-change from Python2. Also, starting on excersise 6, see if you can learn how to use
-the [string format](https://docs.python.org/3.5/library/string.html#string-formatting)
-instead of the '%' to format strings.
+[Learn Python the Hard Way](http://learnpythonthehardway.org/book/). It will
+take time, but this is the best resource I have found, as it skips all the
+hand-holding that other resources do. One note, all print lines will need
+parantheses, a major change from Python2. Also, starting on excersise 6, see if
+you can learn how to use the [string
+format](https://docs.python.org/3.5/library/string.html#string-formatting)
+instead of the '%' to format strings. For a general overview of best practices
+in Python, read [python_tips.md](python_tips.md).
+
 
 Git
 ---
@@ -63,20 +67,24 @@ Organization
 ------------
 
  ```
-summer-program
+summer-program/
+|   .gitignore
+|   python_tips.md
 │   README.md
 │
-├───0
+├───extra-files/
+│
+├───0/
 │   │   instructions.pdf
 │   │
-│   ├───username1
+│   ├───username1/
 │   │   code.py
 │   │
-│   ├───username2
+│   ├───username2/
 │   │   code.py
 │   ...
 │
-├───1
+├───1/
 ...
 ```
 
