@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import os
 import re
@@ -8,87 +8,117 @@ sys.path.insert(0, '../../0/aewiens/')
 from molecule import Molecule
 import numpy as np
 
+
+mol = Molecule(open("../../1/extra-files/molecule.xyz","r").read(),"Bohr")
+N = len(mol)
 h = 0.005
 
-####  Read in geometry  ####
+input_file = """molecule {{
+{}
+units bohr
+}}
 
-f = open("../../1/extra-files/molecule.xyz","r").readlines()
-mol = Molecule(f)
-mol.bohr()
-N = mol.__len__()
-coords = []
-for i in range(N):
-	for j in range(N):
-		coords.append(mol.geom[i][j])
+set {{
+    basis cc-pVDZ
+    e_convergence 12
+    scf_type pk
+    }}
+
+energy('scf')
+"""
+
+def make_input(dirname,atoms,geom):
+    """
+    Write a psi4 input file with specified name
+    :param dirname: directory where we'll write the input file
+    :param atoms: list of strings of the atom labels for the molecule
+    :param geom: numpy matrix of the xyz coordinates for the molecule
+    """
+    os.mkdir("%s" % dirname)
+    xyz = [('  ').join([atoms[i]] + [str(geom[i,j]) for j in range(3)]) for i in range(N)]
+    open("{:s}/input.dat".format(dirname), 'w').write(input_file.format(('\n').join(xyz)))
 
 
-####  function: make and run input files  #### 
+def run_input(dirname):
+    """
+    Run a psi4 single-point energy with specified name
+    :param dirname: directory where we'll run the input file
+    """
+    os.chdir(dirname)
+    os.system('psi4')
+    os.chdir('..')
 
-def get_energy(dirname,labels,coords):
-	os.mkdir(dirname)
-	f = open("%s/input.dat" % dirname,"w")
-	f.write("set basis cc-pVDZ\n\nmolecule h20 {\n0 1\n")
-	for i in range(N):
-		f.write("%s %f %f %f\n"  % (labels[i], coords[3*i], coords[3*i+1], coords[3*i+2]))
-	f.write("units bohr\n}\n\nenergy('scf')")
-	f.close()
-	os.chdir(dirname)
-	os.system('psi4')
-	os.chdir('..')
-
-#### function: find energy from output files ####
 
 def E(i,j,hi,hj):
-   dirname = "X%dX%d_%d%d" % (i,j,hi,hj)
-   f = open("%s/output.dat" % dirname, "r").readlines()
-   lines = (' ').join(f)
-   line = re.findall("Total Energy\s=\s+-\d+.\d+",lines)
-   return float(line[0].split()[3])
+    """
+    Pull energy from output.dat and throw an error if not found
+    :param i: index of atom 1
+    :param j: index of atom 2
+    :param hi: displacement of atom 1 (-1, 0, or 1, corresponds to -h, 0, or h)
+    :param hj: displacement of atom 2
+    """
+    dirname = "X%dX%d_%d%d" % (i,j,hi,hj)
+    out_str = open("%s/output.dat" % dirname, "r").read()
+    match = re.findall("Total Energy\s=\s+-\d+.\d+",out_str)
+    if match == []:
+        out = "Cannot find energy!"
+    else:
+        out = float(match[0].split()[-1])
+    return out
+
 
 ####  Run reference configuration    ####
 
-#get_energy("X0X0_00",mol.atoms,coords)
-E0 = E(0,0,0,0)
+make_input("X0X0_00",mol.atoms,mol.geom)
+run_input("X0X0_00")
+
 
 ####   Run single displacements   ####
 
 for i in range(3*N):
    forward = "X%dX0_10" % i
-   coords_f = [j for j in mol.coords]
-   coords_f[i] +=  h
-   #get_energy(forward,mol.atoms,coords_f)
-
    reverse = "X%dX0_-10" % i
-   coords_r = [j for j in mol.coords]
-   coords_r[i] -=  h
-   #get_energy(reverse,mol.atoms,coords_r)
+   geom_copy = mol.copy().geom
+   geom_copy[i/3,i%3] +=h
+
+   make_input(forward,mol.atoms,geom_copy)
+
+   geom_copy[i/3,i%3] -= 2*h
+   make_input(reverse,mol.atoms,geom_copy)
+
+   run_input(forward)
+   run_input(reverse)
 
 
 ####   Run double displacements    ######
 
 for i in range(3*N):
-   for j in range(i):
-      f = "X%dX%d_11" % (i,j)
-      coords_f2 = [k for k in mol.coords]
-      coords_f2[i] += h
-      coords_f2[j] += h 
-      #get_energy(f,mol.atoms,coords_f2)
+    for j in range(i):
+        forward = "X%dX%d_11" % (i,j)
+        reverse = "X%dX%d_-1-1" % (i,j)
+        geom_copy2 = mol.copy().geom
 
-      r = "X%dX%d_-1-1" % (i,j)
-      coords_r2 = [l for l in mol.coords]
-      coords_r2[i] -= h
-      coords_r2[j] -= h 
-      #get_energy(r,mol.atoms,coords_r2)
+        geom_copy2[i/3,i%3] += h
+        geom_copy2[j/3,j%3] += h
 
+        make_input(forward,mol.atoms,geom_copy2)
+
+        geom_copy2[i/3,i%3] -= 2*h
+        geom_copy2[j/3,j%3] -= 2*h
+
+        make_input(reverse,mol.atoms,geom_copy2)
+
+        run_input(forward)
+        run_input(reverse)
+
+
+E0 = E(0,0,0,0)
 H = np.zeros((3*N,3*N))
-for i in range(3*N):
-   a = E(i,0,1,0)
-   b = E(i,0,-1,0)
-   c = 2*E0
-   print ((a + b)-c)/(h**2)
-#   print (a + b - c)/(h**2)
-   #H[i,i]= (E(i,0,1,0)+E(i,0,-1,0)-2*E0)/(h**2)
-   #for j in range(0,i):
-   #   H[i,j] = H[j,i] = (E(i,j,1,1)+E(i,j,-1,-1)-E(i,0,1,0)-E(j,0,1,0)-E(j,0,-1,0)-E(i,0,-1,0)+2*E0)/(h**2)
 
-#np.savetxt("hessian.txt",H,"%15.7f"," ","\n")
+for i in range(3*N):
+    H[i,i]= (E(i,0,1,0)+E(i,0,-1,0)-2*E0)/(h**2)
+    for j in range(0,i):
+        H[i,j] = H[j,i] = (E(i,j,1,1)+E(i,j,-1,-1)-E(i,0,1,0)-E(j,0,1,0)-E(j,0,-1,0)-E(i,0,-1,0)+2*E0)/(2*h**2)
+
+
+np.savetxt("hessian.txt",H,"%15.7f"," ","\n")

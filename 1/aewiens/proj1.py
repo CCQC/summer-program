@@ -11,7 +11,7 @@ import numpy as np
 
 
 #####  Read in the molecule
-f = open("../extra-files/molecule.xyz").readlines()
+f = open("../extra-files/molecule.xyz").read()
 mol = Molecule(f,"Bohr")
 mol.angs()
 N = mol.__len__()
