@@ -42,6 +42,7 @@ class UHF:
         self.e_convergence = psi4.get_global_option('E_CONVERGENCE')
 
         self.nbf = mints.basisset().nbf()
+        self.norb = self.nbf*2
 
     def compute_energy(self):
         """
@@ -90,6 +91,8 @@ class UHF:
         psi4.print_out('RHF Energy: {:20.15f}\n'.format(E))
 
         self.E = E
+        self.C = C
+        self.e = e
 
         return E
 
