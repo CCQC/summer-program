@@ -32,8 +32,8 @@ class UHF:
       self.H = self.T + self.V
 
       # ERI matrix
-      G = np.array( mints.ao_eri() )    ####  mxmxmxm tensor
-      self.G = block_tei(G)             ####  chemists' notation!! 
+      G = np.array( mints.ao_eri() )                                ####  mxmxmxm tensor
+      self.G = block_tei(G)                                         ####  chemists' notation
       self.g = self.G.swapaxes(1,2) - self.G.swapaxes(1,3)          ####  ( m n | r s ) - ( m s | n r ) ->   < m r | n s >  -  < m r | s n >
 
       # Density matrix
@@ -62,7 +62,7 @@ class UHF:
          E = np.trace( (self.H+0.5*v)*self.D) + self.Vnu        #  HF energy
 
          dE = np.fabs(E-E0)
-         print( "%20.12f%20.12f" % (E, dE) ) 
+         print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
 
          #### save the object variables we changed in this iteration
          self.D = D
@@ -71,7 +71,8 @@ class UHF:
          self.C = C
 
          if dE < self.conv: break
-      return self.e
+      print self.e
+      return self.E
          
 
 """
