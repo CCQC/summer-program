@@ -26,5 +26,5 @@ mints = psi4.MintsHelper()
 rhf = RHF(mol,mints)
 E = rhf.get_energy()
 
-print Eref
-print E
+print(Eref)
+print(E)

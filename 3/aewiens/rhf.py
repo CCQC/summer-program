@@ -52,7 +52,7 @@ class RHF:
             E = np.trace(0.5*(H+F)*D)+Vnu
             dE = np.fabs(E-E0)
 
-            print "{0:20.12f}{1:20.12f}".format(E,dE)
+            print( "{0:20.12f}{1:20.12f}".format(E,dE) )
             if dE < self.conv : break
 
             #### save the object variables that changed during this iteration

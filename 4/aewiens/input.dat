@@ -20,6 +20,6 @@ mints = psi4.MintsHelper()
 mp2 = MP2(mol, mints)
 Emp2 = mp2.get_energy()
 
-print Eref
-print Emp2
+print( Eref )
+print( Emp2 )
 
