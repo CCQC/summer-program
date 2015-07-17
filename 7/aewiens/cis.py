@@ -4,7 +4,6 @@ from psi4_helper import get_nocc, get_nbf
 
 import sys
 sys.path.insert(0,"../../5/aewiens")
-#sys.path.insert(0,"../../5/avcopan")
 
 from uhf import UHF
 
