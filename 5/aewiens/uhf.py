@@ -33,8 +33,8 @@ class UHF:
 
       # ERI matrix
       G = np.array( mints.ao_eri() )    ####  mxmxmxm tensor
-      self.G = block_tei(G)
-      self.g = self.G.swapaxes(1,2)     ####  ( m n | r s ) ->   < m r | n s > 
+      self.G = block_tei(G)             ####  chemists' notation!! 
+      self.g = self.G.swapaxes(1,2) - self.G.swapaxes(1,3)          ####  ( m n | r s ) - ( m s | n r ) ->   < m r | n s >  -  < m r | s n >
 
       # Density matrix
       self.D = np.matrix(np.zeros(self.Z.shape))
@@ -51,19 +51,18 @@ class UHF:
       g, D, H, X, Vnu, E = self.g, self.D, self.H, self.X, self.Vnu, self.E
 
       for i in range(self.maxiter):
-         J = np.einsum("mnrs,ns->mr", g, D)           #  coulomb
-         K = np.einsum("mnsr,ns->mr", g, D)           #  exchange
-         F = H + ( J-K )                              # build fock matrix
+         v = np.einsum("mnrs,ns->mr", g, D)
+         F = H+ v                                     # build fock matrix
          e,tC = la.eigh(X * F * X)                    #  eigenvalues, vectors of diagonalized Fock matrix
          C = X * tC                                   #  backtransform C
          oC = C[:,:self.nocc]                         #  occupied MO coefficients
          D = oC * oC.T                                #  density matrix (of MO coefficients)
 
          E0 = E
-         E = np.trace( (self.H+0.5*(J-K))*self.D) + self.Vnu        #  HF energy
+         E = np.trace( (self.H+0.5*v)*self.D) + self.Vnu        #  HF energy
 
          dE = np.fabs(E-E0)
-         print("%20.12f%20.12f" % (E, dE))
+         print( "%20.12f%20.12f" % (E, dE) ) 
 
          #### save the object variables we changed in this iteration
          self.D = D
@@ -72,7 +71,7 @@ class UHF:
          self.C = C
 
          if dE < self.conv: break
-      return self.E
+      return self.e
          
 
 """

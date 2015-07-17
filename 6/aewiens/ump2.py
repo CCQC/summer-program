@@ -16,17 +16,19 @@ class UMP2:
         self.norb = 2*self.nbf
         self.conv = get_conv()
         self.maxiter = get_maxiter()
-        self.uhf = UHF(mol,mints)
-        self.E_uhf = self.uhf.get_energy()
-        self.e = self.uhf.e
-        self.g = self.uhf.g
-        self.C = self.uhf.C
+
+        uhf = UHF(mol,mints)
+        uhf.get_energy()
+        self.E0 = uhf.E
+        self.e = uhf.e
+        self.g = uhf.g
+        self.C = uhf.C
 
     def get_mp2(self):
 
         # rename class variables
         nocc, nbf, conv, maxiter,norb = self.nocc, self.nbf, self.conv, self.maxiter,self.norb
-        E_uhf, e = self.E_uhf, self.e
+        E0, e = self.E0, self.e
 
 
         ####  4 different algorithms for integral transformation
@@ -38,14 +40,14 @@ class UMP2:
         #4  Gmo = self.transform_integrals_noddy()
 
 
-        Gmo = Gmo - Gmo.swapaxes(2,3)                       ####  Antisymmetrize integrals
+#        Gmo = Gmo - Gmo.swapaxes(2,3)                       ####  Antisymmetrize integrals
         Ecorr = 0.0
         for i in range(nocc):
             for j in range(nocc):
                 for a in range(nocc,norb):
                     for b in range(nocc,norb):
                         Ecorr += 0.25 * (Gmo[i,j,a,b])**2 / (e[i] + e[j] - e[a] - e[b])
-        return E_uhf + Ecorr
+        return E0 + Ecorr
 
 
     def transform_integrals_einsum_noddy(self):
