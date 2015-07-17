@@ -71,7 +71,6 @@ class UHF:
          self.C = C
 
          if dE < self.conv: break
-      print self.e
       return self.E
          
 
@@ -79,13 +78,13 @@ class UHF:
 spin-blocking functions: transform from spatial orbital {x_mu} basis to spin orbital basis {x_mu alpha, x_mu beta}
 """
 
-# block one-electron integrals
+# 1-electron integrals
 def block_oei(A):
    A = np.matrix(A)
    O = np.zeros(A.shape)
    return np.bmat( [[A,O],[O,A]] )     # bmat makes block matrices !!! 
 
-# block two-electron integrals
+# 2-electron integrals
 def block_tei(T):
    t = np.array(T)
    n = t.shape[0]
