@@ -34,8 +34,9 @@ class Molecule(object):
         self.coords = np.array(coords)
         print("Atoms Present: ")
         print(atoms)
-        print ("Atomic Coordinates:")
+        print("Atomic Coordinates:")
         print(self.coords)
+
     def __len__(self):
         """
         Gives the number of atoms in the molecule
@@ -52,7 +53,6 @@ class Molecule(object):
             self.units = "Bohr"
             self.coords *= 1.889725989
             print("These are the units in Bohr: ")
-            return self.coords
 
 
     def bohr_to_ang(self):
@@ -63,7 +63,6 @@ class Molecule(object):
             self.units = "Angstrom"
             self.coords /= 1.889725989
             print("These are the units in Angstroms: ")
-            return self.coords
 
 if __name__ == "__main__":
     mol = Molecule(open("../../extra-files/molecule.xyz").read())
