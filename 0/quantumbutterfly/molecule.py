@@ -2,12 +2,13 @@ import numpy as np
 
 class Molecule:
     """
-    A molecule class that implements labeled geometry and number of atoms
+    A simple molecule
     """
 
     def __init__(self, geom_str, units="Angstrom"):
         """
         Make a new molecule
+
         :param geom_str: a string of the desired geometry
         :param units: units of the geometry, Bohr or Angstrom
         """
@@ -32,22 +33,16 @@ class Molecule:
         self.num = num
         self.atoms = atoms
         self.coords = np.array(coords)
-        """
-    def to_bohr(self):
-       #
-       # Convert geometry to Angstrom if in Bohr
-       #
+
+    def ang_to_bohr(self):
         if self.units == "Angstrom":
-            self.units = "Bohr"
             self.coords *= 1.889725989
 
-    def to_ang(self):
-	#   Convert geometry to Bohr if in Angstrom
+    def bohr_to_ang(self):
         if self.units == "Bohr":
-            self.units = "Angstrom"
             self.coords /= 1.889725989
-"""
-    def print(self):
+
+    def mol_print(self):
         print(self.num)
         print(self.atoms)
         print(self.coords)
@@ -55,4 +50,4 @@ class Molecule:
 if __name__ == "__main__":
     geom_str = open("../../extra-files/molecule.xyz").read()
     mol = Molecule(geom_str)
-    mol.print()
+    mol.mol_print()
