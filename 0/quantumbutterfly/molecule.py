@@ -8,7 +8,6 @@ class Molecule:
     def __init__(self, geom_str, units="Angstrom"):
         """
         Make a new molecule
-
         :param geom_str: a string of the desired geometry
         :param units: units of the geometry, Bohr or Angstrom
         """
@@ -37,10 +36,12 @@ class Molecule:
     def ang_to_bohr(self):
         if self.units == "Angstrom":
             self.coords *= 1.889725989
+        return(self)
 
     def bohr_to_ang(self):
         if self.units == "Bohr":
             self.coords /= 1.889725989
+        return(self)
 
     def mol_print(self):
         print(self.num)
