@@ -17,7 +17,7 @@ import numpy as np
 #From the molecular geometry file, initialize a molecule object
 geom_str = open("../../extra-files/molecule.xyz").read()
 mol = Molecule(geom_str)
-mol.mol_print()
+#mol.mol_print()
 #Convert geometry to Bohr to match units in input
 #mol = mol.ang_to_bohr()
 #mol.print()
@@ -67,17 +67,20 @@ for i in range(0, 3*num):
 #code here that can write that comment line in my input file in some
 #fashion.
 def make_input(dirname,labels,coords):
+    coords.tolist()
+    print(coords)
     with open(dirname + "/input.dat",'w') as f:
         f.write("molecule {\n")
         f.write("units bohr\n")
-        f.write("AT xcoord ycoord zcoord\n")
+        for k in range(0, num):
+            atom = labels[k]
+            x,y,z = coords[k]
+            f.write("  {:<2}{:14.10f}{:14.10f}{:14.10f}\n".format(atom,x,y,z))
         #The write function needs a string, or something that acts like one. 
-        #Therefore, I'll need to turn my numpy matrices into lists, then into
-        #strings (unless there is a direct way to go from numpy matrices to
-        #strings).
-        #f.write(atoms)
-        #f.write(coords)
-        f.write("}\n\n")
+        #For whatever reason, my coordinates are being truncated. The list
+        #of lists of coordinates is not truncating them; not sure what the
+        #deal is.
+        f.write("\n}\n\n")
         f.write("set basis cc-pVDZ\n")
         f.write("energy('scf')\n")
 
