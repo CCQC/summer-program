@@ -24,23 +24,8 @@ coords = mol.coords
 #Displacement, in Bohr
 h = 0.005
 
-#Reference configuration directory
-if not os.path.exists("____"):
-    os.mkdir("____")
-
-#Single displacement directory loop
-for i in range(0, 3*num):
-    if not os.path.exists("f" + str(i) + "__"):
-        os.mkdir("f" + str(i) + "__")
-    
-	#Double displacement directory loop
-    for j in range(i, 3*num):
-        if not os.path.exists("f" + str(i) + "f" + str(j)):
-            os.mkdir("f" + str(i) + "f" + str(j))
-        if not os.path.exists("b" + str(i) + "b" + str(j)):
-            os.mkdir("b" + str(i) + "b" + str(j))
-
-#Third argument to this function is a list (of lists of coordinates)
+#Function to construct input files given a directory, list of atom
+#labels and a list of coordinates
 def make_input(dirname,labels,coords):
     with open(dirname + "/input.dat",'w') as f:
         f.write("molecule {\nunits bohr\n")
@@ -50,23 +35,28 @@ def make_input(dirname,labels,coords):
             f.write("  {:<2}{:14.10f}{:14.10f}{:14.10f}\n".format(atom,x,y,z))
         f.write("\n}\n\nset basis cc-pVDZ\nenergy('scf')\n")
 
-
-#Combine with the directory loop?
-#Reference configuration input file
+#Reference configuration
+if not os.path.exists("____"):
+    os.mkdir("____")
 if not os.path.exists("____/input.dat"):
     make_input("____",atoms,coords)
 
-#Single displacement input file loop
-#Still need to write code that will actually displace the coordinate
+#Single displacement directory loop
 for i in range(0, 3*num):
+    if not os.path.exists("f" + str(i) + "__"):
+        os.mkdir("f" + str(i) + "__")
     if not os.path.exists("f" + str(i) + "__/input.dat"):
         coords.tolist()
         make_input("f" + str(i) + "__",atoms,coords)
-    
-	#Double displacement input file loop
-	#Still need to write code to displace the coordinates
+
+	#Double displacement directory loop
     for j in range(i, 3*num):
+        if not os.path.exists("f" + str(i) + "f" + str(j)):
+            os.mkdir("f" + str(i) + "f" + str(j))
         if not os.path.exists("f" + str(i) + "f" + str(j) + "/input.dat"):
             make_input("f" + str(i) + "f" + str(j),atoms,coords)
+
+        if not os.path.exists("b" + str(i) + "b" + str(j)):
+            os.mkdir("b" + str(i) + "b" + str(j))
         if not os.path.exists("b" + str(i) + "b" + str(j) + "/input.dat"):
             make_input("b" + str(i) + "b" + str(j),atoms,coords)
