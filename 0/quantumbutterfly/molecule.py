@@ -51,4 +51,5 @@ class Molecule:
 if __name__ == "__main__":
     geom_str = open("../../extra-files/molecule.xyz").read()
     mol = Molecule(geom_str)
+    mol.ang_to_bohr()
     mol.mol_print()
