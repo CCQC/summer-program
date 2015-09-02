@@ -5,6 +5,7 @@ sys.path.insert(0, '../extra-files')
 sys.path.insert(0, '../../0/aewiens')
 
 import masses
+from conv import bohr2m, amu2kg, hartree2J, c
 from molecule import Molecule
 
 import numpy as np
@@ -39,13 +40,9 @@ e, l = np.linalg.eigh(mH)
 
 #####  Eigenvectors --> vibrational modes
 Q = np.matrix(M)*np.matrix(l)
+print Q
 
 
-#####  Unit conversions
-bohr2m = 5.2917721e-11
-amu2kg = 1.6605389e-27
-hartree2J = 4.3597443e-18
-c = 29979245800.0                                              # speed of light, cm /s
 conv =  np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)  # dimensional analysis
 
 
