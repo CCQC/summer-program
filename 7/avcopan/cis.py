@@ -3,7 +3,7 @@ import numpy as np
 import scipy.linalg as la
 import itertools as it
 import sys
-sys.path.append("../../5/avcopan/")
+sys.path.append("../../5/aewiens/")
 from uhf import UHF
 
 

@@ -1,7 +1,5 @@
 import numpy as np
 
-from psi4_helper import get_nocc, get_nbf
-
 import sys
 sys.path.insert(0,"../../5/aewiens")
 
@@ -11,36 +9,54 @@ class CIS:
 
     def __init__(self,mol,mints):
 
-        self.nbf = get_nbf(mints)
-        self.nocc = get_nocc(mol)
-
         uhf = UHF(mol,mints)
         uhf.get_energy()
-        self.E0 = uhf.E
-        self.e = uhf.e
 
-        self.Gmo = transform_integrals(uhf.g, uhf.C)
-
-        self.norb = 2*self.nbf
-        self.nvirtual = self.norb - self.nocc
+        nbf = uhf.nbf
+        self.nocc = uhf.nocc
+        self.nvirtual = 2*nbf - self.nocc
         self.ndet = self.nvirtual*self.nocc
 
+        self.E0 = uhf.E
+        self.e = uhf.e
+        self.C = uhf.C
+        self.g = uhf.g
 
-    def singles_iterator(self):
+#        self.TF = uhf.TF
+
+
+    def transform_integrals(self,g,C):
+        """
+        :param g: 4D array of 2-electron integrals in AO basis
+        :param C: 2D array of MO expansion coefficients for AO basis functions (from UHF)
+        Return a 4D array (same as g.size) of 2-electron integrals in MO basis
+        """
+        return np.einsum('Pp,Pqrs->pqrs', C,
+                    np.einsum('Qq,PQrs->Pqrs', C,
+                        np.einsum('Rr,PQRs->PQrs', C,
+                            np.einsum('Ss,PQRS->PQRs', C, g))))
+
+
+    def get_singles(self):
         """
         return a list of all (i,a) single excitations  xi_i -> xi_a
         """
         return [(i,a) for i in range(self.nocc) for a in range(self.nocc,self.nocc+self.nvirtual)]
 
+
     def cis_energies(self):
         """
-        Print out a list of CIS excited states and their energies (Eh)
+        Print a list of CIS excited states and their energies (Eh)
         Return an ordered list of CIS excitation energies
         """
         ##  rename object variables 
-        ndet, E0, e, Gmo = self.ndet, self.E0, self.e, self.Gmo
+        ndet, E0, e, g, C = self.ndet, self.E0, self.e, self.g, self.C
 
-        excite = self.singles_iterator()
+#        TF = self.TF
+
+        Gmo = self.transform_integrals(g,C)
+
+        excite = self.get_singles()
 
         ##  initialize CIS hamiltonian tH
         tH = np.zeros((ndet,ndet))
@@ -49,6 +65,7 @@ class CIS:
         for P, (i,a) in enumerate(excite):
             for Q, (j,b) in enumerate(excite):
                 tH[P,Q] += Gmo[a,j,i,b] + (e[a] - e[i])*(a==b)*(i==j) 
+#                tH[P,Q] += Gmo[a,j,i,b] + TF[a,b]*(i==j) - TF[i,j]*(a==b)
                 
         ##  diagonalize tH
         E, C = np.linalg.eigh(tH)
@@ -60,8 +77,3 @@ class CIS:
         self.E = E
         return E
 
-def transform_integrals(g,C):
-  return np.einsum('Pp,Pqrs->pqrs', C,
-           np.einsum('Qq,PQrs->Pqrs', C,
-             np.einsum('Rr,PQRs->PQrs', C,
-               np.einsum('Ss,PQRS->PQRs', C, g))))

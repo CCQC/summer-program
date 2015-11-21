@@ -1,4 +1,5 @@
 import psi4
+
 from rhf import RHF
 
 molecule mol {

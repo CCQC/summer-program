@@ -1,77 +1,71 @@
 from psi4_helper import get_nbf,get_nocc,get_conv,get_maxiter
 import numpy as np
-from scipy import linalg as la
+import scipy.linalg as la
 
 class UHF:
+    """
+    Class for unrestricted (spin-orbital) Hartree-Fock computations
+    """
 
-   def __init__(self,mol,mints):
-      self.nbf = get_nbf(mints)
-      self.norb = 2* self.nbf
-      self.nocc = get_nocc(mol)
-      self.conv = get_conv()
-      self.maxiter = get_maxiter()
-      m = self.nbf
-      N = self.norb
+    def __init__(self,mol,mints):
+        """
+        Initialize uhf class
+        :param mol: a psi4 molecule object
+        :param mints: a molecular integrals object (from psi4 MintsHelper)
+        """
 
-      # overlap matrix
-      S = mints.ao_overlap()
-      self.Z = block_oei(S)
-      self.X = np.matrix(la.funm(self.Z,lambda x : x**(-0.5)))
+        self.nbf = get_nbf(mints)
+        self.norb = 2* self.nbf
+        self.nocc = get_nocc(mol)
+        self.conv = get_conv()
+        self.maxiter = get_maxiter()
 
-      # KE matrix
-      T = mints.ao_kinetic()
-      self.T = block_oei(T)
+        self.S = block_oei( mints.ao_overlap() )                      ##  S = overlap matrix
+        self.X = np.matrix(la.funm(self.S,lambda x : x**(-0.5)))      ##  S^{-1/2} diagonalizes the Fock matrix
 
-      # PE matrix
-      V = mints.ao_potential()
-      self.V = block_oei(V)
+        self.T = block_oei( mints.ao_kinetic() )
+        self.V = block_oei( mints.ao_potential() )
+        self.Vnu = mol.nuclear_repulsion_energy()                     ##  Nuclear repulsion energy
+        self.H = self.T + self.V
+        
+        G = block_tei(np.array( mints.ao_eri() ) )                    ##  4D ERI array (chemists' notation)
+        g = G.swapaxes(1,2)                                           ##  ( m n | r s )  --> < m r | n s >
+        self.g = g - g.swapaxes(2,3)                                  ##  antisymmetrize
 
-      self.Vnu = mol.nuclear_repulsion_energy()
+        self.D = np.matrix(np.zeros(self.S.shape))                    ##  Density matrix
 
-      # Hcore
-      self.H = self.T + self.V
+        self.E = 0.0
 
-      # ERI matrix
-      G = np.array( mints.ao_eri() )                                ####  mxmxmxm tensor
-      self.G = block_tei(G)                                         ####  chemists' notation
-      self.g = self.G.swapaxes(1,2) - self.G.swapaxes(1,3)          ####  ( m n | r s ) - ( m s | n r ) ->   < m r | n s >  -  < m r | s n >
+    def get_energy(self):
+        """
+        print E and dE from each iteration
+        return uhf energy
+        """
+        ##  rename object variables
+        g, D, H, X, Vnu, E = self.g, self.D, self.H, self.X, self.Vnu, self.E
 
-      # Density matrix
-      self.D = np.matrix(np.zeros(self.Z.shape))
+        for i in range(self.maxiter):
+            v = np.einsum("mnrs,ns->mr", g, D)
+            F = H+ v                                                  ##  build fock matrix (1st guess is F = Hcore) 
+            e,tC = la.eigh(X * F * X)                                 ##  eigenvalues, vectors of transformed Fock matrix
+            C = X * tC                                                ##  backtransform C
+            oC = C[:,:self.nocc]                                      ##  occupied MO coefficients
+            D = oC * oC.T                                             ##  density matrix (of MO coefficients)
 
-      self.E = 0.0
+            E0 = E
+            E = np.trace( (self.H+0.5*v)*self.D) + self.Vnu           ##  HF energy
+            self.TF = X* ( (self.H + 0.5*v)*self.D ) *X
 
-   def get_energy(self):
-      """
-      print E and dE from each iteration
-      return uhf energy
-      """
+            dE = np.fabs(E-E0)
+            print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
 
-      ####  rename object variables
-      g, D, H, X, Vnu, E = self.g, self.D, self.H, self.X, self.Vnu, self.E
+            ##  object variables we changed in this iteration
+            self.D, self.E, self.e, self.C = D, E, e, C
 
-      for i in range(self.maxiter):
-         v = np.einsum("mnrs,ns->mr", g, D)
-         F = H+ v                                     # build fock matrix
-         e,tC = la.eigh(X * F * X)                    #  eigenvalues, vectors of diagonalized Fock matrix
-         C = X * tC                                   #  backtransform C
-         oC = C[:,:self.nocc]                         #  occupied MO coefficients
-         D = oC * oC.T                                #  density matrix (of MO coefficients)
+            if dE < self.conv: break
 
-         E0 = E
-         E = np.trace( (self.H+0.5*v)*self.D) + self.Vnu        #  HF energy
-
-         dE = np.fabs(E-E0)
-         print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
-
-         #### save the object variables we changed in this iteration
-         self.D = D
-         self.E = E
-         self.e = e
-         self.C = C
-
-         if dE < self.conv: break
-      return self.E
+        self.Fmo = C.T * F * C
+        return self.E
          
 
 """
@@ -80,18 +74,18 @@ spin-blocking functions: transform from spatial orbital {x_mu} basis to spin orb
 
 # 1-electron integrals
 def block_oei(A):
-   A = np.matrix(A)
-   O = np.zeros(A.shape)
-   return np.bmat( [[A,O],[O,A]] )     # bmat makes block matrices !!! 
+    A = np.matrix(A)
+    O = np.zeros(A.shape)
+    return np.bmat( [[A,O],[O,A]] )     # bmat makes block matrices !!! 
 
 # 2-electron integrals
 def block_tei(T):
-   t = np.array(T)
-   n = t.shape[0]
-   I2 = np.identity(2)
-   T = np.zeros( (2*n,2*n,2*n,2*n) )
-   for p in range(n):
-      for q in range(n):
-         T[p,q] = np.kron( I2, t[p,q] )
-         T[n:,n:] = T[:n,:n]
-   return T
+    t = np.array(T)
+    n = t.shape[0]
+    I2 = np.identity(2)
+    T = np.zeros( (2*n,2*n,2*n,2*n) )
+    for p in range(n):
+        for q in range(n):
+            T[p,q] = np.kron( I2, t[p,q] )
+            T[n:,n:] = T[:n,:n]
+    return T

@@ -65,11 +65,13 @@ class Molecule:
     def copy(self):
         return Molecule(str(self),self.units)
 
+"""
 #### Example of an input
 f = open("../../1/extra-files/molecule.xyz","r")
 f = f.read()
 
 mol = Molecule(f)
+"""
 
 #print(mol.geom)
 #print(mol.atoms)

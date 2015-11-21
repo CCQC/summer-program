@@ -43,12 +43,10 @@ Q = np.matrix(M)*np.matrix(l)
 print Q
 
 
-conv =  np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)  # dimensional analysis
-
-
 #####   get frequencies
 #####   lambda_a = omega_a^2 / conv^2
 freq = []
+conv =  np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)  # dimensional analysis
 for i in e:
     if i <0:
         freq.append((-i)**0.5*conv)
