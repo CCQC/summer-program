@@ -10,7 +10,7 @@ Projects
 --------
 
 <ol start="0">
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf">Geometry</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf">Geometry</a>
      (<a href="https://github.com/CCQC/summer-program/blob/master/5/advanced.pdf">Advanced</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf">Frequencies</a></li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf">Hessian</a></li>
