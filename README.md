@@ -12,7 +12,8 @@ Projects
 <ol start="0">
   <li><a href="https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf">Geometry</a>
      (<a href="https://github.com/CCQC/summer-program/blob/master/0/advanced.pdf">Advanced</a>)</li>
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf">Frequencies</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf">Frequencies</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/1/theory.pdf">Theory</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf">Hessian</a></li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/3/instructions.pdf">RHF</a></li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/4/instructions.pdf">RMP2</a></li>

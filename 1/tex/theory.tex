@@ -1,0 +1,437 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+
+\usepackage{tikz}
+\usepackage{amsmath}
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small}
+\lstset{literate={~} {$\sim$}{1}}
+\lstset{showstringspaces=false}
+\lstset{language=Python}
+
+\newcommand{\linp}[1]{\lstinputlisting{#1}{}}
+\newcommand{\linl}[1]{\lstinline{#1}{}}
+
+
+
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{lmodern}
+\usepackage{scrextend}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{soul}
+\usepackage{bm}
+
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\tl}[1]{\ensuremath{\tilde{#1}}}
+\newcommand{\pt}{\partial}
+
+\newcommand{\ttf}[1]{{\ttfamily #1}}
+\newcommand{\s}{\textbackslash}
+\renewcommand{\sp}{\ \ \ \ \ \ \ \ \ \ }
+\newcommand{\fr}[2]{\dfrac{#1}{#2}}
+\newcommand{\pr}[1]{\left(#1\right)}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\ma}[1]{\left(\begin{matrix}#1\end{matrix}\right)}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix} #1 \end{matrix}}}
+\newcommand{\pd}[3]{\ensuremath{ \dfrac{ \partial^{#1} #2 }{\partial #3 ^{#1}}}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\Nu}{\ensuremath{\mathrm{Nu}}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\Y}{\ensuremath{\Psi}}
+\newcommand{\y}{\ensuremath{\psi}}
+\newcommand{\si}{\ensuremath{\sigma}}
+\newcommand{\w}{\ensuremath{\omega}}
+\renewcommand{\d}{\ensuremath{\delta}}
+\newcommand{\D}{\ensuremath{\Delta}}
+\newcommand{\la}{\ensuremath{\lambda}}
+\newcommand{\La}{\ensuremath{\Lambda}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\e}{\ensuremath{\bm\varepsilon}}
+
+
+
+\title{Programming Project 1 Theory\\
+\textit{The harmonic approximation to the nuclear Schr\"odinger equation}}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+\vspace{-2cm}
+
+\subsection*{The Born-Oppenheimer Approximation}
+Under the Born-Oppenheimer approximation the stationary-states
+\footnote{\url{http://en.wikipedia.org/wiki/Stationary_state}} of nuclear
+motion $\Y_\Nu$ arise as solutions of the nuclear motion equation.
+\begin{align}
+\label{pes}
+    \op{H}_\Nu
+    \Y_\Nu(\bo{X})
+=
+    E
+    \Y_\Nu(\bo{X})
+\sp
+    \op{H}_\Nu
+\equiv
+    \op{T}_\Nu+E_e(\bo{X})
+\end{align}
+The potential energy term $E_e(\bo{X})$ in the nuclear motion Hamiltonian is
+defined through the clamped-nuclei Schr\"odinger equation.
+\begin{align}
+\label{clamped-se}
+    \op{H}_e(\bo{X})
+    \Y_e(\bo{r}_1,\ld,\bo{r}_n;\bo{X})
+=
+    E_e(\bo{X})
+    \Y_e(\bo{r}_1,\ld,\bo{r}_n;\bo{X})
+\end{align}
+Equation (\ref{clamped-se}) can be solved approximately at any point
+$\bo{X}=(\bo{R}_1,\ld,\bo{R}_N)$ using your favorite electronic structure
+software package (\textsc{Psi4}, CFOUR, Molpro, Gaussian, etc.) and electronic
+structure method (MP2, CCSD, CISD, etc.).
+
+
+\subsection*{Normal Coordinates and the Vibrational Schr\"odinger Equation}
+
+One of the major barriers to solving the nuclear motion equation (\ref{pes}) is
+the difficulty of determining the potential energy surface $E_e(\bo{X})$ at a
+sufficiently large number of points. Since the nuclei generally remain
+relatively localized about an equilibrium configuration $\bo{X}_0$, a good
+first approach is to approximate the potential surface by a Taylor expansion.
+\begin{align*}
+    E_e(\bo{X})
+\approx
+    E_e(\bo{X}_0)
++\sum_A^{3N}
+    \pr{\pd{}{E_e}{X_A}}_0
+    \D X_A
++\fr{1}{2}\sum_{AB}^{3N}
+    \pr{\fr{\pt^2E_e}{\pt X_A\pt X_B}}_0
+    \D X_A
+    \D X_B
+    \sp \D\bo{X}=\bo{X}-\bo{X}_0
+\end{align*}
+Equilibrium structures occur at minima on the potential energy surface, so that
+the second term is zero and only the quadratic term remains.
+\begin{align}
+    E_e(\bo{X})
+\approx
+    E_e(\bo{X}_0)
++\fr{1}{2}\sum_{AB}^{3N}
+    \pr{\fr{\pt^2E_e}{\pt X_A\pt X_B}}_0
+    \D X_A
+    \D X_B
+\end{align}
+For convenience, we use mass-weighted coordinates $\tl{X}_A \equiv \sqrt{M_A}\D
+X_A$ in order to remove the explicit dependence of the kinetic energy operator
+on nuclear masses. \footnote{Explicitly, we can write
+$\fr{\op{\bo{P}}_A^2}{2M_A} = -\fr{1}{2M_A}
+\pd{2}{}{X_A}=-\fr{1}{2}\pd{2}{}{(\sqrt{M_A}\D
+X_A)}=-\fr{1}{2}\pd{2}{}{\tl{X}_A}$. ($\hbar=1$ since we are working in atomic
+units)}
+\begin{align}
+    \op{T}_\Nu
+=
+    -\fr{1}{2}\sum_A^{3N} \pd{2}{}{\tl{X}_A}
+\end{align}
+The nuclear motion equation (\ref{pes}) then becomes
+\begin{align}
+\label{pes-intermediate}
+\pr{
+-\fr{1}{2}\sum_A^{3N}
+    \pd{2}{}{\tl{X}_A}
++\fr{1}{2}\sum_{AB}^{3N}
+    \pr{\fr{\pt^2E_e}{\pt \tl{X}_A\pt \tl{X}_B}}_0
+    \tl{X}_A
+    \tl{X}_B
+}
+    \Y_\Nu(\tl{\bo{X}})
+=
+    E_\Nu
+    \Y_\Nu(\tl{\bo{X}})
+\sp
+    E_\Nu
+\equiv
+    E - E_e(\bo{X}_0)
+\end{align}
+which brings us to the crucial step that motivates this project.
+
+\paragraph{the crucial step that motivates this project:} Note that, if the
+mass-weighted Hessian matrix
+\begin{align}
+    (\tl{\bo{H}}_0)_{AB}
+=
+    \pr{\fr{\pt^2 E_e}{\pt\tl{X}_A\pt\tl{X}_B}}_0
+\end{align}
+were diagonal, we would have a sum of harmonic oscillator Hamiltonians
+\footnote{The Hamiltonian of a single harmonic oscillator is
+$\op{H}=\fr{\op{p}^2}{2m}+\fr{m\w^2\op{x}^2}{2}$, or
+$\op{H}=-\fr{1}{2}\pd{2}{}{q}+\fr{\w^2}{2}q^2$ in mass-weighted coordinates
+with atomic units.  The frequency of oscillation is $\w$.} in equation
+(\ref{pes-intermediate}). This dream of a simple Hamiltonian can be realized by
+choosing a new set of coordinates $\{q_1,\ld,q_{3N}\}$, called {\it normal coordinates}, in terms of which the Hessian is diagonal.
+Since the mass-weighted Hessian $\tl{\bo{H}}_0$ is real and symmetric, it can
+be diagonalized by a real orthogonal matrix $\bo{\tl{Q}}$
+\footnote{\url{http://en.wikipedia.org/wiki/Symmetric_matrix\#Decomposition}}
+\begin{align}
+    \tl{\bo{H}}_0
+=
+    \bo{\tl{Q}}\bo{K}\bo{\tl{Q}}^T
+\sp
+    \bo{K}
+=
+    \ma{ k_1   &   0   &  \ld  &   0      \\
+           0   & k_2   &  \ld  &   0      \\
+          \vd  &  \vd  &  \dd  &  \vd     \\
+           0   &   0   &  \ld  & k_{3N}   }
+\sp
+    \bo{\tl{Q}}\bo{\tl{Q}}^T=\bo{\tl{Q}}^T\bo{\tl{Q}}=\bo{1}
+\end{align}
+where the columns of $\bo{\tl{Q}}$ are eigenvectors $\bm{\tl{q}}_1,\ld,\bm{\tl{q}}_{3N}$ of
+$\tl{\bo{H}}_0$.
+Back-transforming to un-mass-weighted Cartesian space
+gives the \textit{normal modes} of the system.
+\begin{align}
+&
+  \bm{q}_1
+=
+  \bo{M}^{-1/2}
+  \bm{\tl{q}}_1
+&&
+  \bm{q}_2
+=
+  \bo{M}^{-1/2}
+  \bm{\tl{q}}_2
+&&
+  \cdots
+&&
+  \bm{q}_{3N}
+=
+  \bo{M}^{-1/2}
+  \bm{\tl{q}}_{3N}
+&&
+  \text{where  }
+    \bo{M}
+\equiv
+    \ma{ m_1 & 0   & 0   & 0   & \cdots\\
+         0   & m_1 & 0   & 0   & \cdots\\
+         0   & 0   & m_1 & 0   & \cdots\\
+         0   & 0   & 0   & m_2 & \cdots\\
+         \vd & \vd & \vd & \vd & \dd}   
+\end{align}
+Each \textit{normal coordinate} $q$ represents a motion along the \textit{normal mode} $\bm{q}_A$.
+
+
+Expressing equation (\ref{pes-intermediate}) in terms of these newfangled
+coordinates, we are left with 
+\begin{align}
+\label{vib-se}
+\pr{
+-\fr{1}{2}\sum_A^{3N}
+    \pd{2}{}{q}
++\fr{1}{2}\sum_A^{3N}
+    k_A q^2
+}
+    \Y_\Nu(\bo{q})
+=
+    E_\Nu
+    \Y_\Nu(\bo{q})
+\end{align}
+(details of the coordinate transformation are shown in an appendix). The
+Hamiltonian in (\ref{vib-se}) has the marvelously simple form we were hoping
+for:
+\begin{align}
+\label{harm-hamiltonian}
+    \op{H}_\Nu
+\approx
+    \sum_{A=1}^{3N}
+    \op{\mf{h}}_A
+\sp
+    \op{\mf{h}}_A
+\equiv
+-\fr{1}{2}
+    \pd{2}{}{q}
++\fr{1}{2}
+    k_A q^2
+\end{align}
+The only approximation for $\op{H}_\Nu$ here is the truncation of the potential
+energy surface Taylor expansion at second order. As long as $k_A$ is a
+positive real number, $\op{\mf{h}}_A$ is a harmonic oscillator Hamiltonian and
+we can make the identification $k_A=\w_A^2$ where $\w_A$ is the oscillator
+frequency in a.u. It will turn out that, at an equilibrium geometry,
+$\tl{\bo{H}}_0$ has several zero eigenvalues -- one for each translational and
+rotational degree of freedom for the entire nuclear framework with respect to
+its center of mass. For these motions, $\op{\mf{h}}_A$ actually takes the form
+of a free-particle Hamiltonian
+\footnote{\url{http://en.wikipedia.org/wiki/Free_particle\#Non-Relativistic_Quantum_Free_Particle}}
+\begin{align}
+    \op{\mf{h}}_A
+    = -\fr{1}{2} \pd{2}{}{q}
+\end{align}
+although this form is somewhat misleading for rotational motion. In order to
+get a clearer picture of what a normal coordinate physically represents, it
+helps to shift to a classical picture for a moment.
+
+
+
+\subsubsection*{Solutions for Nuclear Motion in a Quadratic Well}
+Here I will simply report the quantum mechanical solution to the translational
+and vibrational components of equation (\ref{vib-se}).
+\begin{align*}
+\pr{\sum_{A=1}^{3N}
+    \op{\mf{h}}_A }
+    \Y_\Nu(\bo{q})
+=
+    E_\Nu
+    \Y_\Nu(\bo{q})
+\sp
+    \op{\mf{h}}_A
+=
+-\fr{1}{2}
+    \pd{2}{}{q}
++\fr{1}{2}
+    k_A q^2
+\end{align*}
+Since the Hamiltonian separates into a sum of independent Hamiltonians each
+involving only one coordinate, the form of the wavefunction is
+\begin{align}
+    \Y_\Nu(q_1,\ld,q_{3N})
+=
+    \y_1(q_1)
+    \y_2(q_2)
+    \cdots
+    \y_{3N}(q_{3N})
+\end{align}
+where each one-coordinate wavefunction $\y_A(q)$ is an eigenfunction (or,
+rather, {\it one of the} eigenfunctions) of the corresponding operator,
+$\op{\mf{h}}_A$.
+\begin{align}
+    \op{\mf{h}}_A
+    \y_A(q)
+=
+    \e
+    \y_A(q)
+\end{align}
+We will only need solutions to the 1D free-particle and 1D harmonic oscillator
+Schr\"odinger equations for the present discussion, which can be found in any
+introductory quantum mechanics text worth reading.\footnote{e.g. R.\ Shankar
+{\it Principles of Quantum Mechanics}, which contains detailed discussions of
+both the free particle and harmonic oscillator. An electronic copy can be found
+\href{http://home.basu.ac.ir/\~psu/Books/\%5BRamamurti_Shankar\%5D_Principles_of_Quantum_Mechanic\%28BookFi.org\%29.pdf}{here}.}
+
+For the three normal coordinates that correspond to translations of the
+molecule as a whole, the potential term in $\op{\mf{h}}$ vanishes (since
+$k=0$) and we only need to solve a free-particle-like problem.
+\begin{align}
+-\fr{1}{2}
+    \pd{2}{\y(q)}{q}
+=
+    \e
+    \y(q)
+\end{align}
+Solutions to this differential equation are given by
+\begin{align}
+    \y_{P}(q)
+=
+    e^{iP(q-q_0)}
+\end{align}
+where $q_0$ is some undetermined phase shift. The distribution of
+eigenvalues is continuous in this case, $\e_{P}=\fr{P^2}{2}$, where $P$
+corresponds to a component of the linear momentum of the molecule as a whole.
+
+Although $k=0$ also holds for rotational modes at equilibrium, normal
+coordinates are only appropriate for parametrizing infinitesimal rotations and
+quickly break down for larger rotational motions.
+Furthermore, unlike translations, these modes are not truly
+``external'' since they change the relative positions of the nuclei (and
+therefore change the energy for finite displacements). Proper parametrization
+of a full rotation about the center of mass in terms of fixed normal
+coordinates would actually require linear combinations of rotational modes
+ with vibrational ones, and these
+motions are in general coupled to each other. For our purposes, we will simply
+note one can, to a good first approximation, ignore the interference of
+rotations when considering vibrational motion.
+
+The remaining $3N-6$ coordinates ($3N-5$ for linear molecules) will always have
+$k>0$ at an equilibrium geometry and so lead to true harmonic oscillator
+motion. The solutions to this problem
+\begin{align}
+-\fr{1}{2}
+    \pd{2}{\y(q)}{q}
++\fr{1}{2}
+    k
+    q^2
+=
+    \e
+    \y(q)
+\end{align}
+are given by
+\begin{align}
+    \y_{n}(q)
+=
+\fr{1}{\sqrt{2^n n!}}\pr{\fr{\w}{\pi}}^{\frac{1}{4}}
+    e^{-\frac{1}{2}\w q^2}
+    \ \text{He}_n(\sqrt{\w}q)
+\sp
+    \w^2=k
+\end{align}
+with energies $\e_{n}=\w(n+\frac{1}{2})$, where $\text{He}_n(x)$ is the
+$n$\eth\ Hermite polynomial.
+\begin{align}
+    \text{He}_n(x)
+=   (-1)^n
+    e^{x^2}
+    \pr{\fr{d^n}{dx^n}e^{-x^2}}
+\end{align}
+Hence, the solution to the {\it vibrational Schr\"odinger equation}
+\footnote{This is simply equation (\ref{vib-se}) with translational and
+rotational modes omitted.}
+\begin{align}
+\sum_{A=1}^{3N-6}
+    \pr{-\fr{1}{2}\pd{2}{}{q_A}+\w_A^2q_A^2}
+    \Y_\text{vib}(\bo{q})
+=
+    E_\text{vib}
+    \Y_\text{vib}(\bo{q})
+\end{align}
+is given by
+\begin{align}
+    \Y_{\bo{n}}(\bo{q})
+    = \prod_{A=1}^{3N-6}
+    \y_{n_A}(q_A)
+\end{align}
+with vibrational energy
+\begin{align}
+    E_{\bo{n}}
+=
+\sum_{A=1}^{3N-6}
+    \w_A
+    \pr{n_A+\fr{1}{2}}
+\end{align}
+The total molecular energy at equilibrium is the sum of translational,
+rotational, vibrational, and electronic contributions.
+\begin{align}
+    E
+    = \fr{\bo{P}_\text{CM}^2}{2M_\text{tot}}
+    + E_\text{vib}
+    + E_\text{rot}
+    + E_e(\bo{X}_0)
+\end{align}
+
+
+
+
+\end{document}

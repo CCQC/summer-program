@@ -23,7 +23,7 @@ class Molecule(object):
     self.labels  = labels
     self.masses  = [get_mass(label)   for label in labels]
     self.charges = [get_charge(label) for label in labels]
-    self.geom    = np.matrix(geom)
+    self.geom    = np.array(geom)
 
   def to_bohr(self):
     if self.units == "Angstrom":
