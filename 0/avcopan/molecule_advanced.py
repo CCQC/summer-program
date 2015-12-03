@@ -24,6 +24,11 @@ class Molecule(object):
     self.masses  = [get_mass(label)   for label in labels]
     self.charges = [get_charge(label) for label in labels]
     self.geom    = np.array(geom)
+    self.assert_no_overlapping_atoms()
+
+  def assert_no_overlapping_atoms(self):
+    if not len(set(self.__str__().splitlines())) == len(list(self.__str__().splitlines())):
+      raise Exception("Cannot construct Molecule with overlapping atoms.")
 
   def to_bohr(self):
     if self.units == "Angstrom":
@@ -34,6 +39,9 @@ class Molecule(object):
     if self.units == "Bohr":
       self.units  = "Angstrom"
       self.geom  /= 1.889725989
+
+  def copy(self):
+    return Molecule(self.__str__(), self.units)
 
   def __len__(self):
     return self.natom
@@ -48,6 +56,23 @@ class Molecule(object):
     for label, coords in self.__iter__():
       ret += fmt.format(label, *coords)
     return ret
+
+  def __add__(self, other):
+    other = other.copy()
+    if   self.units == "Angstrom" and other.units == "Bohr":
+      other.to_angstrom()
+    elif self.units == "Bohr"     and other.units == "Angstrom":
+      other.to_bohr()
+    other.natom   = self.natom   + other.natom
+    other.labels  = self.labels  + other.labels
+    other.masses  = self.masses  + other.masses
+    other.charges = self.charges + other.charges
+    other.geom    = np.concatenate((self.geom, other.geom))
+    other.assert_no_overlapping_atoms()
+    return other
+
+    
+    
       
 
 if __name__ == "__main__":
@@ -70,3 +95,10 @@ if __name__ == "__main__":
   print mol.units
   print mol.geom
 
+  mol.to_angstrom()
+
+  mol2 = Molecule(xyzstring)
+  mol2.geom += 1
+
+  print mol + mol2
+  print mol + mol

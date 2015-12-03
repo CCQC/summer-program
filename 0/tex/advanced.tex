@@ -48,11 +48,11 @@ Implement the following Python ``magic methods'' in your \linl{Molecule} class:
   & \linl{for _ in mol}
   & iterates over \linl{(str, numpy.array)} \linl{tuple}s, each of which contains the atomic symbol and Cartesian coordinates of an atom in the molecule
   \\
-  \linl{__sum__}
+  \linl{__add__}
   & \linl{Molecule}
   & \linl{Molecule}
   & \linl{mol1 + mol2}
-  & returns a new molecule object containing \\
+  & returns a new molecule object containing the atoms of both molecules\\
 \end{tabular}
 \end{center}
 
