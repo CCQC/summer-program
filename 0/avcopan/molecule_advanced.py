@@ -6,7 +6,7 @@ from masses import get_charge, get_mass
 
 class Molecule(object):
 
-  def __init__(self, xyzstring, units="Angstrom"):
+  def __init__(self, xyzstring, units="angstrom"):
     labels = []
     geom   = []
     try:
@@ -31,17 +31,17 @@ class Molecule(object):
       raise Exception("Cannot construct Molecule with overlapping atoms.")
 
   def to_bohr(self):
-    if self.units == "Angstrom":
-      self.units  = "Bohr"
+    if self.units == "angstrom":
+      self.units  = "bohr"
       self.geom  *= 1.889725989
 
   def to_angstrom(self):
-    if self.units == "Bohr":
-      self.units  = "Angstrom"
+    if self.units == "bohr":
+      self.units  = "angstrom"
       self.geom  /= 1.889725989
 
   def copy(self):
-    return Molecule(self.__str__(), self.units)
+    return Molecule(self.__repr__(), self.units)
 
   def __len__(self):
     return self.natom
@@ -50,18 +50,21 @@ class Molecule(object):
     for label, coords in zip(self.labels, self.geom):
       yield label, coords
 
+  def __repr__(self):
+    return "{:d}\n".format(self.natom) + self.__str__()
+
   def __str__(self):
+    ret = "units {:s}\n".format(self.units)
     fmt = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n"
-    ret = "{:d}\n{:s}\n".format(self.natom, self.units)
     for label, coords in self.__iter__():
       ret += fmt.format(label, *coords)
     return ret
 
   def __add__(self, other):
     other = other.copy()
-    if   self.units == "Angstrom" and other.units == "Bohr":
+    if   self.units == "angstrom" and other.units == "bohr":
       other.to_angstrom()
-    elif self.units == "Bohr"     and other.units == "Angstrom":
+    elif self.units == "bohr"     and other.units == "angstrom":
       other.to_bohr()
     other.natom   = self.natom   + other.natom
     other.labels  = self.labels  + other.labels
@@ -71,9 +74,13 @@ class Molecule(object):
     other.assert_no_overlapping_atoms()
     return other
 
-    
-    
-      
+  def displace(self, disp):
+    try:
+      self.geom += disp
+    except:
+      raise Exception("Invalid displacement argument passed to Molecule.")
+
+
 
 if __name__ == "__main__":
   xyzstring = open("../../extra-files/molecule.xyz").read()
@@ -88,17 +95,14 @@ if __name__ == "__main__":
   print(mol)
 
   mol.to_angstrom()
-  print mol.units
-  print mol.geom
+  print(mol)
 
   mol.to_bohr()
-  print mol.units
-  print mol.geom
+  print(mol)
 
   mol.to_angstrom()
 
   mol2 = Molecule(xyzstring)
-  mol2.geom += 1
+  mol2.displace(1.0)
 
-  print mol + mol2
-  print mol + mol
+  print(repr(mol + mol2))

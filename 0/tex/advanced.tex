@@ -38,8 +38,14 @@ Implement the following Python ``magic methods'' in your \linl{Molecule} class:
   \linl{__str__}
   & \linl{str}
   &
-  & \linl{print(mol)}, \linl{str(mol)}
-  & represent the contents of a \linl{Molecule} object as a string in \linl{.xyz} format
+  & \linl{str(mol), print(mol)}
+  & return a pretty \linl{str} representation of the contents of your \linl{Molecule} object
+  \\
+  \linl{__repr__}
+  & \linl{str}
+  &
+  & \linl{>>> mol, repr(mol)}
+  & return a \linl{str} representation of the your \linl{Molecule} object in \linl{.xyz} format
   \\
   \linl{__iter__}
   &

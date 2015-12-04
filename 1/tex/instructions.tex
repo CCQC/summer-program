@@ -55,7 +55,7 @@
 \newcommand{\bigo}{\ensuremath{\mathcal{O}}}
 \newcommand{\tl}{\ensuremath{\tilde}}
 \newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
-\newcommand{\ul}[1]{\ensuremath{\underline{#1}}}
+\newcommand{\ul}[1]{\underline{#1}}
 \newcommand{\op}[1]{\ensuremath{\hat{#1}}}
 \newcommand{\ot}{\ensuremath{\otimes}}
 \newcommand{\wg}{\ensuremath{\wedge}}
@@ -121,12 +121,14 @@ You should import your \linl{Molecule} class from Project 0 and make use of it i
 
 \subsection*{Extra Files}
 \begin{center}
-\begin{tabular}{p{0.15\textwidth}@{}p{0.85\textwidth}}
+\begin{tabular}{p{0.25\textwidth}@{}p{0.75\textwidth}}
   \ul{file name} & \ul{description} \\
   \linl{molecule.xyz}
   & sample \linl{.xyz} file for H$_2$O \\ 
   \linl{hessian.dat}
-  & sample Hessian matrix for H$_2$O
+  & sample Hessian matrix for H$_2$O \\
+  \linl{project1_answer.xyz}
+  & normal modes and frequencies for H$_2$O
 \end{tabular}
 \end{center}
 
@@ -189,6 +191,7 @@ Let $N$ be the number of atoms and let $m_A$ and $(x_A, y_A, z_A)$ be the mass a
 
 \subsection*{Procedure}
 
+Steps 3.--7. should be implemented in a separate \linl{frequencies()} function that takes a \linl{Molecule} object and a \linl{numpy.array} Hessian matrix as arguments.
 \begin{enumerate}
   \item read in the Hessian matrix (defined in equation \ref{hessian-dfn}) from \linl{hessian.dat}
   \item build a \linl{Molecule} object from \linl{molecule.xyz}
@@ -198,7 +201,7 @@ Let $N$ be the number of atoms and let $m_A$ and $(x_A, y_A, z_A)$ be the mass a
   \item determine the spatial frequencies $\tl{\n}_A$ in $\mr{cm}^{-1}$ from your force constants $k_A$, which are in atomic units (equation \ref{conversion})
   \item write the normal modes to a file in \linl{.xyz} format, with frequencies neatly displayed in the comment lines
 \end{enumerate}
-
+After you are finished, check your answers against \linl{project1_answer.xyz} and then try visualizing the normal modes in Jmol.
 
 \newpage
 \subsubsection*{Description of \linl{.xyz} format for normal modes}

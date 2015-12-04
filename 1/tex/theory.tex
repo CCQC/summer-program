@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
 
-\usepackage[margin=1in]{geometry}
+\usepackage[cm]{fullpage}
 
 \usepackage{tikz}
 \usepackage{amsmath}
@@ -241,9 +241,9 @@ coordinates, we are left with
 \label{vib-se}
 \pr{
 -\fr{1}{2}\sum_A^{3N}
-    \pd{2}{}{q}
+    \pd{2}{}{q_A}
 +\fr{1}{2}\sum_A^{3N}
-    k_A q^2
+    k_A q_A^2
 }
     \Y_\Nu(\bo{q})
 =
@@ -263,9 +263,9 @@ for:
     \op{\mf{h}}_A
 \equiv
 -\fr{1}{2}
-    \pd{2}{}{q}
+    \pd{2}{}{q_A}
 +\fr{1}{2}
-    k_A q^2
+    k_A q_A^2
 \end{align}
 The only approximation for $\op{H}_\Nu$ here is the truncation of the potential
 energy surface Taylor expansion at second order. As long as $k_A$ is a
@@ -279,7 +279,7 @@ of a free-particle Hamiltonian
 \footnote{\url{http://en.wikipedia.org/wiki/Free_particle\#Non-Relativistic_Quantum_Free_Particle}}
 \begin{align}
     \op{\mf{h}}_A
-    = -\fr{1}{2} \pd{2}{}{q}
+    = -\fr{1}{2} \pd{2}{}{q_A}
 \end{align}
 although this form is somewhat misleading for rotational motion. In order to
 get a clearer picture of what a normal coordinate physically represents, it
@@ -301,9 +301,9 @@ and vibrational components of equation (\ref{vib-se}).
     \op{\mf{h}}_A
 =
 -\fr{1}{2}
-    \pd{2}{}{q}
+    \pd{2}{}{q_A}
 +\fr{1}{2}
-    k_A q^2
+    k_A q_A^2
 \end{align*}
 Since the Hamiltonian separates into a sum of independent Hamiltonians each
 involving only one coordinate, the form of the wavefunction is
@@ -315,15 +315,15 @@ involving only one coordinate, the form of the wavefunction is
     \cdots
     \y_{3N}(q_{3N})
 \end{align}
-where each one-coordinate wavefunction $\y_A(q)$ is an eigenfunction (or,
+where each one-coordinate wavefunction $\y_A(q_A)$ is an eigenfunction (or,
 rather, {\it one of the} eigenfunctions) of the corresponding operator,
 $\op{\mf{h}}_A$.
 \begin{align}
     \op{\mf{h}}_A
-    \y_A(q)
+    \y_A(q_A)
 =
-    \e
-    \y_A(q)
+    \e_A
+    \y_A(q_A)
 \end{align}
 We will only need solutions to the 1D free-particle and 1D harmonic oscillator
 Schr\"odinger equations for the present discussion, which can be found in any

@@ -1,6 +1,0 @@
-Run in this order:
-  0_input.py     -- generate input files for energy calcs
-  1_run.py       -- run energy calcs
-  2_hessian.py   -- use displacement energies to compute Hessian matrix (units Hartree/Bohr^2)
-
-The file molecule.py just contains a few helper functions.

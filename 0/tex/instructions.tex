@@ -62,7 +62,7 @@ Make sure each class method is called at least once.
   & a list of atomic masses, following the order of the \linl{.xyz} file\\
   \linl{charges} & \linl{list} of \linl{int}s
   & a list of atomic charges, following the order of the \linl{.xyz} file\\
-  \linl{geom}    & \linl{numpy.matrix}
+  \linl{geom}    & \linl{numpy.array}
   & an $\text{\linl{natom}}\times3$ matrix containing the Cartesian coordinates of each atom, following the order of the \linl{.xyz} file
 \end{tabular}
 \end{center}
@@ -77,6 +77,8 @@ Make sure each class method is called at least once.
   & converts the distance units to Bohr, changing member variables \linl{units} and \linl{geom} if necessary \\
   \linl{to_angstrom}
   & converts the distance units to Angstroms, changing member variables \linl{units} and \linl{geom} if necessary \\
+  \linl{xyz_string}
+  & return \linl{str} representing the contents of the \linl{Molecule} object in \linl{.xyz} format\\
   \linl{copy}
   & returns \linl{Molecule} object, which is a fresh copy of \linl{self}
 \end{tabular}

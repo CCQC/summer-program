@@ -6,7 +6,7 @@ from masses import get_charge, get_mass
 
 class Molecule(object):
 
-  def __init__(self, xyzstring, units="Angstrom"):
+  def __init__(self, xyzstring, units="angstrom"):
     labels = []
     geom   = []
     try:
@@ -26,14 +26,24 @@ class Molecule(object):
     self.geom    = np.array(geom)
 
   def to_bohr(self):
-    if self.units == "Angstrom":
-      self.units  = "Bohr"
+    if self.units == "angstrom":
+      self.units  = "bohr"
       self.geom  *= 1.889725989
 
   def to_angstrom(self):
-    if self.units == "Bohr":
-      self.units  = "Angstrom"
+    if self.units == "bohr":
+      self.units  = "angstrom"
       self.geom  /= 1.889725989
+
+  def copy(self):
+    return Molecule(self.xyz_string(), self.units)
+
+  def xyz_string(self):
+    ret = "{:d}\nunits {:s}\n".format(self.natom, self.units)
+    fmt = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n"
+    for label, coords in zip(self.labels, self.geom):
+      ret += fmt.format(label, *coords)
+    return ret
 
 
 if __name__ == "__main__":
@@ -47,10 +57,10 @@ if __name__ == "__main__":
   print mol.geom
 
   mol.to_angstrom()
-  print mol.units
-  print mol.geom
+  print mol.xyz_string()
 
   mol.to_bohr()
-  print mol.units
-  print mol.geom
+  print mol.xyz_string()
 
+  mol2 = mol.copy()
+  print mol.xyz_string()
