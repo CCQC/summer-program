@@ -29,6 +29,13 @@ Projects
 </ol>
 
 
+Algebraic methods
+-----------------
+ - [Tensors](https://github.com/CCQC/summer-program/blob/master/algebraic-methods/tensors.pdf)
+ - [Motivating second quantization](https://github.com/CCQC/summer-program/blob/master/algebraic-methods/motivating-second-quantization.pdf)
+ - [Normal ordering and Wick's theorem](https://github.com/CCQC/summer-program/blob/master/algebraic-methods/normal-ordering.pdf)
+
+
 Python
 ------
 Download the [Anaconda package with Python3.4](http://continuum.io/downloads#34)
