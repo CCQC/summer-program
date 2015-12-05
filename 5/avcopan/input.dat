@@ -11,7 +11,7 @@ set {
   basis sto-3g
   e_convergence 12
   scf_type pk
-  MAXITER 50
+  maxiter 50
 }
 
 # Used to initialize everything

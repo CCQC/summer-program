@@ -16,27 +16,9 @@ See exercises to guide you through the derivation of equations \ref{spin-ao-ints
 
 \noindent
 \bmit{Integrals.}
-For spatial AO basis $\{\x_1,\cd,\x_m\}$, the spin-AO basis is $\{\xi_1,\cd,\xi_{2m}\}$, where $\xi_\mu=\x_\mu\a$ and $\xi_{\mu+m}=\x_\mu\b$.
+For spatial AO basis $\{\x_1,\cd,\x_m\}$, let $\{\xi_1,\cd,\xi_{2m}\}$ represent the spin-AO basis, with $\xi_\mu=\x_\mu\a$ and $\xi_{\mu+m}=\x_\mu\b$.
+Let $\bo{\ol{S}}$, $\bo{\ol{T}}$, $\bo{\ol{V}}$, and $\bo{\ol{G}}$ be represent molecular integrals over the spatial AO basis.  Then the spin-AO integrals are given by
 \begin{gather}
-\begin{aligned}
-\label{space-ao-ints}
-&
-  \ol{S}_{\mu\nu}
-=
-  \ip{\x_{\mu}|\x_{\nu}}
-&&
-  \ol{T}_{\mu\nu}
-=
-  -\tfrac{1}{2}\ip{\x_{\mu}|\nabla_1^2|\x_{\nu}}
-&&
-  \ol{V}_{\mu\nu}
-=
-  \sum_A\ip{\x_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\x_{\nu}}
-&&
-  (\x_\mu\x_\nu|\x_\rho\x_\si)
-=
-  \ip{\x_\mu\x_\rho|\fr{1}{r_{12}}|\x_\nu\x_\si}
-\end{aligned}\\
 \begin{aligned}
 \label{spin-ao-ints}
 &
@@ -81,31 +63,29 @@ For spatial AO basis $\{\x_1,\cd,\x_m\}$, the spin-AO basis is $\{\xi_1,\cd,\xi_
 =
   \d_{\w\w'}
   \ma{\ol{\bo{G}}_{\x\x'}&0\\0&\ol{\bo{G}}_{\x\x'}}
-\end{aligned}\\[7pt]
-\begin{aligned}
-\label{spin-ao-ints-2}
-&
-\text{where}
-\
-  \ol{\bo{G}}
-=
-  [\ol{\bo{G}}_{\x_\mu\x_\nu}],
-\
-  \ol{\bo{G}}_{\x_\mu\x_\nu}
-=
-  [(\x_\mu\x_\nu|\x_\rho\x_\si)]
-\
-\text{and}
-\
-  \bo{G}
-=
-  [\bo{G}_{\xi_\mu\xi_\nu}],
-\
-  \bo{G}_{\xi_\mu\xi_\nu}
-=
-  [(\xi_\mu\xi_\nu|\xi_\rho\xi_\si)]
 \end{aligned}
 \end{gather}
+where
+$
+  \ol{\bo{G}}
+\equiv
+  [\ol{\bo{G}}_{\x_\mu\x_\nu}]$,
+$
+  \ol{\bo{G}}_{\x_\mu\x_\nu}
+\equiv
+  [(\x_\mu\x_\nu|\x_\rho\x_\si)]
+$
+and
+$
+  \bo{G}
+\equiv
+  [\bo{G}_{\xi_\mu\xi_\nu}]
+$,
+$
+  \bo{G}_{\xi_\mu\xi_\nu}
+\equiv
+  [(\xi_\mu\xi_\nu|\xi_\rho\xi_\si)]
+$.\\
 
 \noindent
 \bmit{Working equations.}
@@ -176,8 +156,8 @@ For spatial AO basis $\{\x_1,\cd,\x_m\}$, the spin-AO basis is $\{\xi_1,\cd,\xi_
 \bmit{Initialization.}
 \begin{enumerate}
   \item Read in nuclear repulsion energy ($V_\mathrm{Nu}$) from the Molecule object
-  \item Read in spatial AO basis integrals from LibMints (eq. \ref{space-ao-ints})
-  \item Determine spin-AO basis integrals from spatial AO basis integrals (eq. \ref{spin-ao-ints-1} and \ref{spin-ao-ints-2})
+  \item Read in spatial AO basis integrals from LibMints
+  \item Determine spin-AO basis integrals from spatial AO basis integrals (eq. \ref{spin-ao-ints-1})
   \item Form orthogonalizer $\bo{X}$ (eq. \ref{orthogonalizer})
 \end{enumerate}
 
