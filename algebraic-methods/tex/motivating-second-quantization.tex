@@ -1,0 +1,302 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\ensuremath{\underline{#1}}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+\newcommand{\NO}[1]{\ensuremath{{\bm{:}}#1{}{\bm{:}}}}
+\usepackage{stackengine}
+\newcommand{\GNO}[1]{\setstackgap{S}{0.7pt}\ensuremath{\Shortstack{\textbf{.} \textbf{.} \textbf{.}}#1\Shortstack{\textbf{.} \textbf{.} \textbf{.}}}}
+\newcommand{\cmtr}[2]{\ensuremath{[\cdot,#2]^{#1}}}
+\newcommand{\cmtl}[2]{\ensuremath{[#2,\cdot]^{#1}}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+%contractions
+\usepackage{simplewick}
+\usepackage[nomessages]{fp}
+\newcommand{\ctr}[6][0]{\FPeval\height{1.0+#1*0.5}\ensuremath{\contraction[\height ex]{#2}{#3}{#4}{#5}}}
+%math sections
+\usepackage{cleveref}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheoremstyle[spaceabove=10pt,spacebelow=10pt,bodyfont=\small]{mystyle}
+\theoremstyle{mystyle}
+\newtheorem{dfn}{Definition}[section]
+\crefname{dfn}{definition}{definitions}
+\Crefname{dfn}{Def}{Defs}
+\newtheorem{thm}{Theorem}[section]
+\crefname{thm}{theorem}{theorems}
+\Crefname{thm}{Thm}{Thms}
+\newtheorem{cor}{Corollary}[section]
+\crefname{cor}{corollary}{corollaries}
+\Crefname{cor}{Cor}{Cors}
+\newtheorem{lem}{Lemma}[section]
+\crefname{lem}{lemma}{lemmas}
+\Crefname{lem}{Lem}{Lems}
+\newtheorem{rmk}{Remark}[section]
+\crefname{rmk}{remark}{remarks}
+\Crefname{rmk}{Rmk}{Rmks}
+\newtheorem{pro}{Proposition}[section]
+\crefname{pro}{proposition}{propositions}
+\Crefname{pro}{Prop}{Props}
+\newtheorem{ntt}{Notation}[section]
+\crefname{ntt}{notation}{notations}
+\Crefname{ntt}{Notation}{Notations}
+\usepackage{calc}
+\newcommand{\logbox}{\ensuremath{\text{\makebox[\widthof{exp}][c]{ln}}}}
+\newcommand{\expbox}{\ensuremath{\text{\makebox[\widthof{exp}][c]{exp}}}}
+
+
+\usepackage{cancel}
+
+%%%DOCUMENT%%%
+\begin{document}
+
+\section*{Motivating second quantization}
+
+{\small Note: In what follows, the terminology ``$n$-electron function'' will refer to an \underline{antisymmetric} function of $n$ space-spin coordinates $(i)\equiv(\bo{r}_i,s_i)$.  We implicitly take every integral to be a definite integral over all values of $(\bo{r}_i,s_i)$.}\\
+
+
+\noindent
+\bmit{Annihilation operators.}
+Let $\{\y_p\}$ be a complete basis of spin-orbitals and let $\F_{(p_1\cd p_n)}$ denote the $n$-electron Slater determinant formed from $\y_{p_1},\ld,\y_{p_n}$.
+Then it is possible to define an operator $\op{a}_{p_1}$ which deletes $\y_{p_1}$ from $\F_{(p_1\cd p_n)}$ to produce $\F_{(p_2\cd p_n)}$, the $(n-1)$-electron Slater determinant formed from $\y_{p_2},\ld,\y_{p_n}$.
+We can define such an ``annihilator'' $\op{a}_p$ of spin-orbital $\y_p$ explicitly as
+\begin{align}
+\label{a-func}
+  (\op{a}_p\Y)(2,\ld,m)
+\equiv
+  \sqrt{m}
+  \int d(1)\
+  \y_p^*(1)\Y(1,2,\ld,m)
+\end{align}
+which takes an $m$-electron function $\Y$ into the $(m-1)$-electron function $\op{a}_p\Y$.
+Applied to $\F_{(p_1\cd p_n)}$, this gives
+\begin{align}
+\label{a-det}
+  \op{a}_p\F_{(p_1\cd p_n)}
+=
+  \left\{\ar{
+    (-)^{k-1}\F_{(p_1\cd \cancel{p_k}\cd p_n)} & \text{if $p=p_k\in (p_1\cd p_n)$}\\[10pt]
+    0 & \text{otherwise.}
+  }\right.
+\end{align}
+As an exercise, it is worth proving to yourself that the definition in equation \ref{a-func} satisfies equation \ref{a-det}.\\
+
+\noindent
+\bmit{Annihilation operators anticommute.}
+Consider the action of two annihilators $\op{a}_p$ and $\op{a}_q$ on an $n$-electron function $\Y$.
+If $\op{a}_p$ is applied first, we obtain
+\begin{align*}
+  (\op{a}_q\op{a}_p\Y)(3,\ld,n)
+=
+  \sqrt{n(n-1)}
+  \int d(1)d(2)\
+  \y_p^*(1)\y_q^*(2)\Y(1,2,3,\ld,n)
+\end{align*}
+whereas if $\op{a}_q$ is applied first, we obtain
+\begin{align*}
+  (\op{a}_p\op{a}_q\Y)(3,\ld,n)
+=&\
+  \sqrt{n(n-1)}
+  \int d(1)d(2)\
+  \y_q^*(1)\y_p^*(2)\Y(1,2,3,\ld,n)\ .
+\end{align*}
+This last integral can be rewritten as
+\begin{align*}
+  \int d(1)d(2)\
+  \y_p^*(1)\y_q^*(2)\Y(2,1,3,\ld,n)
+=
+-
+  \int d(1)d(2)\
+  \y_p^*(1)\y_q^*(2)\Y(1,2,3,\ld,n)
+\end{align*}
+by swapping dummy variables of integration ($1\leftrightarrow2$) and using the antisymmetry of $\Y$.
+This shows that $\op{a}_p\op{a}_q\Y=-\op{a}_q\op{a}_p\Y$ and, restricting ourselves to the space of $m$-electron ($m=0,1,2,\ld,\infty$) functions, we have the identity
+\begin{align}
+&&
+  [\op{a}_p,\op{a}_q]_+
+\equiv
+  \op{a}_p\op{a}_q + \op{a}_q\op{a}_p
+=
+  0
+\end{align}
+i.e. the annihilation operators anticommute.
+Note that restriction to antisymmetric functions is key -- were we to restrict ourselves to \textit{symmetric} functions, equation \ref{a-func} would define operators which instead satisfy $\op{a}_p\op{a}_q-\op{a}_q\op{a}_p=0$.\\
+
+
+\noindent
+\bmit{$\Y$ decomposition.}
+Using these newfangled operators, any $n$-electron function can be decomposed as
+\begin{align}
+\label{decomp}
+  \Y(1,\cd,n)
+=
+  \fr{1}{\sqrt{n}}
+  \sum_p^\infty
+  \y_p(1)\ (\op{a}_p\Y)(2,\ld,n)
+=
+  \fr{1}{\sqrt{n(n-1)}}
+  \sum_{pq}^\infty
+  \y_p(1)\y_q(2)\ (\op{a}_q\op{a}_p\Y)(3,\ld,n)
+\end{align}
+by resolution of the identity along one or two sets of electron coordinates  (recall the definition in equation \ref{a-func}).\footnote{
+In principle, this could be carried on to eliminate all of the coordinates from $\Y$.
+The scalars $(\op{a}_{p_n}\cd\op{a}_{p_1}\Y)$ in this expansion would then be equal to $\sqrt{n!}\ c_{p_1\cd p_n}$, where $c_{p_1\cd p_n}$ is the expansion coefficient of $\Y$ in the basis of spin-orbital products.}
+
+\noindent
+\bmit{Expressing $\op{H}_e$ in terms of annihilation operators.}
+The electronic Hamiltonian\footnote{Here I'm defining the electronic Hamiltonian as $\op{H}_e=\op{H}-(\op{V}_\text{Nu}+\op{T}_\text{Nu})$} of an $n$-electron system can be written as
+\begin{align*}
+  \op{H}_e
+=
+  \sum_i^n\op{h}(i)
++
+  \sum_{i<j}^n\op{g}(i,j)
+\sp
+  \op{h}(i)
+=
+-
+  \fr{1}{2}\nabla_i^2
++
+  \sum_A \fr{Z_A}{|\bo{r}_i-\bo{R}_A|}
+\sp
+  \op{g}(i,j)
+=
+  \fr{1}{|\bo{r}_i-\bo{r}_j|}
+\end{align*}
+and its matrix elements with respect to arbitrary $n$-electron functions $\Y$ and $\Y'$ are given by
+\begin{align*}
+  \ip{\Y|\op{H}_e|\Y'}
+=&\
+  \sum_i^n\ip{\Y|\op{h}(i)|\Y'}
++
+  \sum_{i<j}^n\ip{\Y|\op{g}(i,j)|\Y'}
+\\=&\
+  n\ip{\Y|\op{h}(1)|\Y'}
++
+  \fr{n(n-1)}{2}\ip{\Y|\op{g}(1,2)|\Y'}
+\end{align*}
+where the second equality can be shown by exchanging dummy variables ($1\leftrightarrow i$ and $2\leftrightarrow j$) in each integral and noting that $\Y$ and $\Y'$ are antisymmetric.
+Then, using the two decompositions shown in equation \ref{decomp}, we can write this as
+\begin{align*}
+  \ip{\Y|\op{H}_e|\Y'}
+=
+  \sum_{pq}^\infty h_{pq} \ip{\op{a}_p\Y|\op{a}_q\Y'}
++
+  \fr{1}{2}
+  \sum_{pqrs}^\infty \ip{pq|rs} \ip{\op{a}_q\op{a}_p\Y|\op{a}_s\op{a}_r\Y'}
+\sp
+  h_{pq}
+=&\
+  \ip{\y_p(1)|\op{h}(1)|\y_q(1)}
+\\
+  \ip{pq|rs}
+=&\
+  \ip{\y_p(1)\y_q(2)|\op{g}(1,2)|\y_r(1)\y_s(2)}
+\end{align*}
+where $h_{pq}$ and $\ip{pq|rs}$ are our one- and two-electron integrals.
+Restricting ourselves to the space of $m$-electron ($m=0,1,2,\ld,\infty$) functions, we have the identity
+\begin{align}
+&&
+  \op{H}_e
+=
+  \sum_{pq}^\infty
+  h_{pq}
+  \op{a}_p\dg \op{a}_q
++
+  \sum_{pqrs}^\infty
+  \ip{pq|rs}
+  \op{a}_p\dg \op{a}_q\dg \op{a}_s\op{a}_r
+\end{align}
+noting that $\ip{\op{a}_p\Y|\op{a}_q\Y'}=\ip{\Y|\op{a}_p\dg\op{a}_q\Y'}$ and $\ip{\op{a}_q\op{a}_p\Y|\op{a}_s\op{a}_r\Y'}=\ip{\Y|\op{a}_p\dg \op{a}_q\dg \op{a}_s\op{a}_r\Y'}$ by the definition of adjoint.\\
+
+
+
+\end{document}
