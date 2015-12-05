@@ -159,12 +159,12 @@ $.\\
   \item Read in spatial AO basis integrals from LibMints
   \item Determine spin-AO basis integrals from spatial AO basis integrals (eq. \ref{spin-ao-ints-1})
   \item Form orthogonalizer $\bo{X}$ (eq. \ref{orthogonalizer})
+  \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $f_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
 \end{enumerate}
 
 \noindent
 \bmit{Iteration to self-consistency.}
 \begin{enumerate}
-  \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $f_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
   \item\label{loop} Build Fock matrix (eq.~\ref{fock-matrix})
   \item Transform $\bo{f}\mapsto\bo{\tl{f}}$ to orthogonalized AO basis (eq.~\ref{orthogonalizer})
   \item Diagonalize $\bo{\tl{f}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$ (eq.~\ref{orthogonalizer})

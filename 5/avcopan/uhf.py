@@ -49,22 +49,18 @@ class UHF:
       return self.E
 
 
-# spin blocking functions: transform from spatial orbital {x_mu} basis to spin-orbital {x_mu alpha, x_mu beta} basis
+# spin blocking functions: transform from spatial orbital {x_mu} basis
+#                          to spin-orbital {x_mu alpha, x_mu beta} basis
+
 # block one-electron integrals
 def block_oei(A):
-  A  = np.matrix(A)
-  I2 = np.identity(2)
-  return np.matrix( np.kron(I2, A) )
+  A = np.matrix(A)
+  O = np.zeros(A.shape)
+  return np.bmat([[A, O], [O, A]])
 
 # block two-electron integrals [must be in chemist's notation, (mu nu|rh si)]
-def block_tei(T):
-  t  = np.array(T)
-  n  = t.shape[0]
-  I2 = np.identity(2)
-  T  = np.zeros((2*n,2*n,2*n,2*n))
-  for p in range(n):
-    for q in range(n):
-      T[p,q] = np.kron(I2, t[p,q])
-  T[n:,n:] = T[:n,:n]
-  return T
+def block_tei(A):
+  I = np.identity(2)
+  A = np.kron(I, A)
+  return np.kron(I, A.T)
 

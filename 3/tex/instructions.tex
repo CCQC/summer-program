@@ -167,6 +167,7 @@ Let $\{\x_1,\cd,\x_m\}$ be spatial AO basis functions.
 \sp
   D_{\mu\nu}
 =
+  2
   \sum_{i=1}^{n_\text{occ}}
   C_{\mu i} C_{\nu i}^*
 \end{aligned}\\
@@ -181,7 +182,7 @@ Let $\{\x_1,\cd,\x_m\}$ be spatial AO basis functions.
   v_{\mu\nu}
 =
   \sum_{\rho\si}
-  (2\ip{\x_\mu\x_\rho|\x_\nu\x_\si} - \ip{\x_\mu\x_\rho|\x_\si\x_\nu})
+  (\ip{\x_\mu\x_\rho|\x_\nu\x_\si} - \tfrac{1}{2}\ip{\x_\mu\x_\rho|\x_\si\x_\nu})
   D_{\si\rho}
 \end{aligned}\\
 \begin{aligned}
@@ -226,12 +227,12 @@ Let $\{\x_1,\cd,\x_m\}$ be spatial AO basis functions.
 \begin{enumerate}
   \item Read in nuclear repulsion energy ($V_\mathrm{Nu}$) from the \linl{Molecule} object and integrals from \linl{MintsHelper}
   \item Form orthogonalizer $\bo{X}$ (eq. \ref{orthogonalizer})
+  \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $f_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
 \end{enumerate}
 
 \noindent
 \bmit{Iteration to self-consistency.}
 \begin{enumerate}
-  \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $f_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
   \item\label{loop} Build Fock matrix (eq.~\ref{fock-matrix})
   \item Transform $\bo{f}\mapsto\bo{\tl{f}}$ to orthogonalized AO basis (eq.~\ref{orthogonalizer})
   \item Diagonalize $\bo{\tl{f}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$ (eq.~\ref{orthogonalizer})
