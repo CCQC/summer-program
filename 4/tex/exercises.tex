@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 
 \usepackage{listings}
-\lstset{basicstyle=\ttfamily\small}
+\lstset{basicstyle=\ttfamily\footnotesize}
 \lstset{literate={~} {$\sim$}{1}}
 \lstset{showstringspaces=false}
 \lstset{language=Python}
@@ -111,42 +111,104 @@
 \newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
 \newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
 
-\title{Programming Project 4: RMP2\\
-\textit{Second-order M\o ller-Plesset perturbation theory\\(closed-shell)}}
+\title{Programming Project 4 Exercises}
 \author{}
 \date{}
+
 \begin{document}
 
 \maketitle
-\vspace{-1cm}
-\noindent
-Let $\{\f_p\}$ be RHF spatial orbitals with orbital energies $\{\ev_p\}$ and basis expansion coefficients $C_{\mu p}$.
-\begin{align}
-\label{tei-transformation}
-&&
-  \ip{\f_p\f_q|\f_r\f_s}
-=
-  \sum_{\mu\nu\rho\si}
-  C_{\mu p}^*C_{\nu q}^* C_{\rho r}C_{\si s}
-  \ip{\x_\mu\x_\nu|\x_\rho\x_\si}
-\end{align}
-\begin{align}
-\label{mp2-energy}
-&&
-  E\ord{2}
-=
-  \sum_{ijab}
-  \fr{\ip{\f_i\f_j|\f_a\f_b}\pr{\ip{\f_i\f_j|\f_a\f_b} - \ip{\f_i\f_j|\f_b\f_a}}}
-     {\ev_i+\ev_j-\ev_a-\ev_b}
-\end{align}
-
-
-\subsection*{Procedure}
 
 \begin{enumerate}
-  \item Run RHF code to obtain MO coefficients $\{C_{\mu p}\}$ and orbital energies $\{\ev_p\}$.
-  \item Transform two-electron integrals from the AO basis $\{\x_\mu\}$ to the MO basis $\{\f_p\}$ (equation \ref{tei-transformation})
-  \item Evaluate MP2 energy expression (equation \ref{mp2-energy})
+  % PROBLEM 1
+  \item
+  Given a basis of Hartree-Fock spin-orbitals $\{\y_p\}$, the MP2 correlation energy has the following form.
+\begin{equation}
+  \label{spin-orbital-mp2-energy}
+  E\ord{2}
+=
+  \fr{1}{4}
+  \sum_{ijab}
+  \fr{|\ip{\y_i\y_j||\y_a\y_b}|^2}{\ev_i+\ev_j-\ev_a-\ev_b}
+\end{equation}
+  For a closed-shell system these spin-MOs come in $\a$, $\b$ pairs
+\begin{align}
+&
+  \y_{2P-1}(\bo{r}, s) = \f_P(\bo{r})\a(s)
+&&
+  \y_{2P}(\bo{r}, s) = \f_P(\bo{r})\b(s)
+\end{align}
+  where the index $P$ runs over spatial MOs $\{\f_P\}$.
+  Expand equation \ref{spin-orbital-mp2-energy} in this basis, perform the spin-integration, and combine like terms to show that
+\begin{equation}
+  E\ord{2}
+=
+  \sum_{IJAB}
+  \fr{\ip{\f_I\f_J|\f_A\f_B}\pr{\ip{\f_I\f_J|\f_A\f_B} - \ip{\f_I\f_J|\f_B\f_A}}}
+     {\ev_I+\ev_J-\ev_A-\ev_B}
+\end{equation}
+  is the MP2 correlation energy for an RHF reference.
+  % PROBLEM 2
+  \item
+  The most expensive step in an MP2 code is the transformation of two-electron integrals from the AO basis $\{\x_\mu\}$ to the MO basis $\{\f_\mu\}$.
+  Assuming $C_{\mu P}$ are the MO expansion coefficients 
+\begin{equation}
+  \f_P
+=
+  \sum_{\mu} \x_\mu C_{\mu P}
+\end{equation}
+  show that this transformation is given by the following equation.
+\begin{equation}
+  \ip{\f_I\f_J|\f_A\f_B}
+=
+  \sum_{\mu\nu\rho\si}
+  \ip{\x_\mu\x_\nu|\x_\rho\x_\si}
+  C_{\mu I}^*C_{\nu J}^* C_{\rho A} C_{\si B}
+\end{equation}
+  The most straight-forward algorithm for implementing this transformation is
+\begin{lstlisting}
+g = zeros((nocc, nocc, nvir, nvir))
+
+for I in occupied
+  for J in occupied
+    for A in virtual
+      for B in virtual
+        for mu in ao_basis
+          for nu in ao_basis
+            for rh in ao_basis
+              for si in ao_basis
+                g[I,J,A,B] += G[mu,nu,rh,si] * C[mu,I] * C[nu,J] * C[rh,A] * C[si,B]
+\end{lstlisting}
+  which scales as $n_{\mr{o}}^2n_{\mr{v}}^2n_{\mr{b.f.}}^4$ with the number of occupied orbitals ($n_o$), the number of virtual orbitals ($n_v$), and the number of AO basis functions ($n_{\mr{b.f.}}$).
+  Define the term ``scaling'' and expalin how the scaling factor for this algorithm was derived.\\
+  A more substantially more efficient algorithm breaks this transformation down into a series of four partial AO$\rightarrow$MO transformations.
+\begin{equation}
+  \ip{\f_I\f_J|\f_A\f_B}
+=
+  \pr{
+    \sum_\si
+    \pr{
+      \sum_\rho
+      \pr{
+        \sum_\nu
+        \pr{
+          \sum_\mu
+          \ip{\x_\mu\x_\nu|\x_\rho\x_\si}
+          C_{\mu I}^*
+        }
+        C_{\nu J}^*
+      }
+      C_{\rho A}
+    } 
+    C_{\si B}
+  }
+\end{equation}
+  Write out the pseudo-code for all four steps of this algorithm and identify the scaling factor for each one.
+  Identify which step(s) are bottlenecks for large basis sets.
+  Explain why the first algorithm scales as $n_{\mr{b.f.}}^6$ with increasing basis set size whereas the second algorithm scales as $n_{\mr{b.f.}}^5$ with increasing basis set size, holding the number of electrons constant.
+
+
 \end{enumerate}
+
 
 \end{document}
