@@ -120,32 +120,32 @@
 \maketitle
 \vspace{-1cm}
 \noindent
-Let $\{\f_p\}$ be RHF spatial orbitals with orbital energies $\{\ev_p\}$ and basis expansion coefficients $C_{\mu p}$.
+Let $\{\f_P\}$ be RHF spatial orbitals with orbital energies $\{\ev_P\}$ and basis expansion coefficients $C_{\mu P}$.
 \begin{align}
 \label{tei-transformation}
 &&
-  \ip{\f_p\f_q|\f_r\f_s}
+  \ip{\f_P\f_Q|\f_R\f_S}
 =
   \sum_{\mu\nu\rho\si}
-  C_{\mu p}^*C_{\nu q}^* C_{\rho r}C_{\si s}
   \ip{\x_\mu\x_\nu|\x_\rho\x_\si}
+  C_{\mu P}^*C_{\nu Q}^* C_{\rho R}C_{\si S}
 \end{align}
 \begin{align}
 \label{mp2-energy}
 &&
   E\ord{2}
 =
-  \sum_{ijab}
-  \fr{\ip{\f_i\f_j|\f_a\f_b}\pr{\ip{\f_i\f_j|\f_a\f_b} - \ip{\f_i\f_j|\f_b\f_a}}}
-     {\ev_i+\ev_j-\ev_a-\ev_b}
+  \sum_{IJAB}
+  \fr{\ip{\f_I\f_J|\f_A\f_B}\pr{\ip{\f_I\f_J|\f_A\f_B} - \ip{\f_I\f_J|\f_B\f_A}}}
+     {\ev_I+\ev_J-\ev_A-\ev_B}
 \end{align}
 
 
 \subsection*{Procedure}
 
 \begin{enumerate}
-  \item Run RHF code to obtain MO coefficients $\{C_{\mu p}\}$ and orbital energies $\{\ev_p\}$.
-  \item Transform two-electron integrals from the AO basis $\{\x_\mu\}$ to the MO basis $\{\f_p\}$ (equation \ref{tei-transformation})
+  \item Run RHF code to obtain MO coefficients $\{C_{\mu P}\}$ and orbital energies $\{\ev_P\}$.
+  \item Transform two-electron integrals from the AO basis $\{\x_\mu\}$ to the MO basis $\{\f_P\}$ (equation \ref{tei-transformation})
   \item Evaluate MP2 energy expression (equation \ref{mp2-energy})
 \end{enumerate}
 
