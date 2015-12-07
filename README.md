@@ -18,7 +18,7 @@ Projects
      (<a href="https://github.com/CCQC/summer-program/blob/master/2/theory.pdf">Theory</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/3/instructions.pdf">RHF</a>
      (<a href="https://github.com/CCQC/summer-program/blob/master/3/theory-part-1.pdf">Theory 1</a>,
-     <a href="https://github.com/CCQC/summer-program/blob/master/3/theory-part-2.pdf">Theory 2</a>)</li>
+      <a href="https://github.com/CCQC/summer-program/blob/master/3/theory-part-2.pdf">Theory 2</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/4/instructions.pdf">RMP2</a>
      (<a href="https://github.com/CCQC/summer-program/blob/master/4/exercises.pdf">Exercises</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/5/instructions.pdf">UHF</a>
@@ -26,7 +26,10 @@ Projects
   <li><a href="https://github.com/CCQC/summer-program/blob/master/6/instructions.pdf">MP2</a>
      (<a href="https://github.com/CCQC/summer-program/blob/master/6/exercises.pdf">Exercises</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/7/instructions.pdf">CIS</a>
-     (<a href="https://github.com/CCQC/summer-program/blob/master/7/exercises.pdf">Exercises</a>)</li>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/7/exercises.pdf">Exercises</a>,
+      <a href="https://github.com/CCQC/summer-program/blob/master/7/theory.pdf">Theory</a>)</li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/8/instructions.pdf">CCD</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/8/theory.pdf">Theory</a>)</li>
 </ol>
 
 
