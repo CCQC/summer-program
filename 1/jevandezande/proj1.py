@@ -47,7 +47,7 @@ c = 29979245800.0 # speed of light in cm/s
 convert = np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)
 
 # \Delta X(Q_sa) = Q_A M^{-1/2} l_A
-Q = np.matrix(M) * np.matrix(L)
+Q = np.array(np.matrix(M) * np.matrix(L))
 
 out = ''
 line_form = '{:2s}' + '{: >15.10f}'*6 + '\n'
@@ -59,9 +59,7 @@ for a, k_a in enumerate(k):
     for i in range(len(mol)):
         atom = mol.atoms[i]
         x, y, z = mol.geom[i]
-        dx = Q[3*i, a]
-        dy = Q[3*i + 1, a]
-        dz = Q[3*i + 2, a]
+        dx, dy, dz = Q[3*i: 3*i + 3, a]
         out += line_form.format(atom, x, y, z, dx, dy, dz)
     out += '\n'
 

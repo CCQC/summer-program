@@ -10,18 +10,34 @@ Projects
 --------
 
 <ol start="0">
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf">Molecule Class</a></li>
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf">Vibrational Frequencies</a></li>
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf">Numerical Hessian</a></li>
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/3/instructions.pdf">RHF</a></li>
-  <li><a href="https://github.com/CCQC/summer-program/blob/master/4/instructions.pdf">RMP2</a></li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/0/instructions.pdf">Geometry</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/0/advanced.pdf">Advanced</a>)</li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/1/instructions.pdf">Frequencies</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/1/theory.pdf">Theory</a>)</li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/2/instructions.pdf">Hessian</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/2/theory.pdf">Theory</a>)</li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/3/instructions.pdf">RHF</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/3/theory-part-1.pdf">Theory 1</a>,
+      <a href="https://github.com/CCQC/summer-program/blob/master/3/theory-part-2.pdf">Theory 2</a>)</li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/4/instructions.pdf">RMP2</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/4/exercises.pdf">Exercises</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/5/instructions.pdf">UHF</a>
      (<a href="https://github.com/CCQC/summer-program/blob/master/5/exercises.pdf">Exercises</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/6/instructions.pdf">MP2</a>
      (<a href="https://github.com/CCQC/summer-program/blob/master/6/exercises.pdf">Exercises</a>)</li>
   <li><a href="https://github.com/CCQC/summer-program/blob/master/7/instructions.pdf">CIS</a>
-     (<a href="https://github.com/CCQC/summer-program/blob/master/7/exercises.pdf">Exercises</a>)</li>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/7/exercises.pdf">Exercises</a>,
+      <a href="https://github.com/CCQC/summer-program/blob/master/7/theory.pdf">Theory</a>)</li>
+  <li><a href="https://github.com/CCQC/summer-program/blob/master/8/instructions.pdf">CCD</a>
+     (<a href="https://github.com/CCQC/summer-program/blob/master/8/theory.pdf">Theory</a>)</li>
 </ol>
+
+
+Algebraic methods
+-----------------
+ - [Tensors](https://github.com/CCQC/summer-program/blob/master/algebraic-methods/tensors.pdf)
+ - [Motivating second quantization](https://github.com/CCQC/summer-program/blob/master/algebraic-methods/motivating-second-quantization.pdf)
+ - [Normal ordering and Wick's theorem](https://github.com/CCQC/summer-program/blob/master/algebraic-methods/normal-ordering.pdf)
 
 
 Python

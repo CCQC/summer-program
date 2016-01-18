@@ -1,0 +1,271 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{xfrac}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\ensuremath{\underline{#1}}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+\newcommand{\NO}[1]{\ensuremath{{\bm{:}}#1{}{\bm{:}}}}
+\newcommand{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
+\usepackage{stackengine}
+\newcommand{\GNO}[1]{\setstackgap{S}{0.7pt}\ensuremath{\Shortstack{\textbf{.} \textbf{.} \textbf{.}}#1\Shortstack{\textbf{.} \textbf{.} \textbf{.}}}}
+\newcommand{\cmtr}[2]{\ensuremath{[\cdot,#2]^{#1}}}
+\newcommand{\cmtl}[2]{\ensuremath{[#2,\cdot]^{#1}}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+%contractions
+\usepackage{simplewick}
+\usepackage[nomessages]{fp}
+\newcommand{\ctr}[6][0]{\FPeval\height{0.6+#1*0.5}\ensuremath{\contraction[\height ex]{#2}{#3}{#4}{#5}}}
+\newcommand{\ccr}[4]{\ctr[0.7]{#1}{#2}{#3}{#4}{}\ctr{#1}{#2}{#3}{#4}}
+\usepackage{calc}
+\makeatletter
+\def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
+\makeatother
+\newcommand{\halfphantom}[1]{\hspace{\widthof{#1}*\real{0.5}}}
+\newcommand{\fullctr}[1]{\ensuremath{\contraction[0.5ex]{}{\vphantom{#1}}{\hphantom{#1}}{}{}{}\contraction[0.5ex]{}{\vphantom{#1}}{\halfphantom{#1}}{}{}{}#1}}
+%math sections
+\usepackage{cleveref}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheoremstyle[spaceabove=10pt,spacebelow=10pt,bodyfont=\small]{mystyle}
+\theoremstyle{mystyle}
+\newtheorem{dfn}{Definition}[section]
+\crefname{dfn}{definition}{definitions}
+\Crefname{dfn}{Def}{Defs}
+\newtheorem{thm}{Theorem}[section]
+\crefname{thm}{theorem}{theorems}
+\Crefname{thm}{Thm}{Thms}
+\newtheorem{cor}{Corollary}[section]
+\crefname{cor}{corollary}{corollaries}
+\Crefname{cor}{Cor}{Cors}
+\newtheorem{lem}{Lemma}[section]
+\crefname{lem}{lemma}{lemmas}
+\Crefname{lem}{Lem}{Lems}
+\newtheorem{rmk}{Remark}[section]
+\crefname{rmk}{remark}{remarks}
+\Crefname{rmk}{Rmk}{Rmks}
+\newtheorem{pro}{Proposition}[section]
+\crefname{pro}{proposition}{propositions}
+\Crefname{pro}{Prop}{Props}
+\newtheorem{ntt}{Notation}[section]
+\crefname{ntt}{notation}{notations}
+\Crefname{ntt}{Notation}{Notations}
+
+\usepackage{cancel}
+\usepackage{scrextend}
+
+\newcommand{\hole}{\circ}
+\newcommand{\ptcl}{\bullet}
+\newcommand{\circled}[1]{\raisebox{.5pt}{\textcircled{\raisebox{-.9pt}{#1}}}}
+
+
+\title{Programming Project 7 Theory\\
+\textit{Deriving CIS matrix elements in Kutzelnigg-Mukherjee tensor notation}}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+\vspace{-1cm}
+
+\noindent
+The electronic Hamiltonian can be expressed as follows.
+\begin{align}
+&&
+  H_e
+=
+  E_{\text{HF}}
++
+  H_c
+&&
+  E_{\text{HF}}
+=
+  \ip{\F|H_e|\F}
+&&
+  H_c
+=
+  f_p^q
+  \tl{a}_q^p
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  \tl{a}_{rs}^{pq}
+\end{align}
+Assuming Brillouin's theorem is satisfied and $\ip{\F|H_e|\F_i^a}=f_i^a=0$, the CIS ground state eigenpair is simply the Hartree-Fock solution: the root is $E_{\text{HF}}$ and the wavefunction is $\F$.
+Therefore, excitation energies from the ground state are eigenvalues of the matrix $\ip{\F_i^a|H_e-E_{\text{HF}}|\F_j^b}=\ip{\F_i^a|H_c|\F_j^b}$.
+Applying Wick's theorem in $\F$-normal ordering gives
+\begin{align}
+&&\nonumber
+  \ip{\F_i^a|H_c|\F_j^b}
+=&\
+  f_p^q
+  \ip{\F|\tl{a}_a^i\tl{a}_q^p\tl{a}_j^b|\F}
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  \ip{\F|\tl{a}_a^i\tl{a}_{rs}^{pq}\tl{a}_j^b|\F}
+\\&&=&\
+\label{cis-matrix-elements}
+  f_p^q
+  (\tl{a}_a^i\tl{a}_q^p\tl{a}_j^b)_{\text{f.c.}}
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  (\tl{a}_a^i\tl{a}_{rs}^{pq}\tl{a}_j^b)_{\text{f.c.}}
+\end{align}
+where the subscript f.c. denotes the sum over fully contracted terms in these Wick expansions.
+\begin{align}
+\label{one-electron-coupling-matrix}
+&
+  (\tl{a}_a^i\tl{a}_q^p\tl{a}_j^b)_{\text{f.c.}}
+=
+  \GNO{a_{a^\hole}^{i^\ptcl}a_{q^{\hole\hole}}^{p^\hole}a_{j^\ptcl}^{b^{\hole\hole}}}
++
+  \GNO{a_{a^\hole}^{i^{\ptcl}}a_{q^{\ptcl}}^{p^{\ptcl\ptcl}}a_{j^{\ptcl\ptcl}}^{b^{\hole}}}
+=
+  \g^i_j\h_a^p\h_q^b
+-
+  \g_q^i\g_j^p\h_a^b
+\\
+\label{two-electron-coupling-matrix}
+&
+  (\tl{a}_a^i\tl{a}_{rs}^{pq}\tl{a}_j^b)_{\text{f.c.}}
+=
+  \GNO{
+    \tl{a}_{a^\hole}^{i^\ptcl}
+    \tl{a}_{r^{\ptcl}s^{\hole\hole}}^{p^{\hole}q^{\ptcl\ptcl}}
+    \tl{a}_{j^{\ptcl\ptcl}}^{b^{\hole\hole}}
+  }
++
+  \GNO{
+    \tl{a}_{a^\hole}^{i^\ptcl}
+    \tl{a}_{r^{\hole\hole}s^{\ptcl}}^{p^{\hole}q^{\ptcl\ptcl}}
+    \tl{a}_{j^{\ptcl\ptcl}}^{b^{\hole\hole}}
+  }
++
+  \GNO{
+    \tl{a}_{a^\hole}^{i^\ptcl}
+    \tl{a}_{r^{\ptcl}s^{\hole\hole}}^{p^{\ptcl\ptcl}q^{\hole}}
+    \tl{a}_{j^{\ptcl\ptcl}}^{b^{\hole\hole}}
+  }
++
+  \GNO{
+    \tl{a}_{a^\hole}^{i^\ptcl}
+    \tl{a}_{r^{\hole\hole}s^{\ptcl}}^{p^{\ptcl\ptcl}q^{\hole}}
+    \tl{a}_{j^{\ptcl\ptcl}}^{b^{\hole\hole}}
+  }
+=
+  \op{P}^{(p/q)}_{(r/s)}
+  \g^i_r\h^p_a\g^q_j\h^b_s
+\end{align}
+Plugging equations \ref{one-electron-coupling-matrix} and \ref{two-electron-coupling-matrix} into equation \ref{cis-matrix-elements} gives the final working equation for the CIS matrix elements.
+\begin{align}
+\label{cis-equations}
+&&
+  \ip{\F_i^a|H_c|\F_j^b}
+=
+  f_a^b\g_j^i
+-
+  f_j^i\h_a^b
++
+  \ol{g}_{aj}^{ib}
+=
+  f_a^b\d_j^i
+-
+  f_j^i\d_a^b
++
+  \ol{g}_{aj}^{ib}
+\end{align}
+For a canonical Hartree-Fock reference, the Fock matrix is diagonal: $f_a^b=\ev_a\d_a^b$ and $f_j^i=\ev_j\d_j^i$.
+
+
+
+\end{document}

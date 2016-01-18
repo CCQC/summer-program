@@ -1,0 +1,737 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{xfrac}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\ensuremath{\underline{#1}}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+\newcommand{\NO}[1]{\ensuremath{{\bm{:}}#1{}{\bm{:}}}}
+\newcommand{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
+\usepackage{stackengine}
+\newcommand{\GNO}[1]{\setstackgap{S}{0.7pt}\ensuremath{\Shortstack{\textbf{.} \textbf{.} \textbf{.}}#1\Shortstack{\textbf{.} \textbf{.} \textbf{.}}}}
+\newcommand{\cmtr}[2]{\ensuremath{[\cdot,#2]^{#1}}}
+\newcommand{\cmtl}[2]{\ensuremath{[#2,\cdot]^{#1}}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+%contractions
+\usepackage{simplewick}
+\usepackage[nomessages]{fp}
+\newcommand{\ctr}[6][0]{\FPeval\height{0.6+#1*0.5}\ensuremath{\contraction[\height ex]{#2}{#3}{#4}{#5}}}
+\newcommand{\ccr}[4]{\ctr[0.7]{#1}{#2}{#3}{#4}{}\ctr{#1}{#2}{#3}{#4}}
+\usepackage{calc}
+\makeatletter
+\def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
+\makeatother
+\newcommand{\halfphantom}[1]{\hspace{\widthof{#1}*\real{0.5}}}
+\newcommand{\fullctr}[1]{\ensuremath{\contraction[0.5ex]{}{\vphantom{#1}}{\hphantom{#1}}{}{}{}\contraction[0.5ex]{}{\vphantom{#1}}{\halfphantom{#1}}{}{}{}#1}}
+%math sections
+\usepackage{cleveref}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheoremstyle[spaceabove=10pt,spacebelow=10pt,bodyfont=\small]{mystyle}
+\theoremstyle{mystyle}
+\newtheorem{dfn}{Definition}[section]
+\crefname{dfn}{definition}{definitions}
+\Crefname{dfn}{Def}{Defs}
+\newtheorem{thm}{Theorem}[section]
+\crefname{thm}{theorem}{theorems}
+\Crefname{thm}{Thm}{Thms}
+\newtheorem{cor}{Corollary}[section]
+\crefname{cor}{corollary}{corollaries}
+\Crefname{cor}{Cor}{Cors}
+\newtheorem{lem}{Lemma}[section]
+\crefname{lem}{lemma}{lemmas}
+\Crefname{lem}{Lem}{Lems}
+\newtheorem{rmk}{Remark}[section]
+\crefname{rmk}{remark}{remarks}
+\Crefname{rmk}{Rmk}{Rmks}
+\newtheorem{pro}{Proposition}[section]
+\crefname{pro}{proposition}{propositions}
+\Crefname{pro}{Prop}{Props}
+\newtheorem{ntt}{Notation}[section]
+\crefname{ntt}{notation}{notations}
+\Crefname{ntt}{Notation}{Notations}
+
+\usepackage{cancel}
+\usepackage{scrextend}
+
+\newcommand{\hole}{\circ}
+\newcommand{\ptcl}{\bullet}
+\newcommand{\circled}[1]{\raisebox{.5pt}{\textcircled{\raisebox{-.9pt}{#1}}}}
+
+
+\title{Programming Project 8 Theory\\
+\textit{Deriving CCD equations in Kutzelnigg-Mukherjee tensor notation}}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+\vspace{-1cm}
+
+\noindent
+The electronic Hamiltonian can be expressed as follows.
+\begin{align}
+&&
+  H_e
+=
+  E_{\text{HF}}
++
+  H_c
+&&
+  E_{\text{HF}}
+=
+  \ip{\F|H_e|\F}
+&&
+  H_c
+=
+  f_p^q
+  \tl{a}_q^p
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  \tl{a}_{rs}^{pq}
+\end{align}
+The CCD approximation parametrizes the wavefunction as $\Y\approx e^{\op{T}_2}\F$ where $\op{T}_2=\tfrac{1}{4}t_{ab}^{ij}a_{ij}^{ab}$.
+Substituting this ansatz into the Schr\"odinger equation and projecting by $\F$ and $\F_{ij}^{ab}$ gives the following system of equations.
+\begin{align}
+\label{ccd-energy-equation}
+  E_c
+=&\
+  \ip{\F|H_ce^{\op{T}_2}\F|\F}
+&&
+  \implies
+&
+  E_c
+=&\
+  \tfrac{1}{4}
+  \ip{\F|H_c|\F_{kl}^{cd}}t_{cd}^{kl}
+\\
+\label{ccd-t2-amplitude-equation}
+  E_ct_{ab}^{ij}
+=&\
+  \ip{\F_{ij}^{ab}|H_ce^{\op{T}_2}\F|\F}
+&&
+  \implies
+&
+  E_ct_{ab}^{ij}
+=&\
+  \ip{\F_{ij}^{ab}|H_c|\F}
++
+  \tfrac{1}{4}
+  \ip{\F_{ij}^{ab}|H_c|\F_{kl}^{cd}}t_{cd}^{kl}
++
+  \tfrac{1}{2}
+  \pr{\tfrac{1}{4}}^2
+  \ip{\F_{ij}^{ab}|H_c|\F_{klmn}^{cdef}}t_{cd}^{kl}t_{ef}^{mn}
+\end{align}
+The non-trivial terms to be evaluated are
+\begin{align}
+\label{ccd-matrix-elements}
+&&
+  \tfrac{1}{4}
+  \ip{\F_{ij}^{ab}|H_c|\F_{kl}^{cd}}t_{cd}^{kl}
+=&\
+  \tfrac{1}{4}
+  f_p^q
+  t_{cd}^{kl}
+  (\tl{a}_{ab}^{ij}\tl{a}_q^p\tl{a}_{kl}^{cd})_{\text{f.c.}}
++
+  \pr{\tfrac{1}{4}}^2
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}
+  (\tl{a}_{ab}^{ij}\tl{a}_{rs}^{pq}\tl{a}_{kl}^{cd})_{\text{f.c.}}
+\\&&
+  \tfrac{1}{2}
+  \pr{\tfrac{1}{4}}^2
+  \ip{\F_{ij}^{ab}|H_c|\F_{klmn}^{cdef}}
+  t_{cd}^{kl}t_{ef}^{mn}
+=&\
+  \tfrac{1}{2}
+  \pr{\tfrac{1}{4}}^3
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}t_{ef}^{mn}
+  (\tl{a}_{ab}^{ij}\tl{a}_{rs}^{pq}\tl{a}_{kl}^{cd}\tl{a}_{mn}^{ef})_{\text{f.c.}}
+\end{align}
+where $(\tl{a}_{ab}^{ij}\tl{a}_q^p\tl{a}_{kl}^{cd})_{\text{f.c.}}$ and $(\tl{a}_{ab}^{ij}\tl{a}_{rs}^{pq}\tl{a}_{kl}^{cd})_{\text{f.c.}}$ can be determined using Wick's theorem
+\begin{align*}
+  (\tl{a}_{ab}^{ij}\tl{a}_q^p\tl{a}_{kl}^{cd})_{\text{f.c.}}
+=&\
+  \op{P}^{(c/d)}
+        _{(a/b|k/l)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole3}}
+          ^{i^{\ptcl1}j^{\ptcl2}}
+    \tl{a}_{q^{\hole2}}
+          ^{p^{\hole1}}
+    \tl{a}_{k^{\ptcl1}l^{\ptcl2}}
+          ^{c^{\hole2}d^{\hole3}}
+  }
++
+  \op{P}^{(i/j|c/d)}
+        _{(k/l)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole2}}
+          ^{i^{\ptcl1}j^{\ptcl3}}
+    \tl{a}_{q^{\ptcl1}}
+          ^{p^{\ptcl2}}
+    \tl{a}_{k^{\ptcl2}l^{\ptcl3}}
+          ^{c^{\hole1}d^{\hole2}}
+  }
+\\=&\
+  \op{P}^{(c/d)}
+        _{(a/b|k/l)}
+  \h_a^p\h_q^c\h_b^d\g_k^i\g_l^j
+-
+  \op{P}^{(i/j|c/d)}
+        _{(k/l)}
+  \g_q^i\g_k^p\g_l^j\h_a^c\h_b^d
+\\
+  (\tl{a}_{ab}^{ij}\tl{a}_{rs}^{pq}\tl{a}_{kl}^{cd})_{\text{f.c.}}
+=&\
+  \op{P}^{(c/d)}
+        _{(a/b|k/l)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole2}}
+          ^{i^{\ptcl1}j^{\ptcl2}}
+    \tl{a}_{r^{\hole3}s^{\hole4}}
+          ^{p^{\hole1}q^{\hole2}}
+    \tl{a}_{k^{\ptcl1}l^{\ptcl2}}
+          ^{c^{\hole3}d^{\hole4}}
+  }
++
+  \op{P}^{(i/j|c/d)}
+        _{(k/l)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole2}}
+          ^{i^{\ptcl1}j^{\ptcl2}}
+    \tl{a}_{r^{\ptcl1}s^{\ptcl2}}
+          ^{p^{\ptcl3}q^{\ptcl4}}
+    \tl{a}_{k^{\ptcl3}l^{\ptcl4}}
+          ^{c^{\hole1}d^{\hole2}}
+  }
+\\&\
++
+  \op{P}^{(p/q|i/j|c/d)}
+        _{(r/s|k/l|a/b)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole3}}
+          ^{i^{\ptcl1}j^{\ptcl3}}
+    \tl{a}_{r^{\ptcl1}s^{\hole2}}
+          ^{p^{\ptcl2}q^{\hole1}}
+    \tl{a}_{k^{\ptcl2}l^{\ptcl3}}
+          ^{c^{\hole2}d^{\hole3}}
+  }
+\\=&\
+  \op{P}^{(c/d)}
+        _{(a/b|k/l)}
+  \h_a^p\h_b^q\h_r^c\h_s^d
+  \g_k^i\g_l^j
++
+  \op{P}^{(i/j|c/d)}
+        _{(k/l)}
+  \g_r^i\g_s^j\g_k^p\g_l^q
+  \h_a^c\h_b^d
+-
+  \op{P}^{(p/q|i/j|c/d)}
+        _{(r/s|k/l|a/b)}
+  \g_r^i\g_k^p\g_l^j
+  \h_a^q\h_s^c\h_b^d
+\\
+  (\tl{a}_{ab}^{ij}\tl{a}_{rs}^{pq}\tl{a}_{kl}^{cd}\tl{a}_{mn}^{ef})_{\text{f.c.}}
+=&\
+  2
+  \op{P}_{(k/l|m/n)}^{(c/d|e/f)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole2}}^{i^{\ptcl1}j^{\ptcl2}}
+    \tl{a}_{r^{\hole3}s^{\hole4}}^{p^{\ptcl3}q^{\ptcl4}}
+    \tl{a}_{k^{\ptcl1}l^{\ptcl2}}^{c^{\hole1}d^{\hole2}}
+    \tl{a}_{m^{\ptcl3}n^{\ptcl4}}^{e^{\hole3}f^{\hole4}}
+  }
+\\&\
++
+  2
+  \op{P}_{(a/b|r/s|k/l|m/n)}^{(c/d|e/f)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole2}}^{i^{\ptcl1}j^{\ptcl2}}
+    \tl{a}_{r^{\hole3}s^{\hole4}}^{p^{\ptcl3}q^{\ptcl4}}
+    \tl{a}_{k^{\ptcl1}l^{\ptcl2}}^{c^{\hole1}d^{\hole3}}
+    \tl{a}_{m^{\ptcl3}n^{\ptcl4}}^{e^{\hole2}f^{\hole4}}
+  }
+\\&\
++
+  2
+  \op{P}_{(k/l|m/n)}^{(i/j|p/q|c/d|e/f)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole2}}^{i^{\ptcl1}j^{\ptcl2}}
+    \tl{a}_{r^{\hole3}s^{\hole4}}^{p^{\ptcl3}q^{\ptcl4}}
+    \tl{a}_{k^{\ptcl1}l^{\ptcl3}}^{c^{\hole1}d^{\hole2}}
+    \tl{a}_{m^{\ptcl2}n^{\ptcl4}}^{e^{\hole3}f^{\hole4}}
+  }
+\\&\
++
+  2
+  \op{P}_{(k/l|m/n)}^{(c/d|e/f)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole2}}^{i^{\ptcl1}j^{\ptcl2}}
+    \tl{a}_{r^{\hole3}s^{\hole4}}^{p^{\ptcl3}q^{\ptcl4}}
+    \tl{a}_{k^{\ptcl1}l^{\ptcl2}}^{c^{\hole3}d^{\hole4}}
+    \tl{a}_{m^{\ptcl3}n^{\ptcl4}}^{e^{\hole1}f^{\hole2}}
+  }
+\\&\
++
+  \op{P}_{(a/b|r/s|k/l|m/n)}^{(i/j|p/q|c/d|e/f)}
+  \GNO{
+    \tl{a}_{a^{\hole1}b^{\hole2}}^{i^{\ptcl1}j^{\ptcl2}}
+    \tl{a}_{r^{\hole3}s^{\hole4}}^{p^{\ptcl3}q^{\ptcl4}}
+    \tl{a}_{k^{\ptcl1}l^{\ptcl3}}^{c^{\hole1}d^{\hole3}}
+    \tl{a}_{m^{\ptcl2}n^{\ptcl4}}^{e^{\hole2}f^{\hole4}}
+  }
+\\=&\
+  2
+  \op{P}_{(k/l|m/n)}^{(c/d|e/f)}
+  \g_k^i\g_l^j\g_m^p\g_n^q
+  \h_a^c\h_b^d\h_r^e\h_s^f
+\\&\
+-
+  2
+  \op{P}_{(a/b|r/s|k/l|m/n)}^{(c/d|e/f)}
+  \g_k^i\g_l^j\g_m^p\g_n^q
+  \h_a^c\h_b^e\h_r^d\h_s^f
+\\&\
+-
+  2
+  \op{P}_{(k/l|m/n)}^{(i/j|p/q|c/d|e/f)}
+  \g_k^i\g_m^j\g_l^p\g_n^q
+  \h_a^c\h_b^d\h_r^e\h_s^f
+\\&\
++
+  2
+  \op{P}_{(k/l|m/n)}^{(c/d|e/f)}
+  \g_k^i\g_l^j\g_m^p\g_n^q
+  \h_a^e\h_b^f\h_r^c\h_s^d
+\\&\
++
+  \op{P}_{(a/b|r/s|k/l|m/n)}^{(i/j|p/q|c/d|e/f)}
+  \g_k^i\g_m^j\g_l^p\g_n^q
+  \h_a^c\h_b^e\h_r^d\h_s^f
+\end{align*}
+giving the following.
+\begin{align*}
+  \tfrac{1}{4}
+  f_p^q
+  t_{cd}^{kl}
+  (\tl{a}_{ab}^{ij}\tl{a}_q^p\tl{a}_{kl}^{cd})_{\text{f.c.}}
+=&\
+  f_p^q
+  t_{cd}^{kl}
+  \op{P}_{(a/b)}
+  \h_a^p\h_q^c\h_b^d\g_k^i\g_l^j
+-
+  f_p^q
+  t_{cd}^{kl}
+  \op{P}^{(i/j)}
+  \g_q^i\g_k^p\g_l^j\h_a^c\h_b^d
+\\=&\
+  \op{P}_{(a/b)}
+  f_a^c
+  t_{cb}^{ij}
+-
+  \op{P}^{(i/j)}
+  f_k^i
+  t_{ab}^{kj}
+\\
+  \pr{\tfrac{1}{4}}^2
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}
+  (\tl{a}_{ab}^{ij}\tl{a}_{rs}^{pq}\tl{a}_{kl}^{cd})_{\text{f.c.}}
+=&\
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}
+  \op{P}_{(a/b)}
+  \h_a^p\h_b^q\h_r^c\h_s^d
+  \g_k^i\g_l^j
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}
+  \op{P}^{(i/j)}
+  \g_r^i\g_s^j\g_k^p\g_l^q
+  \h_a^c\h_b^d
+\\&
+-
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}
+  \op{P}^{(i/j)}
+        _{(a/b)}
+  \g_r^i\g_k^p\g_l^j
+  \h_a^q\h_s^c\h_b^d
+\\=&\
+  \tfrac{1}{4}
+  \op{P}_{(a/b)}
+  \ol{g}_{ab}^{cd}
+  t_{cd}^{ij}
++
+  \tfrac{1}{4}
+  \op{P}^{(i/j)}
+  \ol{g}_{kl}^{ij}
+  t_{ab}^{kl}
+-
+  \op{P}^{(i/j)}
+        _{(a/b)}
+  \ol{g}_{ka}^{ic}
+  t_{cb}^{kj}
+\\=&\
+  \tfrac{1}{2}
+  \ol{g}_{ab}^{cd}
+  t_{cd}^{ij}
++
+  \tfrac{1}{2}
+  \ol{g}_{kl}^{ij}
+  t_{ab}^{kl}
++
+  \op{P}^{(i/j)}
+        _{(a/b)}
+  \ol{g}_{ak}^{ic}
+  t_{bc}^{jk}
+\\
+  \tfrac{1}{2}
+  \pr{\tfrac{1}{4}}^3
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}t_{ef}^{mn}
+  (\tl{a}_{ab}^{ij}\tl{a}_{rs}^{pq}\tl{a}_{kl}^{cd}\tl{a}_{mn}^{ef})_{\text{f.c.}}
+=&\
+\hphantom+\
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}t_{ef}^{mn}
+  \g_k^i\g_l^j\g_m^p\g_n^q
+  \h_a^c\h_b^d\h_r^e\h_s^f
+\\&\
+-
+  \tfrac{1}{2}
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}t_{ef}^{mn}
+  \op{P}_{(a/b)}
+  \g_k^i\g_l^j\g_m^p\g_n^q
+  \h_a^c\h_b^e\h_r^d\h_s^f
+\\&\
+-
+  \tfrac{1}{2}
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}t_{ef}^{mn}
+  \op{P}^{(i/j)}
+  \g_k^i\g_m^j\g_l^p\g_n^q
+  \h_a^c\h_b^d\h_r^e\h_s^f
+\\&\
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}t_{ef}^{mn}
+  \g_k^i\g_l^j\g_m^p\g_n^q
+  \h_a^e\h_b^f\h_r^c\h_s^d
+\\&\
++
+  \tfrac{1}{2}
+  \ol{g}_{pq}^{rs}
+  t_{cd}^{kl}t_{ef}^{mn}
+  \op{P}_{(a/b)}^{(i/j)}
+  \g_k^i\g_m^j\g_l^p\g_n^q
+  \h_a^c\h_b^e\h_r^d\h_s^f
+\\=&\
+  \tfrac{1}{4}
+  \ol{g}_{mn}^{ef}
+  t_{ab}^{ij}t_{ef}^{mn}
+-
+  \tfrac{1}{2}
+  \op{P}_{(a/b)}
+  \ol{g}_{mn}^{df}
+  t_{ad}^{ij}t_{bf}^{mn}
+-
+  \tfrac{1}{2}
+  \op{P}^{(i/j)}
+  \ol{g}_{ln}^{ef}
+  t_{ab}^{il}t_{ef}^{jn}
+\\&\
++
+  \tfrac{1}{4}
+  \ol{g}_{mn}^{cd}
+  t_{cd}^{ij}t_{ab}^{mn}
++
+  \tfrac{1}{2}
+  \op{P}_{(a/b)}^{(i/j)}
+  \ol{g}_{ln}^{df}
+  t_{ad}^{il}t_{bf}^{jn}
+\\=&\
+  \pr{
+    \tfrac{1}{4}
+    \ol{g}_{kl}^{cd}
+    t_{cd}^{kl}
+  }
+  t_{ab}^{ij}
+-
+  \tfrac{1}{2}
+  \op{P}_{(a/b)}
+  \ol{g}_{kl}^{cd}
+  t_{ac}^{ij}t_{bd}^{kl}
+-
+  \tfrac{1}{2}
+  \op{P}^{(i/j)}
+  \ol{g}_{kl}^{cd}
+  t_{ab}^{ik}t_{cd}^{jl}
+\\&\
++
+  \tfrac{1}{4}
+  \ol{g}_{kl}^{cd}
+  t_{cd}^{ij}t_{ab}^{kl}
++
+  \op{P}^{(i/j)}
+  \ol{g}_{kl}^{cd}
+  t_{ac}^{ik}t_{bd}^{jl}
+\end{align*}
+Substituting these terms, along with the second Slater rule ($\ip{\F_{ij}^{ab}|H_c|\F}=\ol{g}_{ab}^{ij}$ and $\ip{\F|H_c|\F_{kl}^{cd}}=\ol{g}_{kl}^{cd}$), into equations \ref{ccd-energy-equation} and \ref{ccd-t2-amplitude-equation} gives the following.
+\begin{align}
+\label{ccd-energy-equation-2}
+  E_c
+=&\
+  \tfrac{1}{4}
+  \ol{g}_{kl}^{cd}t_{cd}^{kl}
+\\
+\label{ccd-amplitude-energy-dependent}
+  E_ct_{ab}^{ij}
+=&\
+  \ol{g}_{ab}^{ij}
++
+  \op{P}_{(a/b)}
+  f_a^c
+  t_{cb}^{ij}
+-
+  \op{P}^{(i/j)}
+  f_k^i
+  t_{ab}^{kj}
++
+  \tfrac{1}{2}
+  \ol{g}_{ab}^{cd}
+  t_{cd}^{ij}
++
+  \tfrac{1}{2}
+  \ol{g}_{kl}^{ij}
+  t_{ab}^{kl}
++
+  \op{P}^{(i/j)}
+        _{(a/b)}
+  \ol{g}_{ak}^{ic}
+  t_{bc}^{jk}
+\nonumber
+\\&\
++
+  \pr{
+    \tfrac{1}{4}
+    \ol{g}_{kl}^{cd}
+    t_{cd}^{kl}
+  }
+  t_{ab}^{ij}
+-
+  \tfrac{1}{2}
+  \op{P}_{(a/b)}
+  \ol{g}_{kl}^{cd}
+  t_{ac}^{ij}t_{bd}^{kl}
+-
+  \tfrac{1}{2}
+  \op{P}^{(i/j)}
+  \ol{g}_{kl}^{cd}
+  t_{ab}^{ik}t_{cd}^{jl}
++
+  \tfrac{1}{4}
+  \ol{g}_{kl}^{cd}
+  t_{cd}^{ij}t_{ab}^{kl}
++
+  \op{P}^{(i/j)}
+  \ol{g}_{kl}^{cd}
+  t_{ac}^{ik}t_{bd}^{jl}
+\end{align}
+Finally, using the energy expression \ref{ccd-energy-equation-2} allows us to cancel the left-hand side of equation \ref{ccd-amplitude-energy-dependent} with the seventh term on the right, leaving the traditional CCD $\op{T}_2$ amplitude equations.
+\begin{align}
+\nonumber
+  0
+=&\
+  \ol{g}_{ab}^{ij}
++
+  \op{P}_{(a/b)}
+  f_a^c
+  t_{cb}^{ij}
+-
+  \op{P}^{(i/j)}
+  f_k^i
+  t_{ab}^{kj}
++
+  \tfrac{1}{2}
+  \ol{g}_{ab}^{cd}
+  t_{cd}^{ij}
++
+  \tfrac{1}{2}
+  \ol{g}_{kl}^{ij}
+  t_{ab}^{kl}
++
+  \op{P}^{(i/j)}
+        _{(a/b)}
+  \ol{g}_{ak}^{ic}
+  t_{bc}^{jk}
+-
+  \tfrac{1}{2}
+  \op{P}_{(a/b)}
+  \ol{g}_{kl}^{cd}
+  t_{ac}^{ij}t_{bd}^{kl}
+\\&\
+-
+  \tfrac{1}{2}
+  \op{P}^{(i/j)}
+  \ol{g}_{kl}^{cd}
+  t_{ab}^{ik}t_{cd}^{jl}
++
+  \tfrac{1}{4}
+  \ol{g}_{kl}^{cd}
+  t_{cd}^{ij}t_{ab}^{kl}
++
+  \op{P}^{(i/j)}
+  \ol{g}_{kl}^{cd}
+  t_{ac}^{ik}t_{bd}^{jl}
+\end{align}
+Assuming a canonical HF reference wavefunction (so that $f_a^c=\e_a\d_a^c$ and $f_k^i=\e_i\d_k^i$) and moving the second and third terms to the left-hand side gives the CCD working equations
+\begin{align}
+  t_{ab}^{ij}
+=
+  \mc{E}_{ab}^{ij}
+  \left(
+    \ol{g}_{ab}^{ij}
+  \right.
+  &+
+    \tfrac{1}{2}
+    \ol{g}_{ab}^{cd}
+    t_{cd}^{ij}
+  +
+    \tfrac{1}{2}
+    \ol{g}_{kl}^{ij}
+    t_{ab}^{kl}
+  +
+    \op{P}^{(i/j)}
+          _{(a/b)}
+    \ol{g}_{ak}^{ic}
+    t_{bc}^{jk}
+  -
+    \tfrac{1}{2}
+    \op{P}_{(a/b)}
+    \ol{g}_{kl}^{cd}
+    t_{ac}^{ij}t_{bd}^{kl}
+  -
+    \tfrac{1}{2}
+    \op{P}^{(i/j)}
+    \ol{g}_{kl}^{cd}
+    t_{ab}^{ik}t_{cd}^{jl}
+\\
+  &+
+  \left.
+    \tfrac{1}{4}
+    \ol{g}_{kl}^{cd}
+    t_{cd}^{ij}t_{ab}^{kl}
+  +
+    \op{P}^{(i/j)}
+    \ol{g}_{kl}^{cd}
+    t_{ac}^{ik}t_{bd}^{jl}
+  \right)
+\sp\text{where $\mc{E}_{ab}^{ij}=\frac{1}{\e_i+\e_i-\e_a-\e_b}$.}
+\end{align}
+
+
+
+
+
+\end{document}
