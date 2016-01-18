@@ -1,28 +1,27 @@
 import numpy as np
-
 import sys
+import psi4
 sys.path.insert(0,"../../5/aewiens")
 
 from uhf import UHF
+
 
 class CCD:
 
     def __init__(self,mol,mints):
 
         uhf = UHF(mol, mints)
-        uhf.get_energy()
+        uhf.compute_energy()
 
         # import from uhf
-        self.e, self.C, self.g = uhf.e, uhf.C, uhf.g
-        self.maxiter = uhf.maxiter
-        self.conv = uhf.conv
-        nbf = uhf.nbf
-        self.nocc = uhf.nocc
-        self.nvirt = 2*nbf - self.nocc
+        self.e, self.C, self.G = uhf.e, uhf.C, uhf.g
+        self.maxiter, self.conv = uhf.maxiter, uhf.conv
+
+        self.nbf, self.nocc = uhf.nbf, uhf.nocc
+        self.nvirt = 2*self.nbf - self.nocc
 
         self.Ec = 0.0 
-        self.t = np.zeros((self.nvirt,self.nvirt,self.nocc,self.nocc))
-
+        self.t = np.zeros((self.nocc,self.nocc,self.nvirt,self.nvirt))
 
     def transform_integrals(self,g,C):
         """
@@ -30,42 +29,58 @@ class CCD:
         :param C: 2D array of MO expansion coefficients for AO basis functions
         Return a 4D array (same as g.size) of 2-electron integrals in MO basis
         """
+
         return np.einsum('Pp,Pqrs->pqrs', C,
                     np.einsum('Qq,PQrs->Pqrs', C,
                         np.einsum('Rr,PQRs->PQrs', C,
                             np.einsum('Ss,PQRS->PQRs', C, g))))
 
+    def get_energy(self):
+        """
+        :Return: CCD correlation energy
+        """
 
-    def amplitude(self):
+        g = self.transform_integrals(self.G, self.C)
+        nocc,t, e, = self.nocc, self.t, self.e
 
-        Gmo = self.transform_integrals(self.g, self.C)
-        t, nocc = self.t, self.nocc
+        o = slice(None,nocc)
+        v = slice(nocc,None)
 
-        return Gmo[nocc:,nocc:,:nocc,:nocc] + 0.5*np.einsum("abcd,cdij->abij",Gmo[nocc:,nocc:,nocc:,nocc:],t) + 0.5*np.einsum("klij,abkl->abij",Gmo[:nocc,:nocc,:nocc,:nocc],t) 
-        #+ np.einsum("acik,bcjk->abij",Gmo[nocc:,:nocc,:nocc,nocc:],t) 
-        #- np.einsum("akjc,bkic->aijb",Gmo[nocc:,:nocc,:nocc,nocc:],t) - np.einsum("bkic,akjc->bjia",Gmo[nocc:,:nocc,:nocc,nocc:],t) - np.einsum("bkjc,akic->bija",Gmo[nocc:,:nocc,:nocc,nocc:],t)
-
-
-    def win(self):
+        # ???
+        x = np.newaxis
+        Ep = 1.0/ (e[o,x,x,x] + e[x,o,x,x] - e[x,x,v,x] - e[x,x,x,v] )
 
         for k in range(self.maxiter):
-            Gmo = self.transform_integrals(self.g,self.C)
+            # terms
+            t1 = g[o,o,v,v]
+            t2 = np.einsum("abcd,ijcd->ijab",g[v,v,v,v],t)
+            t3 = np.einsum("klij,klab->ijab",g[o,o,o,o],t)
+            t4 = np.einsum("akic,jkbc->ijab",g[v,o,o,v],t)
+            t5 = np.einsum("klcd,ijac,klbd->ijab",g[o,o,v,v],t,t)
+            t6 = np.einsum("klcd,ikab,jlcd->ijab",g[o,o,v,v],t,t)
+            t7 = np.einsum("klcd,ijcd,klab->ijab",g[o,o,v,v],t,t)
+            t8 = np.einsum("klcd,ikac,jlbd->ijab",g[o,o,v,v],t,t)
 
-            t, nocc = self.t, self.nocc
+            # permutations
+            t4P = t4 - t4.transpose((1,0,2,3)) - t4.transpose((0,1,3,2)) + t4.transpose((1,0,3,2))
+            t5P = t5 - t5.transpose((0,1,3,2))
+            t6P = t6 - t6.transpose((1,0,2,3))
+            t8P = t8 - t8.transpose((1,0,2,3))
 
-            t_old, Ec_old = self.t, self.Ec
-            
-            t_new = np.multiply(t_old,self.amplitude())
-            
-            Ec_new = np.einsum("cdkl,cdkl",Gmo[nocc:,nocc:,:nocc,:nocc],t)
+            # update t2 amplitudes
+            t = t1 + 0.5*t2 + 0.5*t3 + t4P - 0.5*t5P - 0.5*t6P + 0.25*t7 + t8P
+            t *= Ep 
 
-            dE = np.fabs(Ec_new - Ec_old)
+            # evaluate Ecorr
+            Ec = 1.0/4 * np.sum(g[o,o,v,v] * t )
+            dE = np.fabs(Ec - self.Ec)
 
             # save stuff
-            self.Ec = Ec_new
-            self.t = t_new
+            self.Ec = Ec
+            self.t = t
+
+            print       ("@CCD {:3d} {:20.15f} {:20.15f}"  .format(k,Ec,dE) )
 
             if dE < self.conv: break
 
         return self.Ec
-
