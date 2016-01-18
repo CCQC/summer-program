@@ -28,7 +28,7 @@ class CIS:
     def transform_integrals(self,g,C):
         """
         :param g: 4D array of 2-electron integrals in AO basis
-        :param C: 2D array of MO expansion coefficients for AO basis functions (from UHF)
+        :param C: 2D array of MO expansion coefficients for AO basis functions
         Return a 4D array (same as g.size) of 2-electron integrals in MO basis
         """
         return np.einsum('Pp,Pqrs->pqrs', C,
