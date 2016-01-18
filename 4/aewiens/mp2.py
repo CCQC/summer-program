@@ -1,5 +1,4 @@
-import numpy as np
-from scipy import linalg as la
+import numpy as np from scipy import linalg as la
 from psi4_helper import get_docc, get_nbf, get_conv, get_maxiter
 
 import sys
