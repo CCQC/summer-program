@@ -36,7 +36,7 @@ class UHF:
 
         self.E = 0.0
 
-    def get_energy(self):
+    def compute_energy(self):
         """
         print E and dE from each iteration
         return uhf energy
