@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-import psi4
 sys.path.insert(0,"../../5/aewiens")
 
 from uhf import UHF
@@ -23,6 +22,7 @@ class CCD:
         self.Ec = 0.0 
         self.t = np.zeros((self.nocc,self.nocc,self.nvirt,self.nvirt))
 
+
     def transform_integrals(self,g,C):
         """
         :param g: 4D array of 2-electron integrals in AO basis
@@ -35,13 +35,14 @@ class CCD:
                         np.einsum('Rr,PQRs->PQrs', C,
                             np.einsum('Ss,PQRS->PQRs', C, g))))
 
+
     def get_energy(self):
         """
         :Return: CCD correlation energy
         """
 
         g = self.transform_integrals(self.G, self.C)
-        nocc,t, e, = self.nocc, self.t, self.e
+        nocc, t, e, = self.nocc, self.t, self.e
 
         o = slice(None,nocc)
         v = slice(nocc,None)
@@ -72,7 +73,7 @@ class CCD:
             t *= Ep 
 
             # evaluate Ecorr
-            Ec = 1.0/4 * np.sum(g[o,o,v,v] * t )
+            Ec = 0.25 * np.sum(g[o,o,v,v] * t )
             dE = np.fabs(Ec - self.Ec)
 
             # save stuff
