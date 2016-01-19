@@ -9,7 +9,7 @@ from molecule import Molecule
 import numpy as np
 
 
-mol = Molecule(open("../../1/extra-files/molecule.xyz","r").read(),"Bohr")
+mol = Molecule(open("../../extra-files/molecule.xyz","r").read(),"Bohr")
 N = len(mol)
 h = 0.005
 
