@@ -37,10 +37,11 @@ class CEPA0:
         nocc, nvirt, e, t = self.nocc, self.nvirt, self.e, self.t
         g = self.transform_integrals(self.G,self.C)
 
-        o = slice(None,nocc)
-        v = slice(nocc,None)
+        o = slice(0,nocc)
+        v = slice(nocc,nocc+nvirt)
         x = np.newaxis
-        Ep = 1.0/ (e[o,x,x,x] + e[x,o,x,x] - e[x,x,v,x] - e[x,x,x,v] )
+        D = e[o,x,x,x] + e[x,o,x,x] - e[x,x,v,x] - e[x,x,x,v] 
+        Ep = 1.0/D
 
         for i in range(self.maxiter):
             ##  terms
