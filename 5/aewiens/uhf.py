@@ -29,8 +29,7 @@ class UHF:
         self.H = self.T + self.V
         
         G = block_tei(np.array( mints.ao_eri() ) )                    ##  4D ERI array (chemists' notation)
-        g = G.swapaxes(1,2)                                           ##  ( m n | r s )  --> < m r | n s >
-        self.g = g - g.swapaxes(2,3)                                  ##  antisymmetrize
+        self.g = G.transpose((0,2,1,3))-G.transpose(0,2,3,1)                                     ##  ( m n | r s )  --> < m r || n s >
 
         self.D = np.matrix(np.zeros(self.S.shape))                    ##  Density matrix
 
@@ -41,26 +40,26 @@ class UHF:
         print E and dE from each iteration
         return uhf energy
         """
-        ##  rename object variables
-        g, D, H, X, Vnu, E = self.g, self.D, self.H, self.X, self.Vnu, self.E
+
+        g, H, X = self.g, self.H, self.X
 
         for i in range(self.maxiter):
-            v = np.einsum("mnrs,ns->mr", g, D)
+            v = np.einsum("mnrs,ns->mr", g, self.D)
             F = H+ v                                                  ##  build fock matrix (1st guess is F = Hcore) 
             e,tC = la.eigh(X * F * X)                                 ##  eigenvalues, vectors of transformed Fock matrix
             C = X * tC                                                ##  backtransform C
             oC = C[:,:self.nocc]                                      ##  occupied MO coefficients
-            D = oC * oC.T                                             ##  density matrix (of MO coefficients)
+            self.D = oC * oC.T                                             ##  density matrix (of MO coefficients)
 
-            E0 = E
-            E = np.trace( (self.H+0.5*v)*self.D) + self.Vnu           ##  HF energy
-            self.TF = X* ( (self.H + 0.5*v)*self.D ) *X
+            E0 = self.E
+            E = np.trace( (H+0.5*v)*self.D) + self.Vnu           ##  HF energy
+            self.TF = X* ( (H + 0.5*v)*self.D ) *X
 
             dE = np.fabs(E-E0)
             print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
 
             ##  object variables we changed in this iteration
-            self.D, self.E, self.e, self.C = D, E, e, C
+            self.E, self.e, self.C, self.D = E, e, C, self.D
 
             if dE < self.conv: break
 
@@ -77,6 +76,7 @@ def block_oei(A):
     A = np.matrix(A)
     O = np.zeros(A.shape)
     return np.bmat( [[A,O],[O,A]] )     # bmat makes block matrices !!! 
+
 
 # 2-electron integrals
 def block_tei(T):
