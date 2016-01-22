@@ -17,14 +17,17 @@ class RHF:
         self.nbf = get_nbf(mints)
         self.conv = get_conv()
         self.maxiter = get_maxiter()
-        self.S = np.matrix(mints.ao_overlap() )
-        self.X = np.matrix(la.funm(self.S,lambda x : x**(-0.5)))
-        self.T = np.matrix(mints.ao_kinetic() )
-        self.V = np.matrix(mints.ao_potential() )
-        self.H = self.T+self.V
-        self.G = np.array(mints.ao_eri() ).swapaxes(1,2)
-        self.D = np.zeros((self.nbf,self.nbf))
+
+        S = np.matrix(mints.ao_overlap() )
+        self.X = np.matrix(la.funm(S,lambda x : x**(-0.5)))
+
+        T = np.matrix(mints.ao_kinetic() )
+        V = np.matrix(mints.ao_potential() )
+        self.H = T+V
         self.Vnu = mol.nuclear_repulsion_energy()
+
+        self.G = np.array(mints.ao_eri() ).transpose((0,2,1,3))
+        self.D = np.zeros((self.nbf,self.nbf))
         self.E = 0
 
     def get_energy(self):
@@ -35,7 +38,7 @@ class RHF:
 
         #rename class variables
         docc, nbf, conv, maxiter = self.docc, self.nbf, self.conv, self.maxiter
-        S, X, T, V, H, G, Vnu, D, E = self.S, self.X, self.T, self.V, self.H, self.G, self.Vnu, self.D, self.E
+        X, H, G, Vnu, D, E = self.X, self.H, self.G, self.Vnu, self.D, self.E
 
         for i in range(maxiter):
             J= np.einsum("ikjl,kl->ij",G,D)
