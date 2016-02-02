@@ -9,33 +9,32 @@ class UMP2:
     def __init__(self,mol,mints):
 
         uhf = UHF(mol,mints)
-        uhf.get_energy()
+        uhf.compute_energy()
         self.Ecorr = 0.0
+
+        self.nocc = uhf.nocc
+        self.norb = uhf.norb
+        self.E0 = uhf.E
+        self.e = uhf.e
+        self.C = uhf.C
+        self.G = uhf.g
 
 
     def get_mp2(self):
+
         """
         Spin-orbital implementation of mp2 equations
         """
 
-        ##  Get relevant varialbes from UHF object
-        nocc, norb = uhf.nocc, uhf.norb
-        E0, e, g, C = uhf.E0, uhf.e, uhf.g, uhf.norb
-
-
-        ####  4 different algorithms for integral transformation (decreasing efficiency) 
-        #Gmo = self.tei(g, C, norb)
-        #Gmo = self.tei_noddy(g, C, norb)
-
-        #Gmo = self.tei_einsum_noddy(g, C)
-        Gmo = self.tei_einsum(uhf.g, uhf.C)
+        Gmo = tei_einsum(self.G, self.C)        ##  fastest
+        nocc, norb, e, Ecorr = self.nocc, self.norb, self.e, self.Ecorr
 
         for i in range(nocc):
             for j in range(nocc):
                 for a in range(nocc,norb):
                     for b in range(nocc,norb):
                         self.Ecorr += 0.25 * (Gmo[i,j,a,b])**2 / (e[i] + e[j] - e[a] - e[b])
-        return E0 + self.Ecorr
+        return self.E0 + self.Ecorr
 
 
 """
