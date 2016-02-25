@@ -1,0 +1,35 @@
+#H2O
+
+molecule mol {
+   0 1
+   O 
+   H 1 1.1
+   H 1 1.1  2  104.0
+   }
+
+set {
+    reference uhf
+    basis sto-3g
+    e_convergence 12
+	MAXITER 100
+    scf_type pk
+    }
+
+# initialize molecule object, integrals library
+
+mol = psi4.get_active_molecule()
+mints = psi4.MintsHelper()
+
+import sys
+sys.path.insert(0,"../../5/avcopan/")
+
+from uhf import UHF
+uhf = UHF(mol,mints)
+uhf.compute_energy()
+
+# call CCD code here
+from ccd import CCD
+ccd = CCD(uhf)
+print ccd.compute_energy()
+
+print energy('cepa0')

@@ -1,0 +1,33 @@
+#doublet H2O+
+
+molecule mol {
+   1 2
+   O 0 0 0 
+   H 0 1 0 
+   H 0 0 1
+   }
+
+set {
+    reference uhf
+    basis sto-3g
+    scf_type pk
+    mp2_type conv
+    e_convergence 12
+	MAXITER 50
+    }
+
+Eref = energy('mp2')
+
+# initialize molecule object, integrals library
+
+mol = psi4.get_active_molecule()
+mints = psi4.MintsHelper()
+
+# call UMP2 code here
+from mp2 import UMP2
+
+ump2 = UMP2(mol,mints)
+E = ump2.get_mp2()
+
+print( Eref )
+print( E )

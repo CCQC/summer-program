@@ -1,0 +1,31 @@
+#doublet H2O+
+
+molecule mol {
+   1 2
+   O 0.0 0.0 0.0
+   H 0.0 1.0 0.0
+   H 0.0 0.0 1.0
+   }
+
+set {
+    basis sto-3g
+    scf_type pk
+    e_convergence 12
+	MAXITER 50
+    }
+
+Eref = energy('uhf')
+
+# initialize molecule object, integrals library
+
+mol = psi4.get_active_molecule()
+mints = psi4.MintsHelper()
+
+# call Hartree-Fock code here
+from uhf import UHF
+
+uhf = UHF(mol,mints)
+uhf.compute_energy()
+
+print("Compare to:")
+print(Eref)

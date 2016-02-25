@@ -1,3 +1,5 @@
+temp
+
 # swap files
 *.swp
 
@@ -14,8 +16,8 @@ __pycache__
 
 # Psi files
 *.clean
+*.out
 timer.dat
-input.dat
 output.dat
 
 # Misc 

@@ -1,0 +1,32 @@
+#H20
+
+molecule mol {
+   0 1
+   O 
+   H 1 1.1
+   H 1 1.1  2  104.0
+   }
+
+set {
+    reference uhf
+    basis sto-3g
+    e_convergence 12
+	MAXITER 50
+    scf_type pk
+    }
+
+
+# initialize molecule object, integrals library
+
+mol = psi4.get_active_molecule()
+mints = psi4.MintsHelper()
+
+import sys
+sys.path.insert(0,"../../5/aewiens/")
+
+Eref =  energy('cepa0')
+
+from cepa0 import CEPA0
+cepa = CEPA0(mol,mints)
+print(cepa.Ehf + cepa.compute_energy() )
+print( "Compare to:\n{:0.12f}".format(Eref) )

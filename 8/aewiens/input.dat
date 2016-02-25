@@ -1,0 +1,28 @@
+#H2O
+
+molecule mol {
+   0 1
+   O 
+   H 1 1.1
+   H 1 1.1  2  104.0
+   }
+
+set {
+    reference uhf
+    basis sto-3g
+    e_convergence 12
+	MAXITER 50
+    }
+
+# initialize molecule object, integrals library
+
+mol = psi4.get_active_molecule()
+mints = psi4.MintsHelper()
+
+
+# call CCD code here
+from ccd import CCD
+
+ccd = CCD(mol,mints)
+
+print ccd.get_energy()
