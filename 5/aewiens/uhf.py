@@ -54,7 +54,7 @@ class UHF:
             print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
 
             ##  object variables we changed in this iteration
-            self.E, self.e, self.C, self.D = E, e, C, D
+            self.E, self.e, self.D = E, e, D
 
             if dE < self.conv: break
 
