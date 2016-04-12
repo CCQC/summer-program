@@ -12,13 +12,13 @@ set {
   basis sto-3g
   e_convergence 13
   scf_type pk
+  mp2_type conv
   MAXITER 50
 }
 
-# Used to initialize everything
-mol.update_geometry()
-
-mints = psi4.MintsHelper()
+basisname = psi4.get_global_option("BASIS")
+basisset  = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
+mints     = psi4.MintsHelper(basisset)
 
 # Call your Hartree-Fock code here
 from mp2 import MP2
@@ -28,4 +28,4 @@ mp2.compute_energy()
 
 # check your answer
 print('Compare to:')
-print('{:27.15f}'.format(energy('conv-mp2')))
+print('{:27.15f}'.format(energy('mp2')))

@@ -2,16 +2,11 @@ import psi4
 import numpy as np
 import scipy.linalg as la
 import itertools as it
-import sys
-sys.path.append("../../5/aewiens/")
-from uhf import UHF
 
 
 class CIS:
 
-    def __init__(self, mol, mints):
-      uhf = UHF(mol, mints)
-      uhf.compute_energy()
+    def __init__(self, uhf):
       self.nocc = uhf.nocc
       self.norb = uhf.norb
       self.ndet = self.nocc * (self.norb - self.nocc)
