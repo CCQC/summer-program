@@ -56,10 +56,10 @@ class CCD(object):
     HNT2T2 += -1/2.* (P - P.transpose((1,0,2,3)))
     HNT2T2 += 1/4.* np.einsum('klcd,ijcd,klab->ijab',g[o,o,v,v],t,t)
     P = np.einsum('klcd,ikac,jlbd->ijab',g[o,o,v,v],t,t)
-    HNT2T2 += (P - P.transpose((0,1,2,3)))
+    HNT2T2 += (P - P.transpose((1,0,2,3)))
 
     eps = 1.0 / (self.e[o,x,x,x] + self.e[x,o,x,x] - self.e[x,x,v,x] - self.e[x,x,x,v])
-    t = (HN + HNT2 + HNT2T2) * eps
+    t = (HN + HNT2 +  HNT2T2) * eps
     
     return t
 
