@@ -1,0 +1,18 @@
+#H2O
+
+molecule mol {
+   0 1
+   O 
+   H 1 1.1
+   H 1 1.1  2  104.0
+   }
+
+set {
+    reference uhf
+    basis sto-3g
+    e_convergence 12
+	MAXITER 100
+    scf_type pk
+    }
+
+energy ('ccsd')
