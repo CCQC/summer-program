@@ -36,6 +36,7 @@ Projects
 Extra Programming Projects
 --------------------------
  - [Internal Coordinate Vibrational Analysis -- The GF Matrix Method](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/gf-matrix/)
+ - [CEPA0 Energy](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/cepa0/)
 
 
 Extra Applications Projects
