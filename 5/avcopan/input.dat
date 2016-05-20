@@ -15,10 +15,9 @@ set {
   reference uhf
 }
 
-# Used to initialize everything
-mol.update_geometry()
-
-mints = psi4.MintsHelper()
+basisname = psi4.get_global_option("BASIS")
+basisset  = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
+mints     = psi4.MintsHelper(basisset)
 
 # Call your Hartree-Fock code here
 from uhf import UHF

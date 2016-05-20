@@ -14,15 +14,21 @@ set {
   scf_type pk
   MAXITER 50
 }
+# run
+basisname = psi4.get_global_option("BASIS")
+basisset  = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
+mints     = psi4.MintsHelper(basisset)
 
-# Used to initialize everything
-mol.update_geometry()
+# call spin-orbital UHF code
+import sys
+sys.path.insert(0, '../../5/avcopan/')
+from uhf import UHF
+uhf = UHF(mol, mints)
+uhf.compute_energy()
 
-mints = psi4.MintsHelper()
-
-# Call your Hartree-Fock code here
+# call CIS code
 from cis import CIS
 
-cis = CIS(mol, mints)
+cis = CIS(uhf)
 cis.compute_excitation_energies()
 

@@ -33,6 +33,16 @@ Projects
 </ol>
 
 
+Extra Programming Projects
+--------------------------
+ - [Internal Coordinate Vibrational Analysis -- The GF Matrix Method](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/gf-matrix/)
+
+
+Extra Applications Projects
+---------------------------
+ - coming soon...
+
+
 Algebraic methods
 -----------------
  - [Tensors](https://github.com/CCQC/summer-program/blob/master/algebraic-methods/tensors.pdf)
