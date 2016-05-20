@@ -35,7 +35,7 @@ Projects
 
 Extra Programming Projects
 --------------------------
- - [Internal Coordinate Vibrational Analysis -- The GF Matrix Method](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/gf-matrix/avcopan/)
+ - [Internal Coordinate Vibrational Analysis -- The GF Matrix Method](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/gf-matrix/)
 
 
 Extra Applications Projects
