@@ -29,11 +29,23 @@ class UMP2:
         Gmo = tei_einsum(self.G, self.C)        ##  fastest
         nocc, norb, e, Ecorr = self.nocc, self.norb, self.e, self.Ecorr
 
+        o = slice(0,nocc)
+        v = slice(nocc,nocc+norb)
+        x = np.newaxis
+        D = e[o,x,x,x] + e[x,o,x,x] - e[x,x,v,x] - e[x,x,x,v]
+
+        T =  np.square(Gmo[o,o,v,v])
+        T /= D
+        self.Ecorr = 0.25*np.ndarray.sum(T,axis=(0,1,2,3))
+
+        """
         for i in range(nocc):
             for j in range(nocc):
                 for a in range(nocc,norb):
                     for b in range(nocc,norb):
                         self.Ecorr += 0.25 * (Gmo[i,j,a,b])**2 / (e[i] + e[j] - e[a] - e[b])
+        """
+
         return self.E0 + self.Ecorr
 
 

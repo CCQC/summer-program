@@ -66,10 +66,18 @@ class Molecule:
         return Molecule(str(self),self.units)
 
 #### Example of an input
+"""
 f = open("../../extra-files/molecule.xyz","r")
 f = f.read()
+"""
+f = open("TSTSTS.xyz", "r")
+f = f.read()
 
-mol = Molecule(f)
+mol = Molecule(f,"Bohr")
+mol.angs()
+g = open("test.xyz","w")
+g.write( str(mol)) 
+g.close()
 
 #print(mol.geom)
 #print(mol.atoms)

@@ -38,7 +38,7 @@ mH = M*H0*M
 e, l = np.linalg.eigh(mH)
 
 
-#####  Eigenvectors --> vibrational modes
+#####  Eigenvectors --> vibrational modes (in non-mass-weighted coordinates)
 Q = np.matrix(M)*np.matrix(l)
 print Q
 

@@ -28,8 +28,15 @@ class UHF:
         self.Vnu = mol.nuclear_repulsion_energy()
 
         ##  alpha and beta density matrices
+        """
         self.Da = np.zeros((self.X.shape))
         self.Db = np.zeros((self.X.shape))
+        """
+        self.Da = np.random.rand(*self.X.shape)
+        self.Da = self.Da + self.Da.T
+
+        self.Db = np.random.rand(*self.X.shape)
+        self.Db = self.Db + self.Db.T
 
         self.E = 0.0
 
@@ -72,6 +79,7 @@ class UHF:
             self.Da, self.Db, self.E = Da, Db, E
 
         return self.E
+
    
 
 
@@ -80,4 +88,13 @@ class UHF:
         T = np.matrix( la.funm( self.S, lambda x: x**0.5 ) )
         n, tC = la.eigh(T*(self.Da+self.Db)*T)
 
-        return sorted(n,reverse=True)
+        active_o = 0
+        active_e = 0
+        for i in n:
+            if 0.02 <= i <= 1.98:
+                active_o += 1 
+                active_e += i.round()
+
+        print( sorted(n,reverse=True) )
+        return (active_o, active_e)
+

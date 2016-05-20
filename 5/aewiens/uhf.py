@@ -54,11 +54,12 @@ class UHF:
             print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
 
             ##  object variables we changed in this iteration
-            self.E, self.e, self.D = E, e, D
+            self.E, self.C, self.e, self.D = E, C, e, D
 
             if dE < self.conv: break
 
         return self.E
+
          
 
 """
@@ -71,7 +72,6 @@ def block_oei(A):
     return np.bmat( [[A,O],[O,A]] )
 
 # 2-electron integrals
-# what on earth is happening here
 def block_tei(T):
     t = np.array(T)
     n = t.shape[0]

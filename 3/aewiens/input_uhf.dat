@@ -1,17 +1,23 @@
 #doublet H2O+
 
+#molecule mol {
+#   1 2
+#   O 0.0 0.0 0.0
+#   H 0.0 1.0 0.0
+#   H 0.0 0.0 1.0
+#   }
+
 molecule mol {
-   1 2
-   O 0.0 0.0 0.0
-   H 0.0 1.0 0.0
-   H 0.0 0.0 1.0
+   0 1
+   F 0.0 0.0 0.0
+   F 0.0 0.0 2.0
    }
 
 set {
-    basis sto-3g
+    basis cc-pvdz
     scf_type pk
     e_convergence 12
-	MAXITER 50
+	MAXITER 75
     }
 
 Eref = energy('uhf')
