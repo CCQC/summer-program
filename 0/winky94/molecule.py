@@ -58,7 +58,7 @@ class Molecule(object):
         """
         line_form = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n"
         out = "{:d}\n{:s}\n".format(len(self), self.units)
-        for atom, xyz in zip(self.atoms,self.coords):
+        for atom, xyz in zip(self.atoms, self.coords):
             out += line_form.format(atom, *xyz)
         return out
 """
