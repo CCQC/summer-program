@@ -1,0 +1,194 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage[cm]{fullpage}
+
+\usepackage{avcgreek}
+\usepackage{avcfonts}
+\usepackage{avcmath}
+\usepackage{qcmacros}
+
+\title{Extra Programming Project Theory\\
+\textit{UHF Natural Orbitals}}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+
+
+The position space representation of the electron density operator is given by
+\begin{align*}
+&&
+  \op{\rh}(\bo{r})
+=
+  \sum_{i=1}^{n_e}
+  \d(\bo{r}-\bo{r}_i)
+\end{align*}
+which adds up the probability for each electron to inhabit position $\bo{r}$.
+The density of a single determinant is
+\begin{align*}
+  \rh(\bo{r})
+=
+  \ip{\F|\op{\rh}(\bo{r})|\F}
+=
+  n\ip{\F|\d(\bo{r}-\bo{r}_1)|\F}
+=&\
+  \sum_{i=1}^{n_e}
+  \ip{\y_i(\bo{r}_1)|\d(\bo{r}-\bo{r}_1)|\y_i(\bo{r}_1)}_{\bo{r}_1}
+\\=&\
+  \sum_{i_\a=1}^{n_\a}
+  \f_{i_\a}^{\a*}(\bo{r})
+  \f_{i_\a}^\a(\bo{r})
++
+  \sum_{i_\b=1}^{n_\b}
+  \f_{i_\b}^{\b*}(\bo{r})
+  \f_{i_\b}^\b(\bo{r})
+\end{align*}
+which can be identified as the trace of the spatial one-particle density matrix.
+\begin{align*}
+  \underset{\bo{r}'\rightarrow\bo{r}}{\tr}
+  d(\bo{r},\bo{r}')
+=
+  \int
+  d^3\bo{r}'\,
+  \d(\bo{r}-\bo{r}')d(\bo{r},\bo{r}')
+=
+  \rh(\bo{r})
+&&
+  d(\bo{r},\bo{r}')
+\equiv
+  \sum_{i_\a=1}^{n_\a}
+  \f_{i_\a}^{\a*}(\bo{r}')
+  \f_{i_\a}^\a(\bo{r})
++
+  \sum_{i_\b=1}^{n_\b}
+  \f_{i_\b}^{\b*}(\bo{r}')
+  \f_{i_\b}^\b(\bo{r})
+\end{align*}
+From the position-space representation of the operator $d(\bo{r},\bo{r}')=\ip{\bo{r}|\op{d}|\bo{r}'}$, we can back out an expression for the abstract density operator $\op{d}$ as follows.
+\begin{align*}
+&
+  d(\bo{r},\bo{r}')
+=
+  \sum_{i_\a=1}^{n_\a}
+  \f_{i_\a}^{\a*}(\bo{r}')
+  \f_{i_\a}^\a(\bo{r})
++
+  \sum_{i_\b=1}^{n_\b}
+  \f_{i_\b}^{\b*}(\bo{r}')
+  \f_{i_\b}^\b(\bo{r})
+=
+  \br{\bo{r}}
+  \pr{
+    \sum_{i_\a=1}^{n_\a}
+    \kt{\f_{i_\a}^\a}\br{\f_{i_\a}^\a}
+  +
+    \sum_{i_\b=1}^{n_\b}
+    \kt{\f_{i_\b}^\b}\br{\f_{i_\b}^\b}
+  }
+  \kt{\bo{r}'}
+\\&
+\implies
+  \op{d}
+=
+  \sum_{i_\a=1}^{n_\a}
+  \kt{\f_{i_\a}^\a}\br{\f_{i_\a}^\a}
++
+  \sum_{i_\b=1}^{n_\b}
+  \kt{\f_{i_\b}^\b}\br{\f_{i_\b}^\b}
+\end{align*}
+This is the spatial one-particle density operator of the determinant $\F=\det(\y_1\cd \y_{n_e})$.
+Expanding the molecular orbitals in terms of atomic orbital basis functions, $\f_{p_\w}^\w=\sum_\mu\x_{\mu}C_{\mu p}^\w$ where $\w\in\{\a,\b\}$, the spatial density operator of $\F$ can be expressed in terms of the Hartree-Fock density matrices $D_{\mu\nu}^\w=\sum_{i_\w=1}^{n_\w}C_{\mu i_\w}^\w C_{\nu i_\w}^\w$ as follows.
+\begin{align}
+\label{eq:uhf-spatial-one-particle-density-operator}
+  \op{d}
+=
+  \sum_{i_\a=1}^{n_\a}
+  \sum_{\mu\nu}
+  C_{\mu i_\a}^{\a*} C_{\nu i_\a}^\a
+  \kt{\x_\mu}\br{\x_\nu}
++
+  \sum_{i_\b=1}^{n_\b}
+  \sum_{\mu\nu}
+  C_{\mu i_\b}^{\b*} C_{\nu i_\b}^\b
+  \kt{\x_\mu}\br{\x_\nu}
+=
+  \sum_{\mu\nu}
+  \pr{
+    D^\a_{\mu\nu}
+  +
+    D^\b_{\mu\nu}
+  }
+  \kt{\x_\mu}\br{\x_\nu}
+\end{align}
+In general, the spatial natural orbitals of a wavefunction $\Y$ are the eigenfunctions of its spatial one-particle density operator.
+\begin{align*}
+&&
+  \op{d}
+  \kt{\f_p^{\mr{no}}}
+=
+  n_p^{\mr{no}}
+  \kt{\f_p^{\mr{no}}}
+\end{align*}
+Expanding the natural orbitals in terms of AO basis functions $\f_p^{\mr{no}}=\sum_\nu \x_\nu C_{\nu p}^{\mr{no}}$, projecting by $\br{\x_\mu}$, and expanding $\op{d}$ according to eq~\ref{eq:uhf-spatial-one-particle-density-operator}, the eigenvalue equation becomes
+\begin{align*}
+  \sum_\nu
+  \sum_{\rh\si}
+  \ip{\x_\mu|\x_\rh}
+  \pr{
+    D^\a_{\rh\si}
+  +
+    D^\b_{\rh\si}
+  }
+  \ip{\x_\si|\x_\nu}
+  C_{\nu p}^{\mr{no}}
+=
+  n_p^{\mr{no}}
+  \sum_\nu
+  \ip{\x_\mu|\x_\nu}
+  C_{\nu p}^{\mr{no}}
+\end{align*}
+which can be expressed in matrix notation as follows.
+\begin{align*}
+  \bo{S}
+  \bo{D}
+  \bo{S}
+  \bo{C}^{\mr{no}}
+=
+  \bo{S}
+  \bo{C}^{\mr{no}}
+  \tl{\bo{D}}^{\mr{no}}
+&&
+  \bo{D}
+=
+  \bo{D}^\a + \bo{D}^\b
+=
+  [D_{\mu\nu}^\a + D_{\mu\nu}^\b]
+&&
+  \bo{C}^{\mr{no}}
+=
+  [C_{\mu p}^{\mr{no}}]
+&&
+  \tl{\bo{D}}^{\mr{no}}
+=
+  [n_p^{\mr{no}} \d_{pq}]
+\end{align*}
+Multiplying both sides by the orthogonalizer $\bo{X}\equiv\bo{S}^{-\fr{1}{2}}$ reduces this equation to a standard symmetric matrix diagonalization.
+\begin{align*}
+  \ol{\bo{D}}\,
+  \ol{\bo{C}}^{\mr{no}}
+=
+  \ol{\bo{C}}^{\mr{no}}
+  \tl{\bo{D}}^{\mr{no}}
+&&
+  \ol{\bo{D}}
+=
+  \bo{S}^{\fr{1}{2}}\bo{D}\bo{S}^{\fr{1}{2}}
+&&
+  \ol{\bo{C}}^{\mr{no}}
+=
+  \bo{S}^{\fr{1}{2}}\bo{C}^{\mr{no}}
+\end{align*}
+
+
+
+\end{document}

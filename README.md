@@ -39,6 +39,8 @@ Extra Programming Projects
  - [CEPA0 Energy](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/cepa0/)
  - [Numerical Solution to the Linear 1D Schrödinger Equation -- The Numerov Method](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/numerov/)
  - [Spin-Integrated UHF](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/spin-integrated-uhf/)
+ - [UHF Natural Orbitals](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/uhf-natural-orbitals/)
+   ([Theory](https://github.com/CCQC/summer-program/blob/master/extra-programming-projects/uhf-natural-orbitals/theory.pdf))
 
 
 Extra Applications Projects
