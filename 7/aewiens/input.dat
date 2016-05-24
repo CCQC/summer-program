@@ -1,4 +1,5 @@
-# doublet H2O+
+
+###  doublet H2O+
 molecule mol {
    1 2
    O 0 0 0 
@@ -7,7 +8,7 @@ molecule mol {
    }
 
 set {
-    reference uhf
+    reference rhf
     basis sto-3g
     scf_type pk
     mp2_type conv
@@ -15,16 +16,12 @@ set {
 	MAXITER 50
     }
 
-Eref = energy('mp2')
-
+###  libmints
 basisname = psi4.get_global_option("BASIS")
 basisset = psi4.BasisSet.pyconstruct_orbital(mol,"BASIS",basisname)
 mints    = psi4.MintsHelper(basisset)
 
 ###  Call MP2 code
-from mp2 import UMP2
-ump2 = UMP2(mol,mints)
-E = ump2.get_mp2()
-
-print( Eref )
-print( E )
+from cis import CIS
+cis = CIS(mol,mints)
+print( cis.cis_energies() )

@@ -8,14 +8,16 @@ molecule {
 }
 
 set basis STO-3G
+set reference rhf
 set scf_type pk
 set e_convergence 12
 set mp2_type conv
 
 Eref= energy('mp2')
 
-mol = psi4.get_active_molecule()
-mints = psi4.MintsHelper()
+basisname = psi4.get_global_option("BASIS")
+basisset = psi4.BasisSet.pyconstruct_orbital(mol,"BASIS",basisname)
+mints    = psi4.MintsHelper(basisset)
 
 mp2 = MP2(mol, mints)
 Emp2 = mp2.get_energy()

@@ -1,18 +1,24 @@
 #doublet H2O+
 
+#molecule mol {
+#   1 2
+#   O 0.0 0.0 0.0
+#   H 0.0 1.0 0.0
+#   H 0.0 0.0 1.0
+#   }
+
 molecule mol {
-   1 2
-   O 0.0 0.0 0.0
-   H 0.0 1.0 0.0
-   H 0.0 0.0 1.0
+   0 1
+   F 0.0 0.0 0.0
+   F 0.0 0.0 2.0
    }
 
 set {
     reference uhf
-    basis sto-3g
+    basis cc-pvdz
     scf_type pk
     e_convergence 12
-	MAXITER 50
+	MAXITER 75
     }
 
 Eref = energy('scf')
@@ -21,10 +27,8 @@ basisname = psi4.get_global_option("BASIS")
 basisset = psi4.BasisSet.pyconstruct_orbital(mol,"BASIS",basisname)
 mints    = psi4.MintsHelper(basisset)
 
+# call Hartree-Fock code here
 from uhf import UHF
-
-uhf = UHF(mol,mints)
+uhf = UHF(mol, mints)
 uhf.compute_energy()
-
-print("Compare to:")
-print(Eref)
+print( uhf.natural_orbitals() )

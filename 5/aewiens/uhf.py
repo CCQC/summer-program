@@ -13,8 +13,8 @@ class UHF:
         :param mol: a psi4 molecule object
         :param mints: a molecular integrals object (from psi4 MintsHelper)
         """
-        nbf = get_nbf(mints)
-        self.norb = 2* nbf
+        self.nbf = get_nbf(mints)
+        self.norb = 2* self.nbf
         self.nocc = get_nocc(mol)
         self.conv = get_conv()
         self.maxiter = get_maxiter()
