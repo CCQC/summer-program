@@ -38,6 +38,7 @@ Extra Programming Projects
  - [Internal Coordinate Vibrational Analysis -- The GF Matrix Method](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/gf-matrix/)
  - [CEPA0 Energy](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/cepa0/)
  - [Numerical Solution to the Linear 1D Schrödinger Equation -- The Numerov Method](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/numerov/)
+ - [Spin-Integrated UHF](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/spin-integrated-uhf/)
 
 
 Extra Applications Projects
