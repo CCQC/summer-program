@@ -60,18 +60,30 @@ class Molecule(object):
             self.units = "Angstrom"
             self.geom /= 1.889725989
 
-    def xyz_string(self):
+    def __len__(self):
         """
-        Returns a string representing the molecule in xyz format
+        Returns the length of the molecule
         """
-        formatting = "{:3s} {: >15.10f} {: >15.10f} {: >15.10f} | {: >15.10f}\t{:d}\n"
-        out = "\nNumber of atoms: {:d}\n\nUnits: {:s}\n\nAtom\tPostition x\tPosition y\tPosition z  | \t\tMass\tCharge\n".format(self.natom, self.units)
-        for atom, (x, y, z), mass, charge in zip(self.atoms, self.geom, self.mass, self.charges):
-            out += formatting.format(atom, x, y, z, mass, charge)
+        return self.natom
+
+    def __repr__(self):
+        return "{:d}\n".format(self.natom) + self.__str__()
+
+    def __str__(self):
         
+        """
+        Format the molecule in a nice way
+        """
+        line_form = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n"
+        out = "units {:s}\n".format(self.units)
+        for atom, (x, y, z) in zip(self.atoms, self.geom):
+            out += line_form.format(atom, x, y, z)
         return out
+
+    def copy(self):
+        return Molecule(self.__repr__(), self.units)
 
 if __name__ == "__main__":
     geom = open("../../extra-files/molecule.xyz").read()
     mol = Molecule(geom)
-    print(mol.xyz_string())
+    print(mol)
