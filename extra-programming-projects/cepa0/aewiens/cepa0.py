@@ -1,6 +1,6 @@
 import numpy as np
 import sys
-sys.path.insert(0,"../../5/aewiens/")
+sys.path.insert(0,"../../../5/aewiens/")
 from uhf import UHF
 
 class CEPA0:

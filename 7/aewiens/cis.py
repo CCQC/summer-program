@@ -10,7 +10,7 @@ class CIS:
     def __init__(self,mol,mints):
 
         uhf = UHF(mol,mints)
-        uhf.get_energy()
+        uhf.compute_energy()
 
         nbf = uhf.nbf
         self.nocc = uhf.nocc

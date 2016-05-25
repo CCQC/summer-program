@@ -12,9 +12,7 @@ set {
     basis sto-3g }
 
 ###  libmints
-basisname = psi4.get_global_option("BASIS")
-basisset = psi4.BasisSet.pyconstruct_orbital(mol,"BASIS",basisname)
-mints    = psi4.MintsHelper(basisset)
+mints    = psi4.MintsHelper()
 
 ###  call CCD module
 from ccd import CCD

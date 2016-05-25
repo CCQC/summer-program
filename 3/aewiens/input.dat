@@ -1,30 +1,30 @@
-# doublet H2O+
+import psi4
+
 molecule mol {
-   1 2
-   O 0 0 0 
-   H 0 1 0 
-   H 0 0 1
+   O 
+   H 1 0.96
+   H 1 0.96 2 104.5
    }
 
 set {
-    reference uhf
+    reference rhf
     basis sto-3g
     scf_type pk
-    mp2_type conv
     e_convergence 12
-	MAXITER 50
+	 MAXITER 50
+    mp2_type conv
     }
 
-Eref = energy('mp2')
+Eref = energy('scf')
 
 basisname = psi4.get_global_option("BASIS")
 basisset = psi4.BasisSet.pyconstruct_orbital(mol,"BASIS",basisname)
 mints    = psi4.MintsHelper(basisset)
 
-###  Call MP2 code
-from mp2 import UMP2
-ump2 = UMP2(mol,mints)
-E = ump2.get_mp2()
+# call Hartree-Fock code here
+from rhf import RHF
+rhf = RHF(mol,mints)
+E = rhf.get_energy()
 
-print( Eref )
-print( E )
+print(Eref)
+print(E)

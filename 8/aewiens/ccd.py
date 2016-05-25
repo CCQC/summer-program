@@ -30,9 +30,9 @@ class CCD:
         Return a 4D array (same as g.size) of 2-electron integrals in MO basis
         """
 
-        return np.einsum('Pp,Pqrs->pqrs', C,
-                    np.einsum('Qq,PQrs->Pqrs', C,
-                        np.einsum('Rr,PQRs->PQrs', C,
+        return np.einsum('Pp,Pqrs->pqrs', C, \
+                    np.einsum('Qq,PQrs->Pqrs', C,  \
+                        np.einsum('Rr,PQRs->PQrs', C, \
                             np.einsum('Ss,PQRS->PQRs', C, g))))
 
     def get_amplitudes(self):
@@ -68,13 +68,7 @@ class CCD:
 
         return t
     
-    def compute_energy(self):
-
-
     def get_energy(self):
-        """
-        :Return: CCD correlation energy
-        """
 
         g = self.transform_integrals(self.G, self.C)
         nocc, t, e, = self.nocc, self.t, self.e
