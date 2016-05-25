@@ -80,7 +80,7 @@ class UHF:
 
         return self.E
 
-    def occupations(self):
+    def get_occupations(self):
 
         T = np.matrix( la.funm( self.S, lambda x: x**0.5 ) )
         n, tC = la.eigh(T*(self.Da+self.Db)*T)
@@ -94,8 +94,7 @@ class UHF:
 
         return self.occ
     
-    """
-    def natural_orbitals(self):
+    def get_activespace(self):
 
         n = self.occupations()
         active_o = 0
@@ -106,4 +105,3 @@ class UHF:
                 active_e += i.round()
 
         return (active_e, active_o)
-    """
