@@ -31,4 +31,3 @@ mints    = psi4.MintsHelper(basisset)
 from uhf import UHF
 uhf = UHF(mol, mints)
 uhf.compute_energy()
-print( uhf.natural_orbitals() )
