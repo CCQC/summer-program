@@ -15,7 +15,7 @@ class Molecule(object):
 
         lines = geom.strip().split("\n")
 
-        units = lines[1]
+        units = lines[1].lower()
         
         natom = int(lines[0])
 
@@ -47,8 +47,8 @@ class Molecule(object):
         Converts geometry to Bohr
         """
 
-        if self.units == "Angstrom":
-            self.units = "Bohr"
+        if self.units == "angstrom":
+            self.units = "bohr"
             self.geom *= 1.889725989
     
     def to_angstrom(self):
@@ -56,8 +56,8 @@ class Molecule(object):
         Converts geometry to Angstroms
         """
 
-        if self.units == "Bohr":
-            self.units = "Angstrom"
+        if self.units == "bohr":
+            self.units = "angstrom"
             self.geom /= 1.889725989
 
     def __len__(self):
@@ -79,11 +79,40 @@ class Molecule(object):
         for atom, (x, y, z) in zip(self.atoms, self.geom):
             out += line_form.format(atom, x, y, z)
         return out
+   
+    def copy_form(self):
 
-    def copy(self):
-        return Molecule(self.__repr__(), self.units)
+        copy_file = "{:d}\n{:s}\n".format(self.natom, self.units)
+        line_form_copy = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n" 
+        for atom, (x, y, z) in zip(self.atoms, self.geom):
+            copy_file += line_form_copy.format(atom, x, y, z)
+        return copy_file
+
+    def copy(self, mol):
+        return Molecule(mol.copy_form())
+
+    def displace(self, disp):
+        try: 
+            self.geom += disp
+        except:
+            raise Exception("Invalid displacement argument passed to Molecule")
+
+
 
 if __name__ == "__main__":
     geom = open("../../extra-files/molecule.xyz").read()
     mol = Molecule(geom)
+    
+    print(mol.units)
+    print(mol.natom)
+    print(mol.atoms)
+    print(mol.geom)
+    print(mol.charges)
+    print(mol.mass)
+
     print(mol)
+
+    print(repr(mol))
+
+    j = mol.copy()
+    print(j)
