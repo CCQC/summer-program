@@ -41,6 +41,8 @@ Extra Programming Projects
  - [Spin-Integrated UHF](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/spin-integrated-uhf/)
  - [UHF Natural Orbitals](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/uhf-natural-orbitals/)
    ([Theory](https://github.com/CCQC/summer-program/blob/master/extra-programming-projects/uhf-natural-orbitals/theory.pdf))
+ - [Spin-Integrated CEPA0](https://github.com/CCQC/summer-program/tree/master/extra-programming-projects/spin-integrated-ucepa0/)
+   ([Theory](https://github.com/CCQC/summer-program/blob/master/extra-programming-projects/spin-integrated-ucepa0/theory.pdf))
 
 
 Extra Applications Projects

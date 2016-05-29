@@ -12,7 +12,7 @@ set {
   basis sto-3g
   e_convergence 10
   scf_type pk
-  MAXITER 50
+  maxiter 50
 }
 # run
 basisname = psi4.get_global_option("BASIS")

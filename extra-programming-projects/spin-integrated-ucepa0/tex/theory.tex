@@ -1,0 +1,537 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage[cm]{fullpage}
+
+\usepackage{avcgreek}
+\usepackage{avcfonts}
+\usepackage{avcmath}
+\usepackage{qcmacros}
+\usepackage{goldstone}
+
+\title{Extra Programming Project Theory\\
+\textit{Spin-Integrated UCEPA$_0$}}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+\vspace{-1cm}
+The spin-orbital CEPA0 amplitude equation is:
+\begin{align*}
+  t_{ab}^{ij}
+=
+  \mc{E}_{ab}^{ij}
+  \pr{
+    \ol{g}_{ab}^{ij}
+  +
+    \tfr{1}{2}
+    \ol{g}_{ab}^{cd}
+    t_{cd}^{ij}
+  +
+    \tfr{1}{2}
+    \ol{g}_{kl}^{ij}
+    t_{ab}^{kl}
+  +
+    P^{(i/j)}_{(a/b)}
+    \ol{g}_{ak}^{ic}
+    t_{bc}^{jk}
+  }
+\end{align*}
+\begin{align*}
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-] (t2) to ++(-0.25,1);
+  \draw[->-] (t2) to ++(+0.25,1);
+}
+=
+\diagram{
+  \interaction{2}{g}{(0,-0.5)}{ddot}{sawtooth};
+  \draw[-<-] (g1) to ++(-0.25,1);
+  \draw[->-] (g1) to ++(+0.25,1);
+  \draw[-<-] (g2) to ++(-0.25,1);
+  \draw[->-] (g2) to ++(+0.25,1);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[-<-=0.4] (t1) to ++(-0.25,1);
+  \draw[->-=0.25,->-=0.75] (t1) to node[midway,ddot] (g1) {} ++(+0.25,1);
+  \draw[-<-=0.4] (t2) to ++(-0.25,1);
+  \draw[->-=0.25,->-=0.75] (t2) to node[midway,ddot] (g2) {} ++(+0.25,1);
+  \draw[sawtooth] (g1) to (g2);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[->-=0.4] (t1) to ++(-0.25,1);
+  \draw[-<-=0.25,-<-=0.75] (t1) to node[midway,ddot] (g1) {} ++(+0.25,1);
+  \draw[->-=0.4] (t2) to ++(-0.25,1);
+  \draw[-<-=0.25,-<-=0.75] (t2) to node[midway,ddot] (g2) {} ++(+0.25,1);
+  \draw[sawtooth] (g1) to (g2);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \interaction{2}{g}{(1,0)}{ddot}{sawtooth};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-,bend left =45] (t2) to (g1);
+  \draw[->-,bend right=45] (t2) to (g1);
+  \draw[-<-] (g2) to ++(-0.25,0.5);
+  \draw[->-] (g2) to ++(+0.25,0.5);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(2.8,0);
+}
+\end{align*}
+with implicit summation over $k,l,c,d$.
+Letting $P, Q, R, S$ denote alpha spin-orbitals and $\ol{P}, \ol{Q}, \ol{R}, \ol{S}$ denote beta spin-orbitals, we spin-integrate by fixing the external indices $i, j, a, b$ to a particular spin block $I, J, A, B$ or $I, \ol{J}, A, \ol{B}$ and considering all non-vanishing cases for the remaining internal indices $c, d, k, l$ of each term.
+\begin{align*}
+  t_{AB}^{IJ}
+=&\
+  \mc{E}_{AB}^{IJ}
+  \pr{
+    \ol{g}_{AB}^{IJ}
+  +
+    \tfr{1}{2}
+    \ol{g}_{AB}^{cd}
+    t_{cd}^{IJ}
+  +
+    \tfr{1}{2}
+    \ol{g}_{kl}^{IJ}
+    t_{AB}^{kl}
+  +
+    P^{(I/J)}_{(A/B)}
+    \ol{g}_{Ak}^{Ic}
+    t_{Bc}^{Jk}
+  }
+\\=&\
+  \mc{E}_{AB}^{IJ}
+  \pr{
+    \ol{g}_{AB}^{IJ}
+  +
+    \tfr{1}{2}
+    \ol{g}_{AB}^{CD}
+    t_{CD}^{IJ}
+  +
+    \tfr{1}{2}
+    \ol{g}_{KL}^{IJ}
+    t_{AB}^{KL}
+  +
+    P^{(I/J)}_{(A/B)}
+    \ol{g}_{AK}^{IC}
+    t_{BC}^{JK}
+  +
+    P^{(I/J)}_{(A/B)}
+    \ol{g}_{A\ol{K}}^{I\ol{C}}
+    t_{B\ol{C}}^{J\ol{K}}
+  }
+\\
+  t_{A\ol{B}}^{I\ol{J}}
+=&\
+  \mc{E}_{A\ol{B}}^{I\ol{J}}
+  \pr{
+    \ol{g}_{A\ol{B}}^{I\ol{J}}
+  +
+    \tfr{1}{2}
+    \ol{g}_{A\ol{B}}^{cd}
+    t_{cd}^{I\ol{J}}
+  +
+    \tfr{1}{2}
+    \ol{g}_{kl}^{I\ol{J}}
+    t_{A\ol{B}}^{kl}
+  +
+    P^{(I/\ol{J})}_{(A/\ol{B})}
+    \ol{g}_{Ak}^{Ic}
+    t_{\ol{B}c}^{\ol{J}k}
+  }
+\\=&\
+  \mc{E}_{A\ol{B}}^{I\ol{J}}
+  \pr{
+    \ol{g}_{A\ol{B}}^{I\ol{J}}
+  +
+    \tfr{1}{2}
+    \ol{g}_{A\ol{B}}^{cd}
+    t_{cd}^{I\ol{J}}
+  +
+    \tfr{1}{2}
+    \ol{g}_{kl}^{I\ol{J}}
+    t_{A\ol{B}}^{kl}
+  +
+    \ol{g}_{Ak}^{Ic}
+    t_{\ol{B}c}^{\ol{J}k}
+  -
+    \ol{g}_{Ak}^{\ol{J}c}
+    t_{\ol{B}c}^{Ik}
+  -
+    \ol{g}_{\ol{B}k}^{Ic}
+    t_{Ac}^{\ol{J}k}
+  +
+    \ol{g}_{\ol{B}k}^{\ol{J}c}
+    t_{Ac}^{Ik}
+  }
+\\=&\
+  \mc{E}_{A\ol{B}}^{I\ol{J}}
+  \pr{
+    \ol{g}_{A\ol{B}}^{I\ol{J}}
+  +
+    \ol{g}_{A\ol{B}}^{C\ol{D}}
+    t_{C\ol{D}}^{I\ol{J}}
+  +
+    \ol{g}_{K\ol{L}}^{I\ol{J}}
+    t_{A\ol{B}}^{K\ol{L}}
+  +
+    \ol{g}_{AK}^{IC}
+    t_{\ol{B}C}^{\ol{J}K}
+  +
+    \ol{g}_{A\ol{K}}^{I\ol{C}}
+    t_{\ol{B}\ol{C}}^{\ol{J}\ol{K}}
+  -
+    \ol{g}_{A\ol{K}}^{\ol{J}C}
+    t_{\ol{B}C}^{I\ol{K}}
+  -
+    \ol{g}_{\ol{B}K}^{I\ol{C}}
+    t_{A\ol{C}}^{\ol{J}K}
+  +
+    \ol{g}_{\ol{B}K}^{\ol{J}C}
+    t_{AC}^{IK}
+  +
+    \ol{g}_{\ol{B}\ol{K}}^{\ol{J}\ol{C}}
+    t_{A\ol{C}}^{I\ol{K}}
+  }
+\\=&\
+  \mc{E}_{A\ol{B}}^{I\ol{J}}
+  \pr{
+    \ol{g}_{A\ol{B}}^{I\ol{J}}
+  +
+    \ol{g}_{A\ol{B}}^{C\ol{D}}
+    t_{C\ol{D}}^{I\ol{J}}
+  +
+    \ol{g}_{K\ol{L}}^{I\ol{J}}
+    t_{A\ol{B}}^{K\ol{L}}
+  +
+    \ol{g}_{AK}^{IC}
+    t_{\ol{B}C}^{\ol{J}K}
+  +
+    \ol{g}_{A\ol{K}}^{I\ol{C}}
+    t_{\ol{B}\ol{C}}^{\ol{J}\ol{K}}
+  -
+    \ol{g}_{A\ol{K}}^{C\ol{J}}
+    t_{C\ol{B}}^{I\ol{K}}
+  -
+    \ol{g}_{K\ol{B}}^{I\ol{C}}
+    t_{A\ol{C}}^{K\ol{J}}
+  +
+    \ol{g}_{\ol{B}K}^{\ol{J}C}
+    t_{AC}^{IK}
+  +
+    \ol{g}_{\ol{B}\ol{K}}^{\ol{J}\ol{C}}
+    t_{A\ol{C}}^{I\ol{K}}
+  }
+\end{align*}
+Graphically, these equations can be expressed as follows.
+\begin{align*}
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-] (t2) to ++(-0.25,1);
+  \draw[->-] (t2) to ++(+0.25,1);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\a$] at (t2) {};
+}
+=&\
+\diagram{
+  \interaction{2}{g}{(0,-0.5)}{ddot}{sawtooth};
+  \draw[-<-] (g1) to ++(-0.25,1);
+  \draw[->-] (g1) to ++(+0.25,1);
+  \draw[-<-] (g2) to ++(-0.25,1);
+  \draw[->-] (g2) to ++(+0.25,1);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+  \node[label=south:$\a$] at (g1) {};
+  \node[label=south:$\a$] at (g2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[-<-=0.4] (t1) to ++(-0.25,1);
+  \draw[->-=0.25,->-=0.75] (t1) to node[midway,ddot] (g1) {} ++(+0.25,1);
+  \draw[-<-=0.4] (t2) to ++(-0.25,1);
+  \draw[->-=0.25,->-=0.75] (t2) to node[midway,ddot] (g2) {} ++(+0.25,1);
+  \draw[sawtooth] (g1) to (g2);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\a$] at (t2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[->-=0.4] (t1) to ++(-0.25,1);
+  \draw[-<-=0.25,-<-=0.75] (t1) to node[midway,ddot] (g1) {} ++(+0.25,1);
+  \draw[->-=0.4] (t2) to ++(-0.25,1);
+  \draw[-<-=0.25,-<-=0.75] (t2) to node[midway,ddot] (g2) {} ++(+0.25,1);
+  \draw[sawtooth] (g1) to (g2);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\a$] at (t2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \interaction{2}{g}{(1,0)}{ddot}{sawtooth};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-,bend left =45] (t2) to (g1);
+  \draw[->-,bend right=45] (t2) to (g1);
+  \draw[-<-] (g2) to ++(-0.25,0.5);
+  \draw[->-] (g2) to ++(+0.25,0.5);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(2.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\a$] at (t2) {};
+  \node[label=south:$\a$] at (g2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \interaction{2}{g}{(1,0)}{ddot}{sawtooth};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-,bend left =45] (t2) to (g1);
+  \draw[->-,bend right=45] (t2) to (g1);
+  \draw[-<-] (g2) to ++(-0.25,0.5);
+  \draw[->-] (g2) to ++(+0.25,0.5);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(2.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\b$] at (t2) {};
+  \node[label=south:$\a$] at (g2) {};
+}
+\\
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-] (t2) to ++(-0.25,1);
+  \draw[->-] (t2) to ++(+0.25,1);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\b$] at (t2) {};
+}
+=&\
+\diagram{
+  \interaction{2}{g}{(0,-0.5)}{ddot}{sawtooth};
+  \draw[-<-] (g1) to ++(-0.25,1);
+  \draw[->-] (g1) to ++(+0.25,1);
+  \draw[-<-] (g2) to ++(-0.25,1);
+  \draw[->-] (g2) to ++(+0.25,1);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+  \node[label=south:$\a$] at (g1) {};
+  \node[label=south:$\b$] at (g2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[-<-=0.4] (t1) to ++(-0.25,1);
+  \draw[->-=0.25,->-=0.75] (t1) to node[midway,ddot] (g1) {} ++(+0.25,1);
+  \draw[-<-=0.4] (t2) to ++(-0.25,1);
+  \draw[->-=0.25,->-=0.75] (t2) to node[midway,ddot] (g2) {} ++(+0.25,1);
+  \draw[sawtooth] (g1) to (g2);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\b$] at (t2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[->-=0.4] (t1) to ++(-0.25,1);
+  \draw[-<-=0.25,-<-=0.75] (t1) to node[midway,ddot] (g1) {} ++(+0.25,1);
+  \draw[->-=0.4] (t2) to ++(-0.25,1);
+  \draw[-<-=0.25,-<-=0.75] (t2) to node[midway,ddot] (g2) {} ++(+0.25,1);
+  \draw[sawtooth] (g1) to (g2);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\b$] at (t2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \interaction{2}{g}{(1,0)}{ddot}{sawtooth};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-,bend left =45] (t2) to (g1);
+  \draw[->-,bend right=45] (t2) to (g1);
+  \draw[-<-] (g2) to ++(-0.25,0.5);
+  \draw[->-] (g2) to ++(+0.25,0.5);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(2.8,0);
+  \node[label=south:$\b$] at (t1) {};
+  \node[label=south:$\a$] at (t2) {};
+  \node[label=south:$\a$] at (g2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \interaction{2}{g}{(1,0)}{ddot}{sawtooth};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-,bend left =45] (t2) to (g1);
+  \draw[->-,bend right=45] (t2) to (g1);
+  \draw[-<-] (g2) to ++(-0.25,0.5);
+  \draw[->-] (g2) to ++(+0.25,0.5);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(2.8,0);
+  \node[label=south:$\b$] at (t1) {};
+  \node[label=south:$\b$] at (t2) {};
+  \node[label=south:$\a$] at (g2) {};
+}
+\\&\
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[-<-=0.4] (t1) to ++(-0.25,1);
+  \draw[->-=0.25,->-=0.75] (t1) to node[midway,ddot] (g1) {} ++(+0.25,1);
+  \draw[->-=0.4] (t2) to ++(-0.25,1);
+  \draw[-<-=0.25,-<-=0.75] (t2) to node[midway,ddot] (g2) {} ++(+0.25,1);
+  \draw[sawtooth] (g1) to (g2);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\b$] at (t2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \draw[->-=0.4] (t1) to ++(-0.25,1);
+  \draw[-<-=0.25,-<-=0.75] (t1) to node[midway,ddot] (g1) {} ++(+0.25,1);
+  \draw[-<-=0.4] (t2) to ++(-0.25,1);
+  \draw[->-=0.25,->-=0.75] (t2) to node[midway,ddot] (g2) {} ++(+0.25,1);
+  \draw[sawtooth] (g1) to (g2);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(1.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\b$] at (t2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \interaction{2}{g}{(1,0)}{ddot}{sawtooth};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-,bend left =45] (t2) to (g1);
+  \draw[->-,bend right=45] (t2) to (g1);
+  \draw[-<-] (g2) to ++(-0.25,0.5);
+  \draw[->-] (g2) to ++(+0.25,0.5);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(2.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\a$] at (t2) {};
+  \node[label=south:$\b$] at (g2) {};
+}
++
+\diagram{
+  \interaction{2}{t}{(0,-0.5)}{ddot}{overhang};
+  \interaction{2}{g}{(1,0)}{ddot}{sawtooth};
+  \draw[-<-] (t1) to ++(-0.25,1);
+  \draw[->-] (t1) to ++(+0.25,1);
+  \draw[-<-,bend left =45] (t2) to (g1);
+  \draw[->-,bend right=45] (t2) to (g1);
+  \draw[-<-] (g2) to ++(-0.25,0.5);
+  \draw[->-] (g2) to ++(+0.25,0.5);
+  \draw[thick,flexdotted] (-0.4,0.35) to ++(2.8,0);
+  \node[label=south:$\a$] at (t1) {};
+  \node[label=south:$\b$] at (t2) {};
+  \node[label=south:$\b$] at (g2) {};
+}
+\end{align*}
+Dropping overbars for the mixed-spin electron repulsion integrals, the final amplitude equations are
+\begin{align*}
+  t_{AB}^{IJ}
+=&\
+  \mc{E}_{AB}^{IJ}
+  \pr{
+    \ol{g}_{AB}^{IJ}
+  +
+    \tfr{1}{2}
+    \ol{g}_{AB}^{CD}
+    t_{CD}^{IJ}
+  +
+    \tfr{1}{2}
+    \ol{g}_{KL}^{IJ}
+    t_{AB}^{KL}
+  +
+    P^{(I/J)}_{(A/B)}
+    \ol{g}_{AK}^{IC}
+    t_{BC}^{JK}
+  +
+    P^{(I/J)}_{(A/B)}
+    g_{A\ol{K}}^{I\ol{C}}
+    t_{B\ol{C}}^{J\ol{K}}
+  }
+\\
+  t_{A\ol{B}}^{I\ol{J}}
+=&\
+  \mc{E}_{A\ol{B}}^{I\ol{J}}
+  \pr{
+    g_{A\ol{B}}^{I\ol{J}}
+  +
+    g_{A\ol{B}}^{C\ol{D}}
+    t_{C\ol{D}}^{I\ol{J}}
+  +
+    g_{K\ol{L}}^{I\ol{J}}
+    t_{A\ol{B}}^{K\ol{L}}
+  +
+    \ol{g}_{AK}^{IC}
+    t_{\ol{B}C}^{\ol{J}K}
+  +
+    g_{A\ol{K}}^{I\ol{C}}
+    t_{\ol{B}\ol{C}}^{\ol{J}\ol{K}}
+  -
+    g_{A\ol{K}}^{C\ol{J}}
+    t_{C\ol{B}}^{I\ol{K}}
+  -
+    g_{K\ol{B}}^{I\ol{C}}
+    t_{A\ol{C}}^{K\ol{J}}
+  +
+    g_{\ol{B}K}^{\ol{J}C}
+    t_{AC}^{IK}
+  +
+    \ol{g}_{\ol{B}\ol{K}}^{\ol{J}\ol{C}}
+    t_{A\ol{C}}^{I\ol{K}}
+  }
+\\
+  t_{\ol{A}\ol{B}}^{\ol{I}\ol{J}}
+=&\
+  \mc{E}_{\ol{A}\ol{B}}^{\ol{I}\ol{J}}
+  \pr{
+    \ol{g}_{\ol{A}\ol{B}}^{\ol{I}\ol{J}}
+  +
+    \tfr{1}{2}
+    \ol{g}_{\ol{A}\ol{B}}^{\ol{C}\ol{D}}
+    t_{\ol{C}\ol{D}}^{\ol{I}\ol{J}}
+  +
+    \tfr{1}{2}
+    \ol{g}_{\ol{K}\ol{L}}^{\ol{I}\ol{J}}
+    t_{\ol{A}\ol{B}}^{\ol{K}\ol{L}}
+  +
+    P^{(I/J)}_{(A/B)}
+    \ol{g}_{\ol{A}\ol{K}}^{\ol{I}\ol{C}}
+    t_{\ol{B}\ol{C}}^{\ol{J}\ol{K}}
+  +
+    P^{(I/J)}_{(A/B)}
+    g_{\ol{A}K}^{\ol{I}C}
+    t_{\ol{B}C}^{\ol{J}K}
+  }\,.
+\end{align*}
+Finally, expanding the energy expression $E_c=\tfr{1}{4}\ol{g}_{ij}^{ab}t_{ab}^{ij}$ by spin blocks gives the following.
+\begin{align*}
+  E_c
+=
+  \tfr{1}{4}
+  \ol{g}_{IJ}^{AB}
+  t_{AB}^{IJ}
++
+  g_{I\ol{J}}^{A\ol{B}}
+  t_{A\ol{B}}^{I\ol{J}}
++
+  \tfr{1}{4}
+  \ol{g}_{\ol{I}\ol{J}}^{\ol{A}\ol{B}}
+  t_{\ol{A}\ol{B}}^{\ol{I}\ol{J}}
+\end{align*}
+
+
+\end{document}

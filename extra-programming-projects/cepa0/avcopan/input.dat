@@ -21,13 +21,14 @@ mints     = psi4.MintsHelper(basisset)
 
 # call spin-orbital UHF code
 import sys
-sys.path.insert(0, '../../5/avcopan/')
+sys.path.insert(0, '../../../5/avcopan/')
 from uhf import UHF
 uhf = UHF(mol, mints)
 uhf.compute_energy()
 
-# call CCD code here
-from ccd import CCD
-ccd = CCD(uhf)
-print ccd.compute_energy()
+# call CEPA0 code here
+from cepa0 import CEPA0
+cepa0 = CEPA0(uhf)
+print cepa0.compute_energy()
 
+energy('lccd')
