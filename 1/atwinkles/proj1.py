@@ -9,7 +9,7 @@ import numpy as np
 
 # Reads in the Hessian
 
-lines = open('../../2/avcopan/hessian.dat').readlines()
+lines = open('../../2/atwinkles/hessian.dat').readlines()
 
 # Builds the molecule
 

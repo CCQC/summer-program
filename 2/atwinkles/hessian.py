@@ -4,7 +4,7 @@ import os
 import re
 import numpy as np
 
-def generate_inputs(mol, template, disp_size = 0.05, directory = "DISPS"):
+def generate_inputs(mol, template, disp_size = 0.005, directory = "DISPS"):
     
     mol = mol.copy(mol)
     mol.to_bohr()
@@ -33,7 +33,7 @@ def generate_inputs(mol, template, disp_size = 0.05, directory = "DISPS"):
             for coord2 in range(coord1):
                 disp2 = np.zeros(3*mol.natom)
                 disp2[coord2] += k * disp_size
-                disp2_mol = disp1_mol.copy(mol)
+                disp2_mol = disp1_mol.copy(disp1_mol)
                 disp2_mol.displace(disp2.reshape(mol.natom,3))
                 write_input(coord1, coord2, k, k, disp2_mol)
 
