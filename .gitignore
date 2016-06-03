@@ -18,13 +18,9 @@ __pycache__
 *.xyz
 *.clean
 *.out
-timer.dat
 output.dat
+timer.dat
+psi.timer.dat
 
-# Misc 
-# (Hessian projects)
-2/aewiens/X*
-2/aewiens/hessian.txt
-1/aewiens/modes.xyz
-extra-programming-projects/numerov/aewiens
+# Mac OS X folder information file
 .DS_Store
