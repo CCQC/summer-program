@@ -33,10 +33,12 @@ class Molecule:
         self.geom = np.array(geom)
 
     def get_masses(self):
-        return [ float(get_mass(i)) for i in self.atoms ]
+        self.M = [ float(get_mass(i)) for i in self.atoms ]
+        return self.M
 
     def get_charges(self):
-        return [ int(get_charge(i)) for i in self.atoms ]
+        self.Z = [ int(get_charge(i)) for i in self.atoms ]
+        return self.Z
 
     def __str__(self):
         """
