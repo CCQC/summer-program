@@ -8,6 +8,9 @@ from uhf import UHF
 class CCD:
 
     def __init__(self,mol,mints):
+        """
+        Create a class to compute ccd energy
+        """
 
         uhf = UHF(mol, mints)
         uhf.compute_energy()
