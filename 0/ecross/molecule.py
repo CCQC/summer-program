@@ -1,8 +1,10 @@
 #!/usr/bin/python 
 
 import sys 
-import masses as M
 import numpy as np
+
+sys.path.insert(0,'../../extra-files')
+import masses as M
 
 File = open('molecule.xyz', 'r')
 File = File.read()
