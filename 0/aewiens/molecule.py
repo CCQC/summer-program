@@ -1,7 +1,11 @@
-#! /usr/bin/python
+#!/usr/bin/env python
 
 import numpy as np
 from scipy import linalg as la
+import sys
+
+sys.path.insert(0,'../../extra-files/')
+from masses import get_mass, get_charge
 
 class Molecule:
     """
@@ -27,6 +31,12 @@ class Molecule:
             self.atoms.append(atom)
             geom.append([float(x),float(y),float(z)])
         self.geom = np.array(geom)
+
+    def get_masses(self):
+        return [ float(get_mass(i)) for i in self.atoms ]
+
+    def get_charges(self):
+        return [ int(get_charge(i)) for i in self.atoms ]
 
     def __str__(self):
         """
@@ -66,9 +76,11 @@ class Molecule:
         return Molecule(str(self),self.units)
 
 #### Example of an input
-"""
 f = open("../../extra-files/molecule.xyz","r")
 f = f.read()
+
+mol = Molecule(f,"Angstrom")
+
 """
 f = open("TSTSTS.xyz", "r")
 f = f.read()
@@ -78,11 +90,13 @@ mol.angs()
 g = open("test.xyz","w")
 g.write( str(mol)) 
 g.close()
-
-#print(mol.geom)
-#print(mol.atoms)
-#print( mol.__len__() )
-#print( mol.__str__() )
-#print( mol.angs() )
-#print( mol.bohr() )
-#print( mol.copy() )
+print( mol.get_masses() )
+print( mol.get_charges() )
+print(mol.geom)
+print(mol.atoms)
+print( mol.__len__() )
+print( mol.__str__() )
+print( mol.angs() )
+print( mol.bohr() )
+print( mol.copy() )
+"""
