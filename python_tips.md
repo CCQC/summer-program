@@ -11,7 +11,7 @@ you can't remember what each line of your own code does.
 >>> a = 1
 >>> b = a
 >>> a = 2
->>> print(a,b)
+>>> print(a, b)
 2 1
 >>> a = list(range(10))
 >>> b = a
@@ -54,10 +54,10 @@ incremented the value of an item in the list, the underlying list would then cha
 	  print(var)
 
 >>> change_me(spam)
-[0,1,2,3]
->>> [9,1,2,3]
+[0, 1, 2, 3]
+>>> [9, 1, 2, 3]
 >>> spam
-[9,1,2,3]
+[9, 1, 2, 3]
 ```
 
 In this case, spam is in the global scope. When we pass it to change_me(),
@@ -79,15 +79,15 @@ Here is another example of Python not acting exactly as you would expect it to.
 >>> b = [[0]*4]*4
 >>> print(b)
 [[0, 0, 0, 0],
-[0, 0, 0, 0],
-[0, 0, 0, 0],
-[0, 0, 0, 0]]
+ [0, 0, 0, 0],
+ [0, 0, 0, 0],
+ [0, 0, 0, 0]]
 >>> b[0][0] = 4
 >>> print(b)
 [[4, 0, 0, 0],
-[4, 0, 0, 0],
-[4, 0, 0, 0],
-[4, 0, 0, 0]]
+ [4, 0, 0, 0],
+ [4, 0, 0, 0],
+ [4, 0, 0, 0]]
 ```
 
 Situations like this are often best served by one of the many libraries in Python,
@@ -128,7 +128,7 @@ There are two types of scopes in Python
 		print(eggs)
   	spam()
 1
->>> def spam()
+>>> def spam():
 		print(eggs)
 		eggs += 1
 UnboundLocalError local variable 'eggs' referenced before assignment
@@ -299,9 +299,9 @@ without needing to look at how you implemented your code.
 		is directly related to the cosine of the angle between two vectors in
 		Euclidean space of any number of dimensions.
     
-		@param vec1: the first vector, any iterable containing numbers
-		@param vec2: the second vector, any iterable containing numbers
-		@return: the dot product
+		:param vec1: the first vector, any iterable containing numbers
+		:param vec2: the second vector, any iterable containing numbers
+		:return: the dot product
 		'''
 		
 		if len(vec1) != len(vec2):  # if the vectors are not equal
@@ -349,6 +349,7 @@ if __name__ == '__main__':
 	c.talk()
 	print(c.whoAmI())
 	d.talk()
+```
 
 While we are talking about object oriented programming in Python, here are a
 few of the hidden things you can do in Python that will make your lives much
@@ -395,7 +396,7 @@ if __name__ == "__main__":
 	b.print_book()
 	print()
 	b[2].print_page()
-
+```
 
 ## Learning Numpy
 ```python
