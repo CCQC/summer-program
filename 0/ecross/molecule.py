@@ -25,17 +25,43 @@ class Molecule(object):
       self.geom = np.matrix(geom) #This stores the list of lists as a matrix
       File.close() 
 
-   def to_bohr(self):
-      if self.units == 'Angstrom':
+
+
+   def to_bohr(self):   
+      if self.units != 'Bohr' or 'Angstrom' or 'meter':   #The program quits if it is passed inappropriate units (cf l 43, 55)
+         sys.exit('Please use Bohr, Angstrom, or meter. The program will now exit.')
+      elif self.units == 'Angstrom':
          self.geom /= 0.529177208 
          self.units = 'Bohr'
+      elif self.units == 'Meter':
+         self.geom /= ( 0.529177208 * ( 1 ** -10 ) )
+         self.units = 'Bohr'
       else:
-         print('Units are already in Bohr.')
+         print('Units are already in Bohrs.')
 
    def to_angstrom(self):
-      if self.units == 'Bohr':
+      if self.units != 'Bohr' or 'Angstrom' or 'meter':
+         sys.exit('Please use Bohr, Angstrom, or meter. The program will now exit.')
+      elif self.units == 'Bohr':
          self.geom *= 0.529177208
          self.units = 'Angstrom'
+      elif self.units == 'Meter':
+         self.geom *= ( 0.529177208 * (1 ** 10))
+         self.units = 'Angstrom'
+      else:
+         print('Units are already in Angstroms.')
+
+   def to_meter(self):
+      if self.units != 'Bohr' or 'Angstrom' or 'meter':
+         sys.exit('Please use Bohr, Angstrom, or meter. The program will now exit.')
+      elif self.units == 'Angstrom':
+         self.geom *= (1 ** -10)
+         self.units = 'meter'
+      elif self.units == 'Bohr':
+         self.geom *= ( 0.529177208 * (1 ** -10))
+         self.units = 'meter'
+      else:
+         print('Units are already in meters.')
 
    def xyz_string(self):
       string = '%d \n%s \n' %(self.natom, self.units)
