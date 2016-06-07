@@ -60,15 +60,13 @@ Algebraic methods
 Python
 ------
 Download the [Anaconda package with Python3.5](http://continuum.io/downloads)
-(you'll have to click on 'I want Python3.5'). To learn how to code Python, use
-[Learn Python the Hard Way](http://learnpythonthehardway.org/book/). It will
-take time, but this is the best resource I have found, as it skips all the
-hand-holding that other resources do. One note, all print lines will need
-parantheses, a major change from Python2. Also, starting on excersise 6, see if
-you can learn how to use the [string
-format](https://docs.python.org/3/library/string.html#string-formatting)
-instead of the '%' to format strings. For a general overview of best practices
-in Python, read [python_tips.md](python_tips.md).
+(you'll have to click on 'I want Python3.5'). To learn how to code Python, there
+are a few recommended resources:
+- [Official Python 3 Tutorial](https://docs.python.org/3/tutorial/)
+- [Dive Into Python 3](http://www.diveintopython3.net/)
+- [Automate the Boring Stuff](https://automatetheboringstuff.com/)
+
+For a general overview of best practices in Python, read [python_tips.md](python_tips.md).
 
 
 Git
