@@ -49,7 +49,6 @@ class Molecule:
         """
         return len(self.geom)
 
-
     def bohr(self):
         """
         return the geometry in bohr
