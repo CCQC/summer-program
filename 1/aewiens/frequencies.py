@@ -6,10 +6,10 @@ amu2kg = 1.6605389e-27
 hartree2J = 4.3597443e-18
 c = 29979245800.0 
 
-from molecule import Molecule
 import numpy as np
 import sys
 sys.path.insert(0, '../../0/aewiens')
+from molecule import Molecule
 
 class Frequencies:
 
@@ -25,21 +25,16 @@ class Frequencies:
         self.MM = np.diag(m)
         self.m = m
 
-    def get_hessian(self):
+    def get_MWhessian(self):
 
         h  = open(self.hessian,"r")
         H0 = np.matrix( [i.split() for i in h.readlines()],float )
         mwH = np.dot(self.MM, np.dot(H0,self.MM) )
         return mwH
 
-    def diagonalize_hessian(self):
-
-        self.e, self.l = np.linalg.eigh( self.get_hessian() )
-        return self.e
-
     def get_frequencies(self):
 
-        self.diagonalize_hessian()
+        self.e, self.l = np.linalg.eigh( self.get_MWhessian() )
         self.Q = np.matrix(self.MM)*np.matrix(self.l)
 
         freq = []
