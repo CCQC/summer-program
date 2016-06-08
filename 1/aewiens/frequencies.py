@@ -1,4 +1,4 @@
-#!/Users/avery/anaconda/bin/python
+#!/usr/bin/python
 
 #####  Unit conversions
 bohr2m = 5.2917721e-11
@@ -36,7 +36,6 @@ class Frequencies:
 
         self.e, self.l = np.linalg.eigh( self.get_MWhessian() )
         self.Q = np.matrix(self.MM)*np.matrix(self.l)
-
         freq = []
         conv =  np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)  # dimensional analysis
         for i in self.e:
@@ -59,17 +58,17 @@ class Frequencies:
                 atom = mol.atoms[j]
                 x,y,z = mol.geom[j,0], mol.geom[j,1], mol.geom[j,2]
                 dx,dy,dz = self.Q[3*j,i], self.Q[3*j+1,i], self.Q[3*j+2,i]
-                #t.write("{:s}".format(atom) + "{0:20.12f}{1:20.12f}{1:20.12f}".format(x,y,z) )
-                t.write("%s%15.7f%15.7f%15.7f%15.7f%15.7f%15.7f\n" % (atom, x, y, z,dx,dy,dz))
+                t.write("{:s}{:12.7f}{:12.7f}{:12.7f}\n".format(atom, x,y,z) )
             t.write("\n")
 
         return None
         
+##  Run frequencies for molecule.xyz from extra-files
 
 f = open("../../extra-files/molecule.xyz", "r")
 f = f.read()
 mol = Molecule(f,"Bohr")
 
-test = Frequencies(mol,"../../extra-files/hessian.dat")
+freq = Frequencies(mol,"../../extra-files/hessian.dat")
+freq.visualize_frequencies("modes.xyz")
 
-test.visualize_frequencies("modes.xyz") 
