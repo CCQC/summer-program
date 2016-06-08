@@ -10,7 +10,6 @@ from molecule import Molecule
 
 import numpy as np
 
-
 #####  Read in the molecule
 f = open("../extra-files/molecule.xyz").read()
 mol = Molecule(f,"Bohr")
@@ -40,8 +39,6 @@ e, l = np.linalg.eigh(mH)
 
 #####  Eigenvectors --> vibrational modes (in non-mass-weighted coordinates)
 Q = np.matrix(M)*np.matrix(l)
-print Q
-
 
 #####   get frequencies
 #####   lambda_a = omega_a^2 / conv^2
@@ -52,6 +49,8 @@ for i in e:
         freq.append((-i)**0.5*conv)
     else:
         freq.append(i**0.5*conv)
+
+print( freq )
 
 
 #####    visualize vibrational modes
