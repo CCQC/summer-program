@@ -64,6 +64,7 @@ Here we un-mass-weight the eigenvectors to get normal coordinates.
 """
 
 nevectors = np.dot(mass_mat, evectors)
+nevectors *= 0.529177208
 
 """
 Here we determine the spatial frequencies and force constants for the H2O molecule
@@ -87,6 +88,8 @@ vfreq = [ ( val / c ) for val in vfreq_Hz ]
 """
 Finally, we write the frequencies to a file in the .xyz format
 """
+mol.to_angstrom()
+
 string = ''
 
 for w in range(len(nevectors)):
