@@ -1,15 +1,10 @@
-"""
-TO DO:
------
-
-Fix the units problem (import file in Bohr screws with things)
-Clean up script
-
-"""
-#!/usr/bin/python
+#!/anaconda/bin/python
 
 import sys
 import numpy as np
+pi = np.pi
+from numpy import linalg as la
+import cmath 
 
 sys.path.insert(0, '../../0/ecross') #Addres for the Molecule class file
 import molecule as M
@@ -62,8 +57,6 @@ mwhessian = np.dot((np.dot(mass_mat, hessian)),mass_mat)
 Computes the eigenvalues and eigenvestors of the mass-weighted Hessian matrix
 """
 
-from numpy import linalg as la
-
 evalues,evectors = la.eigh(mwhessian)
 
 """
@@ -75,5 +68,42 @@ nevectors = np.dot(mass_mat, evectors)
 """
 Here we determine the spatial frequencies and force constants for the H2O molecule
 """
+
+hartree2j = ( 4.3597438e-18 )
+bohr2m = ( 5.29177208e-11 ) 
+amu2kg = ( 1.66054e-27 )
+c = ( 2.99792458e10 ) 
+
+#Returns Hessian eigenvalues in [rad(2) * s(-2)]
+evalues_si = [(val * hartree2j / bohr2m / bohr2m / amu2kg ) for val in evalues]
+
+#Returns frequencies in Hz 
+vfreq_Hz = [1 / ( 2 * pi ) * (np.sqrt(np.complex_(val))) for val in evalues_si]
+
+#Returns frequencies in cm(-1)
+vfreq = [ ( val / c ) for val in vfreq_Hz ]
+
+
+"""
+Finally, we write the frequencies to a file in the .xyz format
+"""
+string = ''
+
+for w in range(len(nevectors)):
+   string += '{:d}\n'.format(mol.natom)
+   string += '{:9.2f} cm-1\n'.format(vfreq[w])
+   for atom in range(mol.natom):
+      string += '{:s}\t'.format(mol.labels[atom])
+      string += '{:>15.10f}{:>15.10f}{:>15.10f}\t'.format(mol.geom[atom,0],mol.geom[atom,1],mol.geom[atom,2])
+      string += '{:>15.10f}{:>15.10f}{:>15.10f}\n'.format(nevectors[w,3*atom],nevectors[w,3*atom+1],nevectors[w,3*atom+2])
+   string += '\n'
+
+
+f = open('output.xyz','w')
+f.write(string)
+f.close()
+
+
+
 
 
