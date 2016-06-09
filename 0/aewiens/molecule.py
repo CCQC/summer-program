@@ -14,10 +14,10 @@ class Molecule:
 
     def __init__(self, geom_str, units="Angstrom"):
 
-        self.read(geom_str)
         self.units = units
-        self.M = [ float(get_mass(i)) for i in self.atoms ]
-        self.Z = [ int(get_charge(i)) for i in self.atoms ]
+        self.read(geom_str)
+        self.masses = [ float(get_mass(i)) for i in self.atoms ]
+        self.charges = [ int(get_charge(i)) for i in self.atoms ]
 
     def read(self, geom_str):
         """
@@ -35,6 +35,12 @@ class Molecule:
             geom.append([float(x),float(y),float(z)])
         self.geom = np.array(geom)
 
+    def __len__(self):
+        """
+        return the length of the molecule (think of as the # of atoms, N)
+        """
+        return len(self.geom)
+
     def __str__(self):
         """
         Print the molecule in a nice format
@@ -43,12 +49,6 @@ class Molecule:
         for atom, xyz in zip(self.atoms, self.geom):
             out += "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n".format(atom, *xyz)
         return out
-
-    def __len__(self):
-        """
-        return the length of the molecule (think of as the # of atoms, N)
-        """
-        return len(self.geom)
 
     def bohr(self):
         """
@@ -71,28 +71,10 @@ class Molecule:
     def copy(self):
         return Molecule(str(self),self.units)
 
-#### Example of an input
-f = open("../../extra-files/molecule.xyz","r")
-f = f.read()
 
-mol = Molecule(f,"Angstrom")
+if __name__ == '__main__':
+    f = open("../../extra-files/molecule.xyz","r")
+    geom_str = f.read()
+    f.close()
+    Molecule(geom_str,"Angstrom")
 
-"""
-f = open("TSTSTS.xyz", "r")
-f = f.read()
-
-mol = Molecule(f,"Bohr")
-mol.angs()
-g = open("test.xyz","w")
-g.write( str(mol)) 
-g.close()
-print( mol.get_masses() )
-print( mol.get_charges() )
-print(mol.geom)
-print(mol.atoms)
-print( mol.__len__() )
-print( mol.__str__() )
-print( mol.angs() )
-print( mol.bohr() )
-print( mol.copy() )
-"""

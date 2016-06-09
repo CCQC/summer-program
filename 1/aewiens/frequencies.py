@@ -21,7 +21,7 @@ class Frequencies:
 
         m = []
         for i in range(self.N):
-            m += [1/(mol.M[i])**0.5]*3
+            m += [1/(mol.masses[i])**0.5]*3
         self.MM = np.diag(m)
         self.m = m
 
