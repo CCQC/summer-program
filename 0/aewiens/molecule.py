@@ -13,6 +13,7 @@ class Molecule:
     """
 
     def __init__(self, geom_str, units="Angstrom"):
+
         self.read(geom_str)
         self.units = units
         self.M = [ float(get_mass(i)) for i in self.atoms ]
