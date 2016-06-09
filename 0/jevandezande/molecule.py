@@ -1,4 +1,5 @@
 import numpy as np
+from collections import Counter
 
 
 class Molecule:
@@ -15,9 +16,22 @@ class Molecule:
         self.read(geom_str)
         self.units = units
 
+    def __repr__(self):
+        """
+        Make a molecular formula string
+
+        """
+        mol_repr = '<Molecule '
+        for atom, count in sorted(Counter(self.atoms).items()):
+            mol_repr += atom
+            if count != 1:
+                mol_repr += str(count)
+        return mol_repr + '>'
+
     def __str__(self):
         """
         Format the molecule in a nice way
+        :return: xyz formatted string of the molecule
         """
         line_form = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n"
         out = "{:d}\n{:s}\n".format(len(self), self.units)
@@ -43,7 +57,7 @@ class Molecule:
         """
         geom = []
         self.atoms = []
-        lines = geom_str.split("\n")
+        lines = geom_str.splitlines()
         num = int(lines[0])
         for line in lines[2:]:
             if line.strip() == "":
