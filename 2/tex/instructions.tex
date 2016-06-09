@@ -174,7 +174,7 @@ Let $N$ be the number of atoms and let $(x_A, y_A, z_A)$ be the Cartesian coordi
   \item\label{generate-inputs}
   \linl{def generate_inputs(mol, template, disp_size = 0.005, directory = "DISPS"):}
   \begin{enumerate}
-    \item make directories with input files for the reference geometry and for the $\tfrac{3N(3N+1)}{2}$ unique displacements needed to evaluate equations \ref{diagonal-elements} and \ref{off-diagonal-elements}
+    \item make directories with input files for the reference geometry and for the $3N(3N+1)$ unique displacements needed to evaluate equations \ref{diagonal-elements} and \ref{off-diagonal-elements}
   \end{enumerate}
   % function 2
   \item \linl{def run_jobs(mol, command = "psi4", directory = "DISPS"):}
