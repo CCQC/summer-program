@@ -18,7 +18,7 @@ H = []
 for line in lines:
     H.append(list(map(float, line.split())))
 
-H = np.matrix(H)
+H = np.array(H)
 
 # Mass weight Hessian
 # \Tilde H = M^{-1/2} H M^{-1/2}
@@ -31,7 +31,7 @@ for atom in mol.atoms:
     masses.append(1/np.sqrt(get_mass(atom)))
 M = np.diag(masses)
 
-Ht = M * H * M
+Ht = M @ H @ M
 
 # Diagonalize the Hessian
 # \Tilde H = L \Lambda L^T
@@ -47,7 +47,7 @@ c = 29979245800.0 # speed of light in cm/s
 convert = np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)
 
 # \Delta X(Q_sa) = Q_A M^{-1/2} l_A
-Q = np.array(np.matrix(M) * np.matrix(L))
+Q = M @ L
 
 out = ''
 line_form = '{:2s}' + '{: >15.10f}'*6 + '\n'
