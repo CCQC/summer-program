@@ -85,6 +85,7 @@ class Hessian:
         f.write(str(self))
         f.close()    
 
-water = Molecule('../extra-files/molecule.xyz','Bohr')
-hessian = Hessian(water, '../extra-files/hessian.dat')
-hessian.output()
+if __name__ == '__main__':
+    water = Molecule('../extra-files/molecule.xyz','Bohr')
+    hessian = Hessian(water, '../extra-files/hessian.dat')
+    hessian.output()
