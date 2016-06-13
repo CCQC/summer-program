@@ -1,4 +1,4 @@
-#!/usr/bin/python 
+#!/anaconda/bin/python 
 
 import sys 
 import numpy as np
@@ -62,6 +62,12 @@ class Molecule(object):
          self.units = 'meter'
       else:
          print('Units are already in meters.')
+   
+   def geom_string(self):
+      string = ''
+      for i in range(self.natom):
+         string += '{:s}{:20.10f}{:20.10f}{:20.10f}\n'.format(self.labels[i],self.geom[i,0],self.geom[i,1],self.geom[i,2])
+      return string[:-1]
 
    def xyz_string(self):
       string = '%d \n%s \n' %(self.natom, self.units)
@@ -74,11 +80,10 @@ class Molecule(object):
       return copy
 
    def test_print(self):
-      print(self.xyz)
-      print(self.labels)
-      print(self.masses)
-      print(self.charges)
-      print(self.geom)
-      print(self.xyz_string())
+      print('Atoms: ' + str(self.labels))
+      print('Masses: ' + str(self.masses))
+      print('Charges: ' + str(self.charges))
+      print('Coordinates:\n' + str(self.geom))
+      print('Output:\n' + self.xyz_string())
 
-mol = Molecule('molecule.xyz', 'Angstrom')
+
