@@ -3,9 +3,9 @@ import sys
 sys.path.insert(0,'../../extra-files/')
 from masses import get_mass, get_charge
 
-class Molecule():
+class Molecule(geom_path = '../../extra-files/molecule.xyz'):
     def __init__(self):
-        f = open('../../extra-files/molecule.xyz')
+        f = open(geom_path)
         lines = f.readlines()
         f.close()
         self.natom = int(lines[0])
