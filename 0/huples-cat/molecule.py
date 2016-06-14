@@ -29,10 +29,25 @@ class Molecule():
         Convert into an xyz formatted string
         """
         my_str = "%i \n" % self.natom
-        my_str += "%s \n" % self.units
-        for i in range(0, self.natom - 1):
+        my_str += "%s" % self.units
+        for i in range(0, self.natom):
             my_str += "%s\t%f\t%f\t%f\n" % (self.labels[i], self.xyz[i][0], self.xyz[i][1], self.xyz[i][2])
+        ##removes newline
+        my_str = my_str[:-1]
         return my_str
+
+    def to_bohr(self):
+        if(self.units.lower() != 'bohr'):
+            self.units = 'Bohr'
+            self.geom *= 0.529177
+
+    def to_angstrom(self):
+        if(self.units.lower() != 'angstrom'):
+            self.units = 'Angstrom'
+            self.geom /= 0.529177
+
+    def copy(self):
+        return Molecule(str(self), self.units)
 
 if __name__ == "__main__":
     mol = Molecule()
