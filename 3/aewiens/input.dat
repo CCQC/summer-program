@@ -8,7 +8,7 @@ molecule mol {
 
 set {
     reference rhf
-    basis sto-3g
+    basis cc-pvtz
     scf_type pk
     e_convergence 12
 	 MAXITER 50
@@ -24,6 +24,7 @@ mints    = psi4.MintsHelper(basisset)
 # call Hartree-Fock code here
 from rhf import RHF
 rhf = RHF(mol,mints)
+print( rhf.nbf )
 E = rhf.get_energy()
 
 print(Eref)

@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import linalg as la
 from psi4_helper import get_docc, get_nbf, get_conv, get_maxiter
 
 class RHF:
@@ -17,7 +18,7 @@ class RHF:
         self.maxiter = get_maxiter()
 
         S = np.matrix(mints.ao_overlap() )
-        self.X = np.matrix(np.linalg.funm(S,lambda x : x**(-0.5)))
+        self.X = np.matrix(la.funm(S,lambda x : x**(-0.5)))
 
         T = np.matrix(mints.ao_kinetic() )
         V = np.matrix(mints.ao_potential() )

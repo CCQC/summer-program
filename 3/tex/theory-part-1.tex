@@ -671,25 +671,46 @@ Consider an analogous situation for two complex functions $f$ and $g$ that satis
 	0
 \sp\text{ for all $\eta(x)$.}
 \end{align}
-We can show that this can only be satisfied if both $f(x)$ and $g(x)$ separately vanish everywhere.
-This is true because, for every choice of $\eta(x)$, it must also hold for $i\eta(x)$
+We can show that this can only be satisfied if both $f(x)$ and $g(x)$ separately vanish everywhere. Since $\eta(x)$ is arbitrary, this equation must hold for some other function $\gamma(x) = i \eta(x)$.
 \begin{align}
-\label{ieta}
--i\int_{-\infty}^\infty dx\
-	\eta^*(x)f(x)
-+i\int_{-\infty}^\infty dx\
-	\eta(x)g(x)
-=
+\int_{-\infty}^\infty dx\
+	\gamma^*(x)f(x)
++\int_{-\infty}^\infty dx\
+	\gamma(x)g(x)
+&=
+	0
+\\[1ex]
+\int_{-\infty}^\infty dx\
+	[i \eta(x) ]^* f(x)
++\int_{-\infty}^\infty dx\
+	[i \eta(x)] g(x)
+&=
+	0
+\\[1ex]
+   \label{ieta}
+    -i 
+    \int_{-\infty}^\infty dx\
+	\eta^*(x)  f(x)
++ 
+    i \int_{-\infty}^\infty dx\
+	\eta(x) g(x)
+&=
 	0
 \end{align}
-and, adding and subtracting $i$ times equation (\ref{ieta}) to equation (\ref{eta}), this means
-\begin{align}
-	\int_{-\infty}^\infty dx\ \eta^*(x)f(x)=0
-\sp\sp
+Adding $i$ times equation (\ref{ieta}) to equation (\ref{eta}) yields:
+\begin{equation}
+   \label{idk}
+	\int_{-\infty}^\infty dx\ 
+	\eta^*(x)f(x)=0
+\sp\text{ for all $\eta(x)$.}
+\end{equation}
+Subtracting $i$ times equation (\ref{ieta}) to equation (\ref{eta}) yields:
+\begin{equation}
+   \label{idk2}
 	\int_{-\infty}^\infty dx\ \eta(x)g(x)=0
 \sp\text{ for all $\eta(x)$.}
-\end{align}
-Which can only be true if $f(x)=0$ and $g(x)=0$.\footnote{Since we could always choose $\eta(x)=f(x)$ or $\eta(x)=g^*(x)$, giving integrands $|f(x)|^2$ and $|g(x)|^2$ that are nonnegative everywhere.}
+\end{equation}
+Again by the Fundamental Lemma of Calculus of Variations, equations (\ref{idk}) and (\ref{idk2}) can only hold true together if $f(x)=0$ and $g(x)=0$.\footnote{Since we could always choose $\eta(x)=f(x)$ or $\eta(x)=g^*(x)$, giving integrands $|f(x)|^2$ and $|g(x)|^2$ that are nonnegative everywhere.}
 
 
 \newpage
