@@ -7,15 +7,13 @@ os.sys.path.insert(0,"../../0/aewiens")
 
 from molecule import Molecule
 
-mol = Molecule(open("../../extra-files/molecule.xyz","r").read() )
-mol.bohr()
 
 class Hessian(object):
+    """
+    Compute a finite difference Hessian
+    """
 
     def __init__(self,mol,template,disp_size=0.005):
-        """
-        Initialize a class to compute a finite difference Hessian
-        """
 
         self.mol = mol
         self.template_str = open(template,"r").read()
@@ -24,10 +22,9 @@ class Hessian(object):
 
     def make_input(self,dirname,atoms,geom):
         """
-        Write a psi4 input file with specified name
-        :param dirname: directory where we'll write the input file
-        :param atoms: list of strings of the atom labels for the molecule
-        :param geom: numpy matrix of the xyz coordinates for the molecule
+        :param dirname: directory for writing a psi4 input file
+        :param atoms: list of strings of atom labels
+        :param geom: 2darray of xyz coordinates
         """
         os.mkdir("%s" % dirname)
         xyz = [('  ').join([atoms[i]] + [str(geom[i,j]) for j in range(3)]) for i in range(self.N)]
@@ -126,10 +123,18 @@ class Hessian(object):
                     self.H[i,j] /= 2*h**2
                     self.H[j,i] = self.H[i,j]
 
+
     def write_Hessian(self):
+        """
+        write Hessian matrix to hessian.dat file
+        """
         self.make_Hessian()
         np.savetxt("hessian.dat",self.H,"%15.7f"," ","\n")
 
 
-hessian = Hessian(mol,"template.dat")
-hessian.write_Hessian()
+if __name__ == "__main__":
+
+    mol = Molecule(open("../../extra-files/molecule.xyz","r").read() )
+    mol.bohr()
+    hessian = Hessian(mol,"template.dat")
+    hessian.write_Hessian()
