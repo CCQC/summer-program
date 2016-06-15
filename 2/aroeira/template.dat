@@ -1,8 +1,0 @@
-molecule {{
-{:s}
-}}
-
-set e_convergence 11
-set basis         cc-pVDZ
-energy('mp2')
-

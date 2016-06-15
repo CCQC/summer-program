@@ -6,7 +6,7 @@ pi = np.pi
 from numpy import linalg as la
 import cmath 
 
-sys.path.insert(0, '../../0/ecross') #Addres for the Molecule class file
+sys.path.insert(0, '../../0/ecross') #Address for the Molecule class file
 import molecule as M
 
 """

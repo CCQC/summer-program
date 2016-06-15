@@ -1,8 +1,11 @@
-#! /usr/bin/python3
+#! /usr/bin/python4
 
 import numpy as np
 import math as m
 import cmath as cm
+import sys
+sys.path.insert(0, '../extra-files')
+sys.path.insert(0, '../../0/aroeira')
 from molecule import Molecule
 from masses import get_mass
 
@@ -11,85 +14,78 @@ E = 4.359744e-18
 a0 = 5.291772e-11
 u = 1.66054e-27
 
-def get_hessian(h_file):
-    with open(h_file) as lines:
-        hessian = []
-        for line in lines:
-            hold = []
-            for term in line.split():
-                hold.append(float(term))
-            hessian.append(hold)
-        hessian = np.array(hessian)
-    return hessian
+def mult(a, b):
+    b = np.transpose(b)
+    l = len(a)
+    r = np.zeros((l, l))
+    for i, roll in enumerate(a):
+        for j, collum in enumerate(b):
+            r[i][j] = np.dot(roll, collum)
+    return r
 
-def mass_weighted(hessian, molecule):
-    d = len(hessian)
-    mw_hessian = []
-    i_index = 0
-    for i in range(d):
-        hold = []
-        j_index = 0
-        if i%3 == 0 and i != 0:
-            i_index += 1
-        atom_i = molecule.atoms[i_index]
-        for j in range(d):
-            if j%3 == 0 and j != 0:
-                j_index += 1
-            atom_j = molecule.atoms[j_index]
-            w = m.sqrt(get_mass(atom_i)*get_mass(atom_j))
-            hold.append(hessian[i][j] / w)
-        mw_hessian.append(hold)
-    mw_hessian = np.array(mw_hessian)
-    return mw_hessian    
+class Hessian:
+    def __init__(self, molecule, matrix):
+        self.mol = molecule
+        self.read(matrix) 
+        self.frequencies()
 
-def uneig(evec, molecule):
-    d = len(evec)
-    out = []
-    index = 0
-    for i in range(d):
-        hold = []
-        if i%3 == 0 and i != 0:
-            index += 1
-        atom = molecule.atoms[index]
-        w = m.sqrt(get_mass(atom))
-        for j in range(d):
-            hold.append(evec[i][j] / w)
-        out.append(hold)
-    out = np.array(out)
-    return out    
+    def __str__(self):
+        out = ''
+        d = np.transpose(self.disp).tolist()
+        for w, wnum in enumerate(self.wavenumbers):
+            out += str(len(self.mol)) + '\n'
+            if wnum.imag > 0:
+                out += '{:<0.2f}i cm^-1\n'.format(wnum.imag)
+            else:
+                out += '{:<5.2f} cm^-1\n'.format(wnum.real)
+            for a, atom in enumerate(self.mol.atoms):
+                out += '{:<3.8s}'.format(atom)
+                for c in self.mol.geom[a]:
+                    out += '{:>20.13f}'.format(c)
+                for x in d[w][:3]:
+                    out += '{:>20.13f}'.format(x)
+                d[w] = d[w][3:]
+                out += '\n'
+            out += '\n'    
+        return out
 
-def output(molecule, wnum, disp):
-    out = ''
-    disp = np.transpose(disp)
-    for w_index in range(len(wnum)):
-        d_index = 0
-        out += str(len(molecule)) + '\n'
-        if wnum[w_index].imag > 0:
-            out += '{:<0.2f}i cm^-1\n'.format(wnum[w_index].imag)
-        else:
-            out += '{:<5.2f} cm^-1\n'.format(wnum[w_index].real)
-        for a_index in range(len(molecule.atoms)):
-            out += '{:<3.8s}'.format(molecule.atoms[a_index])
-            for c_index in range(3):
-                out += '{:>20.13f}'.format(molecule.geom[a_index][c_index])
-            for x in range(3):
-                out += '{:>20.13f}'.format(disp[w_index][d_index])
-                d_index += 1
-            out += '\n'
-        out += '\n'
-    return out
+    def read(self, matrix):
+        with open(matrix) as lines:
+            self.hessian = []
+            for line in lines:
+                hold = []
+                for term in line.split():
+                    hold.append(float(term))
+                self.hessian.append(hold)
+            self.hessian = np.array(self.hessian)
 
-def frequencies(molecule, hessian):
-    mw_hessian = mass_weighted(hessian, water)
-    freq, coord =  np.linalg.eigh(mw_hessian)
-    disp = uneig(coord, water)
-    wavenumbers = []
-    for r in freq:
-        wavenumbers.append(cm.sqrt(r*E/(a0*a0*u))/(2*np.pi*c))
-    f = open('output.xyz', 'w')
-    f.write(output(water, wavenumbers, disp))
-    f.close()    
+    def masses(self):
+        masses = []
+        for atom in self.mol.atoms:
+            masses.append(1/np.sqrt(get_mass(atom)))
+            masses.append(1/np.sqrt(get_mass(atom)))
+            masses.append(1/np.sqrt(get_mass(atom)))
+        M = np.diag(masses)
+        return M
 
-water = Molecule('water.xyz','Bohr')
-hessian = get_hessian('hessian.dat')
-frequencies(water, hessian)
+    def weighted(self):
+        mw_hessian = mult(mult(self.masses(), self.hessian), self.masses())
+        return mw_hessian
+
+    def frequencies(self):
+        freq, coord =  np.linalg.eigh(self.weighted())
+        self.disp = mult(self.masses(), coord)
+        self.wavenumbers = []
+        for r in freq:
+            self.wavenumbers.append(cm.sqrt(r*E/(a0*a0*u))/(2*np.pi*c))
+
+
+    def output(self):
+        f = open('output.xyz', 'w')
+        f.write(str(self))
+        f.close()    
+
+if __name__ == '__main__':
+    water = Molecule('../extra-files/molecule.xyz','Bohr')
+    hessian = Hessian(water, '../extra-files/hessian.dat')
+    hessian.output()

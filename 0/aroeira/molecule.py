@@ -41,5 +41,12 @@ class Molecule:
             self.geom = self.geom*1.889725989
             self.units = 'Bohr'
     
+    def stru(self):
+        line_form = "{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n"
+        out = "units {:s}\n".format(self.units)
+        for atom, coord in zip(self.atoms, self.geom):
+            out += line_form.format(atom, coord[0], coord[1], coord[2])
+        return out    
+
 
 
