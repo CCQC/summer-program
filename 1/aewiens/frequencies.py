@@ -69,6 +69,7 @@ f = open("../../extra-files/molecule.xyz", "r")
 f = f.read()
 mol = Molecule(f,"Bohr")
 
-freq = Frequencies(mol,"../../extra-files/hessian.dat")
+#freq = Frequencies(mol,"../../extra-files/hessian.dat")
+freq = Frequencies(mol,"../../2/aewiens/hessian.dat")
 freq.visualize_frequencies("modes.xyz")
 

@@ -4,9 +4,9 @@ units bohr
 }}
 
 set {{
-    basis cc-pVDZ
+    basis cc-pvdz
     e_convergence 12
-    scf_type pk
+    d_convergence 12
     }}
 
 energy('scf')
