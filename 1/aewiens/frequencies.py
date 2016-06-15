@@ -46,7 +46,7 @@ class Frequencies:
 
         return freq
 
-    def visualize_frequencies(self, output):
+    def frequency_output(self, output):
 
         mol = self.mol
         freq = self.get_frequencies()
@@ -65,11 +65,8 @@ class Frequencies:
         
 ##  Run frequencies for molecule.xyz from extra-files
 
-f = open("../../extra-files/molecule.xyz", "r")
-f = f.read()
+f = open("../../extra-files/molecule.xyz", "r").read()
 mol = Molecule(f,"Bohr")
 
-#freq = Frequencies(mol,"../../extra-files/hessian.dat")
-freq = Frequencies(mol,"../../2/aewiens/hessian.dat")
-freq.visualize_frequencies("modes.xyz")
-
+freq = Frequencies(mol,"../../extra-files/hessian.dat")
+freq.frequency_output("modes.xyz")
