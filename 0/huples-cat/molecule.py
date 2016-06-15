@@ -3,8 +3,8 @@ import sys
 sys.path.insert(0,'../../extra-files/')
 from masses import get_mass, get_charge
 
-class Molecule(geom_path = '../../extra-files/molecule.xyz'):
-    def __init__(self):
+class Molecule(object):
+    def __init__(self, geom_path):
         f = open(geom_path)
         lines = f.readlines()
         f.close()
@@ -32,7 +32,7 @@ class Molecule(geom_path = '../../extra-files/molecule.xyz'):
         my_str += "%s" % self.units
         for i in range(0, self.natom):
             my_str += "%s\t%f\t%f\t%f\n" % (self.labels[i], self.xyz[i][0], self.xyz[i][1], self.xyz[i][2])
-        ##removes newline
+        # removes newline
         my_str = my_str[:-1]
         return my_str
 
@@ -50,5 +50,5 @@ class Molecule(geom_path = '../../extra-files/molecule.xyz'):
         return Molecule(str(self), self.units)
 
 if __name__ == "__main__":
-    mol = Molecule()
+    mol = Molecule('../../extra-files/molecule.xyz')
     print(mol)
