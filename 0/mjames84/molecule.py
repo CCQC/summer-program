@@ -9,12 +9,12 @@ class Molecule(object):
     """
 
     def __init__(self, geom_str, units = "Angstrom"):
-        self.read(geom_string)
+        self.read(geom_str)
         self.units = units
         self.charge = [get_charge(atom) for atom in self.atoms]
         self.mass = [get_mass(atom) for atom in self.atoms]
 
-    def read(self, geom_string):
+    def read(self, geom_str):
         atoms = []
         geom = []
         lines = geom_str.strip().split("\n")
@@ -22,7 +22,7 @@ class Molecule(object):
             atom, x, y, z = item.split()
             atoms.append(atom.upper())
             geom.append([float(x),float(y),float(z)]) 
-        self.atoms = atom
+        self.atoms = atoms
         self.geom = np.array(geom)
 
     def __len__(self):
