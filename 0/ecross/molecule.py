@@ -41,20 +41,20 @@ class Molecule(object):
    Change coordinate units in self.geom and string value of self.units.
    """
    def to_bohr(self):   
-      if self.units != 'bohr' or 'angstrom' or 'meter':
-         print('Warning: Molecule built with unacceptable units; conversion not processed.')
+      if self.units == 'bohr':
+         print('Units are already in Bohr.')
       elif self.units == 'angstrom':
          self.geom /= 0.529177208 
          self.units = 'bohr'
       elif self.units == 'meter':
          self.geom /= ( 0.529177208 * ( 1 ** -10 ) )
          self.units = 'bohr'
-      else:
-         print('Units are already in Bohr.')
+      else: 
+         print('Warning: Molecule built with unacceptable units; conversion not processed.')
 
    def to_angstrom(self):
-      if self.units != 'bohr' or 'angstrom' or 'meter':
-         print('Warning: Molecule built with unacceptable units; conversion not processed.')
+      if self.units == 'angstrom':
+         print('Units are already in Angstroms.')
       elif self.units == 'bohr':
          self.geom *= 0.529177208
          self.units = 'angstrom'
@@ -62,12 +62,11 @@ class Molecule(object):
          self.geom *= ( 0.529177208 * (1 ** 10))
          self.units = 'angstrom'
       else:
-         print('Units are already in Angstroms.')
-
+         print('Warning: Molecule built with unacceptable units; conversion not processed.')
       
    def to_meter(self):
-      if self.units != 'bohr' or 'angstrom' or 'meter':
-         print('Warning: Molecule built with unacceptable units; conversion not processed.')
+      if self.units == 'meter':
+         print('Units are already in meters.')
       elif self.units == 'angstrom':
          self.geom *= (1 ** -10)
          self.units = 'meter'
@@ -75,7 +74,7 @@ class Molecule(object):
          self.geom *= ( 0.529177208 * (1 ** -10))
          self.units = 'meter'
       else:
-         print('Units are already in meters.')
+         print('Warning: Molecule built with unacceptable units; conversion not processed.')
    
    """Return atom labels and coordinates for molecule."""
    def geom_string(self):
