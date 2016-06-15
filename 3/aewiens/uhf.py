@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
 import numpy as np
-from scipy import linalg as la
-
 from psi4_helper import get_maxiter, get_nbf, get_nelec, get_conv
-
 
 class UHF:
 
@@ -24,20 +21,19 @@ class UHF:
 
         self.Hcore = T + V
         self.G = G.transpose((0,2,1,3))
-        self.X = np.matrix( la.funm(self.S, lambda x : x**(-0.5) ) )
+        self.X = np.matrix( np.linalg.funm(self.S, lambda x : x**(-0.5) ) )
         self.Vnu = mol.nuclear_repulsion_energy()
 
         ##  alpha and beta density matrices
-        """
         self.Da = np.zeros((self.X.shape))
         self.Db = np.zeros((self.X.shape))
+
         """
         self.Da = np.random.rand(*self.X.shape)
         self.Da = self.Da + self.Da.T
-
         self.Db = np.random.rand(*self.X.shape)
         self.Db = self.Db + self.Db.T
-
+        """
         self.E = 0.0
 
     def compute_energy(self):
@@ -55,8 +51,8 @@ class UHF:
             tFa = X.dot(Fa.dot(X))
             tFb = X.dot(Fb.dot(X))
 
-            ea, tCa = la.eigh(tFa)
-            eb, tCb = la.eigh(tFb)
+            ea, tCa = np.linalg.eigh(tFa)
+            eb, tCb = np.linalg.eigh(tFb)
 
             Ca = X.dot(tCa)
             Cb = X.dot(tCb)
@@ -79,22 +75,3 @@ class UHF:
             self.Da, self.Db, self.E = Da, Db, E
 
         return self.E
-
-   
-
-
-    def natural_orbitals(self):
-
-        T = np.matrix( la.funm( self.S, lambda x: x**0.5 ) )
-        n, tC = la.eigh(T*(self.Da+self.Db)*T)
-
-        active_o = 0
-        active_e = 0
-        for i in n:
-            if 0.02 <= i <= 1.98:
-                active_o += 1 
-                active_e += i.round()
-
-        print( sorted(n,reverse=True) )
-        return (active_o, active_e)
-
