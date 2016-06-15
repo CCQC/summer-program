@@ -1,15 +1,11 @@
 #!/usr/bin/python
 
-#####  Unit conversions
-bohr2m = 5.2917721e-11
-amu2kg = 1.6605389e-27
-hartree2J = 4.3597443e-18
-c = 29979245800.0 
 
 import numpy as np
 import sys
 sys.path.insert(0, '../../0/aewiens')
 from molecule import Molecule
+import conv as cnv
 
 class Frequencies:
 
@@ -37,7 +33,7 @@ class Frequencies:
         self.e, self.l = np.linalg.eigh( self.get_MWhessian() )
         self.Q = np.matrix(self.MM)*np.matrix(self.l)
         freq = []
-        conv =  np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)  # dimensional analysis
+        conv =  np.sqrt(cnv.hartree2J/(cnv.amu2kg*cnv.bohr2m**2))/(cnv.c*2*np.pi)  # dimensional analysis
         for i in self.e:
             if i <0:
                 freq.append((-i)**0.5*conv)
@@ -63,10 +59,9 @@ class Frequencies:
 
         return None
         
-##  Run frequencies for molecule.xyz from extra-files
+if __name__ == "__main__":
+    f = open("../../extra-files/molecule.xyz", "r").read()
+    mol = Molecule(f,"Bohr")
 
-f = open("../../extra-files/molecule.xyz", "r").read()
-mol = Molecule(f,"Bohr")
-
-freq = Frequencies(mol,"../../extra-files/hessian.dat")
-freq.frequency_output("modes.xyz")
+    freq = Frequencies(mol,"../../extra-files/hessian.dat")
+    freq.frequency_output("modes.xyz")
