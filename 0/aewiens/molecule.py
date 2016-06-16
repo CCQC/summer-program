@@ -11,19 +11,20 @@ class Molecule:
     object that contains the basic properties of a molecule
     """
 
-    def __init__(self, geom_str, units="Angstrom"):
+    def __init__(self, xyz_file, units="Angstrom"):
 
         self.units = units
-        self.read(geom_str)
+        self.read(xyz_file)
         self.masses = [ float(get_mass(i)) for i in self.atoms ]
         self.charges = [ int(get_charge(i)) for i in self.atoms ]
 
-    def read(self, geom_str):
+    def read(self, xyz_file):
         """
         Read in the geometry and store 2 class variables:
         :self.atoms: a list of labels of the N atoms
         :self.geom:  an Nx3 2darray of x,y,z 
         """
+        geom_str = xyz_file.read()
         self.atoms = [] 
         geom = []
         for line in geom_str.split('\n')[2:]:
@@ -75,6 +76,5 @@ class Molecule:
 
 
 if __name__ == '__main__':
-    f = open("../../extra-files/molecule.xyz","r").read()
-    mol = Molecule(geom_str,"Angstrom")
-    mol.to_bohr()
+    f = open("../../extra-files/molecule.xyz","r")
+    mol = Molecule(f,"Angstrom")
