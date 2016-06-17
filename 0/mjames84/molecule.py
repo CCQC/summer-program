@@ -53,7 +53,7 @@ if __name__ == '__main__':
     mol = Molecule(geom_str)
     mol.to_bohr()
     mol.to_angstrom()
-print(mol)
+ print(mol)
 
     
     
