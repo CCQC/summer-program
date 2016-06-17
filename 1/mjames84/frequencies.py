@@ -11,11 +11,11 @@ lines = open('../extra-files/hessian.dat').readlines()
 
 # Build molecule object
 
-mol = Molecule(open('../extra-files/molecule.xyz').read()
+mol = Molecule(open('../extra-files/molecule.xyz')).read()
 
 # Build mass-weighted hessian 
 
-hess = []
+hess = [] # incorrect dimensions
 for line in lines:
     for i in line.split():
         hess.append(i)
@@ -35,7 +35,7 @@ eigenval, eigenvect = np.linalg.eigh(mass_weighted_hess)
 
 # Un-mass-weight eigenvectors to get normal coords
 
-Q = np.matrix(mass) * np.matrix(eigenvect)
+Q = np.matrix(mass) * np.matrix(eigenvect) # fix matrix multiplication)
 
 # Determine spatial frequencies (in cm-1) from force constant
 
