@@ -1,0 +1,23 @@
+molecule mol {
+    0 1
+    O
+    H 1 0.96
+    H 1 0.96 2 104.5
+}
+
+set {
+    BASIS         sto-3g
+    E_CONVERGENCE 10
+    SCF_TYPE      pk
+    MAXITER       50
+}
+
+basisname = psi4.get_global_option("BASIS")
+basisset = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
+mints = psi4.MintsHelper(basisset)
+
+# call RHF code
+from rhf import RHF
+rhf = RHF(mol, mints)
+
+E = rhf.compute_energy()
