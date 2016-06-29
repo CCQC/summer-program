@@ -7,15 +7,13 @@ os.sys.path.insert(0,"../../0/aewiens")
 
 from molecule import Molecule
 
-mol = Molecule(open("../../extra-files/molecule.xyz","r").read() )
-mol.bohr()
 
 class Hessian(object):
+    """
+    Compute a finite difference Hessian
+    """
 
     def __init__(self,mol,template,disp_size=0.005):
-        """
-        Initialize a class to compute a finite difference Hessian
-        """
 
         self.mol = mol
         self.template_str = open(template,"r").read()
@@ -24,10 +22,9 @@ class Hessian(object):
 
     def make_input(self,dirname,atoms,geom):
         """
-        Write a psi4 input file with specified name
-        :param dirname: directory where we'll write the input file
-        :param atoms: list of strings of the atom labels for the molecule
-        :param geom: numpy matrix of the xyz coordinates for the molecule
+        :param dirname: directory for writing a psi4 input file
+        :param atoms: list of strings of atom labels
+        :param geom: 2darray of xyz coordinates
         """
         os.mkdir("%s" % dirname)
         xyz = [('  ').join([atoms[i]] + [str(geom[i,j]) for j in range(3)]) for i in range(self.N)]
@@ -51,7 +48,7 @@ class Hessian(object):
         :params hi,hj: displacements of atoms 1,2 (-1, 0, or 1, corresponds to -h, 0, or h)
         """
         dirname = "X%dX%d_%d%d" % (i,j,hi,hj)
-        out_str = open("%s/output.dat" % dirname, "r").read()
+        out_str = open("disps/%s/output.dat" % dirname, "r").read()
         match = re.findall("Total Energy\s=\s+-\d+.\d+",out_str)
         if match == []:
             out = "Cannot find energy!"
@@ -59,13 +56,16 @@ class Hessian(object):
             out = float(match[0].split()[-1])
         return out
 
+
     def run_disps(self):
 
         h, N = self.h, self.N
+        os.mkdir("disps")
+        os.chdir("disps")
 
-        ####  Run reference configuration    ####
         self.make_input("X0X0_00",mol.atoms,mol.geom)
         self.run_input("X0X0_00")
+
 
         ####   Run single displacements   ####
 
@@ -104,8 +104,11 @@ class Hessian(object):
                 self.run_input(forward)
                 self.run_input(reverse)
 
+        os.chdir("..")
+
 
     def make_Hessian(self):
+
         self.run_disps()
         
         h, N = self.h, self.N
@@ -116,11 +119,22 @@ class Hessian(object):
             for i in range(3*N):
                 self.H[i,i]= (self.find_E(i,0,1,0)+self.find_E(i,0,-1,0)-2*E0)/(h**2)
                 for j in range(0,i):
-                    self.H[i,j] = self.H[j,i] = (self.find_E(i,j,1,1)+self.find_E(i,j,-1,-1)-self.find_E(i,0,1,0)-self.find_E(j,0,1,0)-self.find_E(j,0,-1,0)-self.find_E(i,0,-1,0)+2*E0)/(2*h**2)
+                    self.H[i,j] = (self.find_E(i,j,1,1)+self.find_E(i,j,-1,-1)-self.find_E(i,0,1,0)-self.find_E(j,0,1,0)-self.find_E(j,0,-1,0)-self.find_E(i,0,-1,0)+2*E0)
+                    self.H[i,j] /= 2*h**2
+                    self.H[j,i] = self.H[i,j]
+
 
     def write_Hessian(self):
+        """
+        write Hessian matrix to hessian.dat file
+        """
         self.make_Hessian()
         np.savetxt("hessian.dat",self.H,"%15.7f"," ","\n")
 
-hessian = Hessian(mol,"template.dat")
-hessian.write_Hessian()
+
+if __name__ == "__main__":
+
+    mol = Molecule(open("../../extra-files/molecule.xyz","r").read() )
+    mol.bohr()
+    hessian = Hessian(mol,"template.dat")
+    hessian.write_Hessian()

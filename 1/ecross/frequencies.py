@@ -6,107 +6,99 @@ pi = np.pi
 from numpy import linalg as la
 import cmath 
 
-sys.path.insert(0, '../../0/ecross') #Address for the Molecule class file
+sys.path.insert(0, '../../0/ecross')
 import molecule as M
-
-"""
-The Hessian .dat file is converted to a numpy matrix, called 'hessian.'
-
-Select Hessian file by changing the address 
-found in hess_file
-"""
 
 hess_file = '../extra-files/hessian.dat'
 
-hess_open = open(hess_file, 'r')
-hess_string = hess_open.read()    #This creates a string of the Hessian
-hess_split = hess_string.splitlines()     #This splits the string into a list of the lines in the string
-hess_lol = []      
-for i in hess_split:
-   hess_lol.append(i.split())    #This splits the list of lines into a list of lists for the Hessian 
-
-hessian = np.matrix(hess_lol, dtype=float)    #This converts the list of lists into a numpy matrix
-
-"""
-A Molecule object is built from the molecule.xyz file 
-"""
-
-sys.path.insert(0, '../extra-files') #Address for the molecule.xyz file
+sys.path.insert(0, '../extra-files')
 mol = M.Molecule('molecule.xyz','Bohr')
 
 """
-Here we create the mass-weighted Hessian, labeled 'mwhessian.'
+=================================================================
+Calculate the frequencies and normal modes from a Hessian matrix.
+=================================================================
+
+Inputs:
+1) .xyz file containing molecule geometry in cartesian coordinates
+2) .dat file containing 3N x 3N hessian matrix for specified molecule
+
+Outputs:
+1) File "output.xyz" containing the normal modes and their frequencies
+2) A variety 
 """
 
-s = 3 * mol.natom
-a = (s,s)
+class Frequencies(object):
+   def __init__(self, molecule, hessian):
+      self.mol = molecule
+      self.hess_mat = self.read_hessian(hessian)
+      self.mass_mat = self.mass_matrix()
+      self.evalues, self.evectors = self.diagonalize()
+      self.nmodes = self.unweight()
+      self.freq = self.frequencies()
+      self.write_file()
 
-mass_mat = np.zeros(a, dtype=float)   #Generates 3*natom x 3*natom matrix
-molwt = []
+   """Read .dat file containing hessian matrix into a numpy matrix."""
+   def read_hessian(self,hess_file):
+      hess_string = open(hess_file, 'r').read()
+      hess_split = hess_string.splitlines()
+      hess_list = [ i.split() for i in hess_split ]      
+      hess_mat = np.matrix( hess_list, dtype = float )
+      return(hess_mat)
 
-for i in range(mol.natom):   #Generates 3*natom vector of the form [Ma Ma Ma Mb Mb Mb ... Mn Mn Mn]
-   for j in range(3):
-      molwt.append(mol.masses[int(i)])
+   """Create a 3N x 3N diagonal matrix to weight (unweight) the Hessian (eigenvectors)."""
+   def mass_matrix(self):
+      mass_mat = np.zeros( (3*self.mol.natom,3*self.mol.natom), dtype = float )
+      molwt = [ mol.masses[int(i)] for i in range(self.mol.natom) for j in range(3) ]
+      for i in range(len(molwt)):
+         mass_mat[i,i] = molwt[i] ** -0.5 
+      return(mass_mat)
 
-for i in range(s):   #Generates a diagonal 3*natom square matrix with molwt along the diagonal
-   mass_mat[i,i] = molwt[i] ** -0.5
+   """Mass-weight the Hessian matrixi."""
+   def mass_weight(self):
+      mass_mat = self.mass_matrix()
+      mwhessian = np.dot((np.dot(mass_mat,self.hess_mat)),mass_mat)
+      return(mwhessian)
+      
+   """Diagonalize the mass-weighted hessian."""
+   def diagonalize(self):
+      mwhessian = self.mass_weight()
+      evalues,evectors = la.eigh(mwhessian) 
+      #Numpy is inscrutable and saves eigenvectors as columns #lame (hence transpose)
+      evectors = np.transpose(evectors)
+      return(evalues,evectors)
 
-mwhessian = np.dot((np.dot(mass_mat, hessian)),mass_mat)
+   """Unweight evectors, return normal modes."""
+   def unweight(self):
+      nmodes = np.dot(self.evectors,self.mass_mat) 
+      return(nmodes)
+      
+   """Calculate frequencies from Hessian eigenvalues."""
+   def frequencies(self):
+      hartree2j = (4.3597438e-18)
+      bohr2m = (5.29177208e-11) 
+      amu2kg = (1.66054e-27)
+      c =  (2.99792458e10) 
+      evalues_si = [(val*hartree2j/bohr2m/bohr2m/amu2kg) for val in self.evalues]
+      vfreq_hz = [1/(2*pi)*np.sqrt(np.complex_(val)) for val in evalues_si]
+      vfreq = [(val/c) for val in vfreq_hz]
+      return(vfreq)
 
-"""
-Computes the eigenvalues and eigenvestors of the mass-weighted Hessian matrix
-"""
+   """Write file 'output.xyz' containing normal modes and their frequencies"""
+   def write_file(self):
+      mol.to_angstrom()
+      string = ''
+      for w in range(len(self.nmodes)):
+         string += '{:d}\n'.format(mol.natom)
+         string += '{:9.2f} cm-1\n'.format(self.freq[w])
+         for atom in range(mol.natom):
+            string += '{:s}\t'.format(mol.labels[atom])
+            string += '{:>15.10f}{:>15.10f}{:>15.10f}\t'.format(mol.geom[atom,0],mol.geom[atom,1],mol.geom[atom,2])
+            string += '{:>15.10f}{:>15.10f}{:>15.10f}\n'.format(self.nmodes[w,3*atom],self.nmodes[w,3*atom+1],self.nmodes[w,3*atom+2])
+         string += '\n'
+      with open('output.xyz','w') as f: 
+         f.write(string)
 
-evalues,evectors = la.eigh(mwhessian)
-
-"""
-Here we un-mass-weight the eigenvectors to get normal coordinates. 
-"""
-
-nevectors = np.dot(mass_mat, evectors)
-nevectors *= 0.529177208
-
-"""
-Here we determine the spatial frequencies and force constants for the H2O molecule
-"""
-
-hartree2j = ( 4.3597438e-18 )
-bohr2m = ( 5.29177208e-11 ) 
-amu2kg = ( 1.66054e-27 )
-c = ( 2.99792458e10 ) 
-
-#Returns Hessian eigenvalues in [rad(2) * s(-2)]
-evalues_si = [(val * hartree2j / bohr2m / bohr2m / amu2kg ) for val in evalues]
-
-#Returns frequencies in Hz 
-vfreq_Hz = [1 / ( 2 * pi ) * (np.sqrt(np.complex_(val))) for val in evalues_si]
-
-#Returns frequencies in cm(-1)
-vfreq = [ ( val / c ) for val in vfreq_Hz ]
-
-
-"""
-Finally, we write the frequencies to a file in the .xyz format
-"""
-mol.to_angstrom()
-
-string = ''
-
-for w in range(len(nevectors)):
-   string += '{:d}\n'.format(mol.natom)
-   string += '{:9.2f} cm-1\n'.format(vfreq[w])
-   for atom in range(mol.natom):
-      string += '{:s}\t'.format(mol.labels[atom])
-      string += '{:>15.10f}{:>15.10f}{:>15.10f}\t'.format(mol.geom[atom,0],mol.geom[atom,1],mol.geom[atom,2])
-      string += '{:>15.10f}{:>15.10f}{:>15.10f}\n'.format(nevectors[w,3*atom],nevectors[w,3*atom+1],nevectors[w,3*atom+2])
-   string += '\n'
-
-
-f = open('output.xyz','w')
-f.write(string)
-f.close()
-
-
-
-
-
+if __name__ == '__main__':
+   test = Frequencies(mol, hess_file)
+   

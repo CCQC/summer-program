@@ -2,7 +2,6 @@ import numpy as np
 from scipy import linalg as la
 from psi4_helper import get_docc, get_nbf, get_conv, get_maxiter
 
-
 class RHF:
 # RHF class for obtaining the HF energy of a closed shell system
 
@@ -36,7 +35,6 @@ class RHF:
         return rhf energy
         """
 
-        #rename class variables
         docc, nbf, conv, maxiter = self.docc, self.nbf, self.conv, self.maxiter
         X, H, G, Vnu, D, E = self.X, self.H, self.G, self.Vnu, self.D, self.E
 
@@ -45,9 +43,9 @@ class RHF:
             K = np.einsum("iklj,kl->ij",G,D)
             F = H+J-0.5*K                           ####  build fock matrix
             tF = X*F*X                              ####  diagonalize fock matrix
-            e, tC = la.eigh(tF)                     ####  eigenvalues & eigenvectors of fock matrix
+            e, tC = np.linalg.eigh(tF)              ####  eigenvalues & eigenvectors of fock matrix
             C = X*tC                                ####  back-transform the eigenvectors
-            oC = C[:,:docc]                         ####  only include occupied orbitals in C
+            oC = C[:,:docc]                         ####  save occupied block of C matrix
             D = 2*oC*oC.T                           ####  build density matrix
 
             E0 = E
@@ -57,7 +55,7 @@ class RHF:
             print( "{0:20.12f}{1:20.12f}".format(E,dE) )
             if dE < self.conv : break
 
-            #### save the object variables that changed during this iteration
+            #### save object variables that changed during this iteration
             self.E, self.e, self.C, self.D = E, e, C, D
 
         return self.E
