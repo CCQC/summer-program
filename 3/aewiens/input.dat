@@ -11,7 +11,7 @@ set {
     basis cc-pvtz
     scf_type pk
     e_convergence 12
-	 MAXITER 50
+     MAXITER 50
     mp2_type conv
     }
 
