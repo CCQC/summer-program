@@ -6,7 +6,10 @@ molecule mol {
 }
 
 set basis sto-3g
-set maxiter 50
+set maxiter 30
+set scf_type pk
+
+energy('scf')
 
 basisname = psi4.get_global_option("BASIS")
 basisset  = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)

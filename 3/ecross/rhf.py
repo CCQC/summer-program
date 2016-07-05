@@ -7,107 +7,84 @@ from scipy import linalg as la
 class RHF(object):
     def __init__(self, mol, mints):
         """
-        Computes the energy of a system by the Restricted Hartree-Fock
+        Compute the energy of a system by the Restricted Hartree-Fock
         Self-Consistent Field Method.
-        ==============================================================
+        =============================================================
       
         An initial guess of D = 0 is employed.
         """
         self.mol = mol
         self.mints = mints
+        self.nbf = self.mints.basisset().nbf()
+        self.maxiter = psi4.get_global_option('MAXITER')
+        self.e_convergence = psi4.get_global_option('E_CONVERGENCE')
 
-        self.size = self.mints.basisset().nbf()
+        #Import necessary integrals from psi4
         self.Vnu = mol.nuclear_repulsion_energy()
         self.S = np.matrix(mints.ao_overlap())
         self.T = np.matrix(mints.ao_kinetic())
         self.V = np.matrix(mints.ao_potential())
-        self.g = np.array(mints.ao_eri())
-       
-        self.X = self.orthogonalizer()
-        self.D = self.density_initial()
-        self.col_ex,self.f = self.build_fock()
-        self.ft = self.transform_fock()
+        self.g = np.array(mints.ao_eri()).transpose((0,2,1,3)) #Import eri integrals in physicist's not'n
+
+        #Construct orthogonalizer, X = S^(-0.5)
+        self.X = la.inv(la.sqrtm(self.S))
+
+        #Initial HF guess with D = 0
+        self.D = np.zeros((self.nbf,self.nbf))
 
         # Determine the number of electrons and the number of doubly occupied orbitals
         self.nelec = -mol.molecular_charge()
         for A in range(mol.natom()):
             self.nelec += int(mol.Z(A))
         if mol.multiplicity() != 1 or self.nelec % 2:
-            raise Exception("This code only allows closed-shell molecules")
+            raise Exception("This code only allows closed-shell molecules.")
         self.ndocc = self.nelec / 2
 
-        self.nrg,self.ct_mat = self.diagonalize()
-        self.c_mat = self.back_transform()
-        self.D = self.build_density()
-        self.E = self.evaluate_energy()
-
-    def orthogonalizer(self):
-        """Construct orthogonalizer (X) from overlap matrix."""
-        X = la.inv(la.sqrtm(self.S))
-        return(X)
-
-    def density_initial(self):
-        """Construct density matrix with initial guess D = 0."""
-        D = np.zeros((self.size,self.size))
-        return(D)
-    
-    def build_fock(self):
-        col_ex = np.zeros((self.size,self.size))
-        for u in range(self.size):
-            for v in range(self.size):
-                value = 0
-                for p in range(self.size):
-                    for s in range(self.size):
-                        value += self.g[u,v,p,s] - 0.5 * self.g[u,s,p,v]
-                        value *= self.D[s,p]
-                col_ex[u,v] += value
-        f = self.T + self.V + col_ex
-        return(col_ex,f)
-
-    def transform_fock(self):
-        ft = la.inv(self.X) * self.f * self.X
-        return(ft)
-
-    def diagonalize(self):
-        nrg,ct_mat = la.eigh(self.ft)
-        return(nrg,ct_mat)
-
-    def back_transform(self):
-        c_mat = self.X * self.ct_mat 
-        return(c_mat) 
-
-    def build_density(self):
-        for i in range(self.size):
-            for j in range(self.size):
-                value = 0
-                for k in range(self.ndocc):
-                    value += 2 * self.c_mat[i,k] * np.conj(self.c_mat[j,k])
-                self.D[i,j] = value
-        return(self.D)
-
-    def evaluate_energy(self):
-        E = self.Vnu
-        for i in range(self.size):
-            for j in range(self.size):
-                E += (self.T[i,j] + self.V[i,j] + 0.5 * self.col_ex[i,j]) * self.D[j,i]
-        return(E)
+        self.E = 0
+        self.iterate()
 
     def iterate(self):
-        e = self.evaluate_energy()
-        diff = np.absolute(e - self.E)
-        
-        for i in range(maxiter):
-            if diff < self.e_convergence:
-                pass
-            else:
-                self.build_fock()
-                self.transform_fock()
-                self.diagonalize()
-                self.back_transform()
-                self.build_density()
-                e = self.evaluate_energy()
+        """
+        Input: self
 
+        Operations: Build Fock matrix (f), transform f to orthogonal AO basis (ft), diagonalize ft,
+        transform eigenvectors of ft (ct) to original AO basis (c), truncate c (co) build density
+        matrix (d), evaluate energy (e), evaluate convergence (diff).
 
-        
-       
+        Repeat above process until diff is less than specified convergence.
+
+        Output: self.E = converged energy, self.D = final density matrix 
+        """
+        diff = 1
+        count = 0
+        print('\n')
+        while diff > self.e_convergence:
+            for i in range(self.maxiter):
+                count +=1 
+                J = np.einsum('upvs,ps->uv',self.g,self.D)    #Calculate Coulomb integrals    output: np array
+                K = np.einsum('upsv,ps->uv',self.g,self.D)    #Calculate Exchange integrals   output: np array
+                f = self.T + self.V + J - 0.5*K               #Construct Fock matrix          output: np matrix
+                ft = self.X * f * self.X                      #Transform Fock matrix          output: np matrix
+                nrg,ct_mat = la.eigh(ft)                      #Diagonalize transformed Fock   output: np array, np array
+                c = np.dot(self.X,ct_mat)                     #Backtransform coef matrix      output: np array
+                co = np.matrix(c[:,:self.ndocc])              #Truncate coef matrix           output: np matrix
+                d = 2*np.einsum('ik,jk->ij',co,np.conj(co))   #Construct density matrix       output: np array
+                H = 0.5 * (self.T + self.V + f)               #Construct HF Hamiltonian       output: np matrix
+                e = self.Vnu + np.einsum('ij,ji',H,d)         #Calculate e from Vnu, H, D     output: float
+                diff = abs(self.E - e)                        #Calculate convergence          output: float 
+                
+                if count == self.maxiter:
+                    string = '\n' + '='*69 + '\n'
+                    string += 'Maximum number of iterations reached.\nUnconverged Energy: {:16.10f}\tConvergence: {:16.10f}'.format(e,diff)
+                    string += '\n' + '='*69
+                    raise Exception(string)
+                if diff < self.e_convergence:
+                    print('\nConverged after {} iterations.'.format(count))
+                    print('='*36)
+                    print('Final SCF-RHF energy: {:.10f}'.format(e))
+                    print('='*36)
+                    break
+                else:
+                    self.D, self.E = d, e
+                    print('Iteration {:d}\tEnergy: {:16.10f}\tConvergence: {:17.10f}'.format(count,e,diff))
 
