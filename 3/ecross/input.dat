@@ -6,8 +6,9 @@ molecule mol {
 }
 
 set basis sto-3g
-set maxiter 30
+set maxiter 100
 set scf_type pk
+set e_convergence 10
 
 energy('scf')
 
