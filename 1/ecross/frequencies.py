@@ -57,29 +57,31 @@ class Frequencies(object):
    """Mass-weight the Hessian matrixi."""
    def mass_weight(self):
       mass_mat = self.mass_matrix()
-      mwhessian = np.dot( ( np.dot ( mass_mat, self.hess_mat ) ), mass_mat)
+      mwhessian = np.dot((np.dot(mass_mat,self.hess_mat)),mass_mat)
       return(mwhessian)
       
    """Diagonalize the mass-weighted hessian."""
    def diagonalize(self):
       mwhessian = self.mass_weight()
       evalues,evectors = la.eigh(mwhessian) 
+      #Numpy is inscrutable and saves eigenvectors as columns #lame (hence transpose)
+      evectors = np.transpose(evectors)
       return(evalues,evectors)
 
    """Unweight evectors, return normal modes."""
    def unweight(self):
-      nmodes = np.dot( self.mass_mat, self.evectors) * 0.529177208 
+      nmodes = np.dot(self.evectors,self.mass_mat) 
       return(nmodes)
       
    """Calculate frequencies from Hessian eigenvalues."""
    def frequencies(self):
-      hartree2j = ( 4.3597438e-18 )
-      bohr2m = ( 5.29177208e-11 ) 
-      amu2kg = ( 1.66054e-27 )
-      c = ( 2.99792458e10 ) 
-      evalues_si = [ (val * hartree2j / bohr2m / bohr2m / amu2kg) for val in self.evalues ]
-      vfreq_hz = [ 1 / (2 * pi) * np.sqrt(np.complex_(val)) for val in evalues_si ]
-      vfreq = [ (val / c) for val in vfreq_hz ]
+      hartree2j = (4.3597438e-18)
+      bohr2m = (5.29177208e-11) 
+      amu2kg = (1.66054e-27)
+      c =  (2.99792458e10) 
+      evalues_si = [(val*hartree2j/bohr2m/bohr2m/amu2kg) for val in self.evalues]
+      vfreq_hz = [1/(2*pi)*np.sqrt(np.complex_(val)) for val in evalues_si]
+      vfreq = [(val/c) for val in vfreq_hz]
       return(vfreq)
 
    """Write file 'output.xyz' containing normal modes and their frequencies"""
@@ -99,4 +101,4 @@ class Frequencies(object):
 
 if __name__ == '__main__':
    test = Frequencies(mol, hess_file)
-
+   
