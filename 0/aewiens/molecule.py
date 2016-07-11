@@ -22,9 +22,10 @@ class Molecule:
         """
         Read in the geometry and store 2 class variables:
         :self.atoms: a list of labels of the N atoms
-        :self.geom:  an Nx3 2darray of x,y,z 
+        :self.geom: an Nx3 2darray of x,y,z 
         """
-        geom_str = xyz_file.read()
+        f = open("../../extra-files/molecule.xyz","r")
+        geom_str = f.read()
         self.atoms = [] 
         geom = []
         for line in geom_str.split('\n')[2:]:
@@ -76,5 +77,5 @@ class Molecule:
 
 
 if __name__ == '__main__':
-    f = open("../../extra-files/molecule.xyz","r")
-    mol = Molecule(f,"Angstrom")
+
+    mol = Molecule("../../extra-files/molecule.xyz","Angstrom")
