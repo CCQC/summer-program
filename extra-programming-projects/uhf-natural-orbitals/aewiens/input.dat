@@ -1,12 +1,3 @@
-#doublet H2O+
-
-#molecule mol {
-#   1 2
-#   O 0.0 0.0 0.0
-#   H 0.0 1.0 0.0
-#   H 0.0 0.0 1.0
-#   }
-
 molecule mol {
    0 1
    F 0.0 0.0 0.0
@@ -31,5 +22,5 @@ mints    = psi4.MintsHelper(basisset)
 from uhf import UHF
 uhf = UHF(mol, mints)
 uhf.compute_energy()
-uhf.occupations()
+uhf.get_occupations()
 #print( uhf.natural_orbitals() )
