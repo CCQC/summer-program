@@ -1,7 +1,7 @@
 import psi4
 from mp2 import MP2
 
-molecule {
+molecule mol {
     O
     H 1 0.96
     H 1 0.96 2 104.5
