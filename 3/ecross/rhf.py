@@ -41,6 +41,10 @@ class RHF(object):
         self.ndocc = self.nelec / 2
 
         self.E = 0
+        self.C = 0
+        self.orb_e = 0
+        self.count = 0 
+        self.diff = 0
         self.iterate()
 
     def iterate(self):
@@ -55,9 +59,10 @@ class RHF(object):
 
         Output: self.E = converged energy, self.D = final density matrix 
         """
+        self.print_header()
+
         diff = 1
         count = 0
-        print('\n')
         while diff > self.e_convergence:
             for i in range(self.maxiter):
                 count +=1 
@@ -74,17 +79,38 @@ class RHF(object):
                 diff = abs(self.E - e)                        #Calculate convergence          output: float 
                 
                 if count == self.maxiter:
-                    string = '\n' + '='*69 + '\n'
-                    string += 'Maximum number of iterations reached.\nUnconverged Energy: {:16.10f}\tConvergence: {:16.10f}'.format(e,diff)
-                    string += '\n' + '='*69
-                    raise Exception(string)
-                if diff < self.e_convergence:
-                    print('\nConverged after {} iterations.'.format(count))
-                    print('='*36)
-                    print('Final SCF-RHF energy: {:.10f}'.format(e))
-                    print('='*36)
+                    #string = '\n' + '='*78 + '\n'*2
+                    #string += 'Maximum number of iterations reached.\nUnconverged Energy: {:16.10f}\tConvergence: {:16.10f}\n'.format(e,diff)
+                    #string += '\n' + '='*78
+                    #raise Exception(string)
+                    self.print_failure()
+                    break
+                elif diff < self.e_convergence:
+                    self.print_success()
                     break
                 else:
-                    self.D, self.E = d, e
-                    print('Iteration {:d}\tEnergy: {:16.10f}\tConvergence: {:17.10f}'.format(count,e,diff))
+                    self.D, self.E, self.C, self.orb_e, self.count, self.diff = d, e, c, nrg, count, diff
+                    self.print_iteration()
 
+    def print_header(self):
+        print('\n' + '-'*78 + '\n')
+        print(' '*10 + 'Restricted Hartree-Fock Self-Consistent Field Optimization' + '\n')
+        print(' '*30 + 'by Elliot Rossomme' + '\n')
+        print('-'*78 + '\n')
+
+    def print_iteration(self):
+        print('Iteration {:d}\tEnergy: {:16.10f}\tConvergence: {:17.10f}'.format(self.count,self.E,self.diff))
+
+    def print_failure(self):
+        string = '\n' + '='*78 + '\n'*2
+        string += 'Maximum number of iterations reached.\nUnconverged Energy: {:16.10f}\tConvergence: {:16.10f}\n'.format(self.E,self.diff)
+        string += '\n' + '='*78
+        print(string)
+
+    def print_success(self):
+        print('\n' + '='*78)
+        print('Converged after {} iterations.'.format(self.count))
+        print('Final RHF-SCF Energy: {:.10f}'.format(self.E))
+        print('='*78)
+
+        

@@ -1,0 +1,21 @@
+molecule mol {
+  0 1
+  O
+  H 1 0.96
+  H 1 0.96 2 104.5
+}
+
+set basis cc-pvtz 
+set maxiter 100
+set scf_type pk
+set e_convergence 10
+
+basisname = psi4.get_global_option("BASIS")
+basisset  = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
+mints     = psi4.MintsHelper(basisset)
+
+# call MP2 code
+from mp2 import MP2 
+mp2 = MP2(mol, mints)
+
+
