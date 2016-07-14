@@ -6,7 +6,7 @@ class Molecule:
         self.units = units
 
     def read(self , geom_string):
-        lines = geom_str.splitlines()
+        lines = geom_string.splitlines()
         self.atoms = []
         xyz = []
         natoms = int(lines[0])
@@ -39,9 +39,9 @@ class Molecule:
             self.units = 'Angstrom'
 
 if __name__ == "__main__":
-    geom_str = open('molecule.xyz').read()
+    geom_str = open('../../extra-files/molecule.xyz').read()
     mol = Molecule(geom_str)
     mol.converttoB()
     mol.converttoA()
-    print(len(mol))
     print(mol)
+
