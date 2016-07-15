@@ -5,7 +5,7 @@ molecule mol {
   H 1 0.96 2 104.5
 }
 
-set basis cc-pvtz 
+set basis cc-pvqz 
 set maxiter 100
 set scf_type pk
 set e_convergence 10
