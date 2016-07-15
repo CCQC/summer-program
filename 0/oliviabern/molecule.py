@@ -16,6 +16,7 @@ class Molecule:
             self.atoms.append(atom)
             xyz.append([float(x),float(y), float(z)])
         self.xyz = np.array(xyz)
+        return self.atoms , self.xyz
 
     def __len__(self):
         return len(self.atoms)
@@ -23,6 +24,13 @@ class Molecule:
     def __str__(self):
         line_form = '{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n'
         out = '{:d}\n{:s}\n'.format(len(self) , self.units)
+        for i in range(len(self)):
+            out += line_form.format(self.atoms[i] , *self.xyz[i]) 
+        return out
+
+    def inputform(self):
+        line_form = '{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n'
+        out = '{:d} {:d}\n'.format(0 , 1)
         for i in range(len(self)):
             out += line_form.format(self.atoms[i] , *self.xyz[i]) 
         return out
