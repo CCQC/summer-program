@@ -79,10 +79,6 @@ class RHF(object):
                 diff = abs(self.E - e)                        #Calculate convergence          output: float 
                 
                 if count == self.maxiter:
-                    #string = '\n' + '='*78 + '\n'*2
-                    #string += 'Maximum number of iterations reached.\nUnconverged Energy: {:16.10f}\tConvergence: {:16.10f}\n'.format(e,diff)
-                    #string += '\n' + '='*78
-                    #raise Exception(string)
                     self.print_failure()
                     break
                 elif diff < self.e_convergence:
