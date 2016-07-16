@@ -77,3 +77,4 @@ class RHF:
                 E0 = E1
         else:
             psi4.print_out('\n:(   Does not converge   :(')
+    
