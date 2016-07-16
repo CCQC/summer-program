@@ -28,7 +28,7 @@ class MP2:
         docc, nbf, conv, maxiter = self.docc, self.nbf, self.conv, self.maxiter
         E_scf, e = self.E_scf, self.e
 
-        Gmo = self.transform_integrals()
+        Gmo = self.transform_integrals_noddy()
         Ecorr = 0.0
         for i in range(docc):
             for j in range(docc):
@@ -45,14 +45,12 @@ class MP2:
                     np.einsum("PQRs,Rr->PQrs",
                         np.einsum("PQRS,Ss->PQRs", G, C), C) ,C) ,C)
 
-
 """
-Slower but instructive ways to transform integrals
+##  Slower but instructive ways to transform integrals
 
     def transform_integrals_einsum_2(self):
         G,C = self.G, self.C
         return np.einsum("PQRS,Pp,Qq,Rr,Ss->pqrs",G,C,C,C,C)
-
 
     def transform_integrals_noddy(self):
         nbf = self.nbf
