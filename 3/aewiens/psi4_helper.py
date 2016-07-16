@@ -22,3 +22,7 @@ def get_conv():
 def get_maxiter():
 # get max of iterations
     return psi4.get_option('SCF','MAXITER')
+
+def get_global_options():
+    return psi4.get_global_option_list()
+
