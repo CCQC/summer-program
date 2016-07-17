@@ -17,7 +17,7 @@ basisset = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
 mints = psi4.MintsHelper(basisset)
 
 # call RHF code
-from proj5 import UHF
+from uhf import UHF
 uhf = UHF(mol, mints)
 uhf.compute_energy()
 
