@@ -83,6 +83,29 @@ class RHF:
 
 class UHF:
 
+    def __init__(self, mol, mints):
+
+        self.mol = mol
+        self.mints = mints
+
+        self.V_nuc = mol.nuclear_repulsion_energy()
+        self.T = np.matrix(mints.ao_kinetic())
+        self.S = np.matrix(mints.ao_overlap())
+        self.V = np.matrix(mints.ao_potential())
+
+        self.g = np.array(mints.ao_eri()).swapaxes(1,2)
+
+        self.nelec = -mol.molecular_charge()
+        for A in range(mol.natom()):
+            self.nelec += int(mol.Z(A))
+        self.ndocc = int(self.nelec / 2)
+        self.nsocc = self.nelec - 2*self.ndocc
+        self.maxiter = psi4.get_global_option('MAXITER')
+        self.e_convergence = psi4.get_global_option('E_CONVERGENCE')
+        self.nbf = mints.basisset().nbf()
+        self.nsbf = 2*self.nbf
+        self.vu = np.matrix(np.zeros((self.nsbf, self.nsbf)))
+
     # Calculate the Kronecker delta of spin-AO basis x and y
 
     def delta(self, x, y):
@@ -110,29 +133,6 @@ class UHF:
                     for q in r:
                         q_i = q % self.nbf
                         self.vu[u, v] += (self.delta(u,v) * self.delta(p,q) * self.g[u_i, p_i, v_i, q_i] - self.delta(u,q) * self.delta(p,v) * self.g[u_i, p_i, q_i, v_i]) * D[q, p] 
-
-    def __init__(self, mol, mints):
-
-        self.mol = mol
-        self.mints = mints
-
-        self.V_nuc = mol.nuclear_repulsion_energy()
-        self.T = np.matrix(mints.ao_kinetic())
-        self.S = np.matrix(mints.ao_overlap())
-        self.V = np.matrix(mints.ao_potential())
-
-        self.g = np.array(mints.ao_eri()).swapaxes(1,2)
-
-        self.nelec = -mol.molecular_charge()
-        for A in range(mol.natom()):
-            self.nelec += int(mol.Z(A))
-        self.ndocc = int(self.nelec / 2)
-        self.nsocc = self.nelec - 2*self.ndocc
-        self.maxiter = psi4.get_global_option('MAXITER')
-        self.e_convergence = psi4.get_global_option('E_CONVERGENCE')
-        self.nbf = mints.basisset().nbf()
-        self.nsbf = 2*self.nbf
-        self.vu = np.matrix(np.zeros((self.nsbf, self.nsbf)))
 
     def compute_energy(self):
 
