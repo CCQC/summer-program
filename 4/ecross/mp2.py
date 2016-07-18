@@ -24,6 +24,8 @@ class MP2(object):
 
         self.nocc, self.nvir, self.occ_e, self.vir_e = self.occupancy()
 
+        self.print_header()
+
         self.mp2e = self.mp2_energy()
         self.E = self.rhfe + self.mp2e
         self.print_output()
@@ -64,11 +66,11 @@ class MP2(object):
         c_occ = c[:,:nocc]
         c_vir = c[:,nocc:]
 
-        self.print_header()
-        # Transform 2 electron integrals to MO basis
-        # FOUR EINSUM FUNCTIONS; 0.0339229106903 seconds for H2O cc-pVDZ
         print('Transforming integrals to MO basis...')
         start = default_timer()
+
+        # Transform 2 electron integrals to MO basis
+        # FOUR EINSUM FUNCTIONS; 0.0339229106903 seconds for H2O cc-pVDZ
         gt = np.einsum("ijkl,iu->ujkl",
              np.einsum("ijkl,jv->ivkl",
              np.einsum("ijkl,kp->ijpl",

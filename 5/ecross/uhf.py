@@ -5,14 +5,32 @@ import numpy as np
 import re
 from scipy import linalg as la
 from numpy import einsum as es
+from timeit import default_timer
 
 class UHF(object):
     def __init__(self, mol, mints):
+        """
+        Optimize a spin-orbital basis by Unrestricted Hartree-Fock theory.
+
+        Inputs: 
+        1) Molecule object
+        2) Integral package
+
+        IMPORTANT MEMBER VARIABLES:
+        Optimised energy................self.E
+        Optimised density matrix........self.d
+
+        n.b. Chemist's notation is used for in the evaluation of two electron
+        integrals.
+        """
         self.mol, self.mints = mol, mints
         self.nbf             = self.mints.basisset().nbf()
         self.maxiter         = psi4.get_global_option('MAXITER')
         self.e_convergence   = psi4.get_global_option('E_CONVERGENCE')
         self.vnu             = mol.nuclear_repulsion_energy()
+
+        self.duration = 0
+        self.print_header()
 
         # Determine number of electrons
         self.nelec           = -mol.molecular_charge()
@@ -28,6 +46,8 @@ class UHF(object):
         # Transform 1- and 2-e integrals to spin AO basis
         self.s, self.t, self.v, self.g = self.spin_integrals()
 
+        n = self.nbf
+
         # Form orthogonalizer, X = S^(-0.5)
         self.x = la.sqrtm(la.inv(self.s))
 
@@ -40,14 +60,24 @@ class UHF(object):
         # Iterate to self-consistency
         self.iterate()
 
-        # Compare with Psi4 uhf energy
+        # The following function compares output to Psi4 energy
+        """
         self.check_answer()
+        """
 
     def spin_integrals(self):
-        # Import relevant variables
+        """
+        Transform integrals from spatial to spin-orbital basis.
+
+        Outputs: Overlap (s), one electron (t,v), and two electron (g) integrals in
+                 spin-orbital AO basis
+        """
         s_spat, t_spat = self.s_spat, self.t_spat
         v_spat, g_spat = self.v_spat, self.g_spat
         nbf = self.nbf
+
+        print('Transforming integrals to spin-orbital AO basis...')
+        start = default_timer()
 
         # Block out 2*nbf x 2*nbf (x 2*nbf x 2*nbv) tensors
         s = np.zeros((2*nbf,2*nbf))
@@ -59,8 +89,8 @@ class UHF(object):
         s[:nbf,:nbf] = s_spat[:nbf,:nbf] 
         s[nbf:,nbf:] = s_spat[:nbf,:nbf]
         t[:nbf,:nbf] = t_spat[:nbf,:nbf] 
-        t[:nbf,:nbf] = t_spat[:nbf,:nbf] 
-        v[nbf:,nbf:] = v_spat[:nbf,:nbf]
+        t[nbf:,nbf:] = t_spat[:nbf,:nbf] 
+        v[:nbf,:nbf] = v_spat[:nbf,:nbf]
         v[nbf:,nbf:] = v_spat[:nbf,:nbf]
 
         # Transform two electron integrals
@@ -72,13 +102,26 @@ class UHF(object):
                 # Bottom right quarter of metamatrix
                 g[nbf+i,nbf+j,nbf:,nbf:] = g_spat[i,j,:nbf,:nbf]
                 g[nbf+i,nbf+j,:nbf,:nbf] = g_spat[i,j,:nbf,:nbf]
+
+        duration = default_timer() - start
+        self.duration += duration
+        print(' '*40 + '...completed. Runtime: {:s}'.format(str(duration)) + '\n')
+        print('='*78)
+
         return(s,t,v,g)
 
     def iterate(self):
-        # Import relevant variables
+        """
+        Iterate to self consistency.
+
+        After each iteration, the following member variables are updated:
+            self.count, self.E, self.d, self.diff
+        """
         s, g, d, x        = self.s, self.g, self.d, self.x
         nelec, vnu, count = self.nelec, self.vnu, self.count
         maxiter, e_conv   = self.maxiter, self.e_convergence
+
+        start = default_timer()
 
         h = self.t + self.v 
 
@@ -103,12 +146,29 @@ class UHF(object):
                 break
 
             elif diff < e_conv:
+                duration = default_timer() - start
+                self.duration += duration
+                print('\n' + 'Runtime: {:s}'.format(str(duration)))
                 self.print_success()
                 break
 
             else:
                 self.count, self.E, self.d, self.diff = count, e, d, diff
                 self.print_iteration()
+
+    def print_header(self):
+        print('\n' + '-'*78 + '\n')
+        print(' '*27 + 'Unrestricted Hartree-Fock' + '\n')
+        print(' '*30 + 'by Elliot Rossomme' + '\n')
+        print('-'*78 + '\n')
+
+    def print_output(self):
+        print('\n' + '='*78)
+        print('{:20s}{:15.10f}'.format('SCF Energy:',self.rhfe))
+        print('-'*35)
+        print('{:20s}{:15.10f}'.format('FINAL ENERGY:',self.E))
+        print('-'*35)
+        print('='*78)
 
     def print_failure(self):
         string  = '\n' + '='*78 + '\n'*2
@@ -119,6 +179,7 @@ class UHF(object):
     def print_success(self):
         print('\n' + '='*78)
         print('Converged after {} iterations.'.format(self.count))
+        print('Total Runtime: {:s} seconds'.format(str(self.duration)))
         print('Final RHF-SCF Energy: {:.10f}'.format(self.E))
         print('='*78)
 
