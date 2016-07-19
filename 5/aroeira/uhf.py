@@ -27,6 +27,20 @@ class UHF:
         self.nsbf = 2*self.nbf
         self.vu = np.matrix(np.zeros((self.nsbf, self.nsbf)))
 
+        # Transform the integral matrix
+
+        r = range(int(self.nsbf))
+        self.G = np.zeros((self.nsbf, self.nsbf, self.nsbf, self.nsbf))
+        for u in r:
+            u_i = u % self.nbf
+            for v in r:
+                v_i = v % self.nbf
+                for p in r:
+                    p_i = p % self.nbf
+                    for q in r:
+                        q_i = q % self.nbf
+                        self.G[u, p, v, q] += (self.delta(u,v) * self.delta(p,q) * self.g[u_i, p_i, v_i, q_i] - self.delta(u,q) * self.delta(p,v) * self.g[u_i, p_i, q_i, v_i])
+
     # Calculate the Kronecker delta of spin-AO basis x and y
 
     def delta(self, x, y):
@@ -37,23 +51,6 @@ class UHF:
             return 1
         else:
             return 0                
-
-    def build_vu(self, D):
-        """
-        Construct a v matrix using the density matrix and the four index integrals
-        """
-
-        r = range(int(self.nsbf))
-        self.vu = np.matrix(np.zeros((self.nsbf, self.nsbf)))
-        for u in r:
-            u_i = u % self.nbf
-            for v in r:
-                v_i = v % self.nbf
-                for p in r:
-                    p_i = p % self.nbf
-                    for q in r:
-                        q_i = q % self.nbf
-                        self.vu[u, v] += (self.delta(u,v) * self.delta(p,q) * self.g[u_i, p_i, v_i, q_i] - self.delta(u,q) * self.delta(p,v) * self.g[u_i, p_i, q_i, v_i]) * D[q, p] 
 
     def compute_energy(self):
 
@@ -71,7 +68,7 @@ class UHF:
             C = X * np.matrix(Ct)
             OC = np.matrix(C[:,:self.nelec])
             D = OC*OC.T
-            self.build_vu(D)
+            self.vu = np.einsum('upvq,qp->uv', self.G, D)
             E1 = np.sum((np.array(h) + 0.5 * np.array(self.vu))*np.array(D.T)) + self.V_nuc
             psi4.print_out('Iteration {:<d}   {:.10f}    {:.10f}\n'.format(count, E1, E1-E0))
             if abs(E1 - E0) < self.e_convergence:
