@@ -38,19 +38,6 @@ class RHF:
         self.nbf = mints.basisset().nbf()
         self.vu = np.matrix(np.zeros((self.nbf, self.nbf)))
     
-    def build_vu(self, D):
-        """
-        Construct a v matrix using the density matrix and the four index integrals
-        """
-
-        r = range(int(self.nbf))
-        self.vu = np.matrix(np.zeros((self.nbf, self.nbf)))
-        for u in r:
-            for v in r:
-                for p in r:
-                    for q in r:
-                        self.vu[u, v] += (2 * self.g[u, p, v, q] - self.g[u, p, q, v]) * D[q, p] 
-
     def compute_energy(self):
         """
         Compute the rhf energy
@@ -67,7 +54,8 @@ class RHF:
             C = X * np.matrix(Ct)
             DOC = np.matrix(C[:,:self.ndocc])
             D = DOC*DOC.T
-            self.build_vu(D)
+            G = 2*self.g - self.g.swapaxes(2,3)
+            self.vu = np.einsum('upvq,qp->uv', G, D) 
             E1 = np.sum((2 * np.array(h) + np.array(self.vu))*np.array(D.T)) + self.V_nuc
             psi4.print_out('Iteration {:<d}   {:.10f}    {:.10f}\n'.format(count, E1, E1-E0))
             if abs(E1 - E0) < self.e_convergence:
@@ -83,30 +71,9 @@ class RHF:
 
 class MP2(RHF):
 
-    def build_G(self):
-        self.G = np.zeros((self.ndocc, self.ndocc, len(self.epsi), len(self.epsi)))
-        r = range(int(self.nbf))
-        for I in range(self.ndocc):
-            for J in range(self.ndocc):
-                for A in range(self.ndocc, len(self.epsi)):
-                    for B in range(self.ndocc, len(self.epsi)):
-                        x4 = 0
-                        for sigma in r:
-                            x3 = 0
-                            for ro in r:
-                                x2 = 0
-                                for nu in r:
-                                    x1 = 0
-                                    for mi in r:
-                                        x1 += self.g[mi, nu, ro, sigma] * self.C[mi, I]
-                                    x2 += x1 * self.C[nu, J]
-                                x3 += x2 * self.C[ro, A]
-                            x4 += x3 * self.C[sigma, B]
-                        self.G[I, J, A, B] = x4
-
     def mp2_energy(self):
         E2 = 0
-        self.build_G()
+        self.G = np.einsum('uvpq,uP,vQ,pR,qS->PQRS', self.g, self.C, self.C, self.C, self.C)
         for I in range(self.ndocc):
             for J in range(self.ndocc):
                 for A in range(self.ndocc, len(self.epsi)):

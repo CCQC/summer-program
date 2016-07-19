@@ -12,6 +12,7 @@ set {
     MAXITER       50
 }
 
+
 basisname = psi4.get_global_option("BASIS")
 basisset = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
 mints = psi4.MintsHelper(basisset)
@@ -25,3 +26,5 @@ mp2.mp2_energy()
 print 'HF Energy: ' + str(mp2.ehf)
 print 'MP2 ENergy: ' + str(mp2.emp2)
 print 'Total Energy: ' + str(mp2.ehf + mp2.emp2)
+
+
