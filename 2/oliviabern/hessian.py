@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 import os
+import subprocess
 
 sys.path.insert(0, '../../0/oliviabern')
 from molecule import Molecule
@@ -12,7 +13,6 @@ geom_string = open('../../extra-files/molecule.xyz').read()
 mol = Molecule(geom_string)
 
 atoms , xyz = mol.read(geom_string)
-#xyz[0][0] += .005
 m = str(mol)
 m = m.splitlines()
 N = int(m[0])
@@ -32,11 +32,12 @@ temp = 'memory 256 mb\n' + template
 temp = temp.replace('{','',1)
 temp = temp.replace('}','',2)
 
+geo = xyz.reshape((1,3*N))
+geo = geo[0][:]
+
 def generate_inputs(mol, template, disp_size = 0.005, directory = "DISPS"):
-    atoms , xyz = mol.read(geom_string)
     out = inputform(atoms, xyz)
-    p = '/Users/oliviambernstein/Desktop/ccqc/'
-    ph = p + 'hessian/'
+    ph = directory + '/'
     if not os.path.exists(ph):
         os.mkdir(ph)
     if not os.path.exists(ph + 'd/'):
@@ -45,117 +46,132 @@ def generate_inputs(mol, template, disp_size = 0.005, directory = "DISPS"):
         file = open(ph + 'd/input.dat','w')
         file.write(t)
         file.close()
-        """
-    for i in range(N):
-        for k in range(N):
-            disp = xyz
-            disp[k][i] += disp_size
+    #positive single displacements
+    for i in range(3*N):
+        disp = list(geo)
+        disp[i] += disp_size
+        disp = np.array(disp)
+        disp = disp.reshape((3,N))
+        out = inputform(atoms, disp)
+        name = ph + 'd+' + str(i) + '/'
+        if not os.path.exists(name):
+            os.mkdir(name)
+            t = temp.replace('{:s' , out)
+            file = open(name + 'input.dat', 'w')
+            file.write(t)
+            file.close()
+    #negative single displacements
+    for i in range(3*N):
+        disp = list(geo)
+        disp[i] -= disp_size
+        disp = np.array(disp)
+        disp = disp.reshape((3,N))
+        out = inputform(atoms, disp)
+        name = ph + 'd-' + str(i) + '/'
+        if not os.path.exists(name):
+            os.mkdir(name)
+            t = temp.replace('{:s' , out)
+            file = open(name + 'input.dat', 'w')
+            file.write(t)
+            file.close()
+    #positive double displacements
+    for i in range(3*N):
+        for j in range(i+1,3*N):
+            disp = list(geo)
+            disp[i] += disp_size
+            disp[j] += disp_size 
+            disp = np.array(disp)
+            disp = disp.reshape((3,N))
             out = inputform(atoms, disp)
-            name = ph + 'd+_' + str(k+1) + str(i+1) + '/'
+            name = ph + 'd+' + str(i) + str(j) + '/'
             if not os.path.exists(name):
                 os.mkdir(name)
                 t = temp.replace('{:s' , out)
                 file = open(name + 'input.dat', 'w')
                 file.write(t)
                 file.close()
-            atoms , xyz = mol.read(geom_string)
-    for i in range(N):
-        for k in range(N):
-            disp = xyz
-            disp[k][i] -= disp_size
+    #negative double displacements
+    for i in range(3*N):
+        for j in range(i+1,3*N):
+            disp = list(geo)
+            disp[i] -= disp_size
+            disp[j] -= disp_size 
+            disp = np.array(disp)
+            disp = disp.reshape((3,N))
             out = inputform(atoms, disp)
-            name = ph + 'd-_' + str(k+1) + str(i+1) + '/'
+            name = ph + 'd-' + str(i) + str(j) + '/'
             if not os.path.exists(name):
                 os.mkdir(name)
                 t = temp.replace('{:s' , out)
                 file = open(name + 'input.dat', 'w')
                 file.write(t)
                 file.close()
-            atoms , xyz = mol.read(geom_string)
-            """
-    #positive displacements
-    for i in range(N):
-        for j in range(N):
-            for k in range(N):
-                for l in range(N):
-                    if (i==k) and (j == l):
-                        atoms , xyz = mol.read(geom_string)
-                        disp = xyz
-                        disp[i][j] += disp_size
-                        out = inputform(atoms, disp)
-                        name = ph + 'd+_' + str(i+1) + str(j+1) + '/'
-                        if not os.path.exists(name):
-                            os.mkdir(name)
-                            t = temp.replace('{:s' , out)
-                            file = open(name + 'input.dat', 'w')
-                            file.write(t)
-                            file.close()
-                    else:
-                        atoms , xyz = mol.read(geom_string)
-                        disp = xyz
-                        disp[i][j] += disp_size
-                        disp[k][l] += disp_size
-                        out = inputform(atoms,disp)
-                        name = ph + 'd+_' + str(i+1) + str(j+1) + '_' + str(k+1) + str(l+1) + '/'
-                        if not os.path.exists(name):
-                            os.mkdir(name)
-                            t = temp.replace('{:s' , out)
-                            file = open(name + 'input.dat', 'w')
-                            file.write(t)
-                            file.close()
-    #negative displacements
-    for i in range(N):
-        for j in range(N):
-            for k in range(N):
-                for l in range(N):
-                    if (i==k) and (j == l):
-                        atoms , xyz = mol.read(geom_string)
-                        disp = xyz
-                        disp[i][j] -= disp_size
-                        out = inputform(atoms, disp)
-                        name = ph + 'd-_' + str(i+1) + str(j+1) + '/'
-                        if not os.path.exists(name):
-                            os.mkdir(name)
-                            t = temp.replace('{:s' , out)
-                            file = open(name + 'input.dat', 'w')
-                            file.write(t)
-                            file.close()
-                    else:
-                        atoms , xyz = mol.read(geom_string)
-                        disp = xyz
-                        disp[i][j] -= disp_size
-                        disp[k][l] -= disp_size
-                        out = inputform(atoms,disp)
-                        name = ph + 'd-_' + str(i+1) + str(j+1) + '_' + str(k+1) + str(l+1) + '/'
-                        if not os.path.exists(name):
-                            os.mkdir(name)
-                            t = temp.replace('{:s' , out)
-                            file = open(name + 'input.dat', 'w')
-                            file.write(t)
-                            file.close()
-                        """
-    for i in range(N):
-        for j in range(N):
-            disp = xyz
-            disp[i][j] -= disp_size
-            for k in range(N):
-                for l in range(N):
-                    if (i==k) and (j == l):
-                        print i    
-                    else:
-                        disp[k][l] -= disp_size
-                        out = inputform(atoms,disp)
-                        name = ph + 'd-_' + str(i+1) + str(j+1) + '_' + str(k+1) + str(l+1) + '/'
-                        if not os.path.exists(name):
-                            os.mkdir(name)
-                            t = temp.replace('{:s' , out)
-                            file = open(name + 'input.dat', 'w')
-                            file.write(t)
-                            file.close()
-                        atoms , xyz = mol.read(geom_string)
-                        """
-                    
 
 
+
+def run_jobs(mol , command = 'psi4' , directory = 'DISPS'):
+    ph ='/Users/oliviambernstein/git/summer-program/2/oliviabern/' + directory + '/'
+    os.chdir(ph + 'd/')
+    subprocess.call(command)
+    for i in range(3*N): 
+        name = 'd+' + str(i) + '/'
+        os.chdir(ph + name)
+        subprocess.call(command)
+    for i in range(3*N):
+        name = ph + 'd-' + str(i) + '/'
+        os.chdir(name)
+        subprocess.call(command)
+    for i in range(3*N):
+        name = ph + 'd+' + str(i) + '/'
+        os.chdir(name)
+        subprocess.call(command)
+    for i in range(3*N):
+        for j in range(i+1,3*N):
+            name = ph + 'd+' + str(i) + str(j) + '/'
+            os.chdir(name)
+            subprocess.call(command)
+    for i in range(3*N):
+        for j in range(i+1,3*N):
+            name = ph + 'd-' + str(i) + str(j) + '/'
+            os.chdir(name)
+            subprocess.call(command)
+
+def grab_energy(mol, energy_prefix = '@DF-RHF Final Energy:'):
+    f = open('output.dat').read()
+    x = f.find(energy_prefix)
+    x += len(energy_prefix)
+    x += 3
+    z = '' 
+    for i in range(x,len(f)):
+        if f[i] == '\n':
+            break
+        else:
+            z += f[i]
+    z = float(z)
+    return z
+    
+
+
+
+
+def build_hessian(mol, energy_prefix = '@DF-RHF Final Energy:', disp_size = 0.005, directory = "DISPS"):
+    ph ='/Users/oliviambernstein/git/summer-program/2/oliviabern/' + directory + '/'
+    os.chdir(ph + 'd/')
+    d = grab_energy(mol, energy_prefix)
+    hess = np.zeros((3*N,3*N))
+    for i in range(3*N):
+        for k in range(3*N):
+            if i ==k:
+                os.chdir(ph + 'd+' + str(i))
+                dp = grab_energy(mol)
+                os.chdir(ph + 'd-' + str(i))
+                dm = grab_energy(mol)
+                disp = (dp + dm + d)
+                hess[i,k] += disp
+    print hess
+                
+    
 
 generate_inputs(mol, template)
+#run_jobs(mol)
+build_hessian(mol)
