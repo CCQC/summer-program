@@ -192,9 +192,11 @@ def build_hessian(mol, energy_prefix = '@DF-RHF Final Energy:', disp_size = 0.00
     hess = hess.tolist()
 
     out = ''
+    f = ''
+    f += '{: >12.7f} '*(3*N)
+    f += ' \n'
     for i in range(3*N):
-        out += '{: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f}  \n'.format(*hess[i])
-    print out
+        out += f.format(*hess[i])
 
     os.chdir('/Users/oliviambernstein/git/summer-program/2/oliviabern')
     file = open('hessian.dat','w')
