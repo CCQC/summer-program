@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import numpy as np
 import sys
 import os
@@ -11,8 +13,11 @@ from masses import mass
 #build molecule object
 geom_string = open('../../extra-files/molecule.xyz').read()
 mol = Molecule(geom_string)
+atoms, xyz = mol.atoms, mol.xyz
+mol.converttoB()
+#atoms, xyz = mol.atoms, mol.xyz
 
-atoms , xyz = mol.read(geom_string)
+#atoms , xyz = mol.read(geom_string)
 m = str(mol)
 m = m.splitlines()
 N = int(m[0])
@@ -20,7 +25,7 @@ N = int(m[0])
 
 def inputform(atoms, xyz):
     line_form = '{:2s} {: >15.10f} {: >15.10f} {: >15.10f}\n'
-    out = '{:d} {:d}\n'.format(0 , 1)
+    out = '{:10s}\n'.format('units Bohr')
     for i in range(N):
         out += line_form.format(atoms[i] , *xyz[i]) 
     return out
@@ -166,9 +171,38 @@ def build_hessian(mol, energy_prefix = '@DF-RHF Final Energy:', disp_size = 0.00
                 dp = grab_energy(mol)
                 os.chdir(ph + 'd-' + str(i))
                 dm = grab_energy(mol)
-                disp = (dp + dm + d)
-                hess[i,k] += disp
-    print hess
+                h = (dp + dm - 2*d)/(disp_size**2)
+                hess[i,k] += h
+            else:
+                j = sorted([i,k])
+                os.chdir(ph + 'd+' + str(j[0]) + str(j[1]))
+                dpp = grab_energy(mol)
+                os.chdir(ph + 'd-' + str(j[0]) + str(j[1]))
+                dmm = grab_energy(mol)
+                os.chdir(ph + 'd+' + str(i))
+                dpn = grab_energy(mol)
+                os.chdir(ph + 'd-' + str(i))
+                dmn= grab_energy(mol)
+                os.chdir(ph + 'd+' + str(k))
+                dnp = grab_energy(mol)
+                os.chdir(ph + 'd-' + str(k))
+                dnm = grab_energy(mol)
+                h = (dpp + dmm - dpn -dmn - dnp - dnm + 2*d)/(2*disp_size**2)
+                hess[i,k] += h
+    hess = hess.tolist()
+
+    out = ''
+    for i in range(3*N):
+        out += '{: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f} {: >12.7f}  \n'.format(*hess[i])
+    print out
+
+    os.chdir('/Users/oliviambernstein/git/summer-program/2/oliviabern')
+    file = open('hessian.dat','w')
+    file.write(out)
+    file.close()
+
+
+
                 
     
 
