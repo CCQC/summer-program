@@ -25,7 +25,6 @@ def frequencies(water, h):
     w = str(water)
     N = int(w[0])
     h = h.reshape(3*N,3*N)
-    print h
     atoms = []
     xyz = []
     lines = w.splitlines()

@@ -9,6 +9,8 @@ sys.path.insert(0, '../../0/oliviabern')
 from molecule import Molecule
 sys.path.insert(0, '../../extra-files')
 from masses import mass
+sys.path.insert(1, '../../1/oliviabern')
+from freq import frequencies
 
 #build molecule object
 geom_string = open('../../extra-files/molecule.xyz').read()
@@ -205,9 +207,24 @@ def build_hessian(mol, energy_prefix = '@DF-RHF Final Energy:', disp_size = 0.00
 
 
 
+geom_string = open('../../extra-files/molecule.xyz').read()
+
+
+h = open('hessian.dat').read()
+h = h.split()
+for i in range(len(h)):
+    h[i] = float(h[i])
+h = np.array(h)
+water = Molecule(geom_string)
+
+
+
+
+
                 
     
 
 generate_inputs(mol, template)
 #run_jobs(mol)
 build_hessian(mol)
+frequencies(water, h)
