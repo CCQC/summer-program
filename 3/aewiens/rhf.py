@@ -3,7 +3,7 @@ from scipy import linalg as la
 from psi4_helper import get_docc, get_nbf, get_conv, get_maxiter
 
 class RHF:
-# RHF class for obtaining the HF energy of a closed shell system
+# Class for obtaining the HF energy of a closed shell system
 
     def __init__(self,mol,mints):
         """
@@ -39,8 +39,8 @@ class RHF:
         X, H, G, Vnu, D, E = self.X, self.H, self.G, self.Vnu, self.D, self.E
 
         for i in range(maxiter):
-            J= np.einsum("ikjl,kl->ij",G,D)
-            K = np.einsum("iklj,kl->ij",G,D)
+            J= np.einsum("ikjl,kl",G,D)
+            K = np.einsum("iklj,kl",G,D)
             F = H+J-0.5*K                           ####  build fock matrix
             tF = X*F*X                              ####  diagonalize fock matrix
             e, tC = np.linalg.eigh(tF)              ####  eigenvalues & eigenvectors of fock matrix
@@ -52,7 +52,7 @@ class RHF:
             E = np.trace(0.5*(H+F)*D)+Vnu
             dE = np.fabs(E-E0)
 
-            print( "{0:20.12f}{1:20.12f}".format(E,dE) )
+            print( "{0:2d}{0:20.12f}{1:20.12f}".format(i,E,dE) )
             if dE < self.conv : break
 
             #### save object variables that changed during this iteration

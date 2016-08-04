@@ -7,12 +7,10 @@ molecule mol {
    }
 
 set {
-    reference rhf
-    basis cc-pvtz
+    basis    sto-3g
     scf_type pk
     e_convergence 12
-     MAXITER 50
-    mp2_type conv
+    MAXITER 50
     }
 
 Eref = energy('scf')
@@ -21,7 +19,7 @@ basisname = psi4.get_global_option("BASIS")
 basisset = psi4.BasisSet.pyconstruct_orbital(mol,"BASIS",basisname)
 mints    = psi4.MintsHelper(basisset)
 
-# call Hartree-Fock code here
+##  call Hartree-Fock code
 from rhf import RHF
 rhf = RHF(mol,mints)
 E = rhf.get_energy()
