@@ -76,8 +76,10 @@ class RHF:
             
             if abs(D0 - np.trace(self.D)) < self.e_convergence:
                 break
-        return(np.trace(E)+self.V_nuc)
-            
+        self.energy = energy
+        print('Final RHF Energy:')
+        print(self.energy)
+        return(energy)
            
 
 
