@@ -59,6 +59,7 @@ class RHF:
         :return: energy
         """
         for i in range(self.maxiter):
+            D0 = np.trace(self.D)
             h = self.T + self.V
             j = np.einsum('mrns,rs',self.g,self.D)
             k = np.einsum('msrn,rs',self.g,self.D)
@@ -71,7 +72,11 @@ class RHF:
             self.D = 2*np.dot(OC, OC.T)
             T = h + .5*v
             E = np.dot(T,self.D)
-            print(np.trace(E)+self.V_nuc)
+            energy = np.trace(E) + self.V_nuc 
+            
+            if abs(D0 - np.trace(self.D)) < self.e_convergence:
+                break
+        return(np.trace(E)+self.V_nuc)
             
            
 
