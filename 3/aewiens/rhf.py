@@ -41,12 +41,12 @@ class RHF:
         for i in range(maxiter):
             J= np.einsum("ikjl,kl",G,D)
             K = np.einsum("iklj,kl",G,D)
-            F = H+J-0.5*K                           ####  build fock matrix
-            tF = X*F*X                              ####  diagonalize fock matrix
-            e, tC = np.linalg.eigh(tF)              ####  eigenvalues & eigenvectors of fock matrix
-            C = X*tC                                ####  back-transform the eigenvectors
-            oC = C[:,:docc]                         ####  save occupied block of C matrix
-            D = 2*oC*oC.T                           ####  build density matrix
+            F = H+J-0.5*K                           ##  build fock matrix
+            tF = X*F*X                              ##  diagonalize fock matrix
+            e, tC = np.linalg.eigh(tF)              ##  eigenvalues & eigenvectors of fock matrix
+            C = X*tC                                ##  back-transform the eigenvectors
+            oC = C[:,:docc]                         ##  save occupied block of C matrix
+            D = 2*oC*oC.T                           ##  build density matrix
 
             E0 = E
             E = np.trace(0.5*(H+F)*D)+Vnu
