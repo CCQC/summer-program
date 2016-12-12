@@ -3,10 +3,9 @@
 import numpy as np
 import os
 import re
-os.sys.path.insert(0,"../../0/aewiens")
+os.sys.path.insert(0,"/Users/avery/git/summer-program/0/aewiens")
 
 from molecule import Molecule
-
 
 class Hessian(object):
     """
@@ -48,7 +47,7 @@ class Hessian(object):
         :params hi,hj: displacements of atoms 1,2 (-1, 0, or 1, corresponds to -h, 0, or h)
         """
         dirname = "X%dX%d_%d%d" % (i,j,hi,hj)
-        out_str = open("disps/%s/output.dat" % dirname, "r").read()
+        out_str = open("HESS/%s/output.dat" % dirname, "r").read()
         match = re.findall("Total Energy\s=\s+-\d+.\d+",out_str)
         if match == []:
             out = "Cannot find energy!"
@@ -60,8 +59,8 @@ class Hessian(object):
     def run_disps(self):
 
         h, N = self.h, self.N
-        os.mkdir("disps")
-        os.chdir("disps")
+        os.mkdir("HESS")
+        os.chdir("HESS")
 
         self.make_input("X0X0_00",mol.atoms,mol.geom)
         self.run_input("X0X0_00")
@@ -73,12 +72,12 @@ class Hessian(object):
            forward = "X%dX0_10" % i
            reverse = "X%dX0_-10" % i
            geom_copy = mol.copy().geom
-           geom_copy[i/3,i%3] +=h
+           geom_copy[i//3,i%3] +=h
 
            self.make_input(forward,mol.atoms,geom_copy)
            self.run_input(forward)
 
-           geom_copy[i/3,i%3] -= 2*h
+           geom_copy[i//3,i%3] -= 2*h
            self.make_input(reverse,mol.atoms,geom_copy)
 
            self.run_input(reverse)
@@ -91,13 +90,13 @@ class Hessian(object):
                 reverse = "X%dX%d_-1-1" % (i,j)
                 geom_copy2 = mol.copy().geom
 
-                geom_copy2[i/3,i%3] += h
-                geom_copy2[j/3,j%3] += h
+                geom_copy2[i//3,i%3] += h
+                geom_copy2[j//3,j%3] += h
 
                 self.make_input(forward,mol.atoms,geom_copy2)
 
-                geom_copy2[i/3,i%3] -= 2*h
-                geom_copy2[j/3,j%3] -= 2*h
+                geom_copy2[i//3,i%3] -= 2*h
+                geom_copy2[j//3,j%3] -= 2*h
 
                 self.make_input(reverse,mol.atoms,geom_copy2)
 
@@ -134,7 +133,7 @@ class Hessian(object):
 
 if __name__ == "__main__":
 
-    mol = Molecule(open("../../extra-files/molecule.xyz","r").read() )
+    mol = Molecule(open("/Users/avery/git/summer-program/extra-files/molecule.xyz","r").read() )
     mol.bohr()
     hessian = Hessian(mol,"template.dat")
     hessian.write_Hessian()
