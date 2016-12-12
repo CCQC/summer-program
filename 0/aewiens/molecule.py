@@ -24,8 +24,7 @@ class Molecule:
         :self.atoms: a list of labels of the N atoms
         :self.geom: an Nx3 2darray of x,y,z 
         """
-        f = open("../../extra-files/molecule.xyz","r")
-        geom_str = f.read()
+        geom_str = xyz_file
         self.atoms = [] 
         geom = []
         for line in geom_str.split('\n')[2:]:
@@ -77,5 +76,5 @@ class Molecule:
 
 
 if __name__ == '__main__':
-
-    mol = Molecule("../../extra-files/molecule.xyz","Angstrom")
+	f = open("../../extra-files/molecule.xyz","r").read()
+	mol = Molecule(f,"Angstrom")
