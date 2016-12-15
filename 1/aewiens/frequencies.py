@@ -1,18 +1,16 @@
 #!/usr/bin/python
-
-import numpy as np
-import sys
+import sys,numpy as np
 sys.path.insert(0, '../../0/aewiens')
 from molecule import Molecule
 import conv as cnv
 
 class Frequencies:
 
-    def __init__(self,mol,hessian_file):
+    def __init__(self,mol,hessString):
 
-        self.mol = mol
-        self.hessian = hessian_file
-        self.N = mol.__len__()
+        self.mol        = mol
+        self.hessString = hessString
+        self.N          = mol.__len__()
 
         m = []
         for i in range(self.N):
@@ -22,8 +20,7 @@ class Frequencies:
 
     def get_MWhessian(self):
 
-        h  = open(self.hessian,"r")
-        H0 = np.matrix( [i.split() for i in h.readlines()],float )
+        H0 = np.matrix( [i.split() for i in hessString.splitlines()],float )
         mwH = np.dot(self.MM, np.dot(H0,self.MM) )
         return mwH
 
@@ -59,8 +56,9 @@ class Frequencies:
         return None
         
 if __name__ == "__main__":
-    f = open("../../extra-files/molecule.xyz", "r").read()
-    mol = Molecule(f,"Bohr")
+    f = open("../../2/aewiens/h2.xyz", "r").read()
+    mol = Molecule(f)
 
-    freq = Frequencies(mol,"../../extra-files/hessian.dat")
+	hessian = open("../../2/aewiens/hessian.dat","r").read()
+    freq = Frequencies(mol,hessian)
     freq.frequency_output("modes.xyz")
