@@ -58,27 +58,27 @@ class Hessian(object):
 
     def run_disps(self):
 
-        h, N = self.h, self.N
+        h, N, atoms, geom = self.h, self.N, self.mol.atoms, self.mol.geom
         os.mkdir("HESS")
         os.chdir("HESS")
 
-        self.make_input("X0X0_00",mol.atoms,mol.geom)
+        self.make_input("X0X0_00",atoms,geom)
         self.run_input("X0X0_00")
 
 
         ####   Run single displacements   ####
 
         for i in range(3*N):
-           forward = "X%dX0_10" % i
-           reverse = "X%dX0_-10" % i
-           geom_copy = mol.copy().geom
+           forward   = "X%dX0_10" % i
+           reverse   = "X%dX0_-10" % i
+           geom_copy = self.mol.copy().geom
            geom_copy[i//3,i%3] +=h
 
-           self.make_input(forward,mol.atoms,geom_copy)
+           self.make_input(forward,atoms,geom_copy)
            self.run_input(forward)
 
            geom_copy[i//3,i%3] -= 2*h
-           self.make_input(reverse,mol.atoms,geom_copy)
+           self.make_input(reverse,atoms,geom_copy)
 
            self.run_input(reverse)
 
@@ -88,17 +88,17 @@ class Hessian(object):
             for j in range(i):
                 forward = "X%dX%d_11" % (i,j)
                 reverse = "X%dX%d_-1-1" % (i,j)
-                geom_copy2 = mol.copy().geom
+                geom_copy2 = self.mol.copy().geom
 
                 geom_copy2[i//3,i%3] += h
                 geom_copy2[j//3,j%3] += h
 
-                self.make_input(forward,mol.atoms,geom_copy2)
+                self.make_input(forward,atoms,geom_copy2)
 
                 geom_copy2[i//3,i%3] -= 2*h
                 geom_copy2[j//3,j%3] -= 2*h
 
-                self.make_input(reverse,mol.atoms,geom_copy2)
+                self.make_input(reverse,atoms,geom_copy2)
 
                 self.run_input(forward)
                 self.run_input(reverse)
