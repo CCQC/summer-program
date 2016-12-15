@@ -8,21 +8,21 @@ class Frequencies:
 
     def __init__(self,mol,hessString):
 
-        self.mol        = mol
-        self.hessString = hessString
-        self.N          = mol.__len__()
+	self.mol  = mol
+	self.hess = hessString
+	self.N    = mol.__len__()
 
-        m = []
-        for i in range(self.N):
-            m += [1/(mol.masses[i])**0.5]*3
-        self.MM = np.diag(m)
-        self.m = m
+	m = []
+	for i in range(self.N):
+		m += [1/(mol.masses[i])**0.5]*3
+	self.MM = np.diag(m)
+	self.m = m
 
     def get_MWhessian(self):
 
-        H0 = np.matrix( [i.split() for i in hessString.splitlines()],float )
-        mwH = np.dot(self.MM, np.dot(H0,self.MM) )
-        return mwH
+		H0 = np.matrix( [i.split() for i in self.hess.splitlines()],float )
+		mwH = np.dot(self.MM, np.dot(H0,self.MM) )
+		return mwH
 
     def get_frequencies(self):
 
@@ -56,9 +56,10 @@ class Frequencies:
         return None
         
 if __name__ == "__main__":
-    f = open("../../2/aewiens/h2.xyz", "r").read()
-    mol = Molecule(f)
+
+	f = open("/Users/avery/git/summer-program/extra-files/molecule.xyz","r").read()
+	mol = Molecule(f)
 
 	hessian = open("../../2/aewiens/hessian.dat","r").read()
-    freq = Frequencies(mol,hessian)
-    freq.frequency_output("modes.xyz")
+	freq    = Frequencies(mol,hessian)
+	freq.frequency_output("modes.xyz")
