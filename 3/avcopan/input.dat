@@ -10,11 +10,13 @@ set e_convergence 10
 set scf_type      pk
 set maxiter       50
 
-basisname = psi4.get_global_option("BASIS")
-basisset  = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
-mints     = psi4.MintsHelper(basisset)
+basisname = psi4.core.get_global_option("BASIS")
+basisset  = psi4.core.BasisSet.build(mol, "BASIS", basisname)
+mints     = psi4.core.MintsHelper(basisset)
 
 # call RHF code
+import sys
+sys.path.insert(0, '.')
 from rhf import RHF
 rhf = RHF(mol, mints)
 

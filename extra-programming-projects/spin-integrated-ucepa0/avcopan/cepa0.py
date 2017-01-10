@@ -1,10 +1,10 @@
-import psi4
+import psi4.core
 import numpy as np
 from permutation_operator import P
 
 # get global options
-MAXITER = psi4.get_global_option('MAXITER')
-E_CONV  = psi4.get_global_option('E_CONVERGENCE')
+MAXITER = psi4.core.get_global_option('MAXITER')
+E_CONV  = psi4.core.get_global_option('E_CONVERGENCE')
 
 class CEPA0(object):
 
@@ -84,8 +84,8 @@ class CEPA0(object):
 
       dE = E - self.E
       self.E = E
-      print         ('@CEPA0 {:<3d} {:20.15f} {:20.15f}'  .format(i, E, dE)) # print progress to terminal
-      psi4.print_out('@CEPA0 {:<3d} {:20.15f} {:20.15f}\n'.format(i, E, dE)) # print progress to output
+      print              ('@CEPA0 {:<3d} {:20.15f} {:20.15f}'  .format(i, E, dE)) # print progress to terminal
+      psi4.core.print_out('@CEPA0 {:<3d} {:20.15f} {:20.15f}\n'.format(i, E, dE)) # print progress to output
       if(np.fabs(dE) < E_CONV): break  # quit if converged
 
     return E

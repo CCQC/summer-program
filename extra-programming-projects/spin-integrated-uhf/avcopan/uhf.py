@@ -29,7 +29,7 @@ class UHF(object):
     h, g, aD, bD, X, vnu, naocc, nbocc = self.h, self.g, self.aD, self.bD, self.X, self.vnu, self.naocc, self.nbocc
     self.E = 0.0
 
-    for i in range(psi4.get_option('SCF', 'MAXITER')):
+    for i in range(psi4.core.get_option('SCF', 'MAXITER')):
       aV = np.einsum('mrns,sr', g, aD + bD) - np.einsum('mrsn,sr', g, aD)
       bV = np.einsum('mrns,sr', g, aD + bD) - np.einsum('mrsn,sr', g, bD)
       aF = h + aV
@@ -48,5 +48,5 @@ class UHF(object):
       dE = E - self.E
       self.E, self.aC, self.bC, self.ae, self.be = E, aC, bC, ae, be
       print('UHF {:-3d} {:20.15f} {:20.15f}'.format(i, E, dE)) # print progress
-      if(np.fabs(dE) < psi4.get_global_option('E_CONVERGENCE')): break # quit if converged
+      if(np.fabs(dE) < psi4.core.get_global_option('E_CONVERGENCE')): break # quit if converged
 
