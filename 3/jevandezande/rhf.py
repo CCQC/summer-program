@@ -73,7 +73,7 @@ class RHF:
             D = C[:, :ndocc]*C[:, :ndocc].T
 
             # Compute the energy
-            E = np.trace((F + T +V)*D) + V_nuc
+            E = np.trace((F + T + V)*D) + V_nuc
 
             i += 1
             # Check convergence
