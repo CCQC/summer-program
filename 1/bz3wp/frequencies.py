@@ -5,18 +5,15 @@ import masses
 from molecule import Molecule
 import numpy as np
 
-#building molecule from molecule.xyz
-mol = Molecule.from_file('../extra-files/molecule.xyz')
-mol.to_angstrom()
 
-#reading in hessian matrix as numpy array 
-hessian = np.loadtxt('../extra-files/hessian.dat')
-
-def frequencies(mol, hessian):
+def get_freqs(mol, hes = '../extra-files/hessian.dat'):
+    mol.to_angstrom()
     mass = []
     for atom in mol.labels:
         mass += [masses.get_mass(atom)**(-0.5)]*3
     M = np.diag(mass) 
+   
+    hessian = np.loadtxt(hes)
     
     #building mass weighted hessian 
     H = M @ hessian @ M
@@ -47,11 +44,16 @@ def frequencies(mol, hessian):
         for i in range(mol.natom):
             atom = mol.labels[i]
             x, y, z = mol.geom[i]
-            dx, dy, dz = q[3*i: 3*i + 3, a] 
+            dx, dy, dz = Q[3*i: 3*i + 3, a] 
             out += line_form.format(atom, x, y, z, dx, dy, dz)
         out += '\n'
 
     with open('frequencies.xyz', 'w') as f:
         f.write(out)
- 
-frequencies(mol, hessian)
+
+
+if __name__=='__main__':
+#building molecule from molecule.xyz
+    mol = Molecule.from_file('../extra-files/molecule.xyz')
+
+    get_freqs(mol,'../extra-files/hessian.dat')

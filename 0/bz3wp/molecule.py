@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0,'../../extra-files')
 import masses
 import numpy as np
 
@@ -24,13 +26,15 @@ class Molecule(object):
             print("Already in Bohr")
         else:
             self.geom *= 1.8897 
-    
+            self.units = "Angstrom"
+  
     def to_angstrom(self):
         if self.units == "Angstrom":
             print("Already in Angstrom")
         else:
             self.geom *= 0.5292
-    
+            self.units = "Bohr"
+
     def __str__(self): 
         out = "{}\n\n".format(self.natom)
         for atom,line in zip(self.labels, self.geom):
