@@ -10,11 +10,11 @@ class RHF(SCF):
     """
     def __init__(self, options_ini):
         super().__init__(options_ini)
-        docc = self.config['DEFAULT']['docc']
-        if docc.isnumeric():
-            self.docc = int(docc)
+        nocc = self.config['DEFAULT']['docc']
+        if nocc.isnumeric():
+            self.nocc = int(nocc)
         else:
-            self.docc = docc.split()
+            self.nocc = nocc.split()
             raise Exception('Occupation arrays currently not supported')
         
     def energy(self):
@@ -26,7 +26,7 @@ class RHF(SCF):
         densities = [np.zeros_like(self.H)]
         d_norms = []
 
-        g, H, A, docc, V_nuc = self.g, self.H, self.A, self.docc, self.V_nuc
+        g, H, A, nocc, V_nuc = self.g, self.H, self.A, self.nocc, self.V_nuc
 
         # Core guess
         F = H
@@ -39,7 +39,7 @@ class RHF(SCF):
             e, tC = np.linalg.eigh(tF)
             # Construct new SCF eigenvector
             C = A @ tC
-            Cocc = C[:, :docc]
+            Cocc = C[:, :nocc]
             # Form new density
             D = Cocc @ Cocc.T
             densities.append(D)
