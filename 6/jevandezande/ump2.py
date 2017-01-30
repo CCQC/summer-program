@@ -2,7 +2,6 @@ import psi4
 import numpy as np
 import sys
 sys.path.insert(0, '../../4/jevandezande')
-sys.path.insert(0, '../../5/jevandezande')
 from mp2 import MP2
 
 
@@ -38,6 +37,7 @@ class UMP2(MP2):
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, '../../5/jevandezande')
     from uhf import UHF
     uhf = UHF('../../3/jevandezande/Options.ini')
     uhf.energy()
