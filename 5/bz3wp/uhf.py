@@ -29,8 +29,8 @@ class UHF:
         
         self.C = np.zeros_like(self.H)
         self.e = np.zeros(len(self.H))
-
-        self. A = np.matrix(la.inv(la.sqrtm(S)))
+        self.E_SCF = 0.0
+        self.A = np.matrix(la.inv(la.sqrtm(S)))
 
     def get_energy(self):
         mol, max_iter, g, H, A, C, e, nocc = self.mol, self.max_iter,self.g, self.H, self.A, self.C, self.e, self.nocc
@@ -59,6 +59,7 @@ class UHF:
 
         self.e = e
         self.C = C
+        self.E_SCF = E_SCF
 
 def block_oei(A):
     A = la.block_diag(A, A)

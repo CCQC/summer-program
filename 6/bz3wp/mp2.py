@@ -8,19 +8,16 @@ import scipy.linalg as la
 class MP2:
         
     def __init__(self, uhf):
-        self.g_ao = uhf.g
-        self.C = uhf.C
         self.e = uhf.e
         self.nocc = uhf.nocc
-        self.g_mo = np.zeros_like(self.g_ao) 
         self.nto = uhf.nto
-
-    def transform_integrals(self):
-        C, g_ao = self.C, self.g_ao
-        self.g_mo = np.einsum('pqrs, pP, qQ, rR, sS-> PQRS',g_ao, C, C, C, C)
+        self.E0 = uhf.E_SCF
+    def transform_integrals(self, C, g_ao):
+        return np.einsum('pqrs, pP, qQ, rR, sS-> PQRS',g_ao, C, C, C, C)
          
     def get_energy(self):
-        e, g_mo, nocc, nto = self.e, self.g_mo, self.nocc, self.nto
+        g_mo = self.transform_integrals(uhf.C, uhf.g)
+        e, E0, nocc, nto = self.e, self.E0, self.nocc, self.nto
         E = 0.0
         for i in range(nocc):
             for j in range(nocc):
@@ -29,6 +26,7 @@ class MP2:
                         E += ((1/4)*g_mo[i,j,a,b]**2)/(e[i]+e[j]-e[a]-e[b])  
 
         print('The second order energy correction is {:20.14f}'.format(E)) 
+        print('The total MP2 energy is {:20.14f}'.format(E0+E))
         return E
 
 if __name__=='__main__':
@@ -36,5 +34,4 @@ if __name__=='__main__':
     uhf = UHF('../../5/bz3wp/Options.ini')
     uhf.get_energy()
     mp2 = MP2(uhf)
-    mp2.transform_integrals()
     mp2.get_energy()
