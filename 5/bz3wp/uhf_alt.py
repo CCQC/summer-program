@@ -1,3 +1,5 @@
+# Alternate UHF code separating alpha and beta spin orbitals
+
 import psi4
 import numpy as np
 import configparser 
