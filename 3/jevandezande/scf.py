@@ -48,7 +48,7 @@ class SCF:
         Plot the convergence of energy change and density norm
         """
         energies, d_norms = np.array(self.energies), self.d_norms
-        e, = plt.plot(energies[1:-1] - energies[2:], label=r'$\Delta$ E')
+        e, = plt.plot(abs(energies[1:-1] - energies[2:]), label=r'$\Delta$ E')
         d, = plt.plot(d_norms[1:], label=r'$||\Delta$ D$||$')
         plt.yscale('log')
         plt.legend([e, d])
