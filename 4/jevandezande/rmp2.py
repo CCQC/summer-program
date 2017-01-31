@@ -16,13 +16,13 @@ class RMP2(MP2):
         Compute the RMP2 energy
         :return: RMP2 energy
         """
-        nocc, gmo, e = self.nocc, self.gmo, self.e
+        nocc, ntot, gmo, e = self.nocc, self.gmo, self.e, self.ntot
 
         Ec = 0.0
         for i in range(nocc):
             for j in range(nocc):
-                for a in range(nocc, len(e)):
-                    for b in range(nocc, len(e)):
+                for a in range(nocc, ntot):
+                    for b in range(nocc, ntot):
                         Ec += gmo[i, a, j, b]*(2*gmo[i, a, j, b] - gmo[i, b, j, a])/\
                              (e[i] + e[j] - e[a] - e[b])
 

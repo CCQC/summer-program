@@ -16,6 +16,8 @@ class RHF(SCF):
         else:
             self.nocc = nocc.split()
             raise Exception('Occupation arrays currently not supported')
+        self.ntot = len(self.H)
+        self.nvirt = self.ntot - self.nocc
         
     def energy(self):
         """

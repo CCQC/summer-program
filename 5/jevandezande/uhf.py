@@ -31,7 +31,9 @@ class UHF(SCF):
         self.nelec = -mol.molecular_charge()
         for A in range(mol.natom()):
             self.nelec += int(mol.Z(A))
+        self.ntot = len(self.H)
         self.nocc = self.nelec
+        self.nvirt = self.ntot - self.nocc
 
         self.norb = len(self.H)
 

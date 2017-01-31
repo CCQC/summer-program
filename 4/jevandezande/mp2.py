@@ -10,7 +10,7 @@ class MP2:
     """
 
     def __init__(self, scf):
-        self.nocc, self.e, self.gao, self.E_scf = scf.nocc, scf.e, scf.g, scf.E_scf
+        self.nocc, self.ntot, self.e, self.gao, self.E_scf = scf.nocc, scf.ntot, scf.e, scf.g, scf.E_scf
         self.gmo = transform_integrals(scf.C, scf.g)
 
     @abc.abstractmethod
