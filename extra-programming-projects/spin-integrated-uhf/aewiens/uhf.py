@@ -20,18 +20,14 @@ class UHF:
         V = np.array( mints.ao_potential() )
         T = np.array( mints.ao_kinetic() )
         G = np.array( mints.ao_eri() )
-        self.S = np.array( mints.ao_overlap() )
 
+        self.S     = np.array( mints.ao_overlap() )
         self.Hcore = T + V
-        self.G = G.transpose((0,2,1,3))
-        self.X = np.matrix( la.funm(self.S, lambda x : x**(-0.5) ) )
-        self.Vnu = mol.nuclear_repulsion_energy()
+        self.G     = G.transpose((0,2,1,3))
+        self.X     = np.matrix( la.funm(self.S, lambda x : x**(-0.5) ) )
+        self.Vnu   = mol.nuclear_repulsion_energy()
 
         ##  alpha and beta density matrices
-        """
-        self.Da = np.zeros((self.X.shape))
-        self.Db = np.zeros((self.X.shape))
-        """
         self.Da = np.random.rand(*self.X.shape)
         self.Da = self.Da + self.Da.T
 
