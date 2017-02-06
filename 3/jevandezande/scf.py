@@ -17,6 +17,8 @@ class SCF:
         self.molecule.update_geometry()
         self.V_nuc = self.molecule.nuclear_repulsion_energy()
 
+        self.RESTRICTED = False
+
         self.options = {}
         self.options['BASIS'] = self.config['DEFAULT']['basis']
         self.options['SCF_MAX_ITER'] = self.config.getint('SCF', 'max_iter', fallback=50)
@@ -49,8 +51,23 @@ class SCF:
     def extrapolate_diis(self):
         """
         Extrapolate the Fock matrix
-        e = FDS - SDF
-        P q = f
+        :yield: Fock matrices that need to be extrapolated
+        """
+        start = max(1, len(self.focks) - self.options['DIIS_NVECTOR'])
+        focks, densities = self.focks[start:], self.densities[start:]
+        if self.RESTRICTED:
+            yield SCF.solve_diis(focks, densities, self.S)
+        else:
+            for fx, dx in zip(zip(*focks), zip(*densities)):
+                yield SCF.solve_diis(fx, dx, self.S)
+
+    @staticmethod
+    def solve_diis(focks, densities, S):
+        """
+        P. Pulay, Chem. Phys. Lett. 73, 393 (1980).
+
+        e = F*D*S - S*D*F
+        P*q = f
         +---+---+---+---+ +---+   +---+
         |P00|P01|P02|-1 | | q0|   | 0 |
         +---+---+---+---+ +---+   +---+
@@ -61,28 +78,22 @@ class SCF:
         |-1 |-1 |-1 | 0 | | λ |   |-1 |
         +---+---+---+---+ +---+   +---+
         """
-        e_vec = []
-        S = self.S
-        start = max(1, len(self.focks) - self.options['DIIS_NVECTOR'])
-        num_mats = len(self.focks[start:])
-        for F, D in zip(self.focks[start:], self.densities[start:]):
-            e_vec.append(F @ D @ S - S @ D @ F)
-        
+        num_mats = len(focks)
+
+        e_vecs = [F @ D @ S - S @ D @ F for F, D in zip(focks, densities)]
+
         P = np.zeros((num_mats + 1, num_mats + 1))
+        for i, j in zip(*np.triu_indices(num_mats)):
+            P[i, j] = P[j, i] = (e_vecs[i]*e_vecs[j]).sum()
+        P[-1,  :] = P[ :, -1] = -1
+
         f = np.zeros((num_mats + 1))
         f[-1] = -1
 
-        for i in range(num_mats):
-            P[-1,  i] = -1
-            P[ i, -1] = -1
-            P[i, i] = (e_vec[i]**2).sum()
-            for j in range(i + 1, num_mats):
-                P[i, j] = P[j, i] = (e_vec[i]*e_vec[j]).sum()
-
         q_vec = np.linalg.solve(P, f)
 
-        F_diis = np.zeros_like(self.focks[0])
-        for q, F in zip(q_vec[:-1], self.focks[start:]):
+        F_diis = np.zeros_like(focks[0])
+        for q, F in zip(q_vec[:-1], focks):
             F_diis += q*F
 
         return F_diis

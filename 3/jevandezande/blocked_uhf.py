@@ -1,6 +1,5 @@
 import psi4
 import numpy as np
-
 from scf import SCF
 
 
@@ -17,9 +16,10 @@ class UHF(SCF):
         """
         Compute the UHF energy
         """
-        energies = [0.0]
-        densities = [np.zeros_like(self.H)]
-        d_norms = []
+        self.energies = [0.0]
+        self.densities = [(np.zeros_like(self.H), np.zeros_like(self.H))]
+        self.focks = [(np.zeros_like(self.H), np.zeros_like(self.H))]
+        self.d_norms = []
 
         g, H, A, n_occ_a, n_occ_b, V_nuc = self.g, self.H, self.A, self.n_occ_a, self.n_occ_b, self.V_nuc
 
@@ -46,8 +46,7 @@ class UHF(SCF):
             # Form new density
             Da = Cocc_a @ Cocc_a.T
             Db = Cocc_b @ Cocc_b.T
-            DT = Da + Db
-            densities.append(DT)
+            self.densities.append((Da, Db))
 
             # Construct Fock
             Ja = np.einsum('pqrs,rs->pq', g, Da)
@@ -56,20 +55,24 @@ class UHF(SCF):
             Kb = np.einsum('prqs,rs->pq', g, Db)
             Fa = H + Ja - Ka + Jb
             Fb = H + Jb - Kb + Ja
+            self.focks.append((Fa, Fb))
 
             #E_scf = np.einsum('pq,pq->', (H + Fa)/2, Da) + np.einsum('pq,pq->', (H + Fb)/2, Db) + self.molecule.nuclear_repulsion_energy()
             E_scf = np.trace((H + Fa) @ Da + (H + Fb) @ Db)/2 + V_nuc
 
-            energies.append(E_scf)
-            ΔE = energies[-1] - energies[-2]
-            d_norms.append(np.linalg.norm(densities[-2] - densities[-1]))
-            print('{:3d} {:> 20.14f} {:> 1.5E}  {:>1.5E}'.format(iteration, E_scf, ΔE, d_norms[-1]))
+            self.energies.append(E_scf)
+            ΔE = self.energies[-1] - self.energies[-2]
+            self.d_norms.append(np.linalg.norm(sum(self.densities[-2]) - sum(self.densities[-1])))
+            print('{:3d} {:> 20.14f} {:> 1.5E}  {:>1.5E}'.format(iteration, E_scf, ΔE, self.d_norms[-1]))
 
-            if abs(ΔE) < 1.0e-10 and d_norms[-1] < 1.0e-10:
+            if abs(ΔE) < 1.0e-10 and self.d_norms[-1] < 1.0e-10:
                 break
 
+            if self.options['DIIS'] and self.options['DIIS_START'] < iteration:
+                # Note trailing comma for generators
+                Fa, Fb = self.extrapolate_diis()
+
         print('\nUHF Energy: {:> 15.10f}'.format(E_scf))
-        self.energies, self.densities, self.d_norms = energies, densities, d_norms
         self.Ca, self.Cb, self.ea, self.eb, self.E_scf = Ca, Cb, ea, eb, E_scf
 
         return E_scf

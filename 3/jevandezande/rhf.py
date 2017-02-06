@@ -18,6 +18,7 @@ class RHF(SCF):
             raise Exception('Occupation arrays currently not supported')
         self.ntot = len(self.H)
         self.nvirt = self.ntot - self.nocc
+        self.RESTRICTED = True
         
     def energy(self):
         """
@@ -64,7 +65,8 @@ class RHF(SCF):
                 break
 
             if self.options['DIIS'] and self.options['DIIS_START'] < iteration:
-                F = self.extrapolate_diis()
+                # Note trailing comma for generators
+                F, = self.extrapolate_diis()
 
         print('\nEnergy: {:> 15.10f}'.format(E_scf))
         self.C, self.e, self.E_scf = C, e, E_scf
