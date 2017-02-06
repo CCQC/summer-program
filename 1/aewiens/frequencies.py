@@ -30,6 +30,7 @@ class Frequencies:
         self.Q = np.matrix(self.MM)*np.matrix(self.l)
         freq = []
         conv =  np.sqrt(cnv.hartree2J/(cnv.amu2kg*cnv.bohr2m**2))/(cnv.c*2*np.pi)  # dimensional analysis
+        print(conv)
         for i in self.e:
             if i <0:
                 freq.append((-i)**0.5*conv)
