@@ -130,7 +130,6 @@ class Hessian(object):
         self.make_Hessian()
         np.savetxt("hessian.dat",self.H,"%15.7f"," ","\n")
 
-
 if __name__ == "__main__":
 
     mol = Molecule(open("/Users/avery/git/summer-program/extra-files/molecule.xyz","r").read() )
