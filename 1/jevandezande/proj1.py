@@ -1,45 +1,35 @@
 #!/usr/bin/env python3
 
+import numpy as np
 import sys
 sys.path.insert(0, '../extra-files')
 sys.path.insert(0, '../../0/jevandezande')
 from masses import get_mass
 from molecule import Molecule
-import numpy as np
 
 # Create a molecule
 mol = Molecule(open('../extra-files/molecule.xyz').read(), 'Bohr')
 mol.to_angstrom()
 
 # Read the Hessian
-lines = open('../extra-files/hessian.dat').readlines()
-
-H = []
-for line in lines:
-    H.append(list(map(float, line.split())))
-
-H = np.array(H)
+H = np.genfromtxt('../extra-files/hessian.dat')
 
 # Mass weight Hessian
-# \Tilde H = M^{-1/2} H M^{-1/2}
-
-# Build M^{-1/2}
-masses = []
+# Build W = M^{-1/2}
+weights = []
 for atom in mol.atoms:
-    masses.append(1/np.sqrt(get_mass(atom)))
-    masses.append(1/np.sqrt(get_mass(atom)))
-    masses.append(1/np.sqrt(get_mass(atom)))
-M = np.diag(masses)
+    w = 1/np.sqrt(get_mass(atom))
+    weights += [w, w, w]
+W = np.diag(weights)
 
-Ht = M @ H @ M
+# \Tilde H = M^{-1/2} H M^{-1/2}
+Ht = W @ H @ W
 
 # Diagonalize the Hessian
 # \Tilde H = L \Lambda L^T
-
 k, L = np.linalg.eigh(Ht)
 
 # \lambda_a = \omega^2
-
 hartree2J = 4.3597443e-18
 amu2kg = 1.6605389e-27
 bohr2m = 5.2917721e-11
@@ -47,7 +37,7 @@ c = 29979245800.0 # speed of light in cm/s
 convert = np.sqrt(hartree2J/(amu2kg*bohr2m*bohr2m))/(c*2*np.pi)
 
 # \Delta X(Q_sa) = Q_A M^{-1/2} l_A
-Q = M @ L
+Q = W @ L
 
 out = ''
 line_form = '{:2s}' + '{: >15.10f}'*6 + '\n'

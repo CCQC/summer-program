@@ -1,9 +1,9 @@
-import psi4
+import psi4.core
 import numpy as np
 
 # get global options
-MAXITER = psi4.get_global_option('MAXITER')
-E_CONV  = psi4.get_global_option('E_CONVERGENCE')
+MAXITER = psi4.core.get_global_option('MAXITER')
+E_CONV  = psi4.core.get_global_option('E_CONVERGENCE')
 
 class CCD(object):
 
@@ -50,8 +50,8 @@ class CCD(object):
       E  = 1./4 * np.sum(g[o,o,v,v] * t)
       dE = E - self.E
       self.E, self.t = E, t
-      print         ('@CCD {:<3d} {:20.15f} {:20.15f}'  .format(i, E, dE)) # print progress to terminal
-      psi4.print_out('@CCD {:<3d} {:20.15f} {:20.15f}\n'.format(i, E, dE)) # print progress to output
+      print              ('@CCD {:<3d} {:20.15f} {:20.15f}'  .format(i, E, dE)) # print progress to terminal
+      psi4.core.print_out('@CCD {:<3d} {:20.15f} {:20.15f}\n'.format(i, E, dE)) # print progress to output
       if(np.fabs(dE) < E_CONV): break  # quit if converged
 
     return self.E

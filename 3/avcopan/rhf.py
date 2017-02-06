@@ -1,11 +1,11 @@
-import psi4
+import psi4.core
 import numpy        as np
 import scipy.linalg as la
 from tensor import tensor # subclass of ndarray with operator% overloaded for matrix multiplication
 
 # get global options
-MAXITER = psi4.get_global_option('MAXITER')
-E_CONV  = psi4.get_global_option('E_CONVERGENCE')
+MAXITER = psi4.core.get_global_option('MAXITER')
+E_CONV  = psi4.core.get_global_option('E_CONVERGENCE')
 
 class RHF(object):
 
@@ -55,7 +55,7 @@ class RHF(object):
 
       dE = E - self.E                  # get change in energy
       self.E, self.C, self.e = E, C, e # save these for later
-      psi4.print_out('@RHF {:<3d} {:20.15f} {:20.15f}\n'.format(i, E, dE)) # print progress
+      psi4.core.print_out('@RHF {:<3d} {:20.15f} {:20.15f}\n'.format(i, E, dE)) # print progress
       if(np.fabs(dE) < E_CONV): break  # quit if converged
 
     return self.E

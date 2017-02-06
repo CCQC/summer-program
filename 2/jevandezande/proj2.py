@@ -72,7 +72,7 @@ def run(name):
     # Name the oputput file the same, except for the extension
     out = '.'.join(name.split('.')[:-1]) + '.out'
     # Run
-    subprocess.check_call('. ~/setup.zsh; psi4 -i {} -o {}'.format(name, out), shell=True)
+    subprocess.check_call('psi4 -i {} -o {}'.format(name, out), shell=True)
 
 
 def get_energy(output_file):

@@ -1,4 +1,4 @@
-import psi4
+import psi4.core
 import numpy as np
 
 class RMP2(object):
@@ -23,7 +23,7 @@ class RMP2(object):
           for b in range(nocc, norb):
             E += g[i,j,a,b] * ( 2*g[i,j,a,b] - g[i,j,b,a] ) / (e[i] + e[j] - e[a] - e[b])
 
-    psi4.print_out('@RMP2 correlation energy: {:20.15f}\n'.format(E))
+    psi4.core.print_out('@RMP2 correlation energy: {:20.15f}\n'.format(E))
     self.E = E
     return E
 

@@ -1,112 +1,81 @@
 import psi4
 import numpy as np
-import scipy.linalg as la
 
-class RHF:
+from scf import SCF
+
+
+class RHF(SCF):
     """
-    Restricted Hartree-Fock class for obtaining the restricted Hartree-Fock
-    energy
+    Restricted Hartree-Fock class
     """
-
-    def __init__(self, mol, mints):
+    def __init__(self, options_ini):
+        super().__init__(options_ini)
+        nocc = self.config['DEFAULT']['docc']
+        if nocc.isnumeric():
+            self.nocc = int(nocc)
+        else:
+            self.nocc = nocc.split()
+            raise Exception('Occupation arrays currently not supported')
+        self.ntot = len(self.H)
+        self.nvirt = self.ntot - self.nocc
+        self.RESTRICTED = True
+        
+    def energy(self):
         """
-        Initialize the rhf
-        :param mol: a psi4 molecule object
-        :param mints: a molecular integrals object (from MintsHelper)
+        Compute the RHF energy
+        :return: the RHF energy
         """
-        self.mol = mol
-        self.mints = mints
+        energies = [0.0]
+        self.densities = [np.zeros_like(self.H)]
+        self.focks = [np.zeros_like(self.H)]
+        d_norms = []
 
-        self.V_nuc = mol.nuclear_repulsion_energy()
-        self.T = np.matrix(mints.ao_kinetic())
-        self.S = np.matrix(mints.ao_overlap())
-        self.V = np.matrix(mints.ao_potential())
+        g, H, A, nocc, V_nuc = self.g, self.H, self.A, self.nocc, self.V_nuc
 
-        self.g = np.array(mints.ao_eri())
+        # Core guess
+        F = H
+        print('Iter         Energy            ΔE         ‖ΔD‖')
+        print('--------------------------------------------------')
+        for iteration in range(self.options['SCF_MAX_ITER']):
+            # Transform Fock
+            tF = A @ F @ A
+            # Diagonalize Fock
+            e, tC = np.linalg.eigh(tF)
+            # Construct new SCF eigenvector
+            C = A @ tC
+            Cocc = C[:, :nocc]
+            # Form new density
+            D = Cocc @ Cocc.T
+            self.densities.append(D)
 
-        # Determine the number of electrons and the number of doubly occupied orbitals
-        self.nelec = -mol.molecular_charge()
-        for A in range(mol.natom()):
-            self.nelec += int(mol.Z(A))
-        if mol.multiplicity() != 1 or self.nelec % 2:
-            raise Exception("This code only allows closed-shell molecules")
-        self.ndocc = self.nelec / 2
+            # Construct Fock
+            J = np.einsum('pqrs,rs->pq', g, D)
+            K = np.einsum('prqs,rs->pq', g, D)
+            F = H + 2*J - K
+            self.focks.append(F)
 
-        self.maxiter = psi4.get_global_option('MAXITER')
-        self.e_convergence = psi4.get_global_option('E_CONVERGENCE')
+            E_scf = np.einsum('pq,pq->', F + H, D) + V_nuc
+            energies.append(E_scf)
+            ΔE = energies[-1] - energies[-2]
+            d_norms.append(np.linalg.norm(self.densities[-2] - self.densities[-1]))
+            print('{:3d} {:> 20.14f} {:> 1.5E}  {:>1.5E}'.format(iteration, E_scf, ΔE, d_norms[-1]))
 
-        self.nbf = mints.basisset().nbf()
+            # Check for convergence
+            if abs(ΔE) < 1.0e-10 and d_norms[-1] < 1.0e-10:
+                break
 
-    def compute_energy(self):
-        """
-        Compute the rhf energy
-        :return: energy
-        """
-        V_nuc, T, S, V, g = self.V_nuc, self.T, self.S, self.V, self.g
-        nbf, ndocc = self.nbf, self.ndocc
+            if self.options['DIIS'] and self.options['DIIS_START'] < iteration:
+                # Note trailing comma for generators
+                F, = self.extrapolate_diis()
 
-        D = np.zeros((self.nbf, self.nbf))
-        C = np.zeros((self.nbf, self.nbf))
+        print('\nEnergy: {:> 15.10f}'.format(E_scf))
+        self.C, self.e, self.E_scf = C, e, E_scf
+        self.energies, self.d_norms = energies, d_norms
+        return E_scf
 
-        # S^{-1/2}
-        X = la.inv(la.sqrtm(S)).view(np.matrix)
 
-        psi4.print_out('Iter.        Energy\n')
-        scf_form = '{: >3d}  {: >20.15f}\n'
-        i = 0
-        converged = False
-        e_old = 0
-        # Begin SCF iterations
-        while not converged and i < self.maxiter:
-            F = self.build_fock(D)
-
-            # Transformed Fock matrix to an orthogonal basis
-            tF = X*F*X
-
-            # Diagonalized the transformed Fock matrix
-            e, tC = la.eigh(tF)
-
-            # Convert eigenvectors to AO basis (from orthogonal basis)
-            C = X*tC
-
-            # Form density matrix
-            D = C[:, :ndocc]*C[:, :ndocc].T
-
-            # Compute the energy
-            E = np.trace((F + T +V)*D) + V_nuc
-
-            i += 1
-            # Check convergence
-            if abs(E - e_old) < self.e_convergence:
-                converged = True
-            e_old = E
-
-            psi4.print_out(scf_form.format(i, E))
-
-        psi4.print_out('RHF Energy: {:20.15f}\n'.format(E))
-
-        self.e  = e
-        self.C = C
-        self.E = E
-
-        return E
-
-    def build_fock(self, D):
-        """
-        Build J and K - the Coulomb and exchange matrices
-        :param D: density matrix
-        :return: Fock matrix
-        """
-        nbf, g = self.nbf, self.g
-        J = np.zeros((nbf, nbf))
-        K = np.zeros((nbf, nbf))
-        for p in range(nbf):
-            for q in range(nbf):
-                for r in range(nbf):
-                    for s in range(nbf):
-                        J[p, q] += D[r, s]*g[p, q, r, s]
-                        K[p, q] += D[r, s]*g[p, r, q, s]
-
-        F = self.T + self.V + 2*J - K
-
-        return F
+if __name__ == "__main__":
+    water = RHF('Options.ini')
+    water.energy()
+    #water.plot_convergence()
+    #water.plot_density_changes()

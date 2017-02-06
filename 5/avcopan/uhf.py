@@ -1,4 +1,4 @@
-import psi4
+import psi4.core
 import numpy as np
 import scipy.linalg as la
 
@@ -29,7 +29,7 @@ class UHF:
 
       self.E = 0.0
 
-      for i in range(psi4.get_option('SCF', 'MAXITER')):
+      for i in range(psi4.core.get_option('SCF', 'MAXITER')):
         v = np.einsum('mrns,sr', g, D)   # e- field  v_mu,nu = sum_rh,si <mu rh||mu si> D_si,rh
         f = h + v                        # build fock matrix
 
@@ -44,7 +44,7 @@ class UHF:
         dE = E - self.E                  # get change in energy
         self.E, self.C, self.e = E, C, e # save these for later
         print('UHF {:-3d}{:20.15f}{:20.15f}'.format(i, E, dE)) # print progress
-        if(np.fabs(dE) < psi4.get_global_option('E_CONVERGENCE')): break # quit if converged
+        if(np.fabs(dE) < psi4.core.get_global_option('E_CONVERGENCE')): break # quit if converged
 
       return self.E
 
