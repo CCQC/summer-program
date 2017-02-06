@@ -3,6 +3,7 @@ import numpy as np
 import configparser
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.colors import LogNorm
 import abc
 
 
@@ -58,8 +59,11 @@ class SCF:
         if self.RESTRICTED:
             yield SCF.solve_diis(focks, densities, self.S)
         else:
-            for fx, dx in zip(zip(*focks), zip(*densities)):
-                yield SCF.solve_diis(fx, dx, self.S)
+            if True:
+                for fx, dx in zip(zip(*focks), zip(*densities)):
+                    yield SCF.solve_diis(fx, dx, self.S)
+            else:
+                pass
 
     @staticmethod
     def solve_diis(focks, densities, S):
@@ -127,9 +131,9 @@ class SCF:
                 d = densities[j]
             ax = axes[i - 1]
             ax.set_title('{:d}'.format(j))
-            ax.imshow(d, interpolation='nearest', cmap=cmap)
+            ax.imshow(d, interpolation='nearest', cmap=cmap, norm=LogNorm(vmin=1.0e-10, vmax=d.max()))
 
-        #fig.colorbar(densities[-1])
+        fig.colorbar(densities[-1])
         plt.show()
 
 
@@ -152,7 +156,30 @@ class SCF:
                 d = densities[j] - densities[j-1]
             ax = axes[i - 1]
             ax.set_title('{:d}'.format(j))
-            ims.append(ax.imshow(d, interpolation='nearest', cmap=cmap))
+            ims.append(ax.imshow(d, interpolation='nearest', cmap=cmap, norm=LogNorm(vmin=1.0e-10, vmax=d.max())))
 
         fig.colorbar(ims[-1])
+        plt.show()
+
+    def plot_focks(self):
+        """
+        Plot the focks
+        """
+        focks = self.focks
+        fig, axes = plt.subplots(3, 3)
+        axes = axes.reshape(-1)
+        cmap = plt.get_cmap('Oranges_r')
+
+        for i in range(1, min(len(focks), 10)):
+            # Select distributed throughout
+            j = i
+            f = focks[j]
+            if len(focks) > 10:
+                j = len(focks)//10 * i
+                f = focks[j]
+            ax = axes[i - 1]
+            ax.set_title('{:d}'.format(j))
+            ax.imshow(f, interpolation='nearest', cmap=cmap, norm=LogNorm(vmin=1.0e-10, vmax=f.max()))
+
+        fig.colorbar(focks[-1])
         plt.show()
