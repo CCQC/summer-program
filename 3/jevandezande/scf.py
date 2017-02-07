@@ -3,6 +3,7 @@ import numpy as np
 import configparser
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.colors import LogNorm
 import abc
 
 
@@ -52,18 +53,6 @@ class SCF:
         """
         Extrapolate the Fock matrix
         :yield: Fock matrices that need to be extrapolated
-        """
-        start = max(1, len(self.focks) - self.options['DIIS_NVECTOR'])
-        focks, densities = self.focks[start:], self.densities[start:]
-        if self.RESTRICTED:
-            yield SCF.solve_diis(focks, densities, self.S)
-        else:
-            for fx, dx in zip(zip(*focks), zip(*densities)):
-                yield SCF.solve_diis(fx, dx, self.S)
-
-    @staticmethod
-    def solve_diis(focks, densities, S):
-        """
         P. Pulay, Chem. Phys. Lett. 73, 393 (1980).
 
         e = F*D*S - S*D*F
@@ -78,9 +67,19 @@ class SCF:
         |-1 |-1 |-1 | 0 | | λ |   |-1 |
         +---+---+---+---+ +---+   +---+
         """
-        num_mats = len(focks)
+        S = self.S
+        start = max(1, len(self.focks) - self.options['DIIS_NVECTOR'])
+        focks, densities = self.focks[start:], self.densities[start:]
 
-        e_vecs = [F @ D @ S - S @ D @ F for F, D in zip(focks, densities)]
+        num_mats = len(focks)
+        if isinstance(focks[0], (list, tuple)):
+            e_vecs = []
+            for (Fa, Fb), (Da, Db) in zip(focks, densities):
+                e_a = Fa @ Da @ S - S @ Da @ Fa
+                e_b = Fb @ Db @ S - S @ Db @ Fb
+                e_vecs.append(np.append(e_a, e_b, axis=0))
+        else:
+            e_vecs = [F @ D @ S - S @ D @ F for F, D in zip(focks, densities)]
 
         P = np.zeros((num_mats + 1, num_mats + 1))
         for i, j in zip(*np.triu_indices(num_mats)):
@@ -92,21 +91,21 @@ class SCF:
 
         q_vec = np.linalg.solve(P, f)
 
-        F_diis = np.zeros_like(focks[0])
-        for q, F in zip(q_vec[:-1], focks):
-            F_diis += q*F
-
-        return F_diis
+        if isinstance(focks[0], (list, tuple)):
+            focks = [(q*Fa, q*Fb) for q, (Fa, Fb) in zip(q_vec[:-1], focks)]
+            return np.array(focks).sum(axis=0)
+        else:
+            return sum([q*F for q, F in zip(q_vec[:-1], focks)])
 
     def plot_convergence(self):
         """
         Plot the convergence of energy change and density norm
         """
         energies, d_norms = np.array(self.energies), self.d_norms
-        e, = plt.plot(abs(energies[1:-1] - energies[2:]), label=r'$\Delta$ E')
-        d, = plt.plot(d_norms[1:], label=r'$||\Delta$ D$||$')
+        plt.plot(abs(energies[1:-1] - energies[2:]), label=r'$\Delta$ E')
+        plt.plot(d_norms[1:], label=r'$||\Delta$ D$||$')
         plt.yscale('log')
-        plt.legend([e, d])
+        plt.legend()
         plt.show()
 
     def plot_densities(self):
@@ -127,9 +126,9 @@ class SCF:
                 d = densities[j]
             ax = axes[i - 1]
             ax.set_title('{:d}'.format(j))
-            ax.imshow(d, interpolation='nearest', cmap=cmap)
+            ax.imshow(d, interpolation='nearest', cmap=cmap, norm=LogNorm(vmin=1.0e-10, vmax=d.max()))
 
-        #fig.colorbar(densities[-1])
+        fig.colorbar(densities[-1])
         plt.show()
 
 
@@ -152,7 +151,30 @@ class SCF:
                 d = densities[j] - densities[j-1]
             ax = axes[i - 1]
             ax.set_title('{:d}'.format(j))
-            ims.append(ax.imshow(d, interpolation='nearest', cmap=cmap))
+            ims.append(ax.imshow(d, interpolation='nearest', cmap=cmap, norm=LogNorm(vmin=1.0e-10, vmax=d.max())))
 
         fig.colorbar(ims[-1])
+        plt.show()
+
+    def plot_focks(self):
+        """
+        Plot the focks
+        """
+        focks = self.focks
+        fig, axes = plt.subplots(3, 3)
+        axes = axes.reshape(-1)
+        cmap = plt.get_cmap('Oranges_r')
+
+        for i in range(1, min(len(focks), 10)):
+            # Select distributed throughout
+            j = i
+            f = focks[j]
+            if len(focks) > 10:
+                j = len(focks)//10 * i
+                f = focks[j]
+            ax = axes[i - 1]
+            ax.set_title('{:d}'.format(j))
+            ax.imshow(f, interpolation='nearest', cmap=cmap, norm=LogNorm(vmin=1.0e-10, vmax=f.max()))
+
+        fig.colorbar(focks[-1])
         plt.show()

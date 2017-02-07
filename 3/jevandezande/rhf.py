@@ -66,7 +66,7 @@ class RHF(SCF):
 
             if self.options['DIIS'] and self.options['DIIS_START'] < iteration:
                 # Note trailing comma for generators
-                F, = self.extrapolate_diis()
+                F = self.extrapolate_diis()
 
         print('\nEnergy: {:> 15.10f}'.format(E_scf))
         self.C, self.e, self.E_scf = C, e, E_scf
