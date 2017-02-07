@@ -107,10 +107,10 @@ class SCF:
         Plot the convergence of energy change and density norm
         """
         energies, d_norms = np.array(self.energies), self.d_norms
-        e, = plt.plot(abs(energies[1:-1] - energies[2:]), label=r'$\Delta$ E')
-        d, = plt.plot(d_norms[1:], label=r'$||\Delta$ D$||$')
+        plt.plot(abs(energies[1:-1] - energies[2:]), label=r'$\Delta$ E')
+        plt.plot(d_norms[1:], label=r'$||\Delta$ D$||$')
         plt.yscale('log')
-        plt.legend([e, d])
+        plt.legend()
         plt.show()
 
     def plot_densities(self):
