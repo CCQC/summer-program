@@ -53,21 +53,6 @@ class SCF:
         """
         Extrapolate the Fock matrix
         :yield: Fock matrices that need to be extrapolated
-        """
-        start = max(1, len(self.focks) - self.options['DIIS_NVECTOR'])
-        focks, densities = self.focks[start:], self.densities[start:]
-        if self.RESTRICTED:
-            yield SCF.solve_diis(focks, densities, self.S)
-        else:
-            if True:
-                for fx, dx in zip(zip(*focks), zip(*densities)):
-                    yield SCF.solve_diis(fx, dx, self.S)
-            else:
-                pass
-
-    @staticmethod
-    def solve_diis(focks, densities, S):
-        """
         P. Pulay, Chem. Phys. Lett. 73, 393 (1980).
 
         e = F*D*S - S*D*F
@@ -82,9 +67,19 @@ class SCF:
         |-1 |-1 |-1 | 0 | | λ |   |-1 |
         +---+---+---+---+ +---+   +---+
         """
-        num_mats = len(focks)
+        S = self.S
+        start = max(1, len(self.focks) - self.options['DIIS_NVECTOR'])
+        focks, densities = self.focks[start:], self.densities[start:]
 
-        e_vecs = [F @ D @ S - S @ D @ F for F, D in zip(focks, densities)]
+        num_mats = len(focks)
+        if isinstance(focks[0], (list, tuple)):
+            e_vecs = []
+            for (Fa, Fb), (Da, Db) in zip(focks, densities):
+                e_a = Fa @ Da @ S - S @ Da @ Fa
+                e_b = Fb @ Db @ S - S @ Db @ Fb
+                e_vecs.append(np.append(e_a, e_b, axis=0))
+        else:
+            e_vecs = [F @ D @ S - S @ D @ F for F, D in zip(focks, densities)]
 
         P = np.zeros((num_mats + 1, num_mats + 1))
         for i, j in zip(*np.triu_indices(num_mats)):
@@ -96,11 +91,11 @@ class SCF:
 
         q_vec = np.linalg.solve(P, f)
 
-        F_diis = np.zeros_like(focks[0])
-        for q, F in zip(q_vec[:-1], focks):
-            F_diis += q*F
-
-        return F_diis
+        if isinstance(focks[0], (list, tuple)):
+            focks = [(q*Fa, q*Fb) for q, (Fa, Fb) in zip(q_vec[:-1], focks)]
+            return np.array(focks).sum(axis=0)
+        else:
+            return sum([q*F for q, F in zip(q_vec[:-1], focks)])
 
     def plot_convergence(self):
         """
