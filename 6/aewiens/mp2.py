@@ -1,117 +1,68 @@
-import numpy as np
-import sys
-sys.path.insert(0,"../../5/aewiens/")
+#!/usr/bin/env python3
 
+import psi4, sys, numpy as np, configparser as cfp
+sys.path.insert(0,"../../5/aewiens/")
 from uhf import UHF
 
-class UMP2:
-    
-    def __init__(self,mol,mints):
+class MP2:
 
-        uhf = UHF(mol,mints)
-        uhf.compute_energy()
-        self.Ecorr = 0.0
+	def __init__(self,mol,mints,maxiter,conv):
 
-        self.nocc = uhf.nocc
-        self.norb = uhf.norb
-        self.E0 = uhf.E
-        self.e = uhf.e
-        self.C = uhf.C
-        self.G = uhf.g
+		uhf = UHF(mol,mints,maxiter,conv)
+		uhf.computeEnergy()
 
-
-    def get_mp2(self):
-
-        """
-        Spin-orbital implementation of mp2 equations
-        """
-
-        Gmo = tei_einsum(self.G, self.C)        ##  fastest
-        nocc, norb, e, Ecorr = self.nocc, self.norb, self.e, self.Ecorr
-
-        o = slice(0,nocc)
-        v = slice(nocc,nocc+norb)
-        x = np.newaxis
-        D = e[o,x,x,x] + e[x,o,x,x] - e[x,x,v,x] - e[x,x,x,v]
-
-        T =  np.square(Gmo[o,o,v,v])
-        T /= D
-        self.Ecorr = 0.25*np.ndarray.sum(T,axis=(0,1,2,3))
-
-        """
-        for i in range(nocc):
-            for j in range(nocc):
-                for a in range(nocc,norb):
-                    for b in range(nocc,norb):
-                        self.Ecorr += 0.25 * (Gmo[i,j,a,b])**2 / (e[i] + e[j] - e[a] - e[b])
-        """
-
-        return self.E0 + self.Ecorr
+		self.nocc = uhf.nelec
+		self.norb = uhf.norb
+		self.E0   = uhf.E
+		self.e    = uhf.e
+		self.C    = uhf.C
+		self.G    = uhf.g
 
 
-"""
-Integral transformation functions: gAO --> gMO using expansion coefficients C
-    - 2 different algorithms
-    - ^ with and without einsum
-"""
-
-def tei(g, C, norb):
-
-    Gmo1 = np.zeros(g.shape)
-    for P in range(norb):
-        for Q in range(norb):
-            for R in range(norb):
-                for S in range(norb):
-                    for s in range(norb):
-                        Gmo1[P,Q,R,s] += C[S,s] * g[P,Q,R,S] 
-
-    Gmo2 = np.zeros(g.shape)
-    for P in range(norb):
-        for Q in range(norb):
-            for R in range(norb):
-                for s in range(norb):
-                    for r in range(norb):
-                        Gmo2[P,Q,r,s] += C[R,r] * Gmo1[P,Q,R,s] 
-
-    Gmo3 = np.zeros(g.shape)
-    for P in range(norb):
-        for Q in range(norb):
-            for r in range(norb):
-                for s in range(norb):
-                    for q in range(norb):
-                        Gmo3[P,q,r,s] += C[Q,q] * Gmo2[P,Q,r,s] 
-
-    Gmo = np.zeros(g.shape)
-    for P in range(norb):
-        for q in range(norb):
-            for r in range(norb):
-                for s in range(norb):
-                    for p in range(norb):
-                        Gmo[p,q,r,s] += C[P,p] * Gmo3[P,q,r,s] 
-
-    return Gmo
+	def tei_einsum(self,g,C):
+		return np.einsum("Pp,Pqrs->pqrs",C,
+				np.einsum("Qq,PQrs->Pqrs",C,
+				np.einsum("Rr,PQRs->PQrs",C,
+				np.einsum("Ss,PQRS->PQRs",C,g))))
 
 
-def tei_einsum(g,C):
-    return np.einsum("Pp,Pqrs->pqrs",C,
-                np.einsum("Qq,PQrs->Pqrs",C,
-                    np.einsum("Rr,PQRs->PQrs",C,
-                        np.einsum("Ss,PQRS->PQRs",C,g))))
+	def computeEnergy(self):
+		"""
+		Spin-orbital implementation of mp2 equations
+		"""
+
+		Gmo  = self.tei_einsum(self.G, self.C)
+		nocc = self.nocc
+		norb = self.norb
+
+		e = self.e
+		o = slice(0,nocc)
+		v = slice(nocc,nocc+norb)
+		x = np.newaxis
+
+		D = e[o,x,x,x] + e[x,o,x,x] - e[x,x,v,x] - e[x,x,x,v]
+		T =  np.square(Gmo[o,o,v,v])
+		T /= D
+
+		Ecorr = 0.25*np.ndarray.sum(T,axis=(0,1,2,3))
+
+		return self.E0 + Ecorr
 
 
-def tei_noddy(g,C,norb):
-    Gmo = np.zeros(g.shape)
-    for p in range(norb):
-        for q in range(norb):
-            for r in range(norb):
-                for s in range(norb):
-                    for P in range(norb):
-                        for Q in range(norb):
-                            for R in range(norb):
-                                for S in range(norb):
-                                    Gmo[p,q,r,s] += C[P,p]*C[Q,q]*C[R,r]*C[S,s] * g[P,Q,R,S]
-    return Gmo
 
+if __name__ == '__main__':
+	
+	config = cfp.ConfigParser()
+	config.read('Options.ini')
 
-def tei_noddy_einsum(g,C):
-    return np.einsum("PQRS,Pp,Qq,Rr,Ss->pqrs",g,C,C,C,C)
+	molecule = psi4.geometry( config['DEFAULT']['molecule'] )
+	molecule.update_geometry()
+
+	basis = psi4.core.BasisSet.build(molecule, "BASIS", config['DEFAULT']['basis'],puream=0)
+	mints = psi4.core.MintsHelper(basis)
+
+	maxiter   = int( config['SCF']['maxIter'] )
+	conv      = float( config['SCF']['conv']  )
+
+	mp2 = MP2(molecule,mints,maxiter,conv)
+	print( mp2.computeEnergy() )
