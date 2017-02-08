@@ -68,8 +68,7 @@ class UHF(SCF):
             if abs(ΔE) < 1.0e-10 and self.d_norms[-1] < 1.0e-10:
                 break
 
-            if self.options['DIIS'] and self.options['DIIS_START'] < iteration:
-                # Note trailing comma for generators
+            if self.options['DIIS'] and iteration >= self.options['DIIS_START']:
                 Fa, Fb = self.extrapolate_diis()
 
         print('\nUHF Energy: {:> 15.10f}'.format(E_scf))
