@@ -15,52 +15,44 @@ class UHF:
 
 		self.Vnu = mol.nuclear_repulsion_energy()
 		self.E   = 0.0
+		self.D   = np.zeros_like(self.S)
 
 
 	def getIntegrals(self,mints):
 
+		##   one-electron  ##
 		self.T = block_oei( mints.ao_kinetic() )
 		self.V = block_oei( mints.ao_potential() )
 		self.S = block_oei( mints.ao_overlap() )                      
 
-		G = block_tei(np.array( mints.ao_eri() ) )
-		self.g = G.transpose((0,2,1,3))-G.transpose((0,2,3,1))
-
 		S = mints.ao_overlap()
 		S.power(-0.5,1.e-16)
 		self.X = block_oei( S.to_array() )
-		self.D = np.zeros_like(self.S)
+
+		##  two-electron  ##
+		G = block_tei(np.array( mints.ao_eri() ) )
+		self.G = G.transpose((0,2,1,3))-G.transpose((0,2,3,1))
+
 		
-
-	def getNelec(self, mol):
-
-		char = mol.molecular_charge()
-		nelec = -char
-		for A in range(mol.natom()):
-			nelec += mol.Z(A)
-
-		return int(nelec)
-
-
 	def computeEnergy(self):
 
 		H = self.T + self.V
 		X = self.X
-		g = self.g
+		G = self.G
 		D = self.D
 
 		for i in range(self.maxiter):
 
-			v = np.einsum("mnrs,ns->mr", g, self.D)
+			v = np.einsum("mnrs,ns->mr", G, self.D)
 			F = H + v
 			e,tC = np.linalg.eigh(X@F@ X)
 
 			C  = X@tC
 			oC = C[:,:self.nelec]
-			D  = oC * oC.T
+			D  = oC@oC.T
 
 			E0 = self.E
-			E  = np.trace( (H+0.5*v)*D) + self.Vnu
+			E  = np.trace( (H+0.5*v)@D) + self.Vnu
 			dE = np.fabs(E-E0)
 			
 			if __name__ == '__main__':
@@ -75,6 +67,15 @@ class UHF:
 				break
 
 		return self.E
+
+	def getNelec(self, mol):
+
+		char = mol.molecular_charge()
+		nelec = -char
+		for A in range(mol.natom()):
+			nelec += mol.Z(A)
+
+		return int(nelec)
 
 
 """
@@ -98,6 +99,7 @@ def block_tei(T):
             T[n:,n:] = T[:n,:n]
     return T
 
+
 if __name__ == '__main__':
 	
 	config = cfp.ConfigParser()
@@ -109,8 +111,11 @@ if __name__ == '__main__':
 	basis = psi4.core.BasisSet.build(molecule, "BASIS", config['DEFAULT']['basis'],puream=0)
 	mints = psi4.core.MintsHelper(basis)
 
-	maxiter   = int( config['SCF']['maxIter'] )
-	conv      = float( config['SCF']['conv']  )
+	scf = config['SCF']
+	uhf = UHF(molecule,
+			  mints,
+			  int( scf['maxIter'] ),
+			  float( scf['conv'] )
+			 )
 
-	uhf = UHF(molecule,mints,maxiter,conv)
 	uhf.computeEnergy()
