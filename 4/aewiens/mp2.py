@@ -1,49 +1,63 @@
-import numpy as np 
-from psi4_helper import get_docc, get_nbf, get_conv, get_maxiter
+#!/usr/bin/env python3
 
+import psi4, configparser, numpy as np
 import sys
 sys.path.insert(0,"../../3/aewiens")
 from rhf import RHF
 
+
 class MP2:
 
-    def __init__(self,mol,mints):
+	def __init__(self,mol,mints):
 
-        self.docc = get_docc(mol)
-        self.nbf = get_nbf(mints)
-        self.conv = get_conv()
-        self.maxiter = get_maxiter()
-
-        rhf = RHF(mol,mints)
-        self.E_scf = rhf.get_energy()
-
-        self.e = rhf.e
-        self.G = rhf.G
-        self.C = rhf.C
+		rhf       = RHF(mol,mints)
+		self.E0   = rhf.computeEnergy()
+		self.docc = rhf.docc
+		self.nbf  = len(rhf.S) 
+		self.e    = rhf.e
+		self.G    = rhf.G
+		self.C    = rhf.C
 
 
-    def get_energy(self):
+	def get_energy(self):
 
-        #rename class variables
-        docc, nbf, conv, maxiter = self.docc, self.nbf, self.conv, self.maxiter
-        E_scf, e = self.E_scf, self.e
+		docc = self.docc
+		nbf  = self.nbf
+		E0   = self.E0
+		e    = self.e
 
-        Gmo = self.transform_integrals_noddy()
-        Ecorr = 0.0
-        for i in range(docc):
-            for j in range(docc):
-                for a in range(docc,nbf):
-                    for b in range(docc,nbf):
-                        Ecorr += (2*Gmo[i,j,a,b]-Gmo[i,j,b,a])*Gmo[i,j,a,b]/(e[i]+e[j]-e[a]-e[b])
+		Gmo   = self.transform_integrals()
+		Ecorr = 0.0
 
-        return E_scf + Ecorr
+		for i in range(docc):
+			for j in range(docc):
+				for a in range(docc,nbf):
+					for b in range(docc,nbf):
+						Ecorr += (2*Gmo[i,j,a,b]-Gmo[i,j,b,a])*Gmo[i,j,a,b]/(e[i]+e[j]-e[a]-e[b])
 
-    def transform_integrals(self):
-        G,C = self.G, self.C
-        return np.einsum("Pqrs,Pp->pqrs",
-                np.einsum("PQrs,Qq->Pqrs",
-                    np.einsum("PQRs,Rr->PQrs",
-                        np.einsum("PQRS,Ss->PQRs", G, C), C) ,C) ,C)
+		return E0 + Ecorr
+
+
+	def transform_integrals(self):
+		G,C = self.G, self.C
+		return np.einsum("Pqrs,Pp->pqrs",
+			np.einsum("PQrs,Qq->Pqrs",
+			np.einsum("PQRs,Rr->PQrs",
+			np.einsum("PQRS,Ss->PQRs", G, C), C) ,C) ,C)
+
+
+if __name__ == '__main__':
+	config = configparser.ConfigParser()
+	config.read('Options.ini')
+
+	molecule   = psi4.geometry( config['DEFAULT']['molecule'] )
+	molecule.update_geometry()
+
+	basis = psi4.core.BasisSet.build(molecule, "BASIS", config['DEFAULT']['basis'],puream=0)
+	mints = psi4.core.MintsHelper(basis)
+	mp2 = MP2(molecule,mints)
+	print( mp2.get_energy() )
+
 
 """
 ##  Slower but instructive ways to transform integrals
