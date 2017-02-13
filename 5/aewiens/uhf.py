@@ -1,66 +1,82 @@
-from psi4_helper import get_nbf,get_nocc,get_conv,get_maxiter
-import numpy as np
-import scipy.linalg as la
+#!/usr/bin/env python3
+
+import psi4, numpy as np, configparser as cfp
 
 class UHF:
-    """
-    Class for unrestricted (spin-orbital) Hartree-Fock computations
-    """
 
-    def __init__(self,mol,mints):
-        """
-        Initialize uhf class
-        :param mol: a psi4 molecule object
-        :param mints: a molecular integrals object (from psi4 MintsHelper)
-        """
-        self.nbf = get_nbf(mints)
-        self.norb = 2* self.nbf
-        self.nocc = get_nocc(mol)
-        self.conv = get_conv()
-        self.maxiter = get_maxiter()
+	def __init__(self,mol,mints,maxiter,conv):
 
-        T = block_oei( mints.ao_kinetic() )
-        V = block_oei( mints.ao_potential() )
-        S = block_oei( mints.ao_overlap() )                      
-        G = block_tei(np.array( mints.ao_eri() ) )                    ##  4D ERI array (chemists' notation)
+		self.getIntegrals(mints)
 
-        self.H = T + V
-        self.X = np.matrix(la.funm(S,lambda x : x**(-0.5)))           ##  S^{-1/2} diagonalizes the Fock matrix
-        self.Vnu = mol.nuclear_repulsion_energy()                     ##  Nuclear repulsion energy
-        self.g = G.transpose((0,2,1,3))-G.transpose((0,2,3,1))        ##  ( m n | r s )  --> < m r || n s >
-        self.D = np.matrix(np.zeros( S.shape ))                    
+		self.nelec   = self.getNelec(mol)
+		self.conv    = conv
+		self.maxiter = maxiter
+		self.norb    = len(self.S)
 
-        self.E = 0.0
+		self.Vnu = mol.nuclear_repulsion_energy()
+		self.E   = 0.0
+		self.D   = np.zeros_like(self.S)
 
-    def compute_energy(self):
-        """
-        print E and dE from each iteration
-        return uhf energy
-        """
 
-        g, H, X, D = self.g, self.H, self.X, self.D
+	def getIntegrals(self,mints):
 
-        for i in range(self.maxiter):
-            v = np.einsum("mnrs,ns->mr", g, self.D)
-            F = H+ v                                                  ##  build fock matrix (1st guess is F = Hcore) 
-            e,tC = la.eigh(X * F * X)                                 ##  eigenvalues, vectors of transformed Fock matrix
-            C = X * tC                                                ##  backtransform C
-            oC = C[:,:self.nocc]                                      ##  occupied MO coefficients
-            D = oC * oC.T                                             ##  density matrix (of MO coefficients)
+		##   one-electron  ##
+		self.T = block_oei( mints.ao_kinetic() )
+		self.V = block_oei( mints.ao_potential() )
+		self.S = block_oei( mints.ao_overlap() )                      
 
-            E0 = self.E
-            E = np.trace( (H+0.5*v)*D) + self.Vnu           ##  HF energy
-            dE = np.fabs(E-E0)
-            print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
+		S = mints.ao_overlap()
+		S.power(-0.5,1.e-16)
+		self.X = block_oei( S.to_array() )
 
-            ##  object variables we changed in this iteration
-            self.E, self.C, self.e, self.D = E, C, e, D
+		##  two-electron  ##
+		G = block_tei(np.array( mints.ao_eri() ) )
+		self.G = G.transpose((0,2,1,3))-G.transpose((0,2,3,1))
 
-            if dE < self.conv: break
+		
+	def computeEnergy(self):
 
-        return self.E
+		H = self.T + self.V
+		X = self.X
+		G = self.G
+		D = self.D
 
-         
+		for i in range(self.maxiter):
+
+			v = np.einsum("mnrs,ns->mr", G, self.D)
+			F = H + v
+			e,tC = np.linalg.eigh(X@F@ X)
+
+			C  = X@tC
+			oC = C[:,:self.nelec]
+			D  = oC@oC.T
+
+			E0 = self.E
+			E  = np.trace( (H+0.5*v)@D) + self.Vnu
+			dE = np.fabs(E-E0)
+			
+			if __name__ == '__main__':
+				print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
+
+			self.E = E
+			self.C = C
+			self.e = e
+			self.D = D 
+
+			if dE < self.conv:
+				break
+
+		return self.E
+
+	def getNelec(self, mol):
+
+		char = mol.molecular_charge()
+		nelec = -char
+		for A in range(mol.natom()):
+			nelec += mol.Z(A)
+
+		return int(nelec)
+
 
 """
 spin-blocking functions: transform from spatial orbital {x_mu} basis to spin orbital basis {x_mu alpha, x_mu beta}
@@ -82,3 +98,24 @@ def block_tei(T):
             T[p,q] = np.kron( I2, t[p,q] )
             T[n:,n:] = T[:n,:n]
     return T
+
+
+if __name__ == '__main__':
+	
+	config = cfp.ConfigParser()
+	config.read('Options.ini')
+
+	molecule = psi4.geometry( config['DEFAULT']['molecule'] )
+	molecule.update_geometry()
+
+	basis = psi4.core.BasisSet.build(molecule, "BASIS", config['DEFAULT']['basis'],puream=0)
+	mints = psi4.core.MintsHelper(basis)
+
+	scf = config['SCF']
+	uhf = UHF(molecule,
+			  mints,
+			  int( scf['maxIter'] ),
+			  float( scf['conv'] )
+			 )
+
+	uhf.computeEnergy()

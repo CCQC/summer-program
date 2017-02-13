@@ -74,6 +74,8 @@ class RHF(object):
 
 			self.D = D
 			self.E = E
+			self.e = e
+			self.C = C
 
 		return E
 
