@@ -1,6 +1,7 @@
 import psi4
 import numpy as np
 from scf import SCF
+from fractions import Fraction
 
 
 class UHF(SCF):
@@ -11,6 +12,7 @@ class UHF(SCF):
         super().__init__(options_ini)
         self.n_occ_a = int(self.config['DEFAULT']['nalpha'])
         self.n_occ_b = int(self.config['DEFAULT']['nbeta'])
+        self.spin = Fraction(self.n_occ_a - self.n_occ_b, 2)
         
     def energy(self):
         """

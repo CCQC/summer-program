@@ -18,8 +18,6 @@ class SCF:
         self.molecule.update_geometry()
         self.V_nuc = self.molecule.nuclear_repulsion_energy()
 
-        self.RESTRICTED = False
-
         self.options = {}
         self.options['BASIS'] = self.config['DEFAULT']['basis']
         self.options['SCF_MAX_ITER'] = self.config.getint('SCF', 'max_iter', fallback=50)
@@ -29,18 +27,20 @@ class SCF:
         self.options['DIIS_START'] = self.config.getint('SCF', 'diis_start', fallback=6)
 
         self.basis = psi4.core.BasisSet.build(self.molecule, 'BASIS', self.options['BASIS'], puream=0)
-        mints = psi4.core.MintsHelper(self.basis)
+        self.mints = psi4.core.MintsHelper(self.basis)
 
-        self.S = mints.ao_overlap().to_array()
-        self.T = mints.ao_kinetic().to_array()
-        self.V = mints.ao_potential().to_array()
-        self.g = mints.ao_eri().to_array()
+        self.S = self.mints.ao_overlap().to_array()
+        self.T = self.mints.ao_kinetic().to_array()
+        self.V = self.mints.ao_potential().to_array()
+        self.g = self.mints.ao_eri().to_array()
 
         self.H = self.T + self.V
 
-        A = mints.ao_overlap()
+        A = self.mints.ao_overlap()
         A.power(-0.5, 1.e-16)
         self.A = A.to_array()
+
+        self.spin = 0
 
     @abc.abstractmethod
     def energy(self):
@@ -96,6 +96,29 @@ class SCF:
             return np.array(focks).sum(axis=0)
         else:
             return sum([q*F for q, F in zip(q_vec[:-1], focks)])
+
+    @property
+    def spin_contamination(self):
+        """
+        Compute the spin contamination
+        """
+        spin, na, nb, Ca, Cb, S = self.spin, self.n_occ_a, self.n_occ_b, self.Ca, self.Cb, self.S
+
+        # Catch spin-restricted case (Ca and Cb would be undefined)
+        if spin == 0:
+            return 0
+
+        s2_expected = spin*(spin+1)
+
+        X = Ca.T @ S @ Cb
+        dN = np.vdot(X, X)
+        ΔS = min(na, nb) - dN
+        s2_observed = s2_expected + ΔS
+        print("dN: {}  ΔS: {}".format(round(dN, 10), ΔS))
+        print("S^2 expected:", s2_expected)
+        print("S^2 observed:", s2_observed)
+
+        return s2_observed
 
     def plot_convergence(self):
         """
