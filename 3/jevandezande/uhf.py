@@ -2,6 +2,7 @@ import psi4
 import numpy as np
 from scf import SCF
 from fractions import Fraction
+from scipy import linalg as la
 
 
 class UHF(SCF):
@@ -12,6 +13,8 @@ class UHF(SCF):
         super().__init__(options_ini)
         self.n_occ_a = int(self.config['DEFAULT']['nalpha'])
         self.n_occ_b = int(self.config['DEFAULT']['nbeta'])
+        self.nocc = self.n_occ_a + self.n_occ_b
+        self.ntot = 2*len(self.H)
         self.spin = Fraction(self.n_occ_a - self.n_occ_b, 2)
         
     def energy(self):
@@ -74,6 +77,11 @@ class UHF(SCF):
                 Fa, Fb = self.extrapolate_diis()
 
         print('\nUHF Energy: {:> 15.10f}'.format(E_scf))
+        e = np.append(ea, eb)
+        s = np.argsort(e)
+        self.e = e[s]
+        self.C = la.block_diag(Ca, Cb)[:,s]
+
         self.Ca, self.Cb, self.ea, self.eb, self.E_scf = Ca, Cb, ea, eb, E_scf
 
         return E_scf

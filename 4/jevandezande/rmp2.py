@@ -8,8 +8,8 @@ class RMP2(MP2):
     RMP2 class
     """
 
-    def __init__(self, rhf):
-        super().__init__(rhf)
+    def __init__(self, rhf, df_basis_name=''):
+        super().__init__(rhf, df_basis_name)
 
     def energy(self):
         """

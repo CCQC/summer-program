@@ -10,8 +10,8 @@ class UMP2(MP2):
     Spinorbital version of MP2 (i.e. MP2 using an unrestricted reference)
     """
 
-    def __init__(self, uhf):
-        super().__init__(uhf)
+    def __init__(self, uhf, df_basis_name=''):
+        super().__init__(uhf, df_basis_name)
 
     def energy(self):
         """
@@ -37,9 +37,14 @@ class UMP2(MP2):
 
 
 if __name__ == "__main__":
-    sys.path.insert(0, '../../5/jevandezande')
+    sys.path.insert(0, '../../3/jevandezande')
     from uhf import UHF
     uhf = UHF('../../3/jevandezande/Options.ini')
     uhf.energy()
+
     ump2 = UMP2(uhf)
-    ump2.energy()
+    e = ump2.energy()
+
+    ump2 = UMP2(uhf, 'cc-pVQZ-RI')
+    df_e = ump2.energy()
+    print("Energy Error: {:7.5e}".format(df_e - e))
