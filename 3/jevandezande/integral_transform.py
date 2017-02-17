@@ -25,6 +25,16 @@ def transform_integrals_einsum(C, gao):
     """
     Einsum version of integral transformation
     """
+    return np.einsum('Pp, Pqrs->pqrs', C,
+                np.einsum('Qq,PQrs->Pqrs', C,
+                    np.einsum('Rr,PQRs->PQrs', C,
+                        np.einsum('Ss,PQRS->PQRs', C, gao))))
+
+def transform_integrals_einsum_noddy(C, gao):
+    """
+    Einsum version of integral transformation
+    Noddy algorithm
+    """
     return np.einsum('PQRS,Pp,Qq,Rr,Ss->pqrs', gao, C, C, C, C)
 
 def transform_integrals(C, gao):
