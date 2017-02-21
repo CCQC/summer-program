@@ -15,14 +15,15 @@ class MP2:
         self.df_basis_name = df_basis_name
         self.nocc, self.ntot, self.e, self.gao, self.E_scf, self.molecule = scf.nocc, scf.ntot, scf.e, scf.g, scf.E_scf, scf.molecule
 
-        # If unrestricted and not spin-blocked
-        if scf.spin != 0 and len(scf.H) == len(self.gao):
-            self.gao = block_tei(self.gao)
-
         if self.df_basis_name:
             df_basis = BasisSet.build(self.molecule, 'DF_BASIS_MP2', df_basis_name, puream=0)
-            self.gmo = transform_integrals_df(scf.C, scf, df_basis)
+            self.gmo = transform_integrals_df(scf.C, scf.basis, df_basis)
         else:
+            # If unrestricted and not spin-blocked and antisymmetrized
+            if scf.spin != 0 and len(scf.H) == len(self.gao):
+                self.gao = block_tei(self.gao)
+                self.gao = self.gao.transpose(0, 2, 1, 3) - self.gao.transpose(0, 2, 3, 1)
+
             self.gmo = transform_integrals(scf.C, self.gao)
 
 

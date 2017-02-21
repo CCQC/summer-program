@@ -16,7 +16,7 @@ class RMP2(MP2):
         Compute the RMP2 energy
         :return: RMP2 energy
         """
-        nocc, ntot, gmo, e = self.nocc, self.gmo, self.e, self.ntot
+        nocc, ntot, gmo, e = self.nocc, self.ntot, self.gmo, self.e
 
         Ec = 0.0
         for i in range(nocc):

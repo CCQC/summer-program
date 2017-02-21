@@ -30,8 +30,9 @@ class UMP2(MP2):
         self.Ec = Ec
         self.E_mp2 = Ec + self.E_scf
 
-        print('@MP2 correlation energy: {:15.10f}\n'.format(self.Ec))
-        print('@Total MP2 energy: {:15.10f}\n'.format(self.E_mp2))
+        df = 'DF-' if self.df_basis_name else ''
+        print('@{}MP2 correlation energy: {:15.10f}\n'.format(df, self.Ec))
+        print('@{}Total MP2 energy: {:15.10f}\n'.format(df, self.E_mp2))
 
         return self.E_mp2
 
@@ -45,6 +46,8 @@ if __name__ == "__main__":
     ump2 = UMP2(uhf)
     e = ump2.energy()
 
-    ump2 = UMP2(uhf, 'cc-pVQZ-RI')
-    df_e = ump2.energy()
+    dfump2 = UMP2(uhf, 'cc-pVDZ-RI')
+    df_e = dfump2.energy()
+
     print("Energy Error: {:7.5e}".format(df_e - e))
+    print("norm(UMP2.gmo - DFUMP2.gmo): {:7.5E}".format(np.linalg.norm(ump2.gmo - dfump2.gmo)))
