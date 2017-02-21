@@ -128,10 +128,7 @@ def transform_integrals_df(C, ao_basis, df_basis, spin_block=False):
     b_pqP = np.einsum('nq,pnP->pqP', C, b_pnP)
 
     # form (pq|rs)
-    gmo = np.einsum('pqP, rsP->pqrs', b_pqP, b_pqP)
-
-    # antisymmetrize
-    return gmo.transpose(0, 2, 1, 3) - gmo.transpose(0, 2, 3, 1)
+    return np.einsum('pqP, rsP->pqrs', b_pqP, b_pqP)
 
 
 def block_tei(a):

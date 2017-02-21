@@ -13,6 +13,9 @@ class UMP2(MP2):
     def __init__(self, uhf, df_basis_name=''):
         super().__init__(uhf, df_basis_name)
 
+        # Antisymmetrize gmo
+        self.gmo = self.gmo.transpose(0, 2, 1, 3) - self.gmo.transpose(0, 2, 3, 1)
+
     def energy(self):
         """
         Compute the UMP2 energy
