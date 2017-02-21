@@ -23,6 +23,7 @@ def transform_integrals_noddy(C, gao):
                                             C[mu, p]*C[nu, q]*C[rho, r]*C[sigma, s]
     return gmo
 
+
 def transform_integrals_einsum(C, gao):
     """
     Einsum version of integral transformation
@@ -32,12 +33,14 @@ def transform_integrals_einsum(C, gao):
                     np.einsum('Rr,PQRs->PQrs', C,
                         np.einsum('Ss,PQRS->PQRs', C, gao))))
 
+
 def transform_integrals_einsum_noddy(C, gao):
     """
     Einsum version of integral transformation
     Noddy algorithm
     """
     return np.einsum('PQRS,Pp,Qq,Rr,Ss->pqrs', gao, C, C, C, C)
+
 
 def transform_integrals(C, gao):
     """
@@ -79,6 +82,7 @@ def transform_integrals(C, gao):
 
     return gmo
 
+
 def transform_integrals_itertools(C, gao):
     """
     Simplify iteration using a cartesian product
@@ -98,7 +102,7 @@ def transform_integrals_itertools(C, gao):
     return g4
 
 
-def transform_integrals_df(C, ao_basis, df_basis):
+def transform_integrals_df(C, ao_basis, df_basis, spin_block=False):
     """
     Generate density-fitted integrals
 
@@ -111,7 +115,8 @@ def transform_integrals_df(C, ao_basis, df_basis):
     """
     # Form (pq|P)
     pqP = eri(ao_basis, ao_basis, df_basis)
-    pqP = block_tei_3c(pqP)
+    if spin_block:
+        pqP = block_tei_3c(pqP)
 
     # Form X
     J = eri(df_basis, df_basis)

@@ -17,14 +17,17 @@ class MP2:
 
         if self.df_basis_name:
             df_basis = BasisSet.build(self.molecule, 'DF_BASIS_MP2', df_basis_name, puream=0)
-            self.gmo = transform_integrals_df(scf.C, scf.basis, df_basis)
+            spin_block = bool(scf.spin)
+            self.gmo = transform_integrals_df(scf.C, scf.basis, df_basis, spin_block)
         else:
-            # If unrestricted and not spin-blocked and antisymmetrized
+            # If unrestricted and gao is not spin-blocked
             if scf.spin != 0 and len(scf.H) == len(self.gao):
                 self.gao = block_tei(self.gao)
-                self.gao = self.gao.transpose(0, 2, 1, 3) - self.gao.transpose(0, 2, 3, 1)
 
-            self.gmo = transform_integrals(scf.C, self.gao)
+            # Antisymmetrize the integrals
+            self.g_bar= self.gao.transpose(0, 2, 1, 3) - self.gao.transpose(0, 2, 3, 1)
+
+            self.gmo = transform_integrals(scf.C, self.g_bar)
 
 
     @abc.abstractmethod

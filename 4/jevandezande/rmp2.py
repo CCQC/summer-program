@@ -42,4 +42,10 @@ if __name__ == "__main__":
     rhf = RHF('../../3/jevandezande/Options.ini')
     rhf.energy()
     rmp2 = RMP2(rhf)
-    rmp2.energy()
+    e = rmp2.energy()
+
+    dfrmp2 = RMP2(rhf, 'cc-pVDZ-RI')
+    df_e = dfrmp2.energy()
+
+    print("Energy Error: {:7.5e}".format(df_e - e))
+    print("norm(UMP2.gmo - DFUMP2.gmo): {:7.5E}".format(np.linalg.norm(rmp2.gmo - dfrmp2.gmo)))
