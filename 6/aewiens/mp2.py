@@ -16,7 +16,7 @@ class MP2:
 		self.E0   = uhf.E
 		self.e    = uhf.e
 		self.C    = uhf.C
-		self.G    = uhf.g
+		self.G    = uhf.G
 
 
 	def tei_einsum(self,g,C):
@@ -35,18 +35,31 @@ class MP2:
 		nocc = self.nocc
 		norb = self.norb
 
-		e = self.e
+		e  = self.e
+		Ec = 0.0
+		for i in range(nocc):
+			for j in range(nocc):
+				for a in range(nocc,norb):
+					for b in range(nocc,norb):
+						#Ecorr += (2*Gmo[i,j,a,b]-Gmo[i,j,b,a])*Gmo[i,j,a,b]/(e[i]+e[j]-e[a]-e[b])
+						Ec += (Gmo[i,j,a,b]*Gmo[a,b,i,j])/(e[i]+e[j]-e[a]-e[b])
+
+		Ec *= 0.25
+						
+		"""
 		o = slice(0,nocc)
 		v = slice(nocc,nocc+norb)
 		x = np.newaxis
 
 		D = e[o,x,x,x] + e[x,o,x,x] - e[x,x,v,x] - e[x,x,x,v]
-		T =  np.square(Gmo[o,o,v,v])
-		T /= D
+		T = Gmo[o,o,v,v]*Gmo[v,v,o,o] 
+		#T =  np.square(Gmo[o,o,v,v])
+		#T /= D
 
 		Ecorr = 0.25*np.ndarray.sum(T,axis=(0,1,2,3))
+		"""
 
-		return self.E0 + Ecorr
+		return self.E0 + Ec
 
 
 
