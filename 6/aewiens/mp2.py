@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
-
 import psi4, sys, numpy as np, configparser as cfp
 sys.path.insert(0,"../../5/aewiens/")
 from uhf import UHF
 
 class MP2:
 
-	def __init__(self,mol,mints,maxiter,conv):
+	def __init__(self,options):
 
-		uhf = UHF(mol,mints,maxiter,conv)
+		"""
+		mol = psi4.geometry( options['DEFAULT']['molecule'] )
+		mol.update_geometry()
+
+		basis = psi4.core.BasisSet.build(mol, "BASIS", options['DEFAULT']['basis'],puream=0)
+		mints = psi4.core.MintsHelper(basis)
+		"""
+
+		uhf = UHF(options)
 		uhf.computeEnergy()
 
 		self.nocc = uhf.nelec
@@ -68,14 +75,6 @@ if __name__ == '__main__':
 	config = cfp.ConfigParser()
 	config.read('Options.ini')
 
-	molecule = psi4.geometry( config['DEFAULT']['molecule'] )
-	molecule.update_geometry()
+	mp2 = MP2(config)
 
-	basis = psi4.core.BasisSet.build(molecule, "BASIS", config['DEFAULT']['basis'],puream=0)
-	mints = psi4.core.MintsHelper(basis)
-
-	maxiter   = int( config['SCF']['maxIter'] )
-	conv      = float( config['SCF']['conv']  )
-
-	mp2 = MP2(molecule,mints,maxiter,conv)
 	print( mp2.computeEnergy() )
