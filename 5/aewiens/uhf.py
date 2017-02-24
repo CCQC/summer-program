@@ -9,23 +9,25 @@ class UHF:
 		mol = psi4.geometry( options['DEFAULT']['molecule'] )
 		mol.update_geometry()
 
-		basisName = options['DEFAULT']['basis']
-		basis     = psi4.core.BasisSet.build(mol, "BASIS", basisName ,puream=0)
-		mints     = psi4.core.MintsHelper(basis)
-		self.getIntegrals(mints)
+		self.basisName  = options['DEFAULT']['basis']
+		self.basis = psi4.core.BasisSet.build(mol, "BASIS", self.basisName ,puream=0)
+		self.mints = psi4.core.MintsHelper(self.basis)
+		self.getIntegrals()
 
 		self.conv    = 10**( -int( options['SCF']['conv'] ))
+		self.dConv   = 10**( -int( options['SCF']['d_conv'] ))
 		self.maxiter = int( options['SCF']['max_iter'] )
 		self.norb    = len(self.S)
 		self.nelec   = self.getNelec(mol)
+		self.nvirt   = self.norb - self.nelec
 
 		self.Vnu = mol.nuclear_repulsion_energy()
 		self.E   = 0.0
 		self.D   = np.zeros_like(self.S)
 
 
-	def getIntegrals(self,mints):
-
+	def getIntegrals(self):
+		mints  = self.mints
 		self.T = self.block_oei( mints.ao_kinetic() )
 		self.V = self.block_oei( mints.ao_potential() )
 		self.S = self.block_oei( mints.ao_overlap() )                      
@@ -36,6 +38,7 @@ class UHF:
 
 		G = self.block_tei(np.array( mints.ao_eri() ) )
 		self.G = G.transpose((0,2,1,3))-G.transpose((0,2,3,1))
+
 
 		
 	def computeEnergy(self):
@@ -58,16 +61,18 @@ class UHF:
 			E0 = self.E
 			E  = np.trace( (H+0.5*v)@D) + self.Vnu
 			dE = np.fabs(E-E0)
+
+			dD = np.fabs( np.linalg.norm(D) - np.linalg.norm(self.D) )
 			
 			if __name__ == '__main__':
-				print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
+				print("@UHF-iter {:>4}{: >21.13}{: >21.13}{: >21.13}".format(i,E,dE,dD))
 
 			self.E = E
 			self.C = C
 			self.e = e
 			self.D = D 
 
-			if dE < self.conv:
+			if dE < self.conv and dD < self.dConv:
 				break
 
 		return self.E
