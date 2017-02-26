@@ -1,77 +1,142 @@
 #!/usr/bin/env python
-
-import numpy as np
-from psi4_helper import get_maxiter, get_nbf, get_nelec, get_conv
+import configparser, psi4, numpy as np
 
 class UHF:
 
-    def __init__(self,mol,mints):
+	def __init__(self, options):
 
-        mult = mol.multiplicity()
-        nelec = get_nelec(mol)       
-        self.conv = get_conv()
+		mol   = psi4.geometry( options['DEFAULT']['molecule'] )
+		mol.update_geometry()
 
-        self.Na = int( 0.5*(nelec+mult-1) )
-        self.Nb = nelec - self.Na
+		self.basisName = options['DEFAULT']['basis']
+		self.basis     = psi4.core.BasisSet.build(mol, "BASIS", self.basisName, puream=0)
+		self.getIntegrals() 
 
-        V = np.array( mints.ao_potential() )
-        T = np.array( mints.ao_kinetic() )
-        G = np.array( mints.ao_eri() )
-        self.S = np.array( mints.ao_overlap() )
+		mult  = mol.multiplicity()
+		nelec = self.getNelec(mol)
+		self.Vnu = mol.nuclear_repulsion_energy()
 
-        self.Hcore = T + V
-        self.G = G.transpose((0,2,1,3))
-        self.X = np.matrix( np.linalg.funm(self.S, lambda x : x**(-0.5) ) )
-        self.Vnu = mol.nuclear_repulsion_energy()
+		self.maxiter = int( options['SCF']['max_iter'] )
+		self.conv    = 10**( -int(options['SCF']['conv']) )
+		self.dConv   = 10**( -int(options['SCF']['d_conv']) )
 
-        ##  alpha and beta density matrices
-        self.Da = np.zeros((self.X.shape))
-        self.Db = np.zeros((self.X.shape))
+		self.Na  = int( 0.5*(nelec+mult-1) )
+		self.Nb  = nelec - self.Na
+		self.Da  = np.zeros((self.X.shape))
+		self.Db  = np.zeros((self.X.shape))
+		self.E   = 0.0
+		
+		self.converged = False
+		self.options   = options
 
-        """
-        self.Da = np.random.rand(*self.X.shape)
-        self.Da = self.Da + self.Da.T
-        self.Db = np.random.rand(*self.X.shape)
-        self.Db = self.Db + self.Db.T
-        """
-        self.E = 0.0
 
-    def compute_energy(self):
+	def getNelec(self,mol):
 
-        Hcore, G, Da, Db, X = self.Hcore, self.G, self.Da, self.Db, self.X
+		char = mol.molecular_charge()
+		nelec = -char
+		for A in range(mol.natom()):
+			nelec += mol.Z(A)
 
-        for i in range( get_maxiter() ):
-            
-            va = np.einsum("mnrs,ns->mr",G,Da) - np.einsum("mnsr,ns->mr",G,Da) + np.einsum("mnrs,ns->mr",G,Db)
-            vb = np.einsum("mnrs,ns->mr",G,Db) - np.einsum("mnsr,ns->mr",G,Db) + np.einsum("mnrs,ns->mr",G,Da)
+		return int(nelec)
 
-            Fa = Hcore + va
-            Fb = Hcore + vb
 
-            tFa = X.dot(Fa.dot(X))
-            tFb = X.dot(Fb.dot(X))
+	def getIntegrals(self):
 
-            ea, tCa = np.linalg.eigh(tFa)
-            eb, tCb = np.linalg.eigh(tFb)
+		mints    = psi4.core.MintsHelper( self.basis )
+		self.V   = np.array( mints.ao_potential() )
+		self.T   = np.array( mints.ao_kinetic() )
+		self.S   = np.array( mints.ao_overlap() )
 
-            Ca = X.dot(tCa)
-            Cb = X.dot(tCb)
+		G = np.array( mints.ao_eri() )
+		self.G = G.transpose((0,2,1,3))
 
-            oCa = Ca[:,:self.Na]
-            oCb = Cb[:,:self.Nb]
+		S = mints.ao_overlap()
+		S.power( -0.5, 1.e-16 )
+		self.X = np.array( S )
 
-            Da = oCa.dot(oCa.T)
-            Db = oCb.dot(oCb.T)
 
-            E0 = self.E
-            E = np.trace( (Hcore+0.5*va).dot(Da) ) + np.trace( (Hcore+0.5*vb).dot(Db) ) + self.Vnu
-            dE = np.fabs(E-E0)
+	def computeEnergy(self):
 
-            if dE < self.conv: break
+		H = self.T + self.V
+		G = self.G
+		Da = self.Da
+		Db = self.Db
+		X  = self.X
 
-            print("UHF  {:>4} {: >21.13}  {: >21.13}".format(i,E,dE))
+		print('\n      Iter         Energy                 ΔE                   ‖ΔD‖')
+		print('----------------------------------------------------------------------------')
 
-            ## save
-            self.Da, self.Db, self.E = Da, Db, E
+		for i in range( self.maxiter ):
 
-        return self.E
+			va = np.einsum("mnrs,ns->mr",G,Da+Db) - np.einsum("mnsr,ns->mr",G,Da)
+			vb = np.einsum("mnrs,ns->mr",G,Da+Db) - np.einsum("mnsr,ns->mr",G,Db)
+			Fa = H + va
+			Fb = H + vb
+
+			tFa = X@Fa@X
+			tFb = X@Fb@X
+
+			ea, tCa = np.linalg.eigh(tFa)
+			eb, tCb = np.linalg.eigh(tFb)
+
+			Ca = X@tCa
+			Cb = X@tCb
+
+			oCa = Ca[:,:self.Na]
+			oCb = Cb[:,:self.Nb]
+			Da  = oCa@oCa.T
+			Db  = oCb@oCb.T
+
+			E   = np.trace( (H+0.5*va)@Da ) + np.trace( (H+0.5*vb)@Db ) + self.Vnu
+			dE  = np.fabs( E - self.E )
+			dDa = np.fabs( np.linalg.norm(Da) - np.linalg.norm(self.Da) )
+			dDb = np.fabs( np.linalg.norm(Db) - np.linalg.norm(self.Db) )
+			dD  = (dDa+dDb)/2
+
+			if dE < self.conv and dD < self.dConv:
+				self.converged = True
+				break
+
+			print("UHF {:>4d}{: >21.12f}{: >21.12f}{: >21.12f}".format( i, E, dE, dD ))
+
+			self.Da = Da
+			self.Db = Db
+			self.E  = E
+
+		self.writeOutput() 
+		return self.E
+
+
+	def psiSCF(self):
+
+		psi4.core.set_output_file("output.dat",False)
+
+		psi4.set_options({'basis': self.options['DEFAULT']['basis'],
+						  'scf_type': 'pk',
+						  'reference': 'uhf',
+						  'puream': 0,
+						  'print': 0 })
+
+		return psi4.energy('scf')
+
+
+	def writeOutput(self):
+
+		print('\n----------------------------------------------------------------------------')
+		if self.converged:
+			print("UHF procedure has converged.")
+			print("Final UHF energy:{:20.11f}".format(self.E) )
+			print("Compare to Psi4: {:20.11f}".format( self.psiSCF() ) )
+
+		print('----------------------------------------------------------------------------')
+		if not self.converged:
+			print("UHF procedure did not converge. Sorry")
+		
+
+
+if __name__ == '__main__':
+
+	config = configparser.ConfigParser()
+	config.read('Options.ini')
+	uhf   = UHF(config)
+	uhf.computeEnergy()
