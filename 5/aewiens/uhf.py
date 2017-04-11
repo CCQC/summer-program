@@ -18,8 +18,8 @@ class UHF:
 		self.dConv   = 10**( -int( options['SCF']['d_conv'] ))
 		self.maxiter = int( options['SCF']['max_iter'] )
 		self.norb    = len(self.S)
-		self.nelec   = self.getNelec(mol)
-		self.nvirt   = self.norb - self.nelec
+		self.nocc    = self.getNelec(mol)
+		self.nvirt   = self.norb - self.nocc
 
 		self.Vnu = mol.nuclear_repulsion_energy()
 		self.E   = 0.0
@@ -55,7 +55,7 @@ class UHF:
 			e,tC = np.linalg.eigh(X@F@ X)
 
 			C  = X@tC
-			oC = C[:,:self.nelec]
+			oC = C[:,:self.nocc]
 			D  = oC@oC.T
 
 			E0 = self.E
@@ -108,10 +108,22 @@ class UHF:
 				T[n:,n:] = T[:n,:n]
 		return T
 
+	def psiSCF(self):
+
+		psi4.core.set_output_file("output.dat",False)
+
+		psi4.set_options({'basis':  self.basisName,
+						  'scf_type': 'pk',
+						  'reference': 'uhf',
+						  'puream': 0,
+						  'print': 0 })
+
+		return psi4.energy('scf')
 
 if __name__ == '__main__':
 	
 	config = cfp.ConfigParser()
 	config.read('Options.ini')
 	uhf = UHF(config)
-	uhf.computeEnergy()
+	print( uhf.computeEnergy() )
+	print( uhf.psiSCF() )
