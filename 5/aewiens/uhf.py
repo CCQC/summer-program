@@ -6,11 +6,11 @@ class UHF:
 
 	def __init__(self,options):
 
-		mol = psi4.geometry( options['DEFAULT']['molecule'] )
-		mol.update_geometry()
+		self.mol = psi4.geometry( options['DEFAULT']['molecule'] )
+		self.mol.update_geometry()
 
 		self.basisName  = options['DEFAULT']['basis']
-		self.basis = psi4.core.BasisSet.build(mol, "BASIS", self.basisName ,puream=0)
+		self.basis = psi4.core.BasisSet.build(self.mol, "BASIS", self.basisName ,puream=0)
 		self.mints = psi4.core.MintsHelper(self.basis)
 		self.getIntegrals()
 
@@ -18,10 +18,10 @@ class UHF:
 		self.dConv   = 10**( -int( options['SCF']['d_conv'] ))
 		self.maxiter = int( options['SCF']['max_iter'] )
 		self.norb    = len(self.S)
-		self.nocc    = self.getNelec(mol)
+		self.nocc    = self.getNelec(self.mol)
 		self.nvirt   = self.norb - self.nocc
 
-		self.Vnu = mol.nuclear_repulsion_energy()
+		self.Vnu = self.mol.nuclear_repulsion_energy()
 		self.E   = 0.0
 		self.D   = np.zeros_like(self.S)
 
