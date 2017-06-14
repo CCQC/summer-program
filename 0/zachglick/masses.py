@@ -1,3 +1,4 @@
+
 def get_charge(atomic_symbol):
     return charge[atomic_symbol.upper()]
 
