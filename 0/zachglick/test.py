@@ -5,8 +5,8 @@ class Test(unittest.TestCase):
     """ Tests for Molecule class in 'molecule.py' """
     
     def test_self_variables(self):
-        """ Are the initial self variables (units, natom, masses, charges, geom)
-            initialized correctly? """
+        """ Are the self variables (units, natom, masses, charges, geom)
+            from the xyz file initialized correctly? """
         
         with open('input1.xyz', 'r') as file1:
             mol1 = Molecule(file1.read())
@@ -22,10 +22,10 @@ class Test(unittest.TestCase):
                          'checking geometry')
 
     def test_copy_function(self):
-        """ Does the copy function initialize all variables of the new molecule?
+        """ Does the copy function correctly initialize all variables of a new molecule?
             
             Also, is the new molecule truly a different object? (ie: changing properties of
-            the original does not affect the copy)"""
+            the original does not affect the copy and vice versa)? """
                 
         with open('input1.xyz', 'r') as file1:
             mol1 = Molecule(file1.read())
@@ -41,7 +41,30 @@ class Test(unittest.TestCase):
         self.assertNotEqual(mol1.units, mol2.units)
         self.assertNotEqual(mol1.geom, mol2.geom)
 
+    def test_unit_conversion_accuracy(self):
+        """ 1.0 Angstrom is approximately 1.889725989 Bohr. Is this conversion (and its reverse) 
+            carried out correctly? """
 
+        with open('input1.xyz', 'r') as file1:
+            mol1 = Molecule(file1.read())
+        mol2 = mol1.copy()
+        mol2.to_bohr()
+        for i in range(mol1.natom) :
+            self.assertAlmostEqual(mol1.geom[i][0] * 1.889725989, mol2.geom[i][0])
+            self.assertAlmostEqual(mol1.geom[i][1] * 1.889725989, mol2.geom[i][1])
+            self.assertAlmostEqual(mol1.geom[i][2] * 1.889725989, mol2.geom[i][2])
+
+    def test_unit_conversion_symmetry(self):
+        """ Does converting back and forth between bohrs and angstroms introduce and compound rounding errors?
+            Each operation should exactly reverse its counterpart. """
+                
+        with open('input1.xyz', 'r') as file1:
+            mol1 = Molecule(file1.read())
+        mol2 = mol1.copy()
+        for count in range(10000) :
+            mol2.to_bohr()
+            mol2.to_angstrom()
+        self.assertEqual(mol1.geom, mol2.geom)
 
 
 if __name__ == '__main__':

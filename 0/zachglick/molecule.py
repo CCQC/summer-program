@@ -1,5 +1,4 @@
 import masses as m
-import copy
 
 class Molecule :
 
@@ -40,11 +39,15 @@ class Molecule :
             self.geom =[[coord / 1.889725989 for coord in atom] for atom in self.geom]
 
     def xyz_string(self) :
-        ans = "Molecule: " + " ".join(self.labels)
-        return ans
+        coordinates = ["\t".join(str(coord) for coord in atom) for atom in self.geom]
+        atoms = [zipped[0] + "\t" + zipped[1]
+                 for zipped in zip(self.labels, coordinates)]
     
+        return "\n".join([str(self.natom), self.units, "\n".join(atoms)])
+
+
     def copy(self) :
-        return copy.deepcopy(self)
+        return Molecule(self.xyz_string())
 
     # Advanced Methods
 
@@ -52,11 +55,17 @@ class Molecule :
         return self.natom
 
     def __str__(self) :
-        ans = "Molecule: " + " ".join(self.labels)
-        return ans
+        coordinates = ["(" +
+                       ", ".join(str(coord) for coord in atom) +
+                       ")"
+                       for atom in self.geom]
+        atoms = [zipped[0] + " : " + zipped[1]
+                for zipped in zip(self.labels, coordinates)]
+        summary = "\nMolecule with %s atoms given in units of %s:\n" % (self.natom, self.units)
+        return summary + "\n" + "\n".join(atoms)
     
     def __repr__(self) :
-        return "\n".join(self.labels)
+        return self.xyz_string()
 
     def __iter__(self) :
         pass
@@ -68,9 +77,11 @@ class Molecule :
             mol.to_angstrom()
         newmol = self.copy()
         newmol.natom += mol.natom
-        newmol.geom += mol.geom
         newmol.labels += mol.labels
         newmol.masses += mol.masses
+        newmol.charges += mol.charges
+        newmol.geom += mol.geom
+
         return newmol
 
 if __name__ == '__main__':
