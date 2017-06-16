@@ -4,7 +4,9 @@
 import sys
 sys.path.insert(0, '../../extra-files')
 
-import numpy
+import masses as m
+
+import numpy as np
 
 class Molecule(object):
  
@@ -22,8 +24,13 @@ class Molecule(object):
 			self.units = "angstrom"
 		elif lines[1].lower() == "bohr":
 			self.units = "bohr" 
+		self.labels = [i.strip().split(" ")[0].strip() for i in lines[2:]]
+		self.masses =  [m.get_mass( l ) for l in self.labels ]
+		self.charges = [m.get_charge( l ) for l in self.labels ]
 
 if __name__ == "__main__":
 	mole_str = open("../../extra-files/molecule.xyz").read()
 	mol = Molecule(mole_str)
 	print mol.units
+	print mol.labels
+	print mol.masses
