@@ -27,6 +27,12 @@ class Molecule(object):
 		self.labels = [i.strip().split(" ")[0].strip() for i in lines[2:]]
 		self.masses =  [m.get_mass( l ) for l in self.labels ]
 		self.charges = [m.get_charge( l ) for l in self.labels ]
+		tempArray = [i.split("   ")[1:4] for i in lines[2:]]
+		for a in range(len(tempArray)):
+			for b in range(len(tempArray[a])):
+				tempArray[a][b] = float(tempArray[a][b]
+)
+		self.geom = np.array(tempArray)
 
 if __name__ == "__main__":
 	mole_str = open("../../extra-files/molecule.xyz").read()
@@ -34,3 +40,5 @@ if __name__ == "__main__":
 	print mol.units
 	print mol.labels
 	print mol.masses
+	print mol.charges
+	print mol.geom
