@@ -1,6 +1,5 @@
 #__author__ = "mbowman"
 
-
 import sys
 sys.path.insert(0, '../../extra-files')
 
@@ -13,11 +12,16 @@ class Molecule(object):
 	def __init__(self, mole_str, units="angstrom"):
 		"""
 		Generates an instance of a molecule
-		:param 	
+		:param mole_str: string (typically .xyz file) describing a molecule
+		:param units: units for geometry, angstrom or bohr (default is angstrom) 	
 		"""	
 		self.parse(mole_str)
 
 	def parse(self, mole_str):
+		"""
+		Parses data from .xyz file to change class attributes
+		:param mole_str: string (typically .xyz file) describing a molecule
+		"""
 		lines = mole_str.strip().split("\n")
 		self.natom = lines[0]
 		if lines[1].lower() == "angstrom":
@@ -35,16 +39,25 @@ class Molecule(object):
 		self.geom = np.array(tempArray)
 
 	def to_bohr(self):
+		"""
+		Changes units of geometry to Bohr, adjusts geometry matrix accordingly
+		"""
 		if self.units == "angstrom":
 			self.geom *= 1.88973
 			self.units = "bohr"
 	
 	def to_angstrom(self):
+		"""
+		Changes units of geometry to Angstrom, adjusts geometry matrix accordingly
+		"""
 		if self.units == "bohr":
 			self.geom /= 1.88973
 			self.units = "angstrom"
 	
 	def xyz_string(self):
+		"""
+		Prints out data as it would appear in a .xyz file
+		"""
 		tempString = "%s\n%s\n" % (self.natom, self.units.title())
 		for l in range(len(self.labels)):
 			tempString += self.labels[l] + " " 
@@ -55,8 +68,12 @@ class Molecule(object):
 		return tempString
 	
 	def copy(self):
+		"""
+		Returns copy of self
+		"""
 		return self
 
+#Used to test Molecule class
 if __name__ == "__main__":
 	mole_str = open("../../extra-files/molecule.xyz").read()
 	mol = Molecule(mole_str)
