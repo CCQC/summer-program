@@ -34,11 +34,30 @@ class Molecule(object):
 )
 		self.geom = np.array(tempArray)
 
+	def to_bohr(self):
+		if self.units == "angstrom":
+			self.geom *= 1.88973
+			self.units = "bohr"
+	
+	def to_angstrom(self):
+		if self.units == "bohr":
+			self.geom /= 1.88973
+			self.units = "angstrom"
+	
+	def xyz_string(self):
+		tempString = "%s\n%s\n" % (self.natom, self.units.title())
+		for l in range(len(self.labels)):
+			tempString += self.labels[l] + " " 
+			tempString += '{0:16.10f}'.format(self.geom[l][0])
+			tempString += '{0:16.10f}'.format(self.geom[l][1])
+			tempString += '{0:16.10f}'.format(self.geom[l][2])
+			tempString += "\n"
+		return tempString
+	
+	def copy(self):
+		return self
+
 if __name__ == "__main__":
 	mole_str = open("../../extra-files/molecule.xyz").read()
 	mol = Molecule(mole_str)
-	print mol.units
-	print mol.labels
-	print mol.masses
-	print mol.charges
-	print mol.geom
+	print mol.xyz_string()
