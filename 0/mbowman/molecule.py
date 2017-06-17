@@ -84,8 +84,19 @@ class Molecule(object):
 		"""
 		Overrides str() to instead return the Molecule object in a pretty format
 		"""
-		return "yes"
-
+		row =  "+---+------------------+------------------+------------------+ \n"
+		tempString = ""
+		tempString += row
+		tempString += "| X | x-coordnate      | y-coordinate     | z-coordinate     | \n"
+		tempString += row
+		for l in range(len(self.labels)):
+			tempString += "| " + self.labels[l] + " |"
+			for a in range(3):
+				tempString += ' {0:16.10f} |'.format(self.geom[l][a])
+			tempString += '\n'
+			tempString += row
+		return tempString
+ 
 	def __print__(self):
 		"""
 		Overrides print() to print the result of __str__ 
@@ -110,13 +121,17 @@ class Molecule(object):
 		tempMol.natom += mol2.natom
 		tempMol.masses += mol2.masses
 		tempMol.charges += mol2.charges
-
+		tempMol.labels += mol2.labels
+		tempMol2 = mol2.copy()
+		if tempMol.units == "angstrom":
+			tempMol2.to_angstrom
+		elif tempMol.units == "bohr":
+			tempMol2.to_bohr
+		tempMol.geom = np.concatenate((mol1.geom, mol2.geom), axis=0)
 		return tempMol
 
 #Used to test Molecule class
 if __name__ == "__main__":
 	mole_str = open("../../extra-files/molecule.xyz").read()
 	mol = Molecule(mole_str)
-	mol2 = mol.copy()
-	mol3 = mol + mol2
-	print len(mol3)	
+	print mol
