@@ -1,8 +1,8 @@
-"""This class will store the geometry, masses, and nuclear charges of a molecule."""
 import masses
 import numpy as np
 from copy import deepcopy
 
+"""This class will store the geometry, masses, and nuclear charges of a molecule."""
 class Molecule(object):
 	def __init__(self,TextFile):
 		# Empty arrays defined to be later appended to
@@ -53,6 +53,7 @@ class Molecule(object):
 			for i in range(self.natom):
 				for j in range(self.natom):
 					self.geom[i][j] /= 1.88971616463
+	
 	# Method to print the acquired values in the same format as the .xyz file
 	def xyz_string(self):
 		print str(self.natom)
@@ -60,7 +61,9 @@ class Molecule(object):
 		for i in range(self.natom):
 			x = self.geom[i]
 			print '%s   %s' % (self.labels[i],'   '.join('%13.10f' % j for j in x))
-			
+	
+	# Method to make a fresh copy of Molecule whose values can be changed independently
+	# of the initial Molecule class.		
 	def copy(self):
 		molecule = Molecule(self.textfile)
 		molecule.units = deepcopy(self.units)
@@ -71,19 +74,27 @@ class Molecule(object):
 		molecule.geom = deepcopy(self.geom)
 		return molecule
 
+# Defining first molecule 'm'
 m = Molecule('molecule.xyz')
 print m.geom
 print m.units
+
+# Converting the units of m from Angstrom to Bohr
 m.to_bohr()
 print m.geom
 print m.units
-m.xyz_string()
 
+# Fresh copy of m made, stored as 'n'
 n = m.copy()
 print n.geom
 print n.units
-m.to_bohr()
+
+# m converted back to Angstrom, but n retains Bohr units
+m.to_angstrom()
 print m.geom
 print m.units
 print n.geom
 print n.units
+
+# xyz string printed in same format as the supplied xyz file.
+m.xyz_string()
