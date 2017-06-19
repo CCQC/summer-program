@@ -60,7 +60,7 @@ class Molecule(object):
 		print str(self.units)
 		for i in range(self.natom):
 			x = self.geom[i]
-			print '%s   %s' % (self.labels[i],'   '.join('%13.10f' % j for j in x))
+			print '%s    %s' % (self.labels[i],'   '.join('%13.10f' % j for j in x))
 	
 	# Method to make a fresh copy of Molecule whose values can be changed independently
 	# of the initial Molecule class.		
