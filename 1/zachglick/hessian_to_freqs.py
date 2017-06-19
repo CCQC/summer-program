@@ -13,7 +13,7 @@ kilogram_per_amu = 1.6605389e-27
 centimeter_per_second = 2.99792458e10
 
 def format_frequency(eigval) :
-    """
+    """ 
     eigval -- an eigenvalue of some hessian in units of Hartree / (bohr * bohr * kilogram)
     
     Returns (str) the frequency in cm^-1 represented by the eigenvalue (formatted nicely)
@@ -81,16 +81,21 @@ def output_frequencies(mol, hess) :
                 f.write( "%s %s %s\n" % (mol.labels[atom_ind], coords, displs) )
             f.write('\n')
 
-if __name__ == '__main__':
-    with open('../../extra-files/hessian.dat', 'r') as f:
-        str = (f.read()).replace("\n",";")
-    while str[-1] == ';' :
-        str = str[:-1]
-    mat = matrix(str)
+def solve(mol_path, hess_path):
 
-    with open('../../extra-files/molecule.xyz', 'r') as f:
+    with open(mol_path, 'r') as f:
         molecule = Molecule(f.read())
         molecule.to_angstrom()
 
+    with open(hess_path, 'r') as f:
+        str = (f.read()).replace("\n",";")
+        while str[-1] == ';' :
+            str = str[:-1]
+        mat = matrix(str)
+
     output_frequencies(molecule, mat)
+
+if __name__ == '__main__':
+    
+    solve('../../extra-files/molecule.xyz', '../../extra-files/hessian.dat')
 
