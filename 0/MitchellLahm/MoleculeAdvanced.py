@@ -6,6 +6,7 @@ from copy import deepcopy
 class Molecule(object):
 	def __init__(self,TextFile):
 		# Empty arrays defined to be later appended to
+		self.current = 0
 		self.textfile = TextFile
 		labels = []
 		geom = []
@@ -73,6 +74,55 @@ class Molecule(object):
 		molecule.charges = deepcopy(self.charges)
 		molecule.geom = deepcopy(self.geom)
 		return molecule
+	
+	# Method to return the lengte (number of atoms) of a molecule instance
+	def __len__(self):
+		return self.natom
+	
+	# Method to return a string representation of Molecule object
+	def __str__(self):
+		string  = "__________________________________________________________\n"
+		string += "|  Atom  |    X-Coord    |    Y-Coord    |    Z-Coord    |\n"
+		string += "----------------------------------------------------------\n"
+		for i in range(self.natom):
+			string += "|   %s    | %13.10f | %13.10f | %13.10f |\n"%(self.labels[i],self.geom[i][0],self.geom[i][1],self.geom[i][2])
+		string += "----------------------------------------------------------"
+		return string
+		
+	# Method to return a string representation of the molecule in .xyz format
+	def __repr__(self):
+		string  = str(self.natom) + "\n"
+		string += self.units + "\n"
+		for i in range(self.natom):
+			string += "%s    %13.10f   %13.10f   %13.10f\n"%(self.labels[i],self.geom[i][0],self.geom[i][1],self.geom[i][2])
+		return string
+	
+	# Method to iterate over the cartesian coordinates of the molecule
+	def __iter__(self):
+		return self
+	
+	# Linked to __iter_ method, determines what is iterated over
+	def next(self):
+		if self.current > self.natom - 1:
+			raise StopIteration
+		else:
+			self.current += 1
+			return (self.labels[self.current-1],self.geom[self.current-1])
+	
+	# Method that adds the atoms of mol to the Molecule class
+	def __add__(self,mol):
+		while(self.units != mol.units):
+			if mol.units == 'Angstrom':
+				mol.to_bohr()
+			elif mol.units == 'Bohr':
+				mol.to_angstrom()
+			else:
+				print 'Check units'
+				break
+		self.labels = self.labels + mol.labels
+		self.natom = self.natom + mol.natom
+		self.geom = np.concatenate((self.geom,mol.geom),axis=0)
+		return self
 
 # Defining first molecule 'm'
 m = Molecule('molecule.xyz')
@@ -96,5 +146,22 @@ print m.units
 print n.geom
 print n.units
 
+# len function is demonstrated
+n.natom = 4
+print len(n)
+print len(m)
+n.natom = 3
+
 # xyz string printed in same format as the supplied xyz file.
 m.xyz_string()
+
+# Pretty string representation of molecule and string in xyz format printed
+print(m)
+print repr(m)
+
+# Each atom and its coordinates printed using the iterator 'Magic Method'
+for i in m:
+	print i
+	
+# Demonstration of molecule addition
+print(n + m)
