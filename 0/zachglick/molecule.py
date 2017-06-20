@@ -1,5 +1,8 @@
-import masses as m
+import sys
+sys.path.append('../../extra-files')
 from numpy import array
+
+import masses as m
 
 class Molecule :
     """

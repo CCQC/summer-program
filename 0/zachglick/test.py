@@ -12,7 +12,7 @@ class Test(unittest.TestCase):
         Are the self variables (units, natom, masses, charges, geom) from the xyz file initialized correctly?
         """
         
-        with open('input1.xyz', 'r') as file1:
+        with open('../../extra-files/molecule.xyz', 'r') as file1:
             mol1 = Molecule(file1.read())
         self.assertEqual(mol1.units, 'Angstrom', 'checking units')
         self.assertEqual(mol1.natom, 3, 'checking natom')
@@ -31,7 +31,7 @@ class Test(unittest.TestCase):
         truly a different object? (ie: changing properties of the original does not affect the copy and vice versa)?
         """
                 
-        with open('input1.xyz', 'r') as file1:
+        with open('../../extra-files/molecule.xyz', 'r') as file1:
             mol1 = Molecule(file1.read())
         mol2 = mol1.copy()
         self.assertEqual(mol1.units, mol2.units, 'checking units')
@@ -50,7 +50,7 @@ class Test(unittest.TestCase):
         1.0 Angstrom is approximately 1.889725989 Bohr. Is this conversion (and its reverse) carried out correctly?
         """
 
-        with open('input1.xyz', 'r') as file1:
+        with open('../../extra-files/molecule.xyz', 'r') as file1:
             mol1 = Molecule(file1.read())
         mol2 = mol1.copy()
         mol2.to_bohr()
@@ -65,7 +65,7 @@ class Test(unittest.TestCase):
         operation should exactly reverse its counterpart.
         """
                 
-        with open('input1.xyz', 'r') as file1:
+        with open('../../extra-files/molecule.xyz', 'r') as file1:
             mol1 = Molecule(file1.read())
         mol2 = mol1.copy()
         for count in range(10000) :
@@ -78,8 +78,7 @@ class Test(unittest.TestCase):
         Can the atoms of the molecule be iterated over? Each atom should be a tuple containing the atom's label 
         and a numpy array of the 3 cartesian coordinates.
         """
-
-        with open('input1.xyz', 'r') as file1:
+        with open('../../extra-files/molecule.xyz', 'r') as file1:
             mol1 = Molecule(file1.read())
         
         newlabels = []
