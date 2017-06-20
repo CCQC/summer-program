@@ -39,7 +39,9 @@ class Frequency(object):
 		for a in range(len(self.eigVal)):
 			self.spFreq[a] = cmath.sqrt(self.eigVal[a]) / (2.0 * math.pi)
 		self.to_wavenumber()
-
+		with open('project-1-answers.xyz',"w+") as f:
+			f.write(self.xyz_string())
+		
 	def parse_hessian(self, hess_str):
 		"""
 
@@ -93,12 +95,8 @@ class Frequency(object):
 		
 
 if __name__ == "__main__":
-	hess_str = open("../../extra-files/hessian.dat").read()
-	mole_str = open("../../extra-files/molecule.xyz").read()
+	with open("../../extra-files/hessian.dat") as openHess:
+		hess_str = openHess.read()
+	with open("../../extra-files/molecule.xyz") as openMol:
+		mole_str = openMol.read()
 	freq = Frequency(mole_str, hess_str)
-	#print freq.normCoord
-	for a in range(len(freq.normCoord)):
-		for b in range(len(freq.normCoord)):
-			print '{0:16.10f}'.format(freq.normCoord[a][b])
-		print "\n"
-	print freq.xyz_string()
