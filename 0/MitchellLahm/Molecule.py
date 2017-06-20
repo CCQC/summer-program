@@ -33,8 +33,8 @@ class Molecule(object):
 			self.labels = labels
 			self.geom = np.array(geom)
 			for i in range(self.natom):
-				charges.append(masses.get_mass(str(labels[i])))
-				mass.append(masses.get_charge(str(labels[i])))
+				mass.append(masses.get_mass(str(labels[i])))
+				charges.append(masses.get_charge(str(labels[i])))
 			self.charges = charges
 			self.masses = mass
 	
