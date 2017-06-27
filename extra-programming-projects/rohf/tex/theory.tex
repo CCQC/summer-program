@@ -1,0 +1,250 @@
+\documentclass[11pt]{article}
+\usepackage[cm]{fullpage}
+%%AVC PACKAGES
+\usepackage{avcgreek}
+\usepackage{avcfonts}
+\usepackage{avcmath}
+\usepackage{qcmacros}
+
+
+\begin{document}
+
+\section*{ROHF}
+
+Let $\bm\f_\mr{d}$, $\bm\f_\mr{s}$, and $\bm\f_\mr{v}$ be column vectors of doubly occupied, singly occupied, and virtual orbitals.
+Each of these spatial functions corresponds to two spin-orbital vectors, $\bm{\f}_\mr{x}\a$ and $\bm{\f}_\mr{x}\b$, and the SODS-ROHF effective Fock operator is given (in the Guest-Saunders approach) by the following
+\begin{align}
+  \op{f}_\mr{eff}
+\equiv
+  \ma{
+    \op{1}_\mr{d} &
+    \op{1}_\mr{s} &
+    \op{1}_\mr{v}
+  }
+  \ma{
+    \op{f}_\mr{avg} & \op{f}_\b       &  \op{f}_\mr{avg} \\
+    \op{f}_\b       & \op{f}_\mr{avg} &  \op{f}_\a       \\
+    \op{f}_\mr{avg} & \op{f}_\a       &  \op{f}_\mr{avg} \\
+  }
+  \ma{
+    \op{1}_\mr{d} \\
+    \op{1}_\mr{s} \\
+    \op{1}_\mr{v} \\
+  }
+&&
+  \op{f}_\mr{avg}
+\equiv
+  \tfr{1}{2}
+  (
+    \op{f}_\a
+  +
+    \op{f}_\b
+  )
+&&
+  \op{1}_\mr{x}
+\equiv
+  \kt{\bm\y_\mr{x}}
+  \br{\bm\y_\mr{x}}
+\end{align}
+where $\op{f}_\a$ and $\op{f}_\b$ are the usual Fock operators, defined in terms of $\op{f}_\mr{eff}$'s self-consistent densities.
+
+
+Start with the canonical Hartree-Fock equation
+\begin{align}
+  \op{f}_\mr{eff}
+  \f_p
+=
+  \ev_p
+  \f_p
+&&
+  \op{f}_\mr{eff}
+=
+  \sum_{\mr{x},\mr{y}}
+  \op{1}_\mr{x}
+  \,
+  \op{f}_\mr{eff}^{\mr{x},\mr{y}}
+  \,
+  \op{1}_\mr{y}
+\end{align}
+and expand it in the AO basis.
+\begin{align}
+  \ip{\bm\x|\op{f}_\mr{eff}|\bm\x}
+  \bo{c}_p
+=
+  \ev_p
+  \ip{\bm\x|\bm\x}
+  \bo{c}_p
+&&
+  \op{1}_\mr{x}
+=
+  \kt{\bm\f_\mr{x}}
+  \br{\bm\f_\mr{x}}
+=
+  \kt{\bm\x}
+  \bo{C}_\mr{x}
+  \bo{C}_\mr{x}\dg
+  \br{\bm\x}
+\end{align}
+Yields the following
+\begin{align}
+  \ip{\bm\x|\op{f}_\mr{eff}|\bm\x}
+=
+  \sum_{\mr{x},\mr{y}}
+  \bo{P}_\mr{x}\dg
+  \ip{\bm\x|\op{f}_\mr{eff}^\mr{x,y}|\bm\x}
+  \bo{P}_\mr{y}
+&&
+  \bo{P}_\mr{x}
+\equiv
+  \bo{C}_\mr{x}\bo{C}_\mr{x}\dg
+  \ip{\bm\x|\bm\x}
+\end{align}
+designating the single occupations as alpha spins, we have the following relationships
+\begin{align}
+  \bo{P}_\mr{d}
+=
+  \bo{D}_\b\bo{S}
+&&
+  \bo{P}_\mr{s+d}
+=
+  \bo{D}_\a\bo{S}
+&&
+  \op{1}_\mr{s}
+=
+  \op{1}
+-
+  \op{1}_\mr{d}
+&&
+  \op{1}_\mr{v}
+=
+  \op{1}
+-
+  \op{1}_\mr{s+d}
+\end{align}
+where
+$
+  \bo{D}_\b
+=
+  \bo{C}_{\mr{o}_\b}
+  \bo{C}_{\mr{o}_\b}\dg
+$
+and
+$
+  \bo{D}_\a
+=
+  \bo{C}_{\mr{o}_\a}
+  \bo{C}_{\mr{o}_\a}\dg
+$
+are the UHF density matrices.
+This allows us to express the AO-basis pseudo-projection operators as follows.
+\begin{align}
+  \bo{P}_\mr{d}
+=
+  \bo{D}_\b
+  \bo{S}
+&&
+  \bo{P}_\mr{s}
+=
+  (\bo{D}_\a - \bo{D}_\b)
+  \bo{S}
+&&
+  \bo{P}_\mr{v}
+=
+  \bo{1}
+-
+  \bo{D}_\a
+  \bo{S}
+\end{align}
+The final expression for the effective Fock matrix in terms of UHF Fock matrices is as follows.
+\begin{align}
+  \bo{F}_\mr{eff}
+=
+  \tfr{1}{2}
+  \sum_{
+    \substack{
+      \mr{x},\mr{y}\in\{\mr{d},\mr{v}\} \\
+      \mr{x} = \mr{y} = \mr{s}
+    }
+  }
+  \bo{P}_\mr{x}\dg
+  (\bo{F}_\a + \bo{F}_\b)
+  \bo{P}_\mr{y}
++
+  \sum_{\mr{x}\neq\mr{y}\in\{\mr{d},\mr{s}\}}
+  \bo{P}_\mr{x}
+  \bo{F}_\b
+  \bo{P}_\mr{y}
++
+  \sum_{\mr{x}\neq\mr{y}\in\{\mr{s},\mr{v}\}}
+  \bo{P}_\mr{x}
+  \bo{F}_\a
+  \bo{P}_\mr{y}
+\end{align}
+Apart from replacing the two UHF Fock matrices with this single effective Fock matrix, the algorithm for solving ROHF is the same.
+The residual (orbital gradient) condition is given by
+\begin{align}
+  \bo{R}
+&=
+  \bo{P}_\mr{s}\dg
+  \bo{F}_\b
+  \bo{P}_\mr{d}
++
+  \tfr{1}{2}
+  \bo{P}_\mr{v}\dg
+  (
+    \bo{F}_\a
+  +
+    \bo{F}_\b
+  )
+  \bo{P}_\mr{d}
++
+  \bo{P}_\mr{v}\dg
+  \bo{F}_\a
+  \bo{P}_\mr{s}
+\\
+&-
+  \bo{P}_\mr{d}\dg
+  \bo{F}_\b
+  \bo{P}_\mr{s}
+-
+  \tfr{1}{2}
+  \bo{P}_\mr{d}\dg
+  (
+    \bo{F}_\a
+  +
+    \bo{F}_\b
+  )
+  \bo{P}_\mr{v}
+-
+  \bo{P}_\mr{s}\dg
+  \bo{F}_\a
+  \bo{P}_\mr{v}
+\overset{!}{=}
+  \bo{0}
+\end{align}
+which corresponds to the requirement that the off-diagonal blocks of $\bo{F}_\mr{eff}$ vanish.
+This is analogous to the UHF residual condition.
+\begin{align}
+  \bo{R}_\a
+=
+  \bo{P}_{\mr{v}_\a}\dg
+  \bo{F}_\a
+  \bo{P}_{\mr{o}_\a}
+-
+  \bo{P}_{\mr{o}_\a}\dg
+  \bo{F}_\a
+  \bo{P}_{\mr{v}_\a}
+=
+  \bo{F}_\a
+  \bo{D}_\a
+  \bo{S}
+-
+  \bo{S}
+  \bo{D}_\a
+  \bo{F}_\a
+\overset{!}{=}
+  \bo{0}
+\end{align}
+
+
+\end{document}
