@@ -11,7 +11,7 @@
 
 \section*{ROHF}
 
-Let $\bm\f_\mr{d}$, $\bm\f_\mr{s}$, and $\bm\f_\mr{v}$ be column vectors of doubly occupied, singly occupied, and virtual orbitals.
+Let $\bm\f_\mr{d}$, $\bm\f_\mr{s}$, and $\bm\f_\mr{v}$ be row vectors of doubly occupied, singly occupied, and virtual orbitals.
 Each of these spatial functions corresponds to two spin-orbital vectors, $\bm{\f}_\mr{x}\a$ and $\bm{\f}_\mr{x}\b$, and the SODS-ROHF effective Fock operator is given (in the Guest-Saunders approach) by the following
 \begin{align}
   \op{f}_\mr{eff}
@@ -49,7 +49,7 @@ Each of these spatial functions corresponds to two spin-orbital vectors, $\bm{\f
 where $\op{f}_\a$ and $\op{f}_\b$ are the usual Fock operators, defined in terms of $\op{f}_\mr{eff}$'s self-consistent densities.
 
 
-Start with the canonical Hartree-Fock equation
+Starting with the canonical Hartree-Fock equation
 \begin{align}
   \op{f}_\mr{eff}
   \f_p
@@ -66,7 +66,7 @@ Start with the canonical Hartree-Fock equation
   \,
   \op{1}_\mr{y}
 \end{align}
-and expand it in the AO basis.
+and expanding it in the AO basis
 \begin{align}
   \ip{\bm\x|\op{f}_\mr{eff}|\bm\x}
   \bo{c}_p
@@ -85,7 +85,7 @@ and expand it in the AO basis.
   \bo{C}_\mr{x}\dg
   \br{\bm\x}
 \end{align}
-Yields the following
+yields the following
 \begin{align}
   \ip{\bm\x|\op{f}_\mr{eff}|\bm\x}
 =
@@ -99,7 +99,7 @@ Yields the following
   \bo{C}_\mr{x}\bo{C}_\mr{x}\dg
   \ip{\bm\x|\bm\x}
 \end{align}
-designating the single occupations as alpha spins, we have the following relationships
+Designating the single occupations as alpha spins, we have the following relationships
 \begin{align}
   \bo{P}_\mr{d}
 =
