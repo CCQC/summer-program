@@ -5,7 +5,7 @@ import math
 
 class RHF(object):
 
-	def __init__(self, mol, mints, convCrit = 10, maxIter = 200):
+	def __init__(self, mol, mints, convCrit = 220, maxIter = 200):
 		"""
 		:param mol: 
 		:param mints:
@@ -17,7 +17,7 @@ class RHF(object):
 		self.convCrit = convCrit
 		self.maxIter = maxIter
 		self.E = 0.0
-
+		
 		#Step 1: Read nuclear repulsion energy from molecule and atomic integrals from MintsHelper	
 		self.VNuc = mol.nuclear_repulsion_energy() #nuclear repulsion energy
 		self.S = np.array(mints.ao_overlap()) #overlap integrals
@@ -25,11 +25,16 @@ class RHF(object):
 		self.V = np.array(mints.ao_potential()) #electron-nuclear attraction integrals
 		self.g = np.array(mints.ao_eri()) #electron-electron repulsion integrals
 		self.norb = mints.basisset().nbf() #number of orbits (defines size of arrays) 	
+		self.H = self.T + self.V #Hamiltonian
+		self.nelec = - mol.molecular_charge()
+		for atom in range(mol.natom()):
+			self.nelec += mol.Z(atom)
+		self.nocc = int(self.nelec / 2)
+					
 		#Step 2: Form orthogonalizer (X = S^-1/2)
 		self.X = spla.inv(spla.sqrtm(self.S))
 		
-		self.H = self.T + self.V #Hamiltonian
-		self.I = np.identity(self.norb)	
+		
 		#Step 3: Set D = 0 as "core" guess
 		self.D = np.zeros((self.norb,self.norb))
 		
@@ -80,13 +85,13 @@ class RHF(object):
 		#print self.C
 		
 		#Step 5: Rebuild density matrix
-		self.Cocp = self.C[:,:self.norb]
+		self.Cocp = self.C[:,:self.nocc]
 		self.D = np.einsum('pi,qi->pq',self.Cocp,np.conj(self.Cocp)) #New density matrix 
 		#print self.D
 		
 		#Step 6: Calculate energy (For convenience steps 5 and 6 have been rearranged wrt the inst
                 HF = self.H + self.F #sum of Hamiltonian and Fock matrices
-                self.E = np.einsum('pq,qp',HF,self.D) #New energy, congratulations
+                self.E = np.einsum('pq,qp',HF,self.D) + self.VNuc #New energy, congratulations
 	
 		#Step 7: Increase iteration count
 		self.iter +=1	
