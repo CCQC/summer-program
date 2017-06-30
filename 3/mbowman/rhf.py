@@ -1,10 +1,11 @@
 import psi4.core
 import numpy as np
 import scipy.linalg as spla
+import math
 
 class RHF(object):
 
-	def __init__(self, mol, mints, convCrit = 10):
+	def __init__(self, mol, mints, convCrit = 10, maxIter = 200):
 		"""
 		:param mol: 
 		:param mints:
@@ -13,7 +14,9 @@ class RHF(object):
 			
 		self.mol = mol
 		self.mints = mints
-		
+		self.convCrit = convCrit
+		self.maxIter = maxIter
+		self.E = 0.0
 
 		#Step 1: Read nuclear repulsion energy from molecule and atomic integrals from MintsHelper	
 		self.VNuc = mol.nuclear_repulsion_energy() #nuclear repulsion energy
@@ -32,12 +35,20 @@ class RHF(object):
 		
 		#Iteration to SC
 		convCond = False #convergence condition initially set to false once the energy and density matrix converge it
-		self.Eold = 0
-		self.Energ = 0 
+		self.Eold = 1.0
+		self.Dold = np.zeros((self.norb,self.norb))  
+		self.iter = 0
 		while not convCond:
 			self.I2SC()	
-			if ((self.Eold - self.Energ) < 10**(-convCrit)):
-			 	convCond = True
+			if (np.absolute((self.Eold - self.E)) < 10**(-self.convCrit)  and self.iter > 1):
+				print "Converged"
+				print "Energy: " + str(self.E)
+				print "Iterations: " + str(self.iter)	
+				convCond = True
+			elif self.iter >= self.maxIter:
+				print "Failed to converge"
+				break
+		
 		 
 		 
 	def I2SC(self):
@@ -45,13 +56,40 @@ class RHF(object):
 		Iteration to(2) Self Consistency, this function is called iteratively until the energy converges
 		"""
 		pass
+		self.Eold = self.E
+		self.Dold = self.D
 
 		#Step 1: Build Fock matrix (ie "giving a fock")
-		J = np.einsum('prqs,rs->pq', self.g, self.D) #Sum of Columb Operators
-		K = np.einsum('prsq,rs->pq', self.g, self.D) #Sum of Exchange Operators
-		F = H + 2*J - K	#Fock Operator
+		self.J = np.einsum('prqs,rs->pq', self.g, self.D) #Sum of Columb Operators
+		# print self.J
+		self.K = np.einsum('prsq,rs->pq', self.g, self.D) #Sum of Exchange Operators
+		# print self.K
+		self.F = self.H + 2*self.J - self.K	#Fock Operator
+		# print self.F	
 		
 		#Step 2: Transform Fock to orthogonalized AO basis
-		FOrtho = np.einsum('ik,kj->ij',(np.einsum('ik,kj->ij',X,F), X) #Orthogonalized Fock matrix (XFX)
-			
+		self.FOrtho = np.einsum('ik,kj->ij', (np.einsum('ik,kj->ij',self.X,self.F)) , self.X) #Orthogonalized Fock matrix (XFX)
+		# print self.FOrtho	
 		
+		#Step 3: Diagonilze Orthonalized Fock 
+		self.orbitalEnergies, self.COrtho = np.linalg.eigh(self.FOrtho) #Orbital Energies and MO coefficients
+		# print self.COrtho
+		
+		#Step 4: Backtransform MO Coefficients
+		self.C = np.einsum('ik,kj->ij',self.X,self.COrtho) #Original basis
+		#print self.C
+		
+		#Step 5: Rebuild density matrix
+		self.Cocp = self.C[:,:self.norb]
+		self.D = np.einsum('pi,qi->pq',self.Cocp,np.conj(self.Cocp)) #New density matrix 
+		#print self.D
+		
+		#Step 6: Calculate energy (For convenience steps 5 and 6 have been rearranged wrt the inst
+                HF = self.H + self.F #sum of Hamiltonian and Fock matrices
+                self.E = np.einsum('pq,qp',HF,self.D) #New energy, congratulations
+	
+		#Step 7: Increase iteration count
+		self.iter +=1	
+		print "Energy: " + str(self.E)
+		print "Iteration: " + str(self.iter)	
+
