@@ -1,0 +1,23 @@
+molecule mol {
+  0 1
+  O
+  H 1 0.95
+  H 1 0.95 2 104.5
+}
+
+set basis sto-3g
+
+mol.update_geometry()
+
+
+basisname = psi4.core.get_global_option("BASIS")
+basisset = psi4.core.BasisSet.build(mol,"BASIS",basisname)
+mints = psi4.core.MintsHelper(basisset)
+
+import sys
+sys.path.insert(0, '.')
+from RHF import RHF
+
+rhf = RHF(mol, mints, basisname)
+
+rhf.compute_energy()
