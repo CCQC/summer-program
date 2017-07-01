@@ -5,7 +5,7 @@ import math
 
 class RHF(object):
 
-	def __init__(self, mol, mints, convCrit = 220, maxIter = 200):
+	def __init__(self, mol, mints, convCrit = 10, maxIter = 500):
 		"""
 		:param mol: 
 		:param mints:
@@ -43,17 +43,21 @@ class RHF(object):
 		self.Eold = 1.0
 		self.Dold = np.zeros((self.norb,self.norb))  
 		self.iter = 0
+		line = "+----+--------------------+------------+"
+		print line
+		print  "|iter| Energy             | dE         |"
+		print line
 		while not convCond:
 			self.I2SC()	
 			if (np.absolute((self.Eold - self.E)) < 10**(-self.convCrit)  and self.iter > 1):
-				print "Converged"
-				print "Energy: " + str(self.E)
-				print "Iterations: " + str(self.iter)	
+				print line
+				print  "| Converged                            |"
 				convCond = True
 			elif self.iter >= self.maxIter:
-				print "Failed to converge"
+				print line
+				print  "| Failed to converge                   |"
 				break
-		
+		print line
 		 
 		 
 	def I2SC(self):
@@ -65,11 +69,11 @@ class RHF(object):
 		self.Dold = self.D
 
 		#Step 1: Build Fock matrix (ie "giving a fock")
-		self.J = np.einsum('prqs,rs->pq', self.g, self.D) #Sum of Columb Operators
+		self.J = np.einsum('prqs,sr->pq', self.g, self.D) #Sum of Columb Operators
 		# print self.J
-		self.K = np.einsum('prsq,rs->pq', self.g, self.D) #Sum of Exchange Operators
+		self.K = np.einsum('prsq,sr->pq', self.g, self.D) #Sum of Exchange Operators
 		# print self.K
-		self.F = self.H + 2*self.J - self.K	#Fock Operator
+		self.F = self.H + self.J - 0.5 *self.K	#Fock Operator
 		# print self.F	
 		
 		#Step 2: Transform Fock to orthogonalized AO basis
@@ -86,15 +90,16 @@ class RHF(object):
 		
 		#Step 5: Rebuild density matrix
 		self.Cocp = self.C[:,:self.nocc]
-		self.D = np.einsum('pi,qi->pq',self.Cocp,np.conj(self.Cocp)) #New density matrix 
+		self.D = 2*np.einsum('pi,qi->pq',self.Cocp,np.conj(self.Cocp)) #New density matrix 
 		#print self.D
 		
 		#Step 6: Calculate energy (For convenience steps 5 and 6 have been rearranged wrt the inst
-                HF = self.H + self.F #sum of Hamiltonian and Fock matrices
-                self.E = np.einsum('pq,qp',HF,self.D) + self.VNuc #New energy, congratulations
+                sum = self.H + 0.5* self.J+ 0.25*self.K #sum of Hamiltonian and Fock matrices
+                self.E = np.einsum('pq,qp',sum,self.D) + self.VNuc #New energy, congratulations
 	
-		#Step 7: Increase iteration count
+		#Step 7: Print and increase iteration count
+		print '|{0:4d}| {1:16.14f} | {2:4.4e} |'.format(self.iter, self.E,np.absolute(self.E - self.Eold))
 		self.iter +=1	
-		print "Energy: " + str(self.E)
-		print "Iteration: " + str(self.iter)	
+		#print "Energy: " + str(self.E)
+		#print "Iteration: " + str(self.iter)	
 
