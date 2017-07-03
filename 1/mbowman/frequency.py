@@ -17,7 +17,7 @@ class Frequency(object):
 
 	def __init__(self, mole_str, hess_str):
 		"""
-		
+		Initializes some values then preceeds to calculate normal coordinates and spatial frequencies. 		
 		:param mole_str: string used to create instance of a new molecule
 		:param hess_str: string used to create Hessian matrix
 		"""
@@ -44,7 +44,7 @@ class Frequency(object):
 		
 	def parse_hessian(self, hess_str):
 		"""
-
+		Parses a string file into a the Hessian matrix
 		:param hess_str: string used to create Hessian matrix
 		"""			
 		"""lines = hess_str.strip().split("\n")
@@ -64,16 +64,25 @@ class Frequency(object):
 		return tempMatrix 
 
 	def to_wavenumber(self):
+		"""
+		Converts spatial frequencies to wavenumber
+		"""
 		if self.units =="hertz":
 			self.spFreq /= 29979245800
 			self.units = "wavenumber"
 
 	def to_hertz(self):
+		"""
+		Converts spatial frequencies to hertz
+		"""
 		if self.units == "wavenumber":
 			self.spFreq *= 29979245800
 			self.units = "hertz"
 		 
 	def xyz_string(self):
+		"""
+		Returns a string displaying the vibrations of molecules with atom, geometry, and displacement. Listed by spatial frequency.
+		"""
 		str = ""
 		for n in range(len(self.normCoord)):
 			str += '{0:d} \n'.format(self.mol.natom) 
