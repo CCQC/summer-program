@@ -16,6 +16,7 @@ def frequencies(mol, hessian):
         raise Exception("Please pass a Hermitian matrix to frequencies.")
     if hessian.shape != (3*mol.natom, 3*mol.natom):
         raise Exception("Dimensions of the molecule and the Hessian disagree.")
+    mol.to_angstrom()
     
     # A 3n array used for massweighting, per eqn. 2.
     # A 3n-by-3n matrix could be made via broadcasting, but this feels cleaner.
