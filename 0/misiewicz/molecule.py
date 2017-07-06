@@ -80,7 +80,7 @@ class Molecule(object):
             validate_array_length(self.natom + 2, xyz_lines, "XYZ input", "lines")
             geom = numpy.empty([0, 3])
             for i, line in enumerate(xyz_lines[2:]):
-            	# Ensure a coordinate line is valid before processing it.
+                # Ensure a coordinate line is valid before processing it.
                 atom, matr_row = validate_coord_line(line, i + 3)
                 geom = numpy.vstack((geom, matr_row))
                 self.labels.append(atom)
@@ -92,31 +92,37 @@ class Molecule(object):
         '''Convert Angstrom units to Bohr units.'''
         if self.units == "Bohr":
             pass
-        self.geom = 1.88973 * self.geom
+        self.geom = 1.889725989 * self.geom
         self.units = "Bohr"
-    
+
     def to_angstrom(self):
         '''Convert Bohr units to Angstrom units.'''
         if self.units == "Angstrom":
             pass
-        self.geom = 1 / 1.88973 * self.geom
+        self.geom = 1 / 1.889725989 * self.geom
         self.units = "Angstrom"
-    
+
+    def compose_xyz_string(self):
+        '''Return the molecular coordinates in xyz format.'''
+        xyz_string = ""
+        for label, geom in zip(self.labels, self.geom.tolist()):
+            xyz_string += ("{:3} {:15.10f} {:15.10f} {:15.10f}\n".format(label, geom[0], geom[1], geom[2]))
+        return xyz_string
+
     def xyz_string(self):
         '''Print the molecular coordinates in xyz format.'''
-        for label, geom in zip(self.labels, self.geom.tolist()):
-            print("{:3} {:15.10f} {:15.10f} {:15.10f}".format(label, geom[0], geom[1], geom[2]))
-    
+        print(self.compose_xyz_string())
+
     def copy(self):
         '''Return a deep copy of the molecule object.'''
         return copy.deepcopy(self)
 
 if __name__ == "__main__":
-	water = Molecule("../../extra-files/molecule.xyz")
-	water.to_bohr()
-	water2 = water.copy()
-	water2.to_angstrom()
-	water.xyz_string()
-	water2.xyz_string()
-	print(water.masses)
-	print(water.charges)
+    water = Molecule("../../extra-files/molecule.xyz")
+    water.to_bohr()
+    water2 = water.copy()
+    water2.to_angstrom()
+    water.xyz_string()
+    water2.xyz_string()
+    print(water.masses)
+    print(water.charges)
