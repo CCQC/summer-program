@@ -11,7 +11,7 @@ class Molecule:
         self.moleculelines = self.moleculefile.readlines()
         
         #units are supplied on line 2 
-	self.units = str(self.moleculelines[1]).rstrip()
+        self.units = str(self.moleculelines[1]).rstrip()
         #number of atoms is supplied on line 1   
         self.natom = int((self.moleculelines[0]).rstrip())
         
@@ -34,6 +34,8 @@ class Molecule:
                 #-1 for indexing reasons
                 self.geom[atom][i-1] = tempatom[i]
     def to_bohr(self):
+        #converts all units to Bohr radii when called
+        #1 br = 0.52917724888 A
         if self.units == "Bohr":
             return 0
         
@@ -42,13 +44,24 @@ class Molecule:
             self.geom *= 1.889725989
             return 0
     def to_angstrom(self):
+        #converts all units to Angstrom's when called
+        #1 A = 1.889725989 br
         if self.units == "Angstrom":
             return 0
         elif self.units == "Bohr":
             self.units = "Angstrom"
             self.geom *= (1./1.889725989)
     def xyz_string(self):
-        outstring = str(self.natom) + "\n" + str(self.units) + "\n" + \
-            str(self.geom)
+        #returns a string 
+        outstring = ""
+        outstring += str(self.natom) + "\n"
+        outstring += str(self.units) + "\n"
+        for atom in range(0, self.natom):
+            outstring += str(self.labels[atom]) + "     "
+            outstring += '{: 012.11f}'.format(self.geom[atom][0]) + "   "
+            outstring += '{: 012.11f}'.format(self.geom[atom][1]) + "   "
+            outstring += '{: 012.11f}'.format(self.geom[atom][2]) + "   "
+            outstring += "\n"
+        return outstring
     def copy(self):
         return self
