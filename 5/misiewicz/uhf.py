@@ -4,10 +4,11 @@ import collections
 import itertools
 import numpy as np
 import psi4
+import scipy.linalg
 
 np.set_printoptions(threshold=np.inf, precision=5, linewidth=200, suppress=True)
 
-def rhf(mol, tolerance=1.e-16):
+def uhf(mol, tolerance=1.e-16):
     '''Run restricted Hartree-Fock on a molecule. Takes the molecule and the
     convergence tolerance as arguments. Returns the density matrix, the
     molecular energy, the coefficient matrix, the eigenvalues, the
@@ -25,26 +26,32 @@ def rhf(mol, tolerance=1.e-16):
     mints = psi4.core.MintsHelper(basisset)
     V_n = mol.nuclear_repulsion_energy()
     T = mints.ao_kinetic().to_array()
+    T = scipy.linalg.block_diag(T, T)
     V = mints.ao_potential().to_array()
+    V = scipy.linalg.block_diag(V, V)
     h = T + V
-    X = mints.ao_overlap() # This is actually S...
-    X.power(-0.5, tolerance) # ...and now it's X. Remember, power returns a dimension!
-    X = X.to_array()
+    S = mints.ao_overlap()
+    S = S.to_array(S)
+    S = scipy.linalg.block_diag(S, S)
+    S = psi4.core.Matrix.from_array(S)
+    S.power(-0.5, tolerance) # ...and now it's X. Remember, power returns a dimension!
+    X = S.to_array()
     density_matrix = np.zeros(X.shape)
-    I = mints.ao_eri().to_array().transpose((0, 2, 1, 3))
+    I = mints.ao_eri().to_array()
+    kron_matrix = np.zeros((2, 2, 2, 2))
+    # TODO: There has to be a more elegant way to do this...
+    kron_matrix[0, 0, 0, 0] =  kron_matrix[1, 1, 0, 0] =  kron_matrix[0, 0, 1, 1] =  kron_matrix[1, 1, 1, 1] = 1
+    G = np.kron(kron_matrix, I)
+    G = G.transpose((0, 2, 1, 3))
     
     # This code must run AFTER the basis set is built. Otherwise, the
     # atoms are marked as dummies and not included in natom().
-    electron = sum([int(mol.Z(n)) for n in range(mol.natom())]) - mol.molecular_charge()
-    if electron % 2:
-        raise Exception("Must have a closed-shell system for RHF.")
-    else:
-        nocc = electron // 2
+    nocc = sum([int(mol.Z(n)) for n in range(mol.natom())]) - mol.molecular_charge()
 
     def iteration(D):
         # Convert from chemist to physicist notation.
-        v = np.einsum('abcd, db -> ac', I, D) - (
-            0.5 * np.einsum('abdc, db -> ac', I, D))
+        v = np.einsum('abcd, db -> ac', G, D) - (
+            np.einsum('abdc, db -> ac', G, D))
         f = h + v
         f_hat = X @ f @ X
         # Note that indexing is lost after this step - the eigenvectors are
@@ -54,7 +61,7 @@ def rhf(mol, tolerance=1.e-16):
         C = np.asmatrix(X @ C_hat)
         C_full = C.copy()
         C[:, nocc:] = 0 # Zero terms from unoccupied orbitals.
-        D = 2 * C @ C.getH() # See pg. 138 Szabo, 1st ed., for interpretation.
+        D = C @ C.getH() # See pg. 138 Szabo, 1st ed., for interpretation.
         # The columns of C no longer match our index, but the rows do.
         # And since D was defined in terms of the rows, D is properly indexed!
         E_e = np.trace((h + 1/2 * v) @ D)
@@ -75,10 +82,10 @@ def rhf(mol, tolerance=1.e-16):
 if __name__ == "__main__":
     psi4.set_memory('500 MB')
     h2o = psi4.geometry("""
-O
-H 1 0.96
-H 1 0.96 2 104.5
-""")
-    hf_data = rhf(h2o)
+O     0.0000000000    0.0000000000   -0.0711762954
+H     0.0000000000   -0.8916195680    0.5648097613
+H     0.0000000000 0.8916195680 0.5648097613
+""") # Note to Self: Restore to ZMatrix format!s
+    hf_data = uhf(h2o)
     print(hf_data.density)
     print(hf_data.energy)
