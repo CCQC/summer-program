@@ -5,6 +5,8 @@ import itertools
 import numpy as np
 import psi4
 
+np.set_printoptions(threshold=np.inf, precision=5, linewidth=200, suppress=True)
+
 def rhf(mol, tolerance=1.e-16):
     '''Run restricted Hartree-Fock on a molecule. Takes the molecule and the
     convergence tolerance as arguments. Returns the density matrix, the
