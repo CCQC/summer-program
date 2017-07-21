@@ -10,12 +10,12 @@ class Molecule:
     """
     def __init__(self,data):
         #checking if input string is filename or xyzstring by determining number of lines
-        if len(data.split('\n')) >= 1:
+        if len(data.split('\n')) > 1:
             self.moleculelines = data.split('\n')
         else:
             with open(data, 'r') as moleculefile:
                 self.moleculelines = moleculefile.readlines()
-
+        
         #units are supplied on line 2
         self.units = self.moleculelines[1].rstrip()
         #number of atoms is supplied on line 1
