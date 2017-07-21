@@ -16,17 +16,16 @@ def readhessian(filename):
         hessianlines = hessianfile.readlines()
 
 
-    hessianmatrix = np.zeros(shape=(len(hessianlines),len(hessianlines)))
+    hessianmatrix = np.zeros((len(hessianlines),len(hessianlines)))
     for line in range(0,len(hessianlines)):
         hessianmatrix[line] = hessianlines[line].split()
-
     return hessianmatrix
 
 def frequencies(molecule,hessian):
     #calculates normal modes and frequencies from a Hessian matrix. Takes a molecule file and a \
     # 3*natom X 3*natom hessian numpy array as input.
     weightedhessian = np.zeros(hessian.shape)
-    uwvectors = np.zeros(weightedhessian.shape)
+    uwvectors = np.zeros(hessian.shape)
     frequencies = []
     sortedfreqs = []
     normalmodes = []
@@ -77,20 +76,16 @@ def printfrequencies(molecule, frequencies, normalmodes):
         tempout += str(molecule.natom) + "\n"
 
         tempout += "%4.2f" % frequency.real +" cm^-1" + "\n"
+        tempout = '{}\n{:4.2f} cm^-1 \n'.format(*[molecule.natom,frequency.real])
         i = 0
         for atom in range(0, molecule.natom):
-            tempout += '{: 012.11f}'.format(molecule.geom[atom][0]) + "   "
-            tempout += '{: 012.11f}'.format(molecule.geom[atom][1]) + "   "
-            tempout += '{: 012.11f}'.format(molecule.geom[atom][2]) + "   "
-            tempout += '{: 012.11f}'.format(normalmodes[idx][i])    + "   "
-            tempout += '{: 012.11f}'.format(normalmodes[idx][i+1])  + "   "
-            tempout += '{: 012.11f}'.format(normalmodes[idx][i+2])  + "   "
-
-            tempout += '\n'
-
+             
+            
+            lineout = [molecule.labels[atom]] + np.concatenate((molecule.geom[atom][0:3],normalmodes[idx][i:i+3]), axis=0).tolist() 
+            
+            tempout += ('{:6}'+'{: 12.11f}   '*6).format(*lineout) + '\n'
             i += 3
             i = i % 8
 
         finaloutput += tempout + '\n'
-    with open('example.xyz','w') as f:
-        f.write(finaloutput)
+    return(finaloutput)
