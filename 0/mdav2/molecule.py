@@ -10,7 +10,7 @@ class Molecule:
     """
     def __init__(self,data):
         #checking if input string is filename or xyzstring by determining number of lines
-        if len(data.split('\n')) > 1:
+        if '.xyz' not in data:
             self.moleculelines = data.split('\n')
         else:
             with open(data, 'r') as moleculefile:
