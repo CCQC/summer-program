@@ -1,14 +1,13 @@
 import sys
 import numpy as np
-sys.path.append('../../extra-files')
 sys.path.append('../../0/mdav2')
 import molecule
 import math
 
-ccms = 3E10 #speed of light in centimeters per second
-eh = 4.36E-18 #J/hartree
-ao = 5.29E-11 #m/br
-u = 1.66E-27 #kg/amu
+ccms = 2.99792458E10 #speed of light in centimeters per second
+eh = 4.35974E-18 #J/hartree
+ao = 5.29177E-11 #m/br
+u = 1.66054E-27 #kg/amu
 
 def readhessian(filename):
     #opens and reads a hessian matrix from the given filename
@@ -16,9 +15,8 @@ def readhessian(filename):
         hessianlines = hessianfile.readlines()
 
 
-    hessianmatrix = np.zeros((len(hessianlines),len(hessianlines)))
-    for line in range(0,len(hessianlines)):
-        hessianmatrix[line] = hessianlines[line].split()
+    hessianmatrix = np.array([[float(x) for x in hessianlines[line].split()] for line in range(len(hessianlines))])
+
     return hessianmatrix
 
 def frequencies(molecule,hessian):
@@ -35,7 +33,7 @@ def frequencies(molecule,hessian):
         for B in range(0, molecule.natom * 3):
             weightedhessian[A][B] = hessian[A][B]/math.sqrt(molecule.masses[math.floor(A/3.)]*molecule.masses[math.floor(B/3.)])
 
-    evals,evecs = np.linalg.eig(weightedhessian)
+    evals,evecs = np.linalg.eigh(weightedhessian)
 
     #TODO: work on these lines to a more readable state
     for vector in range(0,molecule.natom * 3):
@@ -52,7 +50,7 @@ def frequencies(molecule,hessian):
         #convert from force constants to wavenumbers
         freq = ( (1./(math.pi * 2) * np.sqrt(frequency + 0J))/ccms) #+0J to force complex evaluation
         #turns imaginary frequencies to negative
-        if freq.imag != 0:
+        if freq.imag:
             freq = -1*freq.imag
         frequencies.append(freq)
 
@@ -72,20 +70,9 @@ def printfrequencies(molecule, frequencies, normalmodes):
     #TODO: use cleaner formatting tools here
     finaloutput = ""
     for idx,frequency in enumerate(frequencies):
-        tempout = ""
-        tempout += str(molecule.natom) + "\n"
-
-        tempout += "%4.2f" % frequency.real +" cm^-1" + "\n"
         tempout = '{}\n{:4.2f} cm^-1 \n'.format(*[molecule.natom,frequency.real])
-        i = 0
-        for atom in range(0, molecule.natom):
-             
-            
-            lineout = [molecule.labels[atom]] + np.concatenate((molecule.geom[atom][0:3],normalmodes[idx][i:i+3]), axis=0).tolist() 
-            
-            tempout += ('{:6}'+'{: 12.11f}   '*6).format(*lineout) + '\n'
-            i += 3
-            i = i % 8
-
+        for atom in range(molecule.natom):
+            lineout = [molecule.labels[atom]] + np.concatenate((molecule.geom[atom][0:3],normalmodes[idx][3*atom:3*atom+3]), axis=0).tolist() 
+            tempout += ('{:6}'+'{: 12.11f}   '*6).format(molecule.labels[atom], *np.concatenate((molecule.geom[atom][0:3],normalmodes[idx][3*atom:3*atom+3]), axis=0).tolist()) + '\n'
         finaloutput += tempout + '\n'
     return(finaloutput)
