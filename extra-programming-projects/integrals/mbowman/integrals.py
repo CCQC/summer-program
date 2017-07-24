@@ -12,6 +12,11 @@ import numpy as np
 from scipy import special, misc
 import collections
 
+np.set_printoptions(threshold=np.inf)
+np.set_printoptions(precision=3)
+np.set_printoptions(linewidth=200)
+np.set_printoptions(suppress=True)
+
 class Integrals(object):
 	
 	def __init__(self, mol_str):
@@ -24,7 +29,7 @@ class Integrals(object):
 		self.createBasisDict() 
 		self.K = len(self.bd) #dimension of molecular integrals		
 		self.gfn = 3 #number of Gaussian functions to sum over
-		self.overlapIntegral()
+		self.S = self.overlapIntegral()
 		
 	def subshells(self, z):
 		s = ['1_s']
@@ -77,9 +82,10 @@ class Integrals(object):
 				self.bd[sss]['R'] = [self.coord[i][c] for c in range(3)] 
 	
 	def overlapIntegral(self):			 
-		self.S = np.zeros((self.K, self.K))
+		S = np.zeros((self.K, self.K))
 		for i, orb1 in enumerate(self.bd):
 			for j, orb2 in enumerate(self.bd):
+				ss = 0
 				for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
 					for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
 						gamma = alphaA + alphaB
@@ -87,18 +93,20 @@ class Integrals(object):
 						#print p
 						t = da * db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n'])
 						#print t
-						norm = ( self.bd[orb1]['R'][0] - self.bd[orb2]['R'][0] + self.bd[orb1]['R'][1] - self.bd[orb2]['R'][1] + self.bd[orb1]['R'][2] - self.bd[orb2]['R'][2])
+						norm = (self.bd[orb1]['R'][0] - self.bd[orb2]['R'][0])**2  + (self.bd[orb1]['R'][1] - self.bd[orb2]['R'][1])**2 + (self.bd[orb1]['R'][2] - self.bd[orb2]['R'][2])**2 
 						#print norm
 						t *= math.exp( -1*alphaA*alphaB*norm / gamma  )
-						print t
-						t *= self.f2(0 , gamma, self.bd[orb1]['l'], self.bd[orb2]['l'], self.bd[orb1]['R'], self.bd[orb2]['R'], p) 
-						print t
-						t *= self.f2(1 , gamma, self.bd[orb1]['m'], self.bd[orb2]['m'], self.bd[orb1]['R'], self.bd[orb2]['R'], p)
-						print t
-						t *= self.f2(2 , gamma, self.bd[orb1]['n'], self.bd[orb2]['n'], self.bd[orb1]['R'], self.bd[orb2]['R'], p)	
-						print t
-						print " "
-		#return S	
+						#print t
+						t *= self.f2(gamma, self.bd[orb1]['l'], self.bd[orb2]['l'], self.bd[orb1]['R'][0], self.bd[orb2]['R'][0], p[0]) 
+						#print t
+						t *= self.f2(gamma, self.bd[orb1]['m'], self.bd[orb2]['m'], self.bd[orb1]['R'][1], self.bd[orb2]['R'][1], p[1])
+						#print t
+						t *= self.f2(gamma, self.bd[orb1]['n'], self.bd[orb2]['n'], self.bd[orb1]['R'][2], self.bd[orb2]['R'][2], p[2])	
+						#print t
+						ss += t
+						#print " "
+				S[i][j] = ss
+		return S	
 
 	def f1(self, j, l, m, a, b):
 		"""
@@ -106,23 +114,24 @@ class Integrals(object):
 		"""
 		s = 0
 		for k in range(max(0,(j-m)), (min(j, l) + 1)):
-			s += special.binom(l,k)*special.binom(m,(j-k))*(a ** (l - k) )*(b ** (m + k - j) )
+			s += special.comb(l,k)*special.comb(m,j-k)*math.pow(a,l - k)*math.pow(b,m + k - j)
+		#print s	
 		return s
 
 	def p(self, a, b, alphaA, alphaB):
 		"""
 		corresponds to equation 5
 		"""
-		return ( np.multiply(alphaA, a) + np.multiply(alphaB, b) )/ (alphaA * alphaB)
+		return ( np.multiply(alphaA, a) + np.multiply(alphaB, b) )/ (alphaA + alphaB)
 
-	def f2(self, dimension, gamma, l, m, a, b, p):
+	def f2(self, gamma, l, m, a, b, p):
 		"""
 		corresponds to equation 3 in notes
 		""" 
-		s = 0
-		for x in range(int( (l + m)/2 )):
-			s += self.f1(x, l, m, np.subtract(p,a)[dimension], np.subtract(p,b)[dimension]) * misc.factorial2((2*x-1),exact=True) / ((2* gamma) ** x) 
-		s *= math.sqrt(( math.pi / gamma) )
+		s = self.f1(0, l, m, (p-a) ,(p-b))   
+		for x in range(1,int( (l + m)/2 ) +1):
+			s += (self.f1(2*x, l, m, (p-a) ,(p-b) ) * misc.factorial2((2*x-1),exact=True) / ((2* gamma) ** x)) 
+		s = s * math.sqrt(( math.pi / gamma) )
 		return s	
 	
 	def normalization(self, alpha, l, m, n):
@@ -133,7 +142,9 @@ class Integrals(object):
 		s /= ( misc.factorial2( (2*l -1), exact=True) * misc.factorial2( (2*m -1), exact=True) * misc.factorial2( (2*n -1), exact=True) )
 		s *= math.pow( (2*alpha/math.pi), 1.5) 
 		return math.sqrt(s)			
+
 if __name__ == "__main__":
 	mole_str = open("../../../extra-files/molecule.xyz").read()
 	integral = Integrals(mole_str)
 	print integral.S
+	#print integral.f2(1,0,0,0,0,0)
