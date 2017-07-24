@@ -56,29 +56,13 @@ class Integrals(object):
 				sss = tas + '_' + subShell
 				self.bd[sss] = {} 		#initializes dictionary entry for subshell of atom
 				self.bd[sss]['a'] = sto.expFact(tempCharge, int(shellInfo[0])) #assigns expansion factors based on atomic number and shell
-				if shellInfo[1] == 's':
-					self.bd[sss]['d'] = sto.contCoeff(int(shellInfo[0]),1)
-					self.bd[sss]['l'] = 0
-					self.bd[sss]['m'] = 0
-					self.bd[sss]['n'] = 0
-				elif shellInfo[1] == 'p':
-					self.bd[sss]['d'] = sto.contCoeff(int(shellInfo[0]),2)
-					if shellInfo[2] == 'x':
-						self.bd[sss]['l'] = 1
-						self.bd[sss]['m'] = 0
-						self.bd[sss]['n'] = 0
-					elif shellInfo[2] == 'y':
-                                        	self.bd[sss]['l'] = 0
-                                        	self.bd[sss]['m'] = 1
-                                        	self.bd[sss]['n'] = 0
-					elif shellInfo[2] == 'z':
-						self.bd[sss]['l'] = 0
-						self.bd[sss]['m'] = 0
-						self.bd[sss]['n'] = 1 
-					else:
-						print "Error: p orbital not specified correctly"
-				elif shellInfo[1] == 'd':
-					print "Error: d orbitals not implemented"
+				self.bd[sss]['d'] = sto.contCoeff(int(shellInfo[0]),(2 if shellInfo[1] == 'p' else 1))
+				if shellInfo[1] == 'p':	
+					self.bd[sss]['l'] = 1 if shellInfo[2] == 'x' else 0
+					self.bd[sss]['m'] = 1 if shellInfo[2] == 'y' else 0
+					self.bd[sss]['n'] = 1 if shellInfo[2] == 'z' else 0
+				else:
+					self.bd[sss]['l'], self.bd[sss]['m'], self.bd[sss]['n'] = 0, 0, 0
 				self.bd[sss]['R'] = [self.coord[i][c] for c in range(3)] 
 	
 	def overlapIntegral(self):			 
@@ -88,23 +72,7 @@ class Integrals(object):
 				ss = 0
 				for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
 					for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
-						gamma = alphaA + alphaB
-						p = self.p(self.bd[orb1]['R'], self.bd[orb2]['R'], alphaA, alphaB)
-						#print p
-						t = da * db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n'])
-						#print t
-						norm = (self.bd[orb1]['R'][0] - self.bd[orb2]['R'][0])**2  + (self.bd[orb1]['R'][1] - self.bd[orb2]['R'][1])**2 + (self.bd[orb1]['R'][2] - self.bd[orb2]['R'][2])**2 
-						#print norm
-						t *= math.exp( -1*alphaA*alphaB*norm / gamma  )
-						#print t
-						t *= self.f2(gamma, self.bd[orb1]['l'], self.bd[orb2]['l'], self.bd[orb1]['R'][0], self.bd[orb2]['R'][0], p[0]) 
-						#print t
-						t *= self.f2(gamma, self.bd[orb1]['m'], self.bd[orb2]['m'], self.bd[orb1]['R'][1], self.bd[orb2]['R'][1], p[1])
-						#print t
-						t *= self.f2(gamma, self.bd[orb1]['n'], self.bd[orb2]['n'], self.bd[orb1]['R'][2], self.bd[orb2]['R'][2], p[2])	
-						#print t
-						ss += t
-						#print " "
+						ss += self.f3(orb1, orb2, alphaA, alphaB, da, db) 
 				S[i][j] = ss
 		return S	
 
@@ -126,13 +94,35 @@ class Integrals(object):
 
 	def f2(self, gamma, l, m, a, b, p):
 		"""
-		corresponds to equation 3 in notes
+		corresponds to equation 3
 		""" 
 		s = self.f1(0, l, m, (p-a) ,(p-b))   
 		for x in range(1,int( (l + m)/2 ) +1):
 			s += (self.f1(2*x, l, m, (p-a) ,(p-b) ) * misc.factorial2((2*x-1),exact=True) / ((2* gamma) ** x)) 
 		s = s * math.sqrt(( math.pi / gamma) )
 		return s	
+	
+	def f3(self, orb1, orb2, alphaA, alphaB, da, db):
+		"""
+		corresponds to equation 1 and 2
+		"""
+		gamma = alphaA + alphaB
+                p = self.p(self.bd[orb1]['R'], self.bd[orb2]['R'], alphaA, alphaB)
+                #print p
+                t = da * db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n'])
+		#print t
+		norm = (self.bd[orb1]['R'][0] - self.bd[orb2]['R'][0])**2  + (self.bd[orb1]['R'][1] - self.bd[orb2]['R'][1])**2 + (self.bd[orb1]['R'][2] - self.bd[orb2]['R'][2])**2
+		#print norm
+		t *= math.exp( -1*alphaA*alphaB*norm / gamma  )
+		#print t
+		t *= self.f2(gamma, self.bd[orb1]['l'], self.bd[orb2]['l'], self.bd[orb1]['R'][0], self.bd[orb2]['R'][0], p[0])
+		#print t
+		t *= self.f2(gamma, self.bd[orb1]['m'], self.bd[orb2]['m'], self.bd[orb1]['R'][1], self.bd[orb2]['R'][1], p[1])
+		#print t
+		t *= self.f2(gamma, self.bd[orb1]['n'], self.bd[orb2]['n'], self.bd[orb1]['R'][2], self.bd[orb2]['R'][2], p[2])
+		#print t
+		return t
+
 	
 	def normalization(self, alpha, l, m, n):
 		"""
@@ -142,7 +132,7 @@ class Integrals(object):
 		s /= ( misc.factorial2( (2*l -1), exact=True) * misc.factorial2( (2*m -1), exact=True) * misc.factorial2( (2*n -1), exact=True) )
 		s *= math.pow( (2*alpha/math.pi), 1.5) 
 		return math.sqrt(s)			
-
+		
 if __name__ == "__main__":
 	mole_str = open("../../../extra-files/molecule.xyz").read()
 	integral = Integrals(mole_str)
