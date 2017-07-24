@@ -10,31 +10,30 @@ class Molecule:
     """
     def __init__(self,data):
         #checking if input string is filename or xyzstring by determining number of lines
-        if '.xyz' not in data:
-            self.moleculelines = data.split('\n')
-        else:
+        if data.endswith('.xyz'):
             with open(data, 'r') as moleculefile:
                 self.moleculelines = moleculefile.readlines()
-        
+        else:
+            self.moleculelines = data.split('\n')
         #units are supplied on line 2
         self.units = self.moleculelines[1].rstrip()
         #number of atoms is supplied on line 1
         self.natom = int((self.moleculelines[0]).rstrip())
 
         #create empty lists of atom labels, masses, charge, and geometry matrix         for later population
-        self.labels = [0]*self.natom
-        self.masses = [0]*self.natom
-        self.charges = [0.0]*self.natom
+        self.labels = []
+        self.masses = []
+        self.charges = []
         self.geom = np.zeros((self.natom,3))
 
         #loop through atoms and populate information into empty lists
-        for atom in range(0,self.natom):
+        for atom in range(self.natom):
             #+2 because atoms start at line 3
             element,x,y,z = self.moleculelines[atom+2].split()
 
-            self.labels[atom] = element
-            self.charges[atom] = masses.get_charge(self.labels[atom])
-            self.masses[atom] = masses.get_mass(self.labels[atom])
+            self.labels.append(element)
+            self.charges.append(masses.get_charge(element))
+            self.masses.append(masses.get_mass(element))
             self.geom[atom] = [x,y,z]
 
     def to_bohr(self):
@@ -50,13 +49,15 @@ class Molecule:
         if self.units == "Bohr":
             self.units = "Angstrom"
             self.geom *= (1./1.889725989)
+
     def xyz_string(self):
         #returns a string containing the object in .xyz format.
-        outstring = '{}\n{}\n'.format(*[self.natom,self.units])
+        outstring = '{}\n{}\n'.format(self.natom,self.units)
         
         for atom in range(0, self.natom):
             outlist = [self.labels[atom]] + self.geom[atom].tolist()
-            outstring += ('{:6}' + '{: 012.11f}   '*3+'\n').format(*outlist)
+            outstring += ('{:6}' + '{: 012.11f}   '*3+'\n').format(self.labels[atom],*self.geom[atom])
         return outstring
+
     def copy(self):
         return Molecule(self.xyz_string())
