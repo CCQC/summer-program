@@ -10,15 +10,15 @@ import psi4
 import sys
 sys.path.insert(0, '../../3/misiewicz')
 import hartree_fock
+sys.path.insert(0, '../../6/misiewicz')
+import utility
 
 def mp2(C, evals, int_tensor, nocc):
-    print(C, evals, int_tensor, nocc)
     dim = C.shape[0]
     nvir = dim - nocc
-    C_left = C[:,:nocc].conjugate() # Grab the columns for occupied orbitals.
-    C_right = C[:,nocc:] # Grab the columns for virtual orbitals.
-    aint = np.einsum('mnrs, mI, nJ, rA, sB -> IJAB',
-        int_tensor, C_left, C_left, C_right, C_right)
+    C_occ = C[:,:nocc].conjugate() # Grab the columns for occupied orbitals.
+    C_vir = C[:,nocc:] # Grab the columns for virtual orbitals.
+    aint = utility.tensor_basis_transform(int_tensor, C_occ, C_vir)
     e = 0
     for i, j, a, b in itertools.product(range(nocc), range(nocc), range(nvir), range(nvir)):
         e += aint[i,j,a,b] * (
