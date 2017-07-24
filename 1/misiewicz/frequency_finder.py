@@ -45,8 +45,7 @@ def frequencies(mol, hessian):
         # The eigenvectors are columns, so pull from index 2.
         mode = evectors[:, i].reshape(mol.natom, mol.natom)
         for label, geom, atom in zip(mol.labels, mol.geom.tolist(), mode):
-            file_contents += format_str.format(
-                label, geom[0], geom[1], geom[2], atom[0], atom[1], atom[2])
+            file_contents += format_str.format(label, *geom, *atom)
         file_contents += "\n\n"
     
     with open("normal_modes.xyz", "w") as f:
