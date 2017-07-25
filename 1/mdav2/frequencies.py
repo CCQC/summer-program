@@ -68,11 +68,13 @@ def frequencies(molecule,hessian):
 
 def printfrequencies(molecule, frequencies, normalmodes):
     #TODO: use cleaner formatting tools here
-    finaloutput = ""
+    fout = ""
     for idx,frequency in enumerate(frequencies):
-        tempout = '{}\n{:4.2f} cm^-1 \n'.format(*[molecule.natom,frequency.real])
-        for atom in range(molecule.natom):
-            lineout = [molecule.labels[atom]] + np.concatenate((molecule.geom[atom][0:3],normalmodes[idx][3*atom:3*atom+3]), axis=0).tolist() 
-            tempout += ('{:6}'+'{: 12.11f}   '*6).format(molecule.labels[atom], *np.concatenate((molecule.geom[atom][0:3],normalmodes[idx][3*atom:3*atom+3]), axis=0).tolist()) + '\n'
-        finaloutput += tempout + '\n'
-    return(finaloutput)
+        fout += '{}\n{:4.2f} cm^-1 \n'.format(*[molecule.natom,frequency.real])
+        reshape = np.reshape(normalmodes[idx], (3,3))
+        for atom, geom, disp in zip(molecule.labels,molecule.geom,reshape):
+            lineout = np.concatenate((geom,disp), axis = 0).tolist()
+            fout +=('{:6}'+'{: 12.11f}   '*6).format(atom,*lineout)+'\n'
+        fout = '\n'   
+
+    return(fout)
