@@ -49,7 +49,6 @@ def uhf(mol, tolerance=1.e-16):
     nocc = sum([int(mol.Z(n)) for n in range(mol.natom())]) - mol.molecular_charge()
 
     def iteration(D):
-        # Convert from chemist to physicist notation.
         v = np.einsum('abcd, db -> ac', G, D) - (
             np.einsum('abdc, db -> ac', G, D))
         f = h + v
@@ -77,15 +76,15 @@ def uhf(mol, tolerance=1.e-16):
         energy_diff = abs(previous_energy - energy)
 
     return collections.namedtuple('hf_data', 'density,energy,C,evals,I,nocc')(
-        density_matrix, energy, C, evals, I, nocc)
+        density_matrix, energy, C, evals, G, nocc)
 
 if __name__ == "__main__":
     psi4.set_memory('500 MB')
     h2o = psi4.geometry("""
-O     0.0000000000    0.0000000000   -0.0711762954
-H     0.0000000000   -0.8916195680    0.5648097613
-H     0.0000000000 0.8916195680 0.5648097613
-""") # Note to Self: Restore to ZMatrix format!s
+1 2
+O
+H 1 0.96
+H 1 0.96 2 104.5
+""")
     hf_data = uhf(h2o)
-    print(hf_data.density)
     print(hf_data.energy)
