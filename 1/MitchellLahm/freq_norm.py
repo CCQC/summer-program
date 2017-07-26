@@ -4,6 +4,7 @@ from numpy import linalg as LA
 import math
 import cmath
 
+# Opening and reading in hessian matrix
 with open('hessian.dat','r') as my_file:
 	data = my_file.read()
 	data = data.split('\n')
@@ -15,40 +16,45 @@ with open('hessian.dat','r') as my_file:
 		hessian.append(temp)
 hessian = np.array(hessian)
 
+# Reading in molecule and converting units to Angstrom
 Mol = Molecule('molecule.xyz')
 Mol.to_angstrom()
+
+# Frequency calculation function
 def frequencies(Mol,hessian):
+	# defining mass weighted hessian
 	mwhessian = hessian
+	# defining length variable
 	h = len(hessian)
 	n = h/3
+	# defining and populating diagonal mass matrix
 	M = np.identity(len(hessian))
 	for i in range(n):
 		for k in range(3):
 			M[3*i+k] = M[3*i+k] / math.sqrt(Mol.masses[i])
+	# Computing the mass weighted Hessian
 	mwhessian = np.dot(mwhessian,M)
 	mwhessian = np.transpose(mwhessian)
 	mwhessian = np.dot(mwhessian,M)
 	mwhessian = np.transpose(mwhessian)
 	
-	k, wq = LA.eig(mwhessian)
+	# Computing the eigenvalues and eigenvectors. Removing mass weight from eigenvectors.
+	k, wq = np.linalg.eigh(mwhessian)
 	q = np.dot(M,wq)
 	q = np.transpose(q)
 	
+	# Defining unit conversion constants
 	n1 = 4.35974417e-18/((5.2917721092e-11**2)*1.6605389e-27)
 	n2 = (2 * math.pi)
 	c = 2.99792458e10
-
+	
+	# Converting frequencies from atomic units to wave numbers
 	k = [complex(i * n1,0) for i in k]
 	v = np.sqrt(k)
 	v = [i / n2 for i in v]
 	v = np.array([i / c for i in v])
 	
-	# Sorting the v and q arrays in ascending vibrational frequency states
-	v.imag = -v.imag
-	l = np.array(np.argsort(v))
-	v.imag = -v.imag
-	q = q[l]
-	v = v[l]
+	# Formatting final string of data
 	xyz_string = ''
 	for i in range(h):
 		xyz_string += str(n) + '\n'
@@ -61,6 +67,7 @@ def frequencies(Mol,hessian):
 	
 	return xyz_string
 
+# Writing string to .xyz file
 string = frequencies(Mol,hessian)
 f = open('project1_answer.xyz','w')
 f.write(string)
