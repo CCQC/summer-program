@@ -12,10 +12,7 @@ import numpy as np
 from scipy import special, misc
 import collections
 
-np.set_printoptions(threshold=np.inf)
-np.set_printoptions(precision=3)
-np.set_printoptions(linewidth=200)
-np.set_printoptions(suppress=True)
+np.set_printoptions(threshold=np.inf, precision=3, linewidth=200, suppress=True)
 
 class Integrals(object):
 	
@@ -30,6 +27,7 @@ class Integrals(object):
 		self.K = len(self.bd) #dimension of molecular integrals		
 		self.gfn = 3 #number of Gaussian functions to sum over
 		self.S = self.overlapIntegral()
+		self.T = self.kineticIntegral()
 		
 	def subshells(self, z):
 		s = ['1_s']
@@ -72,18 +70,33 @@ class Integrals(object):
 				ss = 0
 				for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
 					for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
-						ss += self.f3(orb1, orb2, alphaA, alphaB, da, db) 
+						ss += self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0) 
 				S[i][j] = ss
 		return S	
-
+	
+	def kineticIntegral(self):
+		T = np.zeros((self.K, self.K))
+		for i, orb1 in enumerate(self.bd):
+			for j, orb2 in enumerate(self.bd):
+				ss = 0
+				for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
+					for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
+						ss += alphaB * (2 * (self.bd[orb2]['l'] + self.bd[orb2]['l'] + self.bd[orb2]['l']) + 3) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0)
+						ss += -2.0 * (alphaB ** 2) * ( self.f3(orb1, orb2, alphaA, alphaB, da, db, 2, 0, 0) + self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 2, 0) + self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 2) )
+						ss += -0.5 * self.bd[orb2]['l'] * ( self.bd[orb2]['l'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, -2, 0, 0)
+						ss += -0.5 * self.bd[orb2]['m'] * ( self.bd[orb2]['m'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, -2, 0)
+						ss += -0.5 * self.bd[orb2]['n'] * ( self.bd[orb2]['n'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, -2)
+				T[i][j] = ss
+		return T
+ 
 	def f1(self, j, l, m, a, b):
 		"""
 		corresponds to equation 8
 		"""
 		s = 0
-		for k in range(max(0,(j-m)), (min(j, l) + 1)):
+		for k in range(max(0,(j-m)), min(j, l) + 1):
 			s += special.comb(l,k)*special.comb(m,j-k)*math.pow(a,l - k)*math.pow(b,m + k - j)
-		#print s	
+			#print "      k: " + str(s)	
 		return s
 
 	def p(self, a, b, alphaA, alphaB):
@@ -97,30 +110,33 @@ class Integrals(object):
 		corresponds to equation 3
 		""" 
 		s = self.f1(0, l, m, (p-a) ,(p-b))   
-		for x in range(1,int( (l + m)/2 ) +1):
+		#print "   s: " + str(s)
+		for x in range(1, int( (l + m) / 2 ) +1 ):
 			s += (self.f1(2*x, l, m, (p-a) ,(p-b) ) * misc.factorial2((2*x-1),exact=True) / ((2* gamma) ** x)) 
+			#print "   s: " + str(s)
 		s = s * math.sqrt(( math.pi / gamma) )
 		return s	
 	
-	def f3(self, orb1, orb2, alphaA, alphaB, da, db):
+	def f3(self, orb1, orb2, alphaA, alphaB, da, db, ls, ms, ns):
 		"""
 		corresponds to equation 1 and 2
 		"""
+		if any((i < 0 for i in {(self.bd[orb2]['l'] + ls) + (self.bd[orb2]['m'] + ms) + (self.bd[orb2]['n'] + ns)})):
+			return 0
+
 		gamma = alphaA + alphaB
                 p = self.p(self.bd[orb1]['R'], self.bd[orb2]['R'], alphaA, alphaB)
-                #print p
                 t = da * db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n'])
-		#print t
+		#print "t.0: " + str(t)
 		norm = (self.bd[orb1]['R'][0] - self.bd[orb2]['R'][0])**2  + (self.bd[orb1]['R'][1] - self.bd[orb2]['R'][1])**2 + (self.bd[orb1]['R'][2] - self.bd[orb2]['R'][2])**2
-		#print norm
 		t *= math.exp( -1*alphaA*alphaB*norm / gamma  )
-		#print t
-		t *= self.f2(gamma, self.bd[orb1]['l'], self.bd[orb2]['l'], self.bd[orb1]['R'][0], self.bd[orb2]['R'][0], p[0])
-		#print t
-		t *= self.f2(gamma, self.bd[orb1]['m'], self.bd[orb2]['m'], self.bd[orb1]['R'][1], self.bd[orb2]['R'][1], p[1])
-		#print t
-		t *= self.f2(gamma, self.bd[orb1]['n'], self.bd[orb2]['n'], self.bd[orb1]['R'][2], self.bd[orb2]['R'][2], p[2])
-		#print t
+		t *= self.f2(gamma, self.bd[orb1]['l'], self.bd[orb2]['l'] + ls, self.bd[orb1]['R'][0], self.bd[orb2]['R'][0], p[0])
+		#print "t.1: " + str(t)
+		t *= self.f2(gamma, self.bd[orb1]['m'], self.bd[orb2]['m'] + ms, self.bd[orb1]['R'][1], self.bd[orb2]['R'][1], p[1])
+		#print "t.2: "+ str(t)
+		t *= self.f2(gamma, self.bd[orb1]['n'], self.bd[orb2]['n'] + ns, self.bd[orb1]['R'][2], self.bd[orb2]['R'][2], p[2])
+		#print "t.3: " + str(t)
+		#print ""
 		return t
 
 	
@@ -132,9 +148,47 @@ class Integrals(object):
 		s /= ( misc.factorial2( (2*l -1), exact=True) * misc.factorial2( (2*m -1), exact=True) * misc.factorial2( (2*n -1), exact=True) )
 		s *= math.pow( (2*alpha/math.pi), 1.5) 
 		return math.sqrt(s)			
-		
+
+	def printIntegral(self, I):
+		"""
+		returns Overlap integral in neat tabular form
+		"""
+		l = "+-------+"
+		for i in range(len(self.bd)):
+			l += "-------+"
+		l += "\n"
+		s = l
+		s += "|       |"
+		for orb in self.bd:
+			s += orb.ljust(7) + "|"
+		s += "\n" + l  
+		for i, orb1 in enumerate(self.bd):
+			s += "|" + orb1.ljust(7) + "|"
+			for j, orb2 in enumerate(self.bd):
+				s += "{:6.5f}|".format(np.absolute(I[i][j]))
+		 	s += "\n" + l
+
+		return s
+				
 if __name__ == "__main__":
-	mole_str = open("../../../extra-files/molecule.xyz").read()
+	mole_str = open("water.xyz").read()
 	integral = Integrals(mole_str)
-	print integral.S
-	#print integral.f2(1,0,0,0,0,0)
+	#print integral.T
+	#print np.multiply(3,np.array([1,2,3]))
+	#for key in integral.bd:
+	#	print str(key) + str(integral.bd[key])
+	#print integral.printIntegral(integral.S)
+	#print integral.printIntegral(integral.T)
+	
+	ss = 0
+     	for alphaA, da in zip(integral.bd['O_2_p_z']['a'], integral.bd['O_2_p_z']['d']):
+     		for alphaB, db in zip(integral.bd['O_2_p_z']['a'], integral.bd['O_2_p_z']['d']):
+     			ss += alphaB * (2 * (integral.bd['O_2_p_z']['l'] + integral.bd['O_2_p_z']['l'] + integral.bd['O_2_p_z']['l']) + 3) * integral.f3('O_2_p_z','O_2_p_z', alphaA, alphaB, da, db, 0, 0, 0)
+                        ss += -2.0 * (alphaB ** 2) * ( integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 2, 0, 0) + integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, 2, 0) + integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, 0, 2) )
+	                ss += -0.5 * integral.bd['O_2_p_z']['l'] * ( integral.bd['O_2_p_z']['l'] - 1 ) * integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, -2, 0, 0)
+	                ss += -0.5 * integral.bd['O_2_p_z']['m'] * ( integral.bd['O_2_p_z']['m'] - 1 ) * integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, -2, 0)
+                        ss += -0.5 * integral.bd['O_2_p_z']['n'] * ( integral.bd['O_2_p_z']['n'] - 1 ) * integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, 0, -2)
+			print "\n" + str(ss)
+	
+	
+
