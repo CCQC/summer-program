@@ -77,11 +77,11 @@ class Integrals(object):
 				if i > j:
 					S[i][j] = S[j][i] #Turnover rule guarantees these matrices are symmetric same with T, V
 				else:
-					ss = 0
+					ts = 0
 					for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
 						for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
-							ss += self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0) 
-					S[i][j] = ss
+							ts += da* db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n']) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0) 
+					S[i][j] = ts
 		return S	
 	
 	def kineticIntegral(self):
@@ -91,17 +91,47 @@ class Integrals(object):
 				if i > j:
 					T[i][j] = T[j][i] #Turnover rule	
 				else:	
-					ss = 0
+					ts = 0
 					for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
 						for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
-							ss += alphaB * (2 * (self.bd[orb2]['l'] + self.bd[orb2]['l'] + self.bd[orb2]['l']) + 3) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0)
-							ss += -2.0 * (alphaB ** 2) * ( self.f3(orb1, orb2, alphaA, alphaB, da, db, 2, 0, 0) + self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 2, 0) + self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 2) )
+							ss  = alphaB * (2 * (self.bd[orb2]['l'] + self.bd[orb2]['m'] + self.bd[orb2]['n']) + 3) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0)
+							ss += -2.0 * (alphaB ** 2) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 2, 0, 0) 
+							ss += -2.0 * (alphaB ** 2) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 2, 0)
+							ss += -2.0 * (alphaB ** 2) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 2)
 							ss += -0.5 * self.bd[orb2]['l'] * ( self.bd[orb2]['l'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, -2, 0, 0)
 							ss += -0.5 * self.bd[orb2]['m'] * ( self.bd[orb2]['m'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, -2, 0)
 							ss += -0.5 * self.bd[orb2]['n'] * ( self.bd[orb2]['n'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, -2)
-					T[i][j] = ss
+							ss *= da* db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n']) 
+							ts += ss
+					T[i][j] = ts
 		return T
- 
+	
+	def nucAttractionIntegral(self):
+		V = np.zeros((self.K, self.K))
+		for atom, coord in zip(self.atoms, self.coord):
+			tempV = np.zeros((self.K, self.K))
+			for i, orb1 in enumerate(self.bd):
+				for j, orb2 in enumerate(self.bd):
+					if i > j:
+						tempV[i][j] = tempV[j][i] #Turnover rule
+					else:
+						ts = 0
+						for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
+							for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
+								gamma = alphaA + alphaB
+								r1 = self.bd[orb1]['R']
+								r2 = self.bd[orb2]['R']
+								p = self.p(r1, r2, alphaA, alphaB)
+								norm = (r1['R'][0] - r2['R'][0])**2  + (r1['R'][1] - r2['R'][1])**2 + (r1['R'][2] - r2['R'][2])**2
+								ss = da* db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n'])
+								ss *= - masses.get_charge(atom) * (2 * math.pi / gamma ) * math.exp( -1*alphaA*alphaB*norm / gamma  )
+								ss *= self.f4(self.bd[orb1]['l'], self.bd[orb2]['l'], r1[0], r2[0], coord[0], p[0], gamma)
+								ss *= self.f4(self.bd[orb1]['m'], self.bd[orb2]['m'], r1[1], r2[1], coord[1], p[1], gamma) 
+								ss *= self.f4(self.bd[orb1]['n'], self.bd[orb2]['n'], r1[2], r2[2], coord[2], p[2], gamma)
+								ss *= self.Boys(l + m + n - 2 * (
+			V += tempV
+			
+		 
 	def f1(self, j, l, m, a, b):
 		"""
 		corresponds to equation 8
@@ -139,20 +169,39 @@ class Integrals(object):
 
 		gamma = alphaA + alphaB
                 p = self.p(self.bd[orb1]['R'], self.bd[orb2]['R'], alphaA, alphaB)
-                t = da * db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n'])
-		#print "t.0: " + str(t)
 		norm = (self.bd[orb1]['R'][0] - self.bd[orb2]['R'][0])**2  + (self.bd[orb1]['R'][1] - self.bd[orb2]['R'][1])**2 + (self.bd[orb1]['R'][2] - self.bd[orb2]['R'][2])**2
-		t *= math.exp( -1*alphaA*alphaB*norm / gamma  )
+		t = math.exp( -1*alphaA*alphaB*norm / gamma  )
 		t *= self.f2(gamma, self.bd[orb1]['l'], self.bd[orb2]['l'] + ls, self.bd[orb1]['R'][0], self.bd[orb2]['R'][0], p[0])
-		#print "t.1: " + str(t)
 		t *= self.f2(gamma, self.bd[orb1]['m'], self.bd[orb2]['m'] + ms, self.bd[orb1]['R'][1], self.bd[orb2]['R'][1], p[1])
-		#print "t.2: "+ str(t)
 		t *= self.f2(gamma, self.bd[orb1]['n'], self.bd[orb2]['n'] + ns, self.bd[orb1]['R'][2], self.bd[orb2]['R'][2], p[2])
-		#print "t.3: " + str(t)
 		#print ""
 		return t
 
-	
+	def f4(self, la, lb, a, b, c, p, gamma):
+		"""
+		corresponds to triply nested sums in equation 13/ 14
+		"""
+		ts = 0
+		for l in range(0, (l + m) + 1):
+			for r in range(0, int( l / 2 ) + 1):
+				for i in range(0, int( (l - 2 * r) / 2) + 1):
+					#print "l: " + str(l) + "   r: " + str(r) + "   i: " + str(i) 
+					ss = (-1) ** l
+					ss *= self.f1(l,la,lb,p-a,p-b)
+					ss *= ((-1) ** i) * misc.factorial(l, exact=True) * ( (p - c) ** (l - 2*r - 2*i))
+					ss /= misc.factorial(r, exact=True) * misc.factorial(i, exact=True) * misc.factorial((l - 2*r - 2*i), exact=True) * ((4*gamma)**(r + i))
+					ts += ss
+		return ts	
+		
+	def Boys(self, nu, x):
+		"""
+		corresponds to equation 16 and 17
+		"""
+		if x < 0.000001:
+			return ( 1.0 / (2 * nu + 1)) - ( x / (2 * nu + 3))
+		else:
+			return 0.5 * x**(-(nu + 0.5)) * special.gamma(nu + 0.5) * special.gammainc(nu + 0.5, x)  
+		
 	def normalization(self, alpha, l, m, n):
 		"""
 		corresponds to equation 9
@@ -191,16 +240,23 @@ if __name__ == "__main__":
 	#for key in integral.bd:
 	#	print str(key) + str(integral.bd[key])
 	#print integral.printIntegral(integral.S)
-	print integral.printIntegral(integral.T)
-	"""	
+	#print integral.printIntegral(integral.T)
+	integral.f4(1,1,0,0,0,0)
+	"""		
 	ss = 0
-     	for alphaA, da in zip(integral.bd['O_2_p_z']['a'], integral.bd['O_2_p_z']['d']):
-     		for alphaB, db in zip(integral.bd['O_2_p_z']['a'], integral.bd['O_2_p_z']['d']):
-     			ss += alphaB * (2 * (integral.bd['O_2_p_z']['l'] + integral.bd['O_2_p_z']['l'] + integral.bd['O_2_p_z']['l']) + 3) * integral.f3('O_2_p_z','O_2_p_z', alphaA, alphaB, da, db, 0, 0, 0)
-                        ss += -2.0 * (alphaB ** 2) * ( integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 2, 0, 0) + integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, 2, 0) + integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, 0, 2) )
-	                ss += -0.5 * integral.bd['O_2_p_z']['l'] * ( integral.bd['O_2_p_z']['l'] - 1 ) * integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, -2, 0, 0)
-	                ss += -0.5 * integral.bd['O_2_p_z']['m'] * ( integral.bd['O_2_p_z']['m'] - 1 ) * integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, -2, 0)
-                        ss += -0.5 * integral.bd['O_2_p_z']['n'] * ( integral.bd['O_2_p_z']['n'] - 1 ) * integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, 0, -2)
+	pss = 0
+     	for alphaA, da in zip(integral.bd['O_2pz']['a'], integral.bd['O_2pz']['d']):
+     		for alphaB, db in zip(integral.bd['O_2pz']['a'], integral.bd['O_2pz']['d']):
+     			ss = 0
+			ss += alphaB * (2 * (integral.bd['O_2pz']['l'] + integral.bd['O_2pz']['l'] + integral.bd['O_2pz']['l']) + 3) * integral.f3('O_2pz','O_2pz', alphaA, alphaB, da, db, 0, 0, 0)
+                        print "ss: " + str(ss)
+			ss += -2.0 * (alphaB ** 2) * ( integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 2, 0, 0) + integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 0, 2, 0) + integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 0, 0, 2) )
+	                print "ss: " + str(ss)
+			ss += -0.5 * integral.bd['O_2pz']['l'] * ( integral.bd['O_2pz']['l'] - 1 ) * integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, -2, 0, 0)
+	                ss += -0.5 * integral.bd['O_2pz']['m'] * ( integral.bd['O_2pz']['m'] - 1 ) * integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 0, -2, 0)
+                        ss += -0.5 * integral.bd['O_2pz']['n'] * ( integral.bd['O_2pz']['n'] - 1 ) * integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 0, 0, -2)
+			print "ss: " + str(ss)
+			pss += ss
 			print "\n" + str(ss)
 	
 	"""
