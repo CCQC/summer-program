@@ -38,7 +38,7 @@ class Integrals(object):
 		return s
 
 	def createBasisDict(self):
-		bd = {}
+		bd = {} 
 		duplicates = [item for item, count in collections.Counter(self.atoms).items() if count > 1]
 		duplicateCounter = [1] * len(duplicates)
 		for i, atom in enumerate(self.atoms):
@@ -55,12 +55,12 @@ class Integrals(object):
 				bd[sss] = {} 		#initializes dictionary entry for subshell of atom
 				bd[sss]['a'] = sto.expFact(tempCharge, int(shellInfo[0])) #assigns expansion factors based on atomic number and shell
 				bd[sss]['d'] = sto.contCoeff(int(shellInfo[0]),(2 if shellInfo[1] == 'p' else 1))
-				bd[sss]['z'] = tempCharge
-				bd[sss]['c'] = 0 if not atom in duplicates else duplicateCounter[duplicates.index(atom)] - 1
-				bd[sss]['s'] = shellInfo[0]
+				bd[sss]['z'] = tempCharge		#atomic mass of atom
+				bd[sss]['c'] = 0 if not atom in duplicates else duplicateCounter[duplicates.index(atom)] - 1 #number of atom ie H1 vs H2
+				bd[sss]['s'] = shellInfo[0]		#orbital shell
 				if shellInfo[1] == 'p':	
-					bd[sss]['ss'] = 2
-					bd[sss]['l'] = 1 if shellInfo[2] == 'x' else 0
+					bd[sss]['ss'] = 2		#orbital subshell
+					bd[sss]['l'] = 1 if shellInfo[2] == 'x' else 0 #orbital angular momentum
 					bd[sss]['m'] = 1 if shellInfo[2] == 'y' else 0
 					bd[sss]['n'] = 1 if shellInfo[2] == 'z' else 0
 				else:
@@ -69,31 +69,37 @@ class Integrals(object):
 				bd[sss]['R'] = [self.coord[i][c] for c in range(3)] 
 		
 		return collections.OrderedDict(sorted(bd.items(), key=lambda t: (-t[1]['z'], t[1]['c'], t[1]['s'], t[1]['ss'], -t[1]['l'],-t[1]['m'],-t[1]['n'] )))
-	
+				
 	def overlapIntegral(self):			 
 		S = np.zeros((self.K, self.K))
 		for i, orb1 in enumerate(self.bd):
 			for j, orb2 in enumerate(self.bd):
-				ss = 0
-				for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
-					for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
-						ss += self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0) 
-				S[i][j] = ss
+				if i > j:
+					S[i][j] = S[j][i] #Turnover rule guarantees these matrices are symmetric same with T, V
+				else:
+					ss = 0
+					for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
+						for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
+							ss += self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0) 
+					S[i][j] = ss
 		return S	
 	
 	def kineticIntegral(self):
 		T = np.zeros((self.K, self.K))
 		for i, orb1 in enumerate(self.bd):
 			for j, orb2 in enumerate(self.bd):
-				ss = 0
-				for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
-					for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
-						ss += alphaB * (2 * (self.bd[orb2]['l'] + self.bd[orb2]['l'] + self.bd[orb2]['l']) + 3) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0)
-						ss += -2.0 * (alphaB ** 2) * ( self.f3(orb1, orb2, alphaA, alphaB, da, db, 2, 0, 0) + self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 2, 0) + self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 2) )
-						ss += -0.5 * self.bd[orb2]['l'] * ( self.bd[orb2]['l'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, -2, 0, 0)
-						ss += -0.5 * self.bd[orb2]['m'] * ( self.bd[orb2]['m'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, -2, 0)
-						ss += -0.5 * self.bd[orb2]['n'] * ( self.bd[orb2]['n'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, -2)
-				T[i][j] = ss
+				if i > j:
+					T[i][j] = T[j][i] #Turnover rule	
+				else:	
+					ss = 0
+					for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
+						for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
+							ss += alphaB * (2 * (self.bd[orb2]['l'] + self.bd[orb2]['l'] + self.bd[orb2]['l']) + 3) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0)
+							ss += -2.0 * (alphaB ** 2) * ( self.f3(orb1, orb2, alphaA, alphaB, da, db, 2, 0, 0) + self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 2, 0) + self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 2) )
+							ss += -0.5 * self.bd[orb2]['l'] * ( self.bd[orb2]['l'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, -2, 0, 0)
+							ss += -0.5 * self.bd[orb2]['m'] * ( self.bd[orb2]['m'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, -2, 0)
+							ss += -0.5 * self.bd[orb2]['n'] * ( self.bd[orb2]['n'] - 1 ) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, -2)
+					T[i][j] = ss
 		return T
  
 	def f1(self, j, l, m, a, b):
@@ -184,8 +190,8 @@ if __name__ == "__main__":
 	#print np.multiply(3,np.array([1,2,3]))
 	#for key in integral.bd:
 	#	print str(key) + str(integral.bd[key])
-	print integral.printIntegral(integral.S)
-	#print integral.printIntegral(integral.T)
+	#print integral.printIntegral(integral.S)
+	print integral.printIntegral(integral.T)
 	"""	
 	ss = 0
      	for alphaA, da in zip(integral.bd['O_2_p_z']['a'], integral.bd['O_2_p_z']['d']):
