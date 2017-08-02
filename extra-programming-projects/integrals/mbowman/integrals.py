@@ -23,45 +23,52 @@ class Integrals(object):
 		self.mol.to_bohr()
 		self.atoms = self.mol.labels
 		self.coord = np.array(self.mol.geom)
-		self.createBasisDict() 
+		self.bd = self.createBasisDict() 
 		self.K = len(self.bd) #dimension of molecular integrals		
 		self.gfn = 3 #number of Gaussian functions to sum over
 		self.S = self.overlapIntegral()
 		self.T = self.kineticIntegral()
 		
 	def subshells(self, z):
-		s = ['1_s']
+		s = ['1s']
 		if z > 2:
-			s.extend(['2_s','2_p_x', '2_p_y', '2_p_z'])
+			s.extend(['2s','2px', '2py', '2pz'])
 			if z > 10:
-				s.extend(['3_s','3_p_x', '3_p_y', '3_p_z']) 
+				s.extend(['3s','3px', '3py', '3pz']) 
 		return s
 
 	def createBasisDict(self):
-		self.bd = {}
+		bd = {}
 		duplicates = [item for item, count in collections.Counter(self.atoms).items() if count > 1]
 		duplicateCounter = [1] * len(duplicates)
 		for i, atom in enumerate(self.atoms):
 			tempCharge = masses.get_charge(atom) 	#atomic number of atom, determines subshells
 			if atom in duplicates:
-				tas = atom + "_" + str(duplicateCounter[duplicates.index(atom)]) 	#creates a string to denote duplicate atoms e.g. H_2
+				tas = atom +  str(duplicateCounter[duplicates.index(atom)]) 	#creates a string to denote duplicate atoms e.g. H_2
 				duplicateCounter[duplicates.index(atom)] += 1
 			else:
 				tas = atom							#creates a string to denote unique atoms e.g. O
 			tempShells = self.subshells(tempCharge) 	#creates temp array of subshells from atom
-			for subShell in tempShells:
-				shellInfo = subShell.split('_') 	#splits shell into three sections based on three quantum numbers
-				sss = tas + '_' + subShell
-				self.bd[sss] = {} 		#initializes dictionary entry for subshell of atom
-				self.bd[sss]['a'] = sto.expFact(tempCharge, int(shellInfo[0])) #assigns expansion factors based on atomic number and shell
-				self.bd[sss]['d'] = sto.contCoeff(int(shellInfo[0]),(2 if shellInfo[1] == 'p' else 1))
+			for subshell in tempShells:
+				shellInfo = [c for c in subshell] 	#splits shell into three sections based on three quantum numbers
+				sss = tas + '_' + subshell
+				bd[sss] = {} 		#initializes dictionary entry for subshell of atom
+				bd[sss]['a'] = sto.expFact(tempCharge, int(shellInfo[0])) #assigns expansion factors based on atomic number and shell
+				bd[sss]['d'] = sto.contCoeff(int(shellInfo[0]),(2 if shellInfo[1] == 'p' else 1))
+				bd[sss]['z'] = tempCharge
+				bd[sss]['c'] = 0 if not atom in duplicates else duplicateCounter[duplicates.index(atom)] - 1
+				bd[sss]['s'] = shellInfo[0]
 				if shellInfo[1] == 'p':	
-					self.bd[sss]['l'] = 1 if shellInfo[2] == 'x' else 0
-					self.bd[sss]['m'] = 1 if shellInfo[2] == 'y' else 0
-					self.bd[sss]['n'] = 1 if shellInfo[2] == 'z' else 0
+					bd[sss]['ss'] = 2
+					bd[sss]['l'] = 1 if shellInfo[2] == 'x' else 0
+					bd[sss]['m'] = 1 if shellInfo[2] == 'y' else 0
+					bd[sss]['n'] = 1 if shellInfo[2] == 'z' else 0
 				else:
-					self.bd[sss]['l'], self.bd[sss]['m'], self.bd[sss]['n'] = 0, 0, 0
-				self.bd[sss]['R'] = [self.coord[i][c] for c in range(3)] 
+					bd[sss]['ss'] = 1
+					bd[sss]['l'], bd[sss]['m'], bd[sss]['n'] = 0, 0, 0
+				bd[sss]['R'] = [self.coord[i][c] for c in range(3)] 
+		
+		return collections.OrderedDict(sorted(bd.items(), key=lambda t: (-t[1]['z'], t[1]['c'], t[1]['s'], t[1]['ss'], -t[1]['l'],-t[1]['m'],-t[1]['n'] )))
 	
 	def overlapIntegral(self):			 
 		S = np.zeros((self.K, self.K))
@@ -165,7 +172,7 @@ class Integrals(object):
 		for i, orb1 in enumerate(self.bd):
 			s += "|" + orb1.ljust(7) + "|"
 			for j, orb2 in enumerate(self.bd):
-				s += "{:6.5f}|".format(np.absolute(I[i][j]))
+				s += "  1.0  |" if np.absolute(I[i][j]-1) < 0.0000001 else "  0.0  |" if np.absolute(I[i][j]) < 0.0000001 else "{:7.4f}|".format(I[i][j])
 		 	s += "\n" + l
 
 		return s
@@ -177,9 +184,9 @@ if __name__ == "__main__":
 	#print np.multiply(3,np.array([1,2,3]))
 	#for key in integral.bd:
 	#	print str(key) + str(integral.bd[key])
-	#print integral.printIntegral(integral.S)
+	print integral.printIntegral(integral.S)
 	#print integral.printIntegral(integral.T)
-	
+	"""	
 	ss = 0
      	for alphaA, da in zip(integral.bd['O_2_p_z']['a'], integral.bd['O_2_p_z']['d']):
      		for alphaB, db in zip(integral.bd['O_2_p_z']['a'], integral.bd['O_2_p_z']['d']):
@@ -190,5 +197,5 @@ if __name__ == "__main__":
                         ss += -0.5 * integral.bd['O_2_p_z']['n'] * ( integral.bd['O_2_p_z']['n'] - 1 ) * integral.f3('O_2_p_z', 'O_2_p_z', alphaA, alphaB, da, db, 0, 0, -2)
 			print "\n" + str(ss)
 	
-	
+	"""
 
