@@ -28,6 +28,7 @@ class Integrals(object):
 		self.gfn = 3 #number of Gaussian functions to sum over
 		self.S = self.overlapIntegral()
 		self.T = self.kineticIntegral()
+		self.V = self.nucAttractionIntegral()
 		
 	def subshells(self, z):
 		s = ['1s']
@@ -108,28 +109,30 @@ class Integrals(object):
 	
 	def nucAttractionIntegral(self):
 		V = np.zeros((self.K, self.K))
-		for atom, coord in zip(self.atoms, self.coord):
+		for atom, c in zip(self.atoms, self.coord):
 			tempV = np.zeros((self.K, self.K))
-			for i, orb1 in enumerate(self.bd):
-				for j, orb2 in enumerate(self.bd):
-					if i > j:
-						tempV[i][j] = tempV[j][i] #Turnover rule
+			for a, orb1 in enumerate(self.bd):
+				for b, orb2 in enumerate(self.bd):
+					if a > b:
+						tempV[a][b] = tempV[b][a] #Turnover rule
 					else:
-						ts = 0
+						ts = 0.0 #total sum
+						r1 = np.array(self.bd[orb1]['R']) #coordinates of atom of orb1
+                                                r2 = np.array(self.bd[orb2]['R']) #coordinates of atom of orb2
+						norm = (r1[0] - r2[0])**2  + (r1[1] - r2[1])**2 + (r1[2] - r2[2])**2 #norm square of vector AB
 						for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
 							for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
-								gamma = alphaA + alphaB
-								r1 = self.bd[orb1]['R']
-								r2 = self.bd[orb2]['R']
-								p = self.p(r1, r2, alphaA, alphaB)
-								norm = (r1['R'][0] - r2['R'][0])**2  + (r1['R'][1] - r2['R'][1])**2 + (r1['R'][2] - r2['R'][2])**2
-								ss = da* db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n'])
-								ss *= - masses.get_charge(atom) * (2 * math.pi / gamma ) * math.exp( -1*alphaA*alphaB*norm / gamma  )
-								ss *= self.f4(self.bd[orb1]['l'], self.bd[orb2]['l'], r1[0], r2[0], coord[0], p[0], gamma)
-								ss *= self.f4(self.bd[orb1]['m'], self.bd[orb2]['m'], r1[1], r2[1], coord[1], p[1], gamma) 
-								ss *= self.f4(self.bd[orb1]['n'], self.bd[orb2]['n'], r1[2], r2[2], coord[2], p[2], gamma)
-								ss *= self.Boys(l + m + n - 2 * (
+								g = alphaA + alphaB
+								p = self.p(r1, r2, alphaA, alphaB) 
+								cnorm = (p[0] - c[0])**2 + (p[1] - c[1])**2 + (p[2] - c[2])**2 #norm square of vector PC 
+								la, ma, na, lb, mb, nb = self.bd[orb1]['l'], self.bd[orb1]['m'], self.bd[orb1]['n'], self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n']
+								ss = da* db * self.normalization(alphaA, la, ma, na ) * self.normalization(alphaB, lb, mb, na) #second sum
+								ss *= -masses.get_charge(atom)*2*math.pi*math.exp(-1*alphaA*alphaB*norm/g)/g
+								ss *= math.fsum([math.fsum([math.fsum([self.nu(l,r,i,la,lb,r1[0],r2[0],c[0],p[0],g)*math.fsum([math.fsum([math.fsum([self.nu(m,s,j,ma,mb,r1[1],r2[1],c[1],p[1],g)*math.fsum([math.fsum([math.fsum([self.nu(n,t,k,na,nb,r1[2],r2[2],c[2],p[2],g)*self.Boys(l+m+n-2*(r+s+t)-(i+j+k),g*cnorm) for k in range(int((n-2*t)/2)+1)]) for t in range(int(m/2)+1)]) for n in range(na+nb+1)]) for j in range(int((m-2*s)/2)+1)]) for s in range(int(m/2)+1)]) for m in range(ma+mb+1)]) for i in range(int((l-2*r)/2)+1)]) for r in range(int(l/2)+1)]) for l in range(la+lb+1)]) 
+								ts += ss
+						tempV[a][b] = ts
 			V += tempV
+		return V
 			
 		 
 	def f1(self, j, l, m, a, b):
@@ -177,20 +180,12 @@ class Integrals(object):
 		#print ""
 		return t
 
-	def f4(self, la, lb, a, b, c, p, gamma):
+	def nu(self, l, r, i, la, lb, a, b, c, p, gamma):
 		"""
 		corresponds to triply nested sums in equation 13/ 14
 		"""
-		ts = 0
-		for l in range(0, (l + m) + 1):
-			for r in range(0, int( l / 2 ) + 1):
-				for i in range(0, int( (l - 2 * r) / 2) + 1):
-					#print "l: " + str(l) + "   r: " + str(r) + "   i: " + str(i) 
-					ss = (-1) ** l
-					ss *= self.f1(l,la,lb,p-a,p-b)
-					ss *= ((-1) ** i) * misc.factorial(l, exact=True) * ( (p - c) ** (l - 2*r - 2*i))
-					ss /= misc.factorial(r, exact=True) * misc.factorial(i, exact=True) * misc.factorial((l - 2*r - 2*i), exact=True) * ((4*gamma)**(r + i))
-					ts += ss
+		ts = ((-1) ** (l+ i)) * self.f1(l, la, lb, (p - a), (p - b)) * misc.factorial(l, exact=True) * ( (p - c) ** (l - 2*r - 2*i))
+		ts /= misc.factorial(r, exact=True) * misc.factorial(i, exact=True) * misc.factorial(l - 2*r - 2*i, exact=True) * ( (4*gamma) ** (r + i)) 
 		return ts	
 		
 	def Boys(self, nu, x):
@@ -211,7 +206,7 @@ class Integrals(object):
 		s *= math.pow( (2*alpha/math.pi), 1.5) 
 		return math.sqrt(s)			
 
-	def printIntegral(self, I):
+	def printIntegral(self, I, name):
 		"""
 		returns Overlap integral in neat tabular form
 		"""
@@ -220,14 +215,14 @@ class Integrals(object):
 			l += "-------+"
 		l += "\n"
 		s = l
-		s += "|       |"
+		s += "|   " + name + "   |"
 		for orb in self.bd:
 			s += orb.ljust(7) + "|"
 		s += "\n" + l  
 		for i, orb1 in enumerate(self.bd):
 			s += "|" + orb1.ljust(7) + "|"
 			for j, orb2 in enumerate(self.bd):
-				s += "  1.0  |" if np.absolute(I[i][j]-1) < 0.0000001 else "  0.0  |" if np.absolute(I[i][j]) < 0.0000001 else "{:7.4f}|".format(I[i][j])
+				s += "  1.0  |" if np.absolute(I[i][j]-1) < 0.0000001 else "  0.0  |" if np.absolute(I[i][j]) < 0.0000001 else "{:7.04f}|".format(I[i][j])
 		 	s += "\n" + l
 
 		return s
@@ -239,9 +234,10 @@ if __name__ == "__main__":
 	#print np.multiply(3,np.array([1,2,3]))
 	#for key in integral.bd:
 	#	print str(key) + str(integral.bd[key])
-	#print integral.printIntegral(integral.S)
-	#print integral.printIntegral(integral.T)
-	integral.f4(1,1,0,0,0,0)
+	print integral.printIntegral(integral.S, 'S')
+	print integral.printIntegral(integral.T, 'T')
+	print integral.printIntegral(integral.V, 'V')
+	#integral.f4(1,1,0,0,0,0)
 	"""		
 	ss = 0
 	pss = 0
