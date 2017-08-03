@@ -27,8 +27,8 @@ class Integrals(object):
 		self.K = len(self.bd) #dimension of molecular integrals		
 		self.gfn = 3 #number of Gaussian functions to sum over
 		self.S = self.overlapIntegral()
-		self.T = self.kineticIntegral()
-		self.V = self.nucAttractionIntegral()
+		self.T = self.kineticEnergyIntegral()
+		self.V = self.nuclearAttractionIntegral()
 		
 	def subshells(self, z):
 		s = ['1s']
@@ -85,7 +85,7 @@ class Integrals(object):
 					S[i][j] = ts
 		return S	
 	
-	def kineticIntegral(self):
+	def kineticEnergyIntegral(self):
 		T = np.zeros((self.K, self.K))
 		for i, orb1 in enumerate(self.bd):
 			for j, orb2 in enumerate(self.bd):
@@ -107,7 +107,7 @@ class Integrals(object):
 					T[i][j] = ts
 		return T
 	
-	def nucAttractionIntegral(self):
+	def nuclearAttractionIntegral(self):
 		V = np.zeros((self.K, self.K))
 		for atom, c in zip(self.atoms, self.coord):
 			tempV = np.zeros((self.K, self.K))
@@ -120,20 +120,55 @@ class Integrals(object):
 						r1 = np.array(self.bd[orb1]['R']) #coordinates of atom of orb1
                                                 r2 = np.array(self.bd[orb2]['R']) #coordinates of atom of orb2
 						norm = (r1[0] - r2[0])**2  + (r1[1] - r2[1])**2 + (r1[2] - r2[2])**2 #norm square of vector AB
+						la, ma, na, lb, mb, nb = self.bd[orb1]['l'], self.bd[orb1]['m'], self.bd[orb1]['n'], self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n']
 						for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
 							for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
 								g = alphaA + alphaB
 								p = self.p(r1, r2, alphaA, alphaB) 
 								cnorm = (p[0] - c[0])**2 + (p[1] - c[1])**2 + (p[2] - c[2])**2 #norm square of vector PC 
-								la, ma, na, lb, mb, nb = self.bd[orb1]['l'], self.bd[orb1]['m'], self.bd[orb1]['n'], self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n']
-								ss = da* db * self.normalization(alphaA, la, ma, na ) * self.normalization(alphaB, lb, mb, na) #second sum
+								ss = da* db * self.normalization(alphaA, la, ma, na ) * self.normalization(alphaB, lb, mb, nb) #second sum
 								ss *= -masses.get_charge(atom)*2*math.pi*math.exp(-1*alphaA*alphaB*norm/g)/g
-								ss *= math.fsum([math.fsum([math.fsum([self.nu(l,r,i,la,lb,r1[0],r2[0],c[0],p[0],g)*math.fsum([math.fsum([math.fsum([self.nu(m,s,j,ma,mb,r1[1],r2[1],c[1],p[1],g)*math.fsum([math.fsum([math.fsum([self.nu(n,t,k,na,nb,r1[2],r2[2],c[2],p[2],g)*self.Boys(l+m+n-2*(r+s+t)-(i+j+k),g*cnorm) for k in range(int((n-2*t)/2)+1)]) for t in range(int(m/2)+1)]) for n in range(na+nb+1)]) for j in range(int((m-2*s)/2)+1)]) for s in range(int(m/2)+1)]) for m in range(ma+mb+1)]) for i in range(int((l-2*r)/2)+1)]) for r in range(int(l/2)+1)]) for l in range(la+lb+1)]) 
+								ss *= (math.fsum([math.fsum([math.fsum([self.nu(l,r,i,la,lb,r1[0],r2[0],c[0],p[0],g)*
+								math.fsum([math.fsum([math.fsum([self.nu(m,s,j,ma,mb,r1[1],r2[1],c[1],p[1],g)*
+								math.fsum([math.fsum([math.fsum([self.nu(n,t,k,na,nb,r1[2],r2[2],c[2],p[2],g)*
+								self.Boys(l+m+n-2*(r+s+t)-(i+j+k),g*cnorm) 
+								for k in range(int((n-2*t)/2)+1)]) for t in range(int(n/2)+1)]) for n in range(na+nb+1)]) 
+								for j in range(int((m-2*s)/2)+1)]) for s in range(int(m/2)+1)]) for m in range(ma+mb+1)]) 
+								for i in range(int((l-2*r)/2)+1)]) for r in range(int(l/2)+1)]) for l in range(la+lb+1)])) 
 								ts += ss
 						tempV[a][b] = ts
 			V += tempV
 		return V
-			
+	
+	def electronRepulsionIntegral(self):
+		G = np.zeros((self.K,self.K,self.K,self.K))
+		for a, orb1 in enumerate(self.bd):
+			for b, orb2 in enumerate(self.bd):
+				for c, orb3 in enumerate(self.bd):
+					for d, orb4 in enumerate(self.bd):
+						if True == False:
+							pass
+						else:
+							ts = 0
+							r1, r2, r3, r4 = np.array(self.bd[orb1]['R']), np.array(self.bd[orb2]['R']), np.array(self.bd[orb3]['R']), np.array(self.bd[orb4]['R'])
+							norm1, norm2 = ((r1[0]-r2[0])**2 + (r1[1]-r2[1])**2 + (r1[2]-r2[2])**2), ((r3[0]-r4[0])**2 + (r3[1]-r4[1])**2 + (r3[2]-r4[2])**2)
+							la, lb, lc, ld = self.bd[orb1]['l'], self.bd[orb2]['l'], self.bd[orb3]['l'], self.bd[orb4]['l']
+                                                        ma, mb, mc, md = self.bd[orb1]['m'], self.bd[orb2]['m'], self.bd[orb3]['m'], self.bd[orb4]['m']
+                                                        na, nb, nc, nd = self.bd[orb1]['n'], self.bd[orb2]['n'], self.bd[orb3]['n'], self.bd[orb4]['n']
+							for alphaA, da in zip(self.bd[orb1]['a'], self.bd[orb1]['d']):
+								for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
+									for alphaC, dc in zip(self.bd[orb3]['a'], self.bd[orb3]['d']):
+										for alphaD, dd in zip(self.bd[orb4]['a'], self.bd[orb4]['d']):
+											g1, g2 = (alphaA + alphaB), (alphaC + alphaD) #equation 20
+											delta = (g1 + g2)/(4*g1*g2) #equation 21
+											p, q = self.p(r1,r2,alphaA,alphaB), self.p(r3,r4,alphaC,alphaD)
+											pqnorm = (p[0] - q[0])**2 + (p[1] - q[1])**2 + (p[2] -q[2])**2
+											ts = (da*db*dc*dd*self.normalization(alphaA,la,ma,na)*self.normalization(alphaB,lb,mb,nb)*
+											self.normalization(alphaC,lc,mc,nc)*self.normalization(alphaD,ld,md,nd))
+											ts *= 2 * math.pi**2 *math.sqrt(math.pi/(g1+g2))/(g1*g2)
+											ts *= math.exp(-1*alphaA*alphaB*norm1/g1)*math.exp(-1*alphaC*alphaD*norm2/g2)
+											
+		return G	
 		 
 	def f1(self, j, l, m, a, b):
 		"""
@@ -196,7 +231,16 @@ class Integrals(object):
 			return ( 1.0 / (2 * nu + 1)) - ( x / (2 * nu + 3))
 		else:
 			return 0.5 * x**(-(nu + 0.5)) * special.gamma(nu + 0.5) * special.gammainc(nu + 0.5, x)  
-		
+	
+	def theta(self, l, la, lb, a, b, r, g):
+		return self.f1(l,la,lb,a,b) * misc.factorial(l,exact=True) * g ** (r - l) / (misc.factorial(r,exact=True)*misc.factorial(l-2*r,exact=True))
+
+	def f4(self,l,lp,r,rp,i,delta,la,lb,a,bp,g1,lc,ld,c,d,q,g2):
+		ts = (-1)**l * self.theta(l,la,lb,p-a,p-b,r,g1) * self.theta(lp,lc,ld,q-c,q-d,rp,g2)
+		ts *= (-1)**i * (2*delta)**(2(r+rp)) * misc.factorial(l+lp-2*(r+rp),exact=True) * delta**i * (p-q)**(l+lp-2*(r+rp+i))
+		ts /= (4*delta)**(l+lp) * misc.factorial(i,exact=True) * misc.factorial(l+lp-2*(r+rp+i),exact=True)
+		return ts	
+	
 	def normalization(self, alpha, l, m, n):
 		"""
 		corresponds to equation 9
@@ -222,7 +266,7 @@ class Integrals(object):
 		for i, orb1 in enumerate(self.bd):
 			s += "|" + orb1.ljust(7) + "|"
 			for j, orb2 in enumerate(self.bd):
-				s += "  1.0  |" if np.absolute(I[i][j]-1) < 0.0000001 else "  0.0  |" if np.absolute(I[i][j]) < 0.0000001 else "{:7.04f}|".format(I[i][j])
+				s += "  1.0  |" if np.absolute(I[i][j]-1) < 0.0000001 else "  0.0  |" if np.absolute(I[i][j]) < 0.0000001 else "{:>7.3f}|".format(I[i][j])
 		 	s += "\n" + l
 
 		return s
@@ -234,10 +278,13 @@ if __name__ == "__main__":
 	#print np.multiply(3,np.array([1,2,3]))
 	#for key in integral.bd:
 	#	print str(key) + str(integral.bd[key])
-	print integral.printIntegral(integral.S, 'S')
-	print integral.printIntegral(integral.T, 'T')
+	#print integral.printIntegral(integral.S, 'S')
+	#print integral.printIntegral(integral.T, 'T')
 	print integral.printIntegral(integral.V, 'V')
 	#integral.f4(1,1,0,0,0,0)
+	#print math.fsum([ s for l in range(3) for s in range(l*2)]) 
+		
+	
 	"""		
 	ss = 0
 	pss = 0
