@@ -1,12 +1,12 @@
 import psi4.core
 import numpy as np
-from permutation_operator import P
+from permutation import P
 
 # get global options
 MAXITER = psi4.core.get_global_option('MAXITER')
 E_CONV  = psi4.core.get_global_option('E_CONVERGENCE')
 
-class CEPA0(object):
+class CCD(object):
 
   def __init__(self, uhf):
     G = uhf.g # antisymmetrized AO-basis TEIs, <mu nu || rh si>
@@ -32,17 +32,17 @@ class CEPA0(object):
 
     for i in range(MAXITER):
       # update T2 amplitudes
-      t  = g[o,o,v,v]                                                        \
-         + 1./2                * np.einsum("abcd,ijcd->ijab", g[v,v,v,v], t) \
-         + 1./2                * np.einsum("klij,klab->ijab", g[o,o,o,o], t) \
-         + 1.   * P("0/1|2/3") * np.einsum("akic,jkbc->ijab", g[v,o,o,v], t)
+      t  = g[o,o,v,v]                                                          \
+         + 1./2                  * np.einsum("abcd,ijcd->ijab", g[v,v,v,v], t) \
+         + 1./2                  * np.einsum("klij,klab->ijab", g[o,o,o,o], t) \
+         + 1.   * P((0,1),(2,3)) * np.einsum("akic,jkbc->ijab", g[v,o,o,v], t)
       t *= Ep
       # evaluate energy
       E  = 1./4 * np.sum(g[o,o,v,v] * t)
       dE = E - self.E
       self.E, self.t = E, t
-      print         ('@CEPA0 {:<3d} {:20.15f} {:20.15f}'  .format(i, E, dE)) # print progress to terminal
-      psi4.core.print_out('@CEPA0 {:<3d} {:20.15f} {:20.15f}\n'.format(i, E, dE)) # print progress to output
+      print         ('@CCD {:<3d} {:20.15f} {:20.15f}'  .format(i, E, dE)) # print progress to terminal
+      psi4.core.print_out('@CCD {:<3d} {:20.15f} {:20.15f}\n'.format(i, E, dE)) # print progress to output
       if(np.fabs(dE) < E_CONV): break  # quit if converged
 
     return self.E
