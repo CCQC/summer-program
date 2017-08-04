@@ -29,6 +29,7 @@ class Integrals(object):
 		self.S = self.overlapIntegral()
 		self.T = self.kineticEnergyIntegral()
 		self.V = self.nuclearAttractionIntegral()
+		self.G = self.electronRepulsionIntegral()
 		
 	def subshells(self, z):
 		s = ['1s']
@@ -146,8 +147,14 @@ class Integrals(object):
 			for b, orb2 in enumerate(self.bd):
 				for c, orb3 in enumerate(self.bd):
 					for d, orb4 in enumerate(self.bd):
-						if True == False:
-							pass
+						if c > d:
+							pass #These values are already calculated :)	
+						elif a > b:
+							pass 
+						elif a > c and b > d:
+							pass 
+						elif a > d and b > c:
+							pass 
 						else:
 							ts = 0
 							r1, r2, r3, r4 = np.array(self.bd[orb1]['R']), np.array(self.bd[orb2]['R']), np.array(self.bd[orb3]['R']), np.array(self.bd[orb4]['R'])
@@ -163,11 +170,20 @@ class Integrals(object):
 											delta = (g1 + g2)/(4*g1*g2) #equation 21
 											p, q = self.p(r1,r2,alphaA,alphaB), self.p(r3,r4,alphaC,alphaD)
 											pqnorm = (p[0] - q[0])**2 + (p[1] - q[1])**2 + (p[2] -q[2])**2
-											ts = (da*db*dc*dd*self.normalization(alphaA,la,ma,na)*self.normalization(alphaB,lb,mb,nb)*
+											ss = (da*db*dc*dd*self.normalization(alphaA,la,ma,na)*self.normalization(alphaB,lb,mb,nb)*
 											self.normalization(alphaC,lc,mc,nc)*self.normalization(alphaD,ld,md,nd))
-											ts *= 2 * math.pi**2 *math.sqrt(math.pi/(g1+g2))/(g1*g2)
-											ts *= math.exp(-1*alphaA*alphaB*norm1/g1)*math.exp(-1*alphaC*alphaD*norm2/g2)
-											
+											ss *= 2 * math.pi**2 *math.sqrt(math.pi/(g1+g2))/(g1*g2)
+											ss *= math.exp(-1*alphaA*alphaB*norm1/g1)*math.exp(-1*alphaC*alphaD*norm2/g2)
+											ss *= (math.fsum([self.f4(l,lPrime,r,rPrime,i,delta,la,lb,r1[0],r2[0],p[0],g1,lc,ld,r3[0],r4[0],q[0],g2)*
+											math.fsum([self.f4(m,mPrime,s,sPrime,j,delta,ma,mb,r1[1],r2[1],p[1],g1,mc,md,r3[1],r4[1],q[1],g2)*
+											math.fsum([self.f4(n,nPrime,t,tPrime,k,delta,na,nb,r1[2],r2[2],p[2],g1,nc,nd,r3[2],r4[2],q[2],g2)*
+											self.Boys(l+lPrime+m+mPrime+n+nPrime-2*(r+rPrime+s+sPrime+t+tPrime)-(i+j+k),pqnorm/(4*delta))
+											for n in range(na+nb+1) for t in range(int(n/2)+1) for nPrime in range(nc+nd+1) for tPrime in range(int(nPrime/2)+1) for k in range(int((n+nPrime-2*(t+tPrime))/2)+1)])
+											for m in range(ma+mb+1) for s in range(int(m/2)+1) for mPrime in range(mc+md+1) for sPrime in range(int(mPrime/2)+1) for j in range(int((m+mPrime-2*(s+sPrime))/2)+1)])
+											for l in range(la+lb+1) for r in range(int(l/2)+1) for lPrime in range(lc+ld+1) for rPrime in range(int(lPrime/2)+1) for i in range(int((l+lPrime-2*(l+lPrime))/2)+1)]))
+											ts += ss
+							G[a][b][c][d]=G[c][d][a][b]=G[b][a][d][c]=G[d][c][b][a]=G[b][a][c][d]=G[d][c][a][b]=G[a][b][d][c]=G[c][d][b][a] = ts	
+							""" These permutations are all equal if the orbitals are real"""			
 		return G	
 		 
 	def f1(self, j, l, m, a, b):
@@ -235,9 +251,9 @@ class Integrals(object):
 	def theta(self, l, la, lb, a, b, r, g):
 		return self.f1(l,la,lb,a,b) * misc.factorial(l,exact=True) * g ** (r - l) / (misc.factorial(r,exact=True)*misc.factorial(l-2*r,exact=True))
 
-	def f4(self,l,lp,r,rp,i,delta,la,lb,a,bp,g1,lc,ld,c,d,q,g2):
+	def f4(self,l,lp,r,rp,i,delta,la,lb,a,b,p,g1,lc,ld,c,d,q,g2):
 		ts = (-1)**l * self.theta(l,la,lb,p-a,p-b,r,g1) * self.theta(lp,lc,ld,q-c,q-d,rp,g2)
-		ts *= (-1)**i * (2*delta)**(2(r+rp)) * misc.factorial(l+lp-2*(r+rp),exact=True) * delta**i * (p-q)**(l+lp-2*(r+rp+i))
+		ts *= (-1)**i * (2*delta)**(2*(r+rp)) * misc.factorial(l+lp-2*(r+rp),exact=True) * delta**i * (p-q)**(l+lp-2*(r+rp+i))
 		ts /= (4*delta)**(l+lp) * misc.factorial(i,exact=True) * misc.factorial(l+lp-2*(r+rp+i),exact=True)
 		return ts	
 	
@@ -280,27 +296,7 @@ if __name__ == "__main__":
 	#	print str(key) + str(integral.bd[key])
 	#print integral.printIntegral(integral.S, 'S')
 	#print integral.printIntegral(integral.T, 'T')
-	print integral.printIntegral(integral.V, 'V')
-	#integral.f4(1,1,0,0,0,0)
+	#print integral.printIntegral(integral.V, 'V')
+	print integral.printIntegral(integral.G[2][3], 'G')	
 	#print math.fsum([ s for l in range(3) for s in range(l*2)]) 
-		
-	
-	"""		
-	ss = 0
-	pss = 0
-     	for alphaA, da in zip(integral.bd['O_2pz']['a'], integral.bd['O_2pz']['d']):
-     		for alphaB, db in zip(integral.bd['O_2pz']['a'], integral.bd['O_2pz']['d']):
-     			ss = 0
-			ss += alphaB * (2 * (integral.bd['O_2pz']['l'] + integral.bd['O_2pz']['l'] + integral.bd['O_2pz']['l']) + 3) * integral.f3('O_2pz','O_2pz', alphaA, alphaB, da, db, 0, 0, 0)
-                        print "ss: " + str(ss)
-			ss += -2.0 * (alphaB ** 2) * ( integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 2, 0, 0) + integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 0, 2, 0) + integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 0, 0, 2) )
-	                print "ss: " + str(ss)
-			ss += -0.5 * integral.bd['O_2pz']['l'] * ( integral.bd['O_2pz']['l'] - 1 ) * integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, -2, 0, 0)
-	                ss += -0.5 * integral.bd['O_2pz']['m'] * ( integral.bd['O_2pz']['m'] - 1 ) * integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 0, -2, 0)
-                        ss += -0.5 * integral.bd['O_2pz']['n'] * ( integral.bd['O_2pz']['n'] - 1 ) * integral.f3('O_2pz', 'O_2pz', alphaA, alphaB, da, db, 0, 0, -2)
-			print "ss: " + str(ss)
-			pss += ss
-			print "\n" + str(ss)
-	
-	"""
 
