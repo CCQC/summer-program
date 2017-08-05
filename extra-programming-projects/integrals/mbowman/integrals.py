@@ -1,9 +1,5 @@
 #__author__ = "mbowman"
 
-import sys
-sys.path.insert(0, '../../../extra-files')
-sys.path.insert(0, '../../../0/mbowman')
-
 import STO3Gbasis as sto
 import molecule
 import masses
@@ -14,7 +10,7 @@ import collections
 
 np.set_printoptions(threshold=np.inf, precision=3, linewidth=200, suppress=True)
 
-class Integrals(object):
+class Integral(object):
 	
 	def __init__(self, mol_str):
 		"""
@@ -25,7 +21,8 @@ class Integrals(object):
 		self.coord = np.array(self.mol.geom)
 		self.bd = self.createBasisDict() 
 		self.K = len(self.bd) #dimension of molecular integrals		
-		self.gfn = 3 #number of Gaussian functions to sum over
+		self.VNuc = self.nuclearRepulsionEnergy()
+		print self.VNuc
 		self.S = self.overlapIntegral()
 		self.T = self.kineticEnergyIntegral()
 		self.V = self.nuclearAttractionIntegral()
@@ -71,9 +68,18 @@ class Integrals(object):
 				bd[sss]['R'] = [self.coord[i][c] for c in range(3)] 
 		
 		return collections.OrderedDict(sorted(bd.items(), key=lambda t: (-t[1]['z'], t[1]['c'], t[1]['s'], t[1]['ss'], -t[1]['l'],-t[1]['m'],-t[1]['n'] )))
-				
+
+	def nuclearRepulsionEnergy(self):
+		ts = 0
+		for i, atom1 in enumerate(self.atoms):
+			for j, atom2 in enumerate(self.atoms[i+1:]):
+				if(i != j):
+					ts += masses.get_charge(atom1) * masses.get_charge(atom2) / np.linalg.norm(self.coord[j] - self.coord[i])
+		return ts
+
 	def overlapIntegral(self):			 
 		S = np.zeros((self.K, self.K))
+		print "Calculating overlap integral (S):"
 		for i, orb1 in enumerate(self.bd):
 			for j, orb2 in enumerate(self.bd):
 				if i > j:
@@ -84,10 +90,12 @@ class Integrals(object):
 						for alphaB, db in zip(self.bd[orb2]['a'], self.bd[orb2]['d']):
 							ts += da* db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n']) * self.f3(orb1, orb2, alphaA, alphaB, da, db, 0, 0, 0) 
 					S[i][j] = ts
+		print "\tDone"
 		return S	
 	
 	def kineticEnergyIntegral(self):
 		T = np.zeros((self.K, self.K))
+		print "Calculating kinetic energy integral (T):"
 		for i, orb1 in enumerate(self.bd):
 			for j, orb2 in enumerate(self.bd):
 				if i > j:
@@ -106,10 +114,12 @@ class Integrals(object):
 							ss *= da* db * self.normalization(alphaA, self.bd[orb1]['l'], self.bd[orb1]['m'],self.bd[orb1]['n'] ) * self.normalization(alphaB, self.bd[orb2]['l'], self.bd[orb2]['m'], self.bd[orb2]['n']) 
 							ts += ss
 					T[i][j] = ts
+		print "\tDone"
 		return T
 	
 	def nuclearAttractionIntegral(self):
 		V = np.zeros((self.K, self.K))
+		print "Calculating nuclear attraction integral (V):"
 		for atom, c in zip(self.atoms, self.coord):
 			tempV = np.zeros((self.K, self.K))
 			for a, orb1 in enumerate(self.bd):
@@ -139,10 +149,12 @@ class Integrals(object):
 								ts += ss
 						tempV[a][b] = ts
 			V += tempV
+		print "\tDone"
 		return V
 	
 	def electronRepulsionIntegral(self):
 		G = np.zeros((self.K,self.K,self.K,self.K))
+		print "Calculating electron repulsion integral (G):"
 		for a, orb1 in enumerate(self.bd):
 			for b, orb2 in enumerate(self.bd):
 				for c, orb3 in enumerate(self.bd):
@@ -180,10 +192,12 @@ class Integrals(object):
 											self.Boys(l+lPrime+m+mPrime+n+nPrime-2*(r+rPrime+s+sPrime+t+tPrime)-(i+j+k),pqnorm/(4*delta))
 											for n in range(na+nb+1) for t in range(int(n/2)+1) for nPrime in range(nc+nd+1) for tPrime in range(int(nPrime/2)+1) for k in range(int((n+nPrime-2*(t+tPrime))/2)+1)])
 											for m in range(ma+mb+1) for s in range(int(m/2)+1) for mPrime in range(mc+md+1) for sPrime in range(int(mPrime/2)+1) for j in range(int((m+mPrime-2*(s+sPrime))/2)+1)])
-											for l in range(la+lb+1) for r in range(int(l/2)+1) for lPrime in range(lc+ld+1) for rPrime in range(int(lPrime/2)+1) for i in range(int((l+lPrime-2*(l+lPrime))/2)+1)]))
+											for l in range(la+lb+1) for r in range(int(l/2)+1) for lPrime in range(lc+ld+1) for rPrime in range(int(lPrime/2)+1) for i in range(int((l+lPrime-2*(r+rPrime))/2)+1)]))
 											ts += ss
 							G[a][b][c][d]=G[c][d][a][b]=G[b][a][d][c]=G[d][c][b][a]=G[b][a][c][d]=G[d][c][a][b]=G[a][b][d][c]=G[c][d][b][a] = ts	
-							""" These permutations are all equal if the orbitals are real"""			
+							# These permutations are all equal if the orbitals are real
+			print "\t{:3.1f}% Complete".format(100*(a*len(self.bd)+b)/(len(self.bd)**2))
+		print "\tDone"			
 		return G	
 		 
 	def f1(self, j, l, m, a, b):
@@ -287,16 +301,3 @@ class Integrals(object):
 
 		return s
 				
-if __name__ == "__main__":
-	mole_str = open("water.xyz").read()
-	integral = Integrals(mole_str)
-	#print integral.T
-	#print np.multiply(3,np.array([1,2,3]))
-	#for key in integral.bd:
-	#	print str(key) + str(integral.bd[key])
-	#print integral.printIntegral(integral.S, 'S')
-	#print integral.printIntegral(integral.T, 'T')
-	#print integral.printIntegral(integral.V, 'V')
-	print integral.printIntegral(integral.G[2][3], 'G')	
-	#print math.fsum([ s for l in range(3) for s in range(l*2)]) 
-

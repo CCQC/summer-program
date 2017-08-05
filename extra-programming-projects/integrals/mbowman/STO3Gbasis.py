@@ -1,8 +1,8 @@
 def contCoeff(shell, subshell):
-	return d[shell][subshell]
+	return d[(shell-1)][(subshell-1)]
 
 def expFact(atomicNumber, shell):
-	return a[atomicNumber - 1][shell]
+	return a[(atomicNumber - 1)][(shell-1)]
 
 d = [
 [ [ 0.1543289673, 0.5353281423, 0.4446345422] ], #1s
