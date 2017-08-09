@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath, centernot, fancyhdr, mathtools}
+\pagestyle{fancy}
+\rhead{Jonathon Misiewicz - Summer Program\\
+Project 7 Exercises}
+
+\begin{document}
+1. Order the basis such that $\Phi$ is first. The matrix is block diagonal, with $\mathbf{H}_{11}$ being its own block. By definition of $\mathbf{H}_{PQ}$, Brillouin's theorem guarantees all matrix elements of the form $\mathbf{H}_{1Q}$ vanish, and exploting hermiticity, the $\mathbf{H}_{Q1}$ terms must vanish as well. This produces the block diagonal structure described.\\
+
+2. Order the basis such that $\Phi$ is first. $\mathbf{H}_{11} = \langle \Phi | \hat{H}_e | \Phi \rangle = E_0$. But it was proved in problem 1 that $\mathbf{H}_{11}$ is its own block. Thus, $\mathbf{H}_{11} e_1 = E_0 e_1$. But our first basis vector, $e_1$, is simply $\Phi$ by how we defined our basis.\\
+
+3. $\mathbf{Hc}_K = E_K\mathbf{c}_K \implies \mathbf{Hc}_K - E_0\mathbf{Ic}_K = E_K\mathbf{Ic}_K - E_0\mathbf{c}_K \implies\\
+(\mathbf{H}-E_0\mathbf{I})\mathbf{c}_K = (E\mathbf{I}-E_0\mathbf{I})\mathbf{c}_K \implies \widetilde{\mathbf{H}}\mathbf{c}_K = (E-E_0)\mathbf{c}_K$\\
+
+Shifting your diagonals shifts your eigenvalues.\\
+
+4a. The determinants differ in two positions, so the one-electron integral vanishes, and the two electron integral gives $\langle aj || ib \rangle$.\\
+4b. The determinants differ in one position. We redefine the reference determinant $\Phi$ to be $(\Phi_0)_i^a$, making the integral $\langle \Phi | H | \Phi_a^b \rangle$. Slater's Rules give an expectation of $h_{ab}+\sum\limits_{k \in \Phi} \langle ak || bk \rangle $, but we are summing over the orbitals of our modified reference determinant. Noting that $f_{ab} = h_{ab} + \sum\limits_{k=\Phi_0} \langle ak || bk \rangle = h_{ab} + \sum\limits_{k=\Phi} \langle ak || bk \rangle - \langle ai || bi \rangle + \langle aa || ba \rangle$. We can therefore rewrite the expectation value in question as $h_{ab} - \langle ai || bi\rangle = h_{ab} + \langle ai || ib\rangle$ by the permutational symmetry of the two-electron integral.\\
+4c. The determinants differ in two positions, but this can be manipulated to a difference in one position. First, the right determinant will have the orbitals in position $i$ and $j$ switched. Therefore, both determinants have orbital $a$ in the $i$ position, but in the $j$ position, the right determinant will have orbital $i$ while the left determinant has orbital $j$.
+
+We redefine the reference determinant $\Phi$ to be $(\Phi_0)_i^a$. Therefore,\\ $\mathcal{P}_{ij}((\Phi_0)_j^a)=\Phi_i^j$. Since a swap of two elements is its own inverse, we have that $(\Phi_0)_j^a = \mathcal{P}_{ij}(\Phi_i^j)$. Note that we refer to indices when subscripting permutations and to functions when subscripting or superscripting determinants. Therefore, $\langle (\Phi_0)_i^a | H | (\Phi_0)_j^a \rangle = \langle \Phi | H | \mathcal{P}_{ij}(\Phi_i^j) \rangle = - \langle \Phi | H | \Phi_i^j \rangle = - f_{ij} - \sum\limits_{k \in \Phi} \langle ik || jk \rangle = - f_{ij} - (\sum\limits_{k \in \Phi_0} \langle ik || jk \rangle - \langle ii || ji \rangle + \langle ia || ja \rangle) = - h_{ij} - \langle ia || ja \rangle$. We have made heavy use of the same tricks used in the previous section. Unfortunately, to make further progress, we must assume our integral is real. If so, then $ - \langle ia || ja \rangle = - \langle ja || ia \rangle = \langle aj || ia \rangle$. Thus, our solution for this case is $-f_{ij} + \overline{\langle aj || ia \rangle}$, which reduces to the expected solution in the case of real integrals.\\
+4d. Redefine the reference wavefunction $\Phi$ to $(\Phi_0)_i^a$. The Slater-Condon rules give the expectation as $\sum\limits_{k \in \Phi} f_{kk} + \frac{1}{2} \sum\limits_{k \in \Phi} \sum\limits_{l \in \Phi, \neq k} \langle kl || kl \rangle$. We break this into pieces. $\sum\limits_{k \in \Phi} f_{kk} = \sum\limits_{k \in \Phi_0} f_{kk} - f_{ii} + f_{aa}$. We also know that $\frac{1}{2} \sum\limits_{k \in \Phi} \sum\limits_{l \in \Phi, \neq k} \langle kl || kl \rangle = \frac{1}{2} \sum\limits_{k \in \Phi_0} \sum\limits_{l \in \Phi_0, \neq k} \langle kl || kl \rangle - \frac{1}{2} \sum\limits_{l \in \Phi_0, \neq i} \langle il || il \rangle - \frac{1}{2} \sum\limits_{k \in \Phi_0} \langle ki || ki \rangle
++ \frac{1}{2} \sum\limits_{l \in \Phi_0, \neq a} \langle al || al \rangle + \frac{1}{2} \sum\limits_{k \in \Phi_0} \langle ka || ka \rangle + \langle ai || ai \rangle$.\\
+Adding these together, the expectation is $\sum\limits_{k \in \Phi_0} f_{kk} - f_{ii} + f_{aa} + \frac{1}{2} \sum\limits_{k \in \Phi_0} \sum\limits_{l \in \Phi_0, \neq k} \langle kl || kl \rangle - \frac{1}{2} \sum\limits_{l \in \Phi_0, \neq i} \langle il || il \rangle - \frac{1}{2} \sum\limits_{k \in \Phi_0} \langle ki || ki \rangle
++ \frac{1}{2} \sum\limits_{l \in \Phi_0, \neq a} \langle al || al \rangle + \frac{1}{2} \sum\limits_{k \in \Phi_0} \langle ka || ka \rangle + \langle ai || ai \rangle$. We recognize a familiar expression in there, so $E_0 - f_{ii} + f_{aa} - \frac{1}{2} \sum\limits_{l \in \Phi_0, \neq i} \langle il || il \rangle - \frac{1}{2} \sum\limits_{k \in \Phi_0} \langle ki || ki \rangle
++ \frac{1}{2} \sum\limits_{l \in \Phi_0, \neq a} \langle al || al \rangle + \frac{1}{2} \sum\limits_{k \in \Phi_0} \langle ka || ka \rangle + \langle ai || ai \rangle =
+E_0 - f_{ii} + f_{aa} - \sum\limits_{l \in \Phi_0} \langle il || il \rangle
++ \sum\limits_{l \in \Phi_0} \langle al || al \rangle = E_0 - f_{ii} + f_{aa} + \langle ai || ai \rangle$
+
+This was as to be shown.
+
+5. $\langle \Phi_i^a | \hat{H}_e - E_0 | \Phi_j^b \rangle = \langle \Phi_i^a | \hat{H}_e | \Phi_j^b \rangle - \langle \Phi_i^a | E_0 | \Phi_j^b \rangle = E_0 \delta_{ij} \delta_{ab} + f_{ab} \delta_{ij} - f_{ij} \delta_{ab} + \langle aj || ib \rangle  - E_0 \langle \Phi_i^a | \Phi_j^b \rangle = E_0 \delta_{ij} \delta_{ab} + f_{ab} \delta_{ab}\delta_{ij} - f_{ij} \delta_{ab}\delta_{ij} + \langle aj || ib \rangle  - E_0 \delta_{ij} \delta_{ab} = (\epsilon_a - \epsilon_i) \delta_{ab}\delta_{ij} + \langle aj || ib \rangle$
+
+Given a Hartree-Fock reference, the off-diagonal elements of the Fock Matrix vanish. \\
+\end{document}
