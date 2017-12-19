@@ -38,7 +38,7 @@ def main():
 
 def restricted_orbitals(basis, labels, coords, charge=0, spin=0, niter=100,
                         e_thresh=1e-12, d_thresh=1e-9, guess='gwh'):
-    """restricted Hartree-Fock orbital coefficients
+    """restricted Hartree-Fock orbitals
 
     :param basis: basis set name
     :type basis: str
@@ -59,8 +59,8 @@ def restricted_orbitals(basis, labels, coords, charge=0, spin=0, niter=100,
     :param guess: hartree-fock starting guess
     :type guess: str
 
-    :return: orbital coefficients
-    :rtype: numpy.ndarray
+    :return: orbital coefficients and energies, along with the occupation count
+    :rtype: (numpy.ndarray, numpy.ndarray, int)
     """
     psi4.set_options({'e_convergence': e_thresh, 'd_convergence': d_thresh,
                       'maxiter': niter, 'guess': guess, 'reference': 'RHF'})
@@ -88,11 +88,11 @@ def factorized_repulsion_integrals(basis, auxbasis, labels, coords):
     :rtype: numpy.ndarray
     """
     j = coulomb_metric_integrals(basis=auxbasis, labels=labels, coords=coords)
-    g_3c = threecenter_repulsion_integrals(
+    r3c = threecenter_repulsion_integrals(
             basis=basis, auxbasis=auxbasis, labels=labels, coords=coords)
 
     x = scipy.linalg.cholesky(scipy.linalg.inv(j))
-    return numpy.tensordot(g_3c, x, axes=(2, 1))
+    return numpy.tensordot(r3c, x, axes=(2, 1))
 
 
 def threecenter_repulsion_integrals(basis, auxbasis, labels, coords):
