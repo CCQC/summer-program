@@ -1,6 +1,6 @@
 import psi4.core
 import numpy as np
-from permutation_operator import P
+from permutation import P
 
 # get global options
 MAXITER = psi4.core.get_global_option('MAXITER')
@@ -32,10 +32,10 @@ class CEPA0(object):
 
     for i in range(MAXITER):
       # update T2 amplitudes
-      t  = g[o,o,v,v]                                                        \
-         + 1./2                * np.einsum("abcd,ijcd->ijab", g[v,v,v,v], t) \
-         + 1./2                * np.einsum("klij,klab->ijab", g[o,o,o,o], t) \
-         + 1.   * P("0/1|2/3") * np.einsum("akic,jkbc->ijab", g[v,o,o,v], t)
+      t  = g[o,o,v,v]                                                          \
+         + 1./2                  * np.einsum("abcd,ijcd->ijab", g[v,v,v,v], t) \
+         + 1./2                  * np.einsum("klij,klab->ijab", g[o,o,o,o], t) \
+         + 1.   * P((0,1),(2,3)) * np.einsum("akic,jkbc->ijab", g[v,o,o,v], t)
       t *= Ep
       # evaluate energy
       E  = 1./4 * np.sum(g[o,o,v,v] * t)

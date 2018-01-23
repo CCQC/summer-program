@@ -15,9 +15,9 @@ set {
   maxiter 50
 }
 # run
-basisname = psi4.core.get_global_option("BASIS")
-basisset  = psi4.core.BasisSet.build(mol, "BASIS", basisname)
-mints     = psi4.core.MintsHelper(basisset)
+basisname   = psi4.core.get_global_option("BASIS")
+basisset, _ = psi4.core.BasisSet.build(mol, "BASIS", basisname)
+mints       = psi4.core.MintsHelper(basisset)
 
 # call spin-orbital UHF code
 import sys

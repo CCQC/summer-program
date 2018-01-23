@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath, centernot, fancyhdr, mathtools}
+\pagestyle{fancy}
+\rhead{Jonathon Misiewicz - Summer Program\\
+Project 6 Exercises}
+
+\begin{document}
+1. We apply the bra $\langle \Psi_K^{0} |$ to both sides of the equation.\\
+
+$\langle \Psi_K^0 | \hat{H}^0 - E_K^0 | \Psi_K^{n} \rangle = \langle \Psi_K^0 | \sum_{p=0}^{n-1} E_K^{(n-p)} \Psi_K^{p} - \hat{W} \Psi_K^{n-1} \rangle\\
+\langle \Psi_K^0 | \hat{H}^0 | \Psi_K^{n} \rangle - E_K^0 \langle \Psi_K^0 | \Psi_K^{n} \rangle = \sum_{p=0}^{n-1} E_K^{(n-p)} \langle \Psi_K^0 | \Psi_K^{p} \rangle - \langle \Psi_K^0 | \hat{W} | \Psi_K^{n-1} \rangle \\
+\langle \Psi_K^n | \hat{H}^0 | \Psi_K^{0} \rangle^* - E_K^0 \langle \Psi_K^0 | \Psi_K^{n} \rangle = \sum_{p=0}^{n-1} E_K^{(n-p)} \langle \Psi_K^0 | \Psi_K^{p} \rangle - \langle \Psi_K^0 | \hat{W} | \Psi_K^{n-1} \rangle \\
+E_K^0 \langle \Psi_K^n | \Psi_K^{0} \rangle^* - E_K^0 \langle \Psi_K^0 | \Psi_K^{n} \rangle = \sum_{p=0}^{n-1} E_K^{(n-p)} \langle \Psi_K^0 | \Psi_K^{p} \rangle - \langle \Psi_K^0 | \hat{W} | \Psi_K^{n-1} \rangle \\
+0 = E_K^n - \langle \Psi_K^0 | \hat{W} | \Psi_K^{n-1} \rangle \\
+E_K^n = \langle \Psi_K^0 | \hat{W} | \Psi_K^{n-1} \rangle$\\
+
+2. Letting $J \neq K$ be a particular but arbitrary index, we apply the bra $\langle \Psi_J^0 |$ to both sides of the equation and then substitute for $\Phi_K^1$ in both sides of the equation.
+
+$\langle \Psi_J^0 | \hat{H}^0 - E_K^0 | \sum_{L\neq K} \Psi_L^0 c_{LK}^1 \rangle = \langle \Psi_J^0 | E_K^1-W | \Psi_K^0 \rangle \\ 
+\sum_{L\neq K} c_{LK}^1 \langle \Psi_J^0 | \hat{H}^0 | \Psi_L^0 \rangle - E_K^0 c_{LK}^1 \langle \Psi_J^0 | \Psi_L^0 \rangle =  E_K^1 \langle \Psi_J^0 | \Psi_K^0 \rangle - \langle \Psi_J^0 | W | \Psi_K^0 \rangle \\
+\sum_{L\neq K} E_L^0 c_{LK}^1 \langle \Psi_J^0 | \Psi_L^0 \rangle - E_K^0 c_{LK}^1 \langle \Psi_J^0 | \Psi_L^0 \rangle =  E_K^1 \langle \Psi_J^0 | \Psi_K^0 \rangle - \langle \Psi_J^0 | W | \Psi_K^0 \rangle \\
+E_J^0 c_{JK}^1 - E_K^0 c_{JK}^1 = - \langle \Psi_J^0 | W | \Psi_K^0 \rangle \\
+c_{JK}^1 = \frac{\langle \Psi_J^0 | W | \Psi_K^0 \rangle}{E_K^0 - E_J^0} $\\
+
+3. $E_K^0 + E_K^1 + E_K^2 = \langle \Psi_K^0 | \hat{H}^0 | \Psi_K^0 \rangle + \langle \Psi_K^0 | W | \Psi_K^0 \rangle + \langle \Psi_K^0 | W | \Psi_K^1 \rangle = \\
+\langle \Psi_K^0 | \hat{H}^0 + W | \Psi_K^0 \rangle + \langle \Psi_K^0 | W | \Psi_K^1 \rangle = \langle \Psi_K^0 | \hat{H} | \Psi_K^0 \rangle + \langle \Psi_K^0 | W | \Psi_K^1 \rangle =\\
+\langle \Psi_K^0 | \hat{H} | \Psi_K^0 \rangle + \langle \Psi_K^0 | W | \sum_{L\neq K} \Psi_L^0 c_{LK}^1 \rangle =\\
+\langle \Psi_K^0 | \hat{H} | \Psi_K^0 \rangle + \langle \Psi_K^0 | W | \sum_{L\neq K} \Psi_L^0 \frac{\langle \Psi_L^0 | W | \Psi_K^0 \rangle}{E_K^0 - E_L^0} \rangle =\\
+\langle \Psi_K^0 | \hat{H} | \Psi_K^0 \rangle + \frac{\langle \Psi_K^0 | W | \Psi_L^0 \rangle \langle \Psi_L^0 | W | \Psi_K^0 \rangle}{E_K^0 - E_L^0}$\\
+
+4. $\Phi$ is a linear combination of terms of the form  $\Pi \psi_{\sigma(j)}(j)$ for different $\sigma$. If those conditions suffice to show the property for one such term, it holds for the entire linear combination. $\sum_i \hat{f}(i) \Pi_j \psi_{\sigma(j)}(j)=\sum_i \Pi_{j \neq i} \psi_{\sigma(j)}(j) \hat{f}(i) \psi_{\sigma(i)}(i)=\\
+\sum_i \Pi_{j} \psi_{\sigma(j)}(j) \epsilon_{\sigma(i)} = \sum_i \epsilon_{\sigma(i)} \Pi_{j} \psi_{\sigma(j)}(j) = \varepsilon \Pi_{j} \psi_{\sigma(j)}(j)$. The property holds for one term, so by linearity, it holds for all.\\
+
+5. $E_K^0 + E_K^1 + E_K^2 = \langle \Psi_K^0 | \hat{H} | \Psi_K^0 \rangle + \frac{\langle \Psi_K^0 | W | \Psi_L^0 \rangle \langle \Psi_L^0 | W | \Psi_K^0 \rangle}{E_K^0 - E_L^0} \implies \\
+E^0 + E^1 + E^2 = E_0 + \sum \frac{|\langle \Phi | W | \Psi_L^0 \rangle |^2}{\epsilon - E_L^0} =\\
+E_0 + \sum\limits_{a, i} \frac{|\langle \Phi | W | \Psi_i^a \rangle |^2}{\varepsilon_i - \varepsilon_a} + \sum\limits_{a<b, i<j} \frac{|\langle \Phi | W | \Psi_{ij}^{ab} \rangle |^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon-b} + \sum\limits_{a<b<c, i<j<k} \frac{|\langle \Phi | W | \Psi_{ijk}^{abc} \rangle |^2}{\varepsilon_i + \varepsilon_j + \varepsilon_k - \varepsilon_a - \varepsilon-b - \varepsilon_c}+...$\\
+
+6. We must break into cases:\\
+6a. The third and higher order terms vanish by Slater-Condon. For a term of the integral to not be zero, each function in the ket's "pair" in the bra must not be orthogonal to it, but distinct orbitals are orthonormal, and there are three functions in the ket that are not in the bra. Two of the may be transformed by the two-electron $W$ operator, but not the third. It must be 0. Because this holds for all terms, all terms go to 0, and third-and-higher-order excitations vanish.\\
+Each term of the bra has at least three functions not found in the ket, and vice versa. The $W$ operator may only transform two of the ket's functions to those in the bra, but that leaves at least one key function untransformed and not in the bra.\\
+6b. The singly excited terms vanish by Slater-Condon and Hartree-Fock Method. $\hat{W}=\hat{H}-\hat{H}^0$, but $\hat{H}$ has a one-particle part and a two-particle part. Application of the Slater-Condon rules on both produces $\langle i | h | a \rangle - \sum_b \langle ib || ab \rangle$. This equals $\langle i | \hat{H}^0 | a\rangle$, which is the term we subtract off. A difference of identical things is 0, so the term is 0. Incidentally, because the Hartree-Fock matrix is diagonalized, the matrix elements we're subtracting from each other are 0 anyways.\\
+6c. Again by Slater-Condon, the one electron part of the integral vanishes, leaving the two-electron part. Becuase the second electron of the Fock Matrix is hidden away in an integral, this is just an $r^{-1}$ term. Slater-Condon reveals the term to be $\langle ij || ab \rangle$.\\
+
+Our expression is then $E_0 + \sum\limits_{a<b, i<j} \frac{|\langle ij||ab \rangle |^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon-b}$. Because a=b and i=j both yield 0, by rules for the determinant, and we can biject the $a<b$ and $b<a$ cases, this is also $E_0 + \frac{1}{4} \sum\limits_{a,b,i,j} \frac{|\langle ij||ab \rangle |^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon-b}$.
+\end{document}
