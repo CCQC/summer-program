@@ -1,79 +1,81 @@
-import numpy as np
-
-import sys
+#!/usr/bin/env python3
+import sys, configparser, numpy as np
+from scipy import linalg as la
 sys.path.insert(0,"../../5/aewiens")
-
+sys.path.insert(0,"../../6/aewiens")
 from uhf import UHF
+from mp2 import MP2
 
 class CIS:
 
-    def __init__(self,mol,mints):
+	def __init__(self,options):
 
-        uhf = UHF(mol,mints)
-        uhf.compute_energy()
+		uhf = UHF( options )
 
-        nbf = uhf.nbf
-        self.nocc = uhf.nocc
-        self.nvirtual = 2*nbf - self.nocc
-        self.ndet = self.nvirtual*self.nocc
+		uhf.computeEnergy()
 
-        self.E0 = uhf.E
-        self.e = uhf.e
-        self.C = uhf.C
-        self.g = uhf.g
+		self.nocc  = uhf.nocc
+		self.nvirt = uhf.norb - self.nocc
+		self.E0    = uhf.E
+		self.e     = uhf.e
 
-#        self.TF = uhf.TF
+		mp2 = MP2( options )
+		self.GMO   = mp2.transformTEI( uhf.G, uhf.C )
 
-
-    def transform_integrals(self,g,C):
-        """
-        :param g: 4D array of 2-electron integrals in AO basis
-        :param C: 2D array of MO expansion coefficients for AO basis functions
-        Return a 4D array (same as g.size) of 2-electron integrals in MO basis
-        """
-        return np.einsum('Pp,Pqrs->pqrs', C,
-                    np.einsum('Qq,PQrs->Pqrs', C,
-                        np.einsum('Rr,PQRs->PQrs', C,
-                            np.einsum('Ss,PQRS->PQRs', C, g))))
+		print( "-----------------------------------" )
+		print( "| Output for CI Singles Procedure |" )
+		print( "-----------------------------------" )
+		print( "\n @UHF Energy:   %f" % uhf.E )
 
 
-    def get_singles(self):
-        """
-        return a list of all (i,a) single excitations  xi_i -> xi_a
-        """
-        return [(i,a) for i in range(self.nocc) for a in range(self.nocc,self.nocc+self.nvirtual)]
+	def getSingles(self):
+		"""  return a list of all (i,a) single excitations  xi_i -> xi_a
+		"""
+		return [(i,a) for i in range(self.nocc) for a in range(self.nocc,self.nocc+self.nvirt)]
 
 
-    def cis_energies(self):
-        """
-        Print a list of CIS excited states and their energies (Eh)
-        Return an ordered list of CIS excitation energies
-        """
-        ##  rename object variables 
-        ndet, E0, e, g, C = self.ndet, self.E0, self.e, self.g, self.C
+	def computeStates(self):
 
-#        TF = self.TF
+		E0 = self.E0
+		e  = self.e
+		nDeterminants = self.nocc*self.nvirt
+		excitations   = self.getSingles()
 
-        Gmo = self.transform_integrals(g,C)
+		##  build CIS hamiltonian (tH)  ##
+		tH = np.zeros((nDeterminants,nDeterminants))
+		for P, (i,a) in enumerate(excitations):
+			for Q, (j,b) in enumerate(excitations):
+				tH[P,Q] = self.GMO[a,j,i,b] + (e[a] - e[i])*(a==b)*(i==j) 
 
-        excite = self.get_singles()
+		E, C = np.linalg.eigh(tH)
 
-        ##  initialize CIS hamiltonian tH
-        tH = np.zeros((ndet,ndet))
+		self.E = E
+		eigenvectors = C.T
 
-        ## build CIS Hamiltonian tH
-        for P, (i,a) in enumerate(excite):
-            for Q, (j,b) in enumerate(excite):
-                tH[P,Q] += Gmo[a,j,i,b] + (e[a] - e[i])*(a==b)*(i==j) 
-#                tH[P,Q] += Gmo[a,j,i,b] + TF[a,b]*(i==j) - TF[i,j]*(a==b)
-                
-        ##  diagonalize tH
-        E, C = np.linalg.eigh(tH)
+		info = []
+		for i, row in enumerate( C.T ):
+			temp =  ""
+			for j, value in enumerate(row):
+				if value**2 >= 0.10:
+					percentage = "{:5.0f}% ".format( 100*value**2 )
+					excitation = " {:d} --> {:d}".format(*excitations[j])
+					temp += percentage + excitation + "   "
 
-        print( "{:>6s}{:>15s}".format("State","Energy") )
-        for i, en in enumerate(E):
-            print("{:6d}  {: >16.11f}".format(i,en) )
+			info.append( temp )
 
-        self.E = E
-        return E
+		print("\n State      Energy (Eh)    Excitations")
+		print("-----------------------------------------------------------")
+		for i, energy in enumerate(E):
+			print("{:4d}  {: >16.11f}  ".format(i,energy) + info[i] )
+		print("-----------------------------------------------------------")
+
+
+
+if __name__ == '__main__':
+	
+	config = configparser.ConfigParser()
+	config.read('Options.ini')
+
+	cis = CIS(config)
+	cis.computeStates()
 
