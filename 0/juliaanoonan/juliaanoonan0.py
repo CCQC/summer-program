@@ -1,29 +1,33 @@
+import sys
+sys.path.insert(0, '../../extra-files')
+import masses  #provides functions get_mass and get_charge
+import numpy  #lets me make an array later
+
 class Molecule:
 
     def __init__(self, xyzfile):
-        import sys
-        sys.path.insert(0, '../../extra-files')
-        import masses  #provides functions get_mass and get_charge
-        import numpy  #lets me make an array later
         with open(xyzfile, "r") as f:
             lines = f.readlines() #opening the xyz file for reading
         self.xyz = xyzfile
 
         self.natom = int(lines[0]) #first line = num of atoms
         
+        if len(lines) != (self.natom + 2):
+            print("Error: incorrectly formatted xyz file")
+            return
+
         self.units = lines[1].rstrip() #second line = Angstroms or Bohr
+        if self.units != "Angstrom" and self.units != "Bohr":
+            print("Error: unspecified units or units we are currently unequipped to handle.")
+            return
 
         self.labels = []
         for line in lines[2:]:  #from the third line to the end
             self.labels = self.labels + [line[0]] #append the first character
             
-        self.masses = []
-        for i in self.labels:  #for atom in list of atoms
-            self.masses = self.masses + [masses.get_mass(i)]  #append the mass
+        self.masses = [masses.get_mass(i) for i in self.labels] #creates a list of the masses
 
-        self.charges = []
-        for i in self.labels:  #for atom in list of atoms
-            self.charges = self.charges + [masses.get_charge(i)]  #append the charge
+        self.charges = [masses.get_charge(i) for i in self.labels] #creates a list of the charges
 
         fgeoms = []
         for line in lines[2:]:  #from the third line to the end
