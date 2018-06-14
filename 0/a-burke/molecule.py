@@ -20,17 +20,21 @@ class Molecule(object):
 	
 	def read(self, geom_str):
 		#Read in the file containing the geometry of the molecule in question
+		print("\n" + "MOLECULE INFORMATION" + "\n")
 		geom = []
 		self.labels = []
 		self.masses = []
 		self.charges = []
 		lines = geom_str.strip().splitlines()
 		self.natom = int(lines[0])
+		print("Number of atoms: " + str(self.natom) + "\n")
+		print("Units are currently in: " + self.units + "\n")
 		for line in lines[2:]:
 			atom, x, y, z = line.split() 
 			self.labels.append(atom) 
 			geom.append([float(x), float(y), float(z)])
-		self.geom = np.array(geom)
+		self.geom = np.array(geom)	
+		print("Atoms: " + str(self.labels)+ "\n")
 		
 		#Reading in the masses and charges of the atoms from the .xyz file
 		
@@ -42,6 +46,9 @@ class Molecule(object):
 			print("Mass of " + x + " is: " + str(self.masses[y]))
 			print("Charge of " + x + " is: " + str(self.charges[y]))
 			y += 1
+		print("\n")
+		print("Molecular Geometry in: " + self.units + "\n")
+		print(self.geom)
 
 
 	#UNIT CONVERSION FUNCTIONS
@@ -73,13 +80,11 @@ class Molecule(object):
 if __name__ == "__main__":	
 	file1 = open("../../extra-files/molecule.xyz").read()
 	mol = Molecule(file1, "Angstrom")
-	print("Units are currently in: " + mol.units)
-	print(mol.geom)
-	print("Number of atoms: " + str(mol.natom))
-	print("Atoms: " + str(mol.labels))
+	
+	#Testing unit conversion functions
 	mol.to_bohr()
-	print("Units have now been converted to: " + mol.units)
+	print("\n" + "Units have now been converted to: " + mol.units)
 	print(mol.geom)
 	mol.to_angstrom()
-	print("Units have now been converted back to: " + mol.units)
+	print("\n" + "Units have now been converted back to: " + mol.units)
 	print(mol.geom)
