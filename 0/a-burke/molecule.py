@@ -31,6 +31,9 @@ class Molecule(object):
 			self.labels.append(atom) 
 			geom.append([float(x), float(y), float(z)])
 		self.geom = np.array(geom)
+		
+		#Reading in the masses and charges of the atoms from the .xyz file
+		
 		for x in self.labels:
 			self.masses.append(get_mass(x))
 			self.charges.append(get_charge(x))
@@ -39,15 +42,14 @@ class Molecule(object):
 			print("Mass of " + x + " is: " + str(self.masses[y]))
 			print("Charge of " + x + " is: " + str(self.charges[y]))
 			y += 1
-#get_mass and get_charge functions not being used (should append into self.masses and self.charges
 
-					
 
 	#UNIT CONVERSION FUNCTIONS
 
 	def to_bohr(self):
 
 	#Converts units from Angstrom to Bohr	
+		
 		if self.units == "Angstrom":
 			self.units = "Bohr"
 			self.geom *= 1.889725989
@@ -66,7 +68,8 @@ class Molecule(object):
 		x = Molecule(self.read(geom_str))
 		return x			
 		
-	
+#Used to test the functions above
+
 if __name__ == "__main__":	
 	file1 = open("../../extra-files/molecule.xyz").read()
 	mol = Molecule(file1, "Angstrom")
