@@ -1,5 +1,5 @@
 #This is the first code I've ever written in python... maybe it works! 
-
+#Ryan Maynard
 import copy
 import numpy
 from masses import get_charge, get_mass
