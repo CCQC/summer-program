@@ -1,5 +1,9 @@
 #This is the first code I've ever written in python... maybe it works! 
+<<<<<<< HEAD
 #Ryan Maynard
+=======
+#By Ryan Maynard
+>>>>>>> eb020fabe0d3c916959d7f72da6bd4165d494b37
 import copy
 import numpy
 from masses import get_charge, get_mass
