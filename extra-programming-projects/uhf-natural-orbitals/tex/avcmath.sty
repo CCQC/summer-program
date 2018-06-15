@@ -1,0 +1,47 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{avcmath}
+\RequirePackage{mathtools,xspace,xfrac,mathdots,cancel,amssymb,array}
+
+\def\sgnspace\ignorespaces{\@ifnextchar-{}{\@ifnextchar+{}{\phantom{+}}}}
+\newcolumntype{s}{>{\sgnspace}{c}}
+
+%ornaments
+\renewcommand{\eth}{\ensuremath{^\text{th}}\xspace}
+\newcommand{\rst}{\ensuremath{^\text{st}}\xspace}
+\newcommand{\ond}{\ensuremath{^\text{nd}}\xspace}
+\newcommand{\ird}{\ensuremath{^\text{rd}}\xspace}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\newcommand{\bs}{\ensuremath{\setminus}}
+\renewcommand{\sp}{\hspace{30pt}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
+\newcommand{\fr }[2]{\ensuremath{\frac {#1}{#2}}}
+\newcommand{\sfr}[2]{\ensuremath{\sfrac{#1}{#2}}}
+\newcommand{\tfr}[2]{\ensuremath{\tfrac{#1}{#2}}}
+\newcommand{\dfr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\pd }[2]{\ensuremath{\frac {\partial#1}{\partial#2}}}
+\newcommand{\tpd}[2]{\ensuremath{\tfrac{\partial#1}{\partial#2}}}
+\newcommand{\dpd}[2]{\ensuremath{\dfrac{\partial#1}{\partial#2}}}
+\newcommand{\fd }[2]{\ensuremath{\frac {d #1}{d #2}}}
+\newcommand{\tfd}[2]{\ensuremath{\tfrac{d #1}{d #2}}}
+\newcommand{\dfd}[2]{\ensuremath{\dfrac{d #1}{d #2}}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\id}{\ensuremath{\iddots}}
+%arrays
+\newcommand{\ma}[2][c]{\ensuremath{\begin{pmatrix*}[#1]#2\end{pmatrix*}}}
+\newcommand{\pma}[2][c]{\ensuremath{\begin{bmatrix*}[#1]#2\end{bmatrix*}}}
+\newcommand{\ar}[2][c]{\ensuremath{\begin{matrix*}[#1]#2\end{matrix*}}}
+\setcounter{MaxMatrixCols}{50}
+
+\endinput

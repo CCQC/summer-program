@@ -1,0 +1,23 @@
+molecule hooh {
+H 
+O 1 r1
+O 2 r2 1 a1 
+H 3 r3 2 a2 1 t1
+ 
+r1 =  0.9625
+r2 =  1.4535
+r3 =  0.9625
+a1 =  99.64
+a2 =  99.64
+t1 =  113.7
+}
+
+set {
+basis cc-pvdz
+e_convergence 12
+d_convergence 12
+r_convergence 12
+scf_type pk 
+}
+
+energy('scf')

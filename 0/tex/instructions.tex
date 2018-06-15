@@ -1,0 +1,88 @@
+\documentclass[fleqn]{article}
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{url}
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small}
+\lstset{literate={~} {$\sim$}{1}}
+\lstset{showstringspaces=false}
+\lstset{language=Python}
+\newcommand{\linp}[1]{\lstinputlisting{#1}}
+\newcommand{\linl}[1]{\lstinline{#1}{}}
+\newcommand{\ul}[1]{\underline{#1}}
+
+\title{Programming Project 0: Geometry\\
+\textit{Object-oriented programming basics}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-1cm}
+\noindent
+Write a class to store the geometry, masses, and nuclear charges of a molecule.
+Afterwards, write a small program to test your class.
+Make sure each class method is called at least once.
+
+\subsection*{Extra Files}
+\begin{center}
+\begin{tabular}{p{0.15\textwidth}@{}p{0.85\textwidth}}
+  \ul{file name} & \ul{description} \\
+  \linl{molecule.xyz}
+  & sample \linl{.xyz} file for testing out your program \\ 
+  \linl{masses.py}
+  & provides functions \linl{get_mass} and \linl{get_charge} which return the mass and charge of an atom, e.g.:
+  \begin{lstlisting}[language=python]
+>>> import masses
+>>> masses.get_mass("O")
+15.99491461956
+>>> masses.get_charge("O")
+8
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\subsection*{Class description}
+
+\paragraph{Member variables.}
+\begin{center}
+\begin{tabular}{p{0.1\textwidth}@{}p{0.15\textwidth}@{}p{0.75\textwidth}}
+  \ul{name} & \ul{type} & \ul{description} \\
+  \linl{units}   & \linl{str}
+  & either \linl{"Angstrom"} or \linl{"Bohr"}, specifying the distance units used for spatial coordinates\\
+  \linl{natom}   & \linl{int}
+  & the number of atoms\\
+  \linl{labels}  & \linl{list} of \linl{str}s
+  & a list of uppercase atomic symbols, following the order of the \linl{.xyz} file\\
+  \linl{masses}  & \linl{list} of \linl{float}s
+  & a list of atomic masses, following the order of the \linl{.xyz} file\\
+  \linl{charges} & \linl{list} of \linl{int}s
+  & a list of atomic charges, following the order of the \linl{.xyz} file\\
+  \linl{geom}    & \linl{numpy.array}
+  & an $\text{\linl{natom}}\times3$ matrix containing the Cartesian coordinates of each atom, following the order of the \linl{.xyz} file
+\end{tabular}
+\end{center}
+
+\paragraph{Methods.}
+\begin{center}
+\begin{tabular}{p{0.2\textwidth}@{}p{0.8\textwidth}}
+  \ul{method} & \ul{description}\\
+  Constructor (\linl{__init__})
+  & takes \linl{str} contents of an \linl{.xyz} file as input; initializes all member variables and fills them with their correct values\\
+  \linl{to_bohr}
+  & converts the distance units to Bohr, changing member variables \linl{units} and \linl{geom} if necessary \\
+  \linl{to_angstrom}
+  & converts the distance units to Angstroms, changing member variables \linl{units} and \linl{geom} if necessary \\
+  \linl{xyz_string}
+  & return \linl{str} representing the contents of the \linl{Molecule} object in \linl{.xyz} format\\
+  \linl{copy}
+  & returns \linl{Molecule} object, which is a fresh copy of \linl{self}
+\end{tabular}
+\end{center}
+
+
+\end{document}

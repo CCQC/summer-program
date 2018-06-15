@@ -1,0 +1,68 @@
+\documentclass[fleqn]{article}
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{url}
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small}
+\lstset{literate={~} {$\sim$}{1}}
+\lstset{showstringspaces=false}
+\lstset{language=Python}
+\newcommand{\linp}[1]{\lstinputlisting{#1}}
+\newcommand{\linl}[1]{\lstinline{#1}{}}
+\newcommand{\ul}[1]{\underline{#1}}
+
+\title{Programming Project 0 (Advanced)}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-1cm}
+\noindent
+Implement the following Python ``magic methods'' in your \linl{Molecule} class:
+
+\begin{center}
+\begin{tabular}{p{0.1\textwidth}@{}p{0.1\textwidth}@{}p{0.1\textwidth}@{}p{0.2\textwidth}@{}p{0.5\textwidth}}
+  \ul{name}      & \ul{returns} & \ul{args} & \ul{called by\footnotemark[1]} & \ul{description}
+  \\
+  \linl{__len__}
+  & \linl{int}
+  &
+  & \linl{len(mol)}
+  & return the ``length'' (number of atoms) of a molecule instance
+  \\
+  \linl{__str__}
+  & \linl{str}
+  &
+  & \linl{str(mol), print(mol)}
+  & return a pretty \linl{str} representation of the contents of your \linl{Molecule} object
+  \\
+  \linl{__repr__}
+  & \linl{str}
+  &
+  & \linl{>>> mol, repr(mol)}
+  & return a \linl{str} representation of the your \linl{Molecule} object in \linl{.xyz} format
+  \\
+  \linl{__iter__}
+  &
+  iterator
+  &
+  & \linl{for _ in mol}
+  & iterates over \linl{(str, numpy.array)} \linl{tuple}s, each of which contains the atomic symbol and Cartesian coordinates of an atom in the molecule
+  \\
+  \linl{__add__}
+  & \linl{Molecule}
+  & \linl{Molecule}
+  & \linl{mol1 + mol2}
+  & returns a new molecule object containing the atoms of both molecules\\
+\end{tabular}
+\end{center}
+
+\footnotetext[1]{Assume \linl{mol}, \linl{mol1}, and \linl{mol2} are all instances of your \linl{Molecule} class.}
+
+
+\end{document}
