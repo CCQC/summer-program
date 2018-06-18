@@ -1,0 +1,37 @@
+molecule mol {
+    0   1
+    O
+    H   1   0.96
+    H   1   0.96    2   104.5
+}
+
+set {
+    basis sto-3g
+    e_convergence  10
+    scf_type pk
+    MAXITER 50
+}
+
+energy('conv-mp2')
+
+# Used to initialize everything
+mol.update_geometry()
+
+mol = psi4.get_active_molecule()
+mints = psi4.MintsHelper()
+
+# Call your restricted Hartree-Fock code here
+import sys
+sys.path.insert(0, '../../3/jevandezande/')
+from rhf import RHF
+my_rhf = RHF(mol, mints)
+
+energy = my_rhf.compute_energy()
+
+# Call your mp2 code
+from mp2 import MP2
+my_mp2 = MP2(my_rhf)
+
+my_mp2.compute_energy()
+
+

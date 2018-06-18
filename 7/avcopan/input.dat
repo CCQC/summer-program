@@ -1,0 +1,36 @@
+# ground state H2O
+
+molecule mol {
+  0 1
+  O
+  H 1 1.1
+  H 1 1.1 2 104.0
+}
+
+set {
+  reference uhf
+  basis sto-3g
+  e_convergence 10
+  scf_type pk
+  maxiter 50
+}
+# run
+basisname = psi4.core.get_global_option("BASIS")
+basisset  = psi4.core.BasisSet.build(mol, "BASIS", basisname)
+mints     = psi4.core.MintsHelper(basisset)
+
+# call spin-orbital UHF code
+import sys
+sys.path.insert(0, '.')
+sys.path.insert(0, '../../5/avcopan/')
+
+from uhf import UHF
+uhf = UHF(mol, mints)
+uhf.compute_energy()
+
+# call CIS code
+from cis import CIS
+
+cis = CIS(uhf)
+cis.compute_excitation_energies()
+

@@ -1,0 +1,64 @@
+\documentclass[fleqn]{article}
+\usepackage{mystyle}
+\usepackage{amsmath}
+
+\title{Programming Project 7: CIS\\
+\textit{Configuration interaction with singles\\(spin-orbital)}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-1cm}
+\noindent
+Let $\{\y_p\}$ be canonical Hartree-Fock spin-orbitals with orbital energies $\{\ev_p\}$ and basis expansion coefficients $C_{\mu p}$, and let $E_0$ be the ground-state Hartree-Fock energy $E_0=\ip{\F|\op{H}_e|\F}$.
+\begin{align}
+\label{tei-transformation}
+&&
+  \ip{\y_p\y_q|\y_r\y_s}
+=
+  \sum_{\mu\nu\rho\si}
+  C_{\mu p}^*C_{\nu q}^* C_{\rho r}C_{\si s}
+  \ip{\xi_\mu\xi_\nu|\xi_\rho\xi_\si}
+\end{align}
+\begin{align}
+\label{shifted-cis-hamiltonian}
+&&
+  \bo{\tl{H}}
+=
+  \bo{H} - E_0\bo{I}
+=
+  [\ip{\F_P|\op{H}_e-E_0|\F_Q}], \F_P\in\{\F_i^a\}
+\end{align}
+\begin{align}
+\label{cis-matrix-elements}
+&&
+  \ip{\F_i^a|\op{H}_e-E_0|\F_j^b}
+=
+  (\ev_a-\ev_i)\d_{ij}\d_{ab}
++
+  \ip{aj||ib}
+\end{align}
+\begin{align}
+&&
+  \bo{\tl{H}}\bo{c}_K
+=
+  \D E_K\bo{c}_K,
+\ \ 
+  \D E_K
+=
+  E_K - E_0
+\end{align}
+
+
+\subsection*{Procedure}
+
+\begin{enumerate}
+  \item Run canonical spin-orbital Hartree-Fock code to obtain MO coefficients $\{C_{\mu p}\}$ and orbital energies $\{\ev_p\}$.
+  \item Transform two-electron integrals from the spin-AO basis $\{\xi_\mu\}$ to the spin-MO basis $\{\y_p\}$ (equation \ref{tei-transformation}).
+  \item Build the eigenvalue-shifted CIS Hamiltonian matrix (equation~\ref{shifted-cis-hamiltonian}) using equation~\ref{cis-matrix-elements} to evaluate its matrix elements.
+  \item Diagonalize $\bo{\tl{H}}$ to obtain CIS excitation energies $\{\D E_K\}$ and wavefunction expansion coefficients $\{\bo{c}_K\}$.
+\end{enumerate}
+
+\end{document}

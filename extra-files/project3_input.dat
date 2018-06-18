@@ -1,0 +1,60 @@
+# this file shows how to grab integrals in psi4
+# note: you should choose a bigger molecule to test your programs
+#       (I'm using H2 so that the two-electron integrals are print-able)
+
+molecule mol {
+  H
+  H 1 1.0
+}
+
+# set the basis
+set basis sto-3g
+
+# initialize Psi4's molecule object
+mol.update_geometry()
+
+# get molecular integrals helper-object
+mints = psi4.MintsHelper()
+
+# for non-trivial programs, it is better to have
+# a function or object in a separate script that
+# takes a MintsHelper object as an argument --
+# to run it, simply import it and call it from
+# your input file like so:
+#
+#   from myscript import MyClass
+#   myobj = MyClass(mints)
+#   myobj.do_stuff()
+
+import numpy as np
+
+Enuc   = mol.nuclear_repulsion_energy()
+natom  = mol.natom()
+charge = mol.molecular_charge() # 0 if neutral, -1 if anion, +1 if cation, etc.
+norb   = mints.basisset().nbf() # number of (spatial) orbitals = number of basis functions
+
+nuclear_charges = [mol.Z(A) for A in range(natom)] # nuclear charges by atom
+
+S = np.array(mints.ao_overlap())    # overlap integrals
+T = np.array(mints.ao_kinetic())    # kinetic energy integrals
+V = np.array(mints.ao_potential())  # electron-nuclear attraction integrals
+g = np.array(mints.ao_eri())        # electron-electron repulsion integrals
+
+print("Enuc   = {:<.7f}".format(Enuc))
+print("natom  = {:d}".format(natom))
+print("charge = {:d}".format(charge))
+print("norb   = {:d}".format(norb))
+
+print("\nnuclear_charges = {:s}".format(str(nuclear_charges)))
+
+print("\noverlap integrals:")
+print(S)
+
+print("\nkinetic energy integrals:")
+print(T)
+
+print("\nelectron-nuclear attraction integrals:")
+print(V)
+
+print("\ntwo-electron integrals:")
+print(g)

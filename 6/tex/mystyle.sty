@@ -1,0 +1,116 @@
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\ensuremath{\underline{#1}}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+\newcommand{\NO}[1]{\ensuremath{{\bm{:}}#1{}{\bm{:}}}}
+\usepackage{stackengine}
+\newcommand{\GNO}[1]{\setstackgap{S}{0.7pt}\ensuremath{\Shortstack{\textbf{.} \textbf{.} \textbf{.}}#1\Shortstack{\textbf{.} \textbf{.} \textbf{.}}}}
+\newcommand{\cmtr}[2]{\ensuremath{[\cdot,#2]^{#1}}}
+\newcommand{\cmtl}[2]{\ensuremath{[#2,\cdot]^{#1}}}
+\newcommand{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+%contractions
+\usepackage{simplewick}
+\usepackage[nomessages]{fp}
+\newcommand{\ctr}[6][0]{\FPeval\height{1.0+#1*0.5}\ensuremath{\contraction[\height ex]{#2}{#3}{#4}{#5}}}
+%math sections
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheoremstyle[spaceabove=10pt,spacebelow=10pt,bodyfont=\small]{mystyle}
+\theoremstyle{mystyle}
+\newtheorem{dfn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}{Corollary}
+\newtheorem{lem}{Lemma}
+\newtheorem{rmk}{Remark}
+\newtheorem{pro}{Proposition}
+

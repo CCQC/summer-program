@@ -1,0 +1,33 @@
+# doublet H2O+
+
+molecule mol {
+  1 2
+  O
+  H 1 0.96
+  H 1 0.96 2 104.5
+}
+
+set {
+  reference uhf
+  basis sto-3g
+  e_convergence 13
+  scf_type pk
+  MAXITER 50
+}
+
+# Used to initialize everything
+mol.update_geometry()
+
+mints = psi4.MintsHelper()
+
+# Call your Hartree-Fock code here
+from mp2 import MP2
+
+mp2 = MP2(mol, mints)
+mp2.compute_energy()
+
+conv_mp2_energy = energy('conv-mp2')
+
+print('        My MP2          Conventional MP2')
+print('{:>20.15f}  {:>20.15f}'.format(mp2.E, conv_mp2_energy))
+print('Error: {:20.15f}'.format(mp2.E - conv_mp2_energy))

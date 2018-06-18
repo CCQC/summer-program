@@ -1,0 +1,11 @@
+molecule {
+O  0.0  0.0  -0.1345036952
+H  0.0  -1.68491667  1.0673356848
+H  -0.005  1.68491667  1.0673356848
+units bohr
+}
+
+set e_convergence 11
+set basis         cc-pVDZ
+energy('scf')
+

@@ -1,0 +1,405 @@
+\documentclass[11pt]{article}
+
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{braket}
+\usepackage{bm}
+\usepackage{xfrac}
+\usepackage{url}
+
+% greek letters
+\renewcommand{\a}{\alpha}   % alpha
+\renewcommand{\b}{\beta}     % beta
+\newcommand{\g}{\gamma}  % gamma
+\newcommand{\G}{\Gamma}  
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}     
+\newcommand{\e}{\epsilon}  %epsilon
+\newcommand{\ev}{\varepsilon}  %varepsilon
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\Y}{\ensuremath{\Psi}}
+\newcommand{\y}{\ensuremath{\psi}}
+\newcommand{\w}{\ensuremath{\omega}}
+\newcommand{\W}{\ensuremath{\Omega}}
+
+
+\newcommand{\pt}{\ensuremath{\partial}}
+
+%% ornaments
+\renewcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+
+%% dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\hole}{\circ}
+\newcommand{\ptcl}{\bullet}
+\usepackage{stackengine}
+\newcommand{\GNO}[1]{\setstackgap{S}{0.7pt}\ensuremath{\Shortstack{\textbf{.} \textbf{.} \textbf{.}}#1\Shortstack{\textbf{.} \textbf{.} \textbf{.}}}}
+
+%% fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+
+%% styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+
+%% math
+\usepackage{cancel}
+\usepackage{cleveref}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheoremstyle[spaceabove=10pt,spacebelow=10pt,bodyfont=\small]{mystyle}
+\theoremstyle{mystyle}
+\newtheorem{dfn}{Definition}
+\crefname{dfn}{definition}{definitions}
+\Crefname{dfn}{Def}{Defs}
+\newtheorem{thm}{Theorem}
+\crefname{thm}{theorem}{theorems}
+\Crefname{thm}{Thm}{Thms}
+\newtheorem{cor}{Corollary}
+\crefname{cor}{corollary}{corollaries}
+\Crefname{cor}{Cor}{Cors}
+\newtheorem{lem}{Lemma}
+\crefname{lem}{lemma}{lemmas}
+\Crefname{lem}{Lem}{Lems}
+\newtheorem{rmk}{Remark}
+\crefname{rmk}{remark}{remarks}
+\Crefname{rmk}{Rmk}{Rmks}
+\newtheorem{pro}{Proposition}
+\crefname{pro}{proposition}{propositions}
+\Crefname{pro}{Prop}{Props}
+\newtheorem{ex}{Example}
+\crefname{ex}{example}{exampls}
+\Crefname{ex}{Ex}{Exs}
+\newtheorem{ntt}{Notation}
+\crefname{ntt}{notation}{notations}
+\Crefname{ntt}{Notation}{Notations}
+
+
+\newtheorem{prf}{Proof}
+\crefname{prf}{proof}{proofs}
+\Crefname{prf}{Proof}{Proofs}
+
+\numberwithin{equation}{section}
+
+
+\begin{document}
+\section{Derivation of the spin-restricted MP2 equations}
+Given a basis of Hartree-Fock (HF) spin-orbitals $\{ \y_p \}$, the MP2 correlation energy has the following form:
+\begin{equation} 
+\label{unrestricted-energy}
+   E^{(2)}
+=
+   \frac{1}{4} \,
+   \sum\limits_{ijab}^N \,
+   \frac{
+       \left|
+       \braket{ \y_i \y_j || \y_a \y_b }
+       \right|^2
+   }
+   {
+      \e_i + \e_j - \e_a - \e_b
+   }
+\end{equation}
+For a closed-shell system these spin-MOS's come in ($\a,\b$) pairs 
+\begin{align*}
+   \y_{2P-1}
+   (\bo{r},s)
+=
+   \f_P (\bo{r})
+   \a (s)
+&&
+    \y_{2P}
+   (\bo{r},s)
+=
+   \f_P (\bo{r})
+   \b (s)
+\end{align*}
+where the index $P$ runs over the $\tfrac{N}{2}$ spatial MOs $\{\f_P \}$. We can expand equation \ref{unrestricted-energy} in this basis with a little algebra.
+\begin{align*}
+   \bra{
+      \y_i \y_j
+   }
+   \ket{
+      \y_a \y_b
+      }
+&=
+   \int
+   \mr{d} \bo{r}_1 \,
+   \mr{d} \bo{r}_2 \,
+   \f_i^* (\bo{r}_1) \,
+   \w^*_i (s_1) \,
+   \f_j^*   (\bo{r}_2) \,
+   \w^*_j (s_2) \,
+   [
+      1 - \hat{P}_{12}
+   ] \,
+   \f_a   (\bo{r}_1) \,
+   \w_a (s_1) \,
+   \f_b    (\bo{r}_2) 
+   \w_b (s_2) \,
+\\
+&=
+   \braket{ \f_i \f_j | \f_a \, \f_b }
+   \braket{ \w_i \w_j | \w_a \, \w_b }
+-
+   \braket{ \f_i \f_j | \f_b \, \f_a }
+   \braket{ \w_i \w_j | \w_b \, \w_a }
+\\
+&=
+   2
+   \left(
+   \braket{ \f_i \f_j | \f_a \, \f_b }
+   \braket{ \w_i \w_j | \w_a \, \w_b }
+-
+   \braket{ \f_i \f_j | \f_b \, \f_a }
+   \braket{ \w_i \w_j | \w_b \, \w_a }
+   \right)
+&=
+    \braket{ \f_i \f_j || \f_a \, \f_b }
+    \int
+    \mr{d} s_1 \,
+   \mr{d} s_2 \,
+   \w^*_i (s_1) \,
+   \w^*_j (s_2) \,
+   [
+      1 - \hat{P}_{12}
+   ] \,
+   \w_a (s_1) \,
+   \w_b (s_2) \,
+\\
+&=
+    \braket{ \f_i \f_j || \f_a \f_b }
+    \left(
+    \int
+    \mr{d} s_1 \,
+   \mr{d} s_2 \,
+   \w^*_i (s_1) \,
+   \w^*_j (s_2) \,
+   \w_a (s_1) \,
+   \w_b (s_2) \,
+   +
+    \int
+    \mr{d} s_1 \,
+   \mr{d} s_2 \,
+   \w^*_i (s_1) \,
+   \w^*_j (s_2) \,
+   \w_b (s_1) \,
+   \w_a (s_2) \,
+   \right)
+\\
+\sum\limits_{ijab}
+   \left|
+   \bra{
+      \y_i \y_j
+   }
+   \ket{
+      \y_a \y_b
+      }
+    \right|^2
+&=
+   \left|
+    \bra{
+      \f_i \f_j }
+   \ket{
+      \f_a \f_b }
+      \left(
+    \int
+    \mr{d} s_1 \,
+   \mr{d} s_2 \,
+   \w^*_i (s_1) \,
+   \w^*_j (s_2) \,
+   \w_a (s_1) \,
+   \w_b (s_2) \,
+   +
+    \int
+    \mr{d} s_1 \,
+   \mr{d} s_2 \,
+   \w^*_i (s_1) \,
+   \w^*_j (s_2) \,
+   \w_b (s_1) \,
+   \w_a (s_2) \,
+   \right)
+   \right|^2
+\\
+&=
+   2 
+   \left|
+    \bra{
+      \f_i \f_j }
+   \ket{
+      \f_a \f_b }
+      \left(
+    \int
+    \mr{d} s_1 \,
+   \mr{d} s_2 \,
+   \a^*_i (s_1) \,
+   \w^*_j (s_2) \,
+   \w_a (s_1) \,
+   \w_b (s_2) \,
+   +
+    \int
+    \mr{d} s_1 \,
+   \mr{d} s_2 \,
+   \a^*_i (s_1) \,
+   \w^*_j (s_2) \,
+   \w_b (s_1) \,
+   \w_a (s_2) \,
+   \right)
+   \right|^2
+\\
+&=
+    \braket{ \f_i \f_j | \f_a \f_b }
+    \int
+    \mr{d} s_1 \,
+    \mr{d} s_2 \,
+    \a^*_i (s_1) \,
+    \a^*_j (s_2) \,
+    \a_a (s_1) \,
+    \a_b (s_2) \,
+\\
+&-
+   \braket{ \f_i \f_j | \f_b \f_a }
+    \int
+    \mr{d} s_1 \,
+    \mr{d} s_2 \,
+    \a^*_i (s_1) \,
+    \a^*_j (s_2) \,
+    \a_b (s_1) \,
+    \a_a (s_2) \,
+\\
+%&+
+%    \bra{
+%      \f_i \f_j }
+%   \ket{
+%      \f_a \f_b }
+%    \int
+%    \mr{d} s_1 \,
+%    \mr{d} s_2 \,
+%    \left[
+%    \a^*_i (s_1) \,
+%    \b^*_j (s_2) \,
+%    \a_a (s_1) \,
+%    \b_b (s_2) \,
+%   +
+%    \a^*_i (s_1) \,
+%    \b^*_j (s_2) \,
+%    \b_b (s_1) \,
+%    \a_a (s_2) \,
+%   \right]
+%\\
+%&+
+%    \bra{
+%      \f_i \f_j }
+%   \ket{
+%      \f_a \f_b }
+%    \int
+%    \mr{d} s_1 \,
+%    \mr{d} s_2 \,
+%    \left[
+%    \b^*_i (s_1) \,
+%    \a^*_j (s_2) \,
+%    \b_a (s_1) \,
+%    \a_b (s_2) \,
+%   +
+%    \b^*_i (s_1) \,
+%    \a^*_j (s_2) \,
+%    \a_b (s_1) \,
+%    \b_a (s_2) \,
+%   \right]
+%\\
+%&+
+%    \bra{
+%      \f_i \f_j }
+%   \ket{
+%      \f_a \f_b }
+%    \int
+%    \mr{d} s_1 \,
+%    \mr{d} s_2 \,
+%    \left[
+%    \b^*_i (s_1) \,
+%    \b^*_j (s_2) \,
+%    \b_a (s_1) \,
+%    \b_b (s_2) \,
+%   +
+%    \b^*_i (s_1) \,
+%    \b^*_j (s_2) \,
+%    \b_b (s_1) \,
+%    \b_a (s_2) \,
+%   \right]
+\end{align*}
+%\begin{align*}
+%   \sum\limits_{ijab}
+%   \left|
+%   \bra{
+%      \y_i \y_j
+%   }
+%   \ket{
+%      \y_a \y_b
+%      }
+%    \right|^2
+%&=
+%   \sum\limits_{ijab}^{N/2}
+%   \sum\limits_{\w=\a,\b}
+%   \left|
+%   \braket{ \f_i \f_j || \f_a \f_b }
+%    \left(
+%   \d_{\w_i, \w_a}
+%   \d_{\w_j, \w_b}
+%   +
+%    \d_{\w_i, \w_b}
+%   \d_{\w_j, \w_a}
+%   \right)
+%    \right|^2
+%\end{align*}
+%\begin{equation}
+%   E^{(2)}
+%=
+%   \frac{1}{4} \,
+%   \sum\limits_{ijab}^{N/2} \,
+%   \sum\limits_{\w = \a, \b}
+%   \frac{
+%       \left|
+%       \braket{ \f_i \w_i \f_j \w_j || \f_a  \w_a \f_b \w_b }
+%       \right|^2
+%   }
+%   {
+%      \e_I + \e_J - \e_A - \e_B
+%   }
+%\end{equation}
+\end{document}

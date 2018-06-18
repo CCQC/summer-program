@@ -1,0 +1,26 @@
+temp
+
+# swap files
+*.swp
+
+# Compiled python
+*.pyc
+__pycache__
+
+# PyCharm directories
+.idea
+
+# Latex stuff
+*.log
+*.aux
+
+# Psi files
+*.xyz
+*.clean
+*.out
+output.dat
+timer.dat
+psi.timer.dat
+
+# Mac OS X folder information file
+.DS_Store

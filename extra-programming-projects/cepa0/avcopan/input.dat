@@ -1,0 +1,34 @@
+# ground state H2O
+
+molecule mol {
+	1 2
+	O 0.000000000000  0.000000000000 -0.143225816552
+	H 0.000000000000  1.638036840407  1.136548822547
+	H 0.000000000000 -1.638036840407  1.136548822547
+	units bohr
+}
+
+set {
+  reference uhf
+  basis sto-3g
+  e_convergence 10
+  scf_type pk
+  maxiter 100
+}
+# run
+basisname   = psi4.core.get_global_option("BASIS")
+basisset, _ = psi4.core.BasisSet.build(mol, "BASIS", basisname)
+mints       = psi4.core.MintsHelper(basisset)
+
+# call spin-orbital UHF code
+import sys
+sys.path.insert(0, '.')
+sys.path.insert(0, '../../../5/avcopan/')
+from uhf import UHF
+uhf = UHF(mol, mints)
+uhf.compute_energy()
+
+# call CEPA0 code here
+from cepa0 import CEPA0
+cepa0 = CEPA0(uhf)
+print(cepa0.compute_energy())

@@ -1,0 +1,150 @@
+\documentclass[fleqn,11pt]{article}
+\usepackage{mystyle}
+
+\title{Programming Project 5 Exercises}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+  \item Derive the Hartree-Fock energy expression:
+\begin{align}
+&&
+  \ip{\F|\op{H}_e|\F}
+=
+  \sum_i^n
+  h_{ii}
++
+  \sum_{i<j}^n
+  \ip{ij||ij}
+\end{align}
+
+  \item Let $\ol{\bo{S}}$, $\ol{\bo{T}}$, and $\ol{\bo{V}}$ be one-electron integrals with respect to the spatial AO basis $\{\x_1,\cd,\x_m\}$.
+\begin{align}
+\label{space-ao-ints}
+&
+  \ol{S}_{\mu\nu}
+=
+  \ip{\x_{\mu}|\x_{\nu}}
+&&
+  \ol{T}_{\mu\nu}
+=
+  -\tfrac{1}{2}\ip{\x_{\mu}|\nabla_1^2|\x_{\nu}}
+&&
+  \ol{V}_{\mu\nu}
+=
+  \sum_A\ip{\x_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\x_{\nu}}
+\end{align}
+  Explain why their counterparts $\bo{S}$, $\bo{T}$, $\bo{V}$ with respect to the spin-AO basis $\{\xi_1,\cd,\xi_{2m}\}$, where $\xi_\mu=\x_\mu\a$ and $\xi_{\mu+m}=\x_\mu\b$,
+\begin{align}
+\label{space-ao-ints}
+&
+  S_{\mu\nu}
+=
+  \ip{\xi_{\mu}|\xi_{\nu}}
+&&
+  T_{\mu\nu}
+=
+  -\tfrac{1}{2}\ip{\xi_{\mu}|\nabla_1^2|\xi_{\nu}}
+&&
+  V_{\mu\nu}
+=
+  \sum_A\ip{\xi_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\xi_{\nu}}
+\end{align}
+have the following block-diagonal structure.
+\begin{align}
+\label{spin-ao-ints-1}
+&
+  \bo{S}
+=
+  \ma{\ol{\bo{S}}&0\\0&\ol{\bo{S}}}
+&&
+  \bo{T}
+=
+  \ma{\ol{\bo{T}}&0\\0&\ol{\bo{T}}}
+&&
+  \bo{V}
+=
+  \ma{\ol{\bo{V}}&0\\0&\ol{\bo{V}}}
+\end{align}
+  \item The two-electron integrals $(\x_\mu\x_\nu|\x_\rho\x_\si)$ make up a 4-index tensor, which can be viewed as a matrix $\ol{\bo{G}}=[\ol{\bo{G}}_{\x_\mu\x_\nu}]$ of matrices $\ol{\bo{G}}_{\x_\mu\x_\nu}=[(\x_\mu\x_\nu|\x_\rho\x_\si)]$.
+  Explain why the spatial AO basis integral tensor $\ol{\bo{G}}$ is related to its spin-AO counterpart $\bo{G}$, where $\bo{G}=[\bo{G}_{\xi_\mu\xi_\nu}]$ and $\bo{G}_{\xi_\mu\xi_\nu}=[(\xi_\mu\xi_\nu|\xi_\rho\xi_\si)]$, via
+\begin{align}
+&&
+  \bo{G}
+=
+  \ma{\ol{\bo{G}}&0\\0&\ol{\bo{G}}}
+&&
+  \bo{G}_{\xi,\xi'}
+=
+  \bo{G}_{\x\w,\x'\w'}
+=
+  \d_{\w\w'}
+  \ma{\ol{\bo{G}}_{\x\x'}&0\\0&\ol{\bo{G}}_{\x\x'}}
+\end{align}
+  i.e. it has a block-diagonal structure with respect to each pair of indices.
+  Note that this is one case where the index-ordering of chemist's notation has some advantages over physicist's notation.
+  \item The spin-orbital Fock operator is given by
+\begin{align}
+&&
+  \op{f}
+=
+  \op{h}
++
+  \sum_{i=1}^n
+  (\op{J}_i - \op{K}_i)
+\end{align}
+  where $\op{h}$ is the one-electron (``core'') Hamiltonian and $\op{J}_i$ and $\op{K}_i$ are Coulomb and exchange operators.
+  Show that its matrix elements with respect to the spin-orbital basis $\{\y_p\}$ are given by
+\begin{align}
+&&
+  f_{pq}
+=
+  h_{pq}
++
+  \sum_{i=1}^n
+  \ip{pi||qi}\ .
+\end{align}
+  \item 
+  Show that, if $C_{\mu p}$ are the expansion coefficients of $\y_p$ in the spin-AO basis $\{\xi_\mu\}=\{\x_\mu\a\}\cup\{\x_\mu\b\}$
+\begin{align}
+&&
+  \y_p
+=
+  \sum_\mu \xi_\mu C_{\mu p}
+\end{align}
+  then the spin-AO basis Fock matrix elements are given by
+\begin{align}
+&&
+  f_{\mu\nu}
+=
+  h_{\mu\nu}
++
+  \sum_{\rho\si}
+  \ip{\xi_\mu\xi_\rho||\xi_\nu\xi_\si}D_{\si\rho}
+&&
+  D_{\mu\nu}
+=
+  \sum_{i=1}^n
+  C_{\mu i}C_{\nu i}^*
+\end{align}
+  where $D_{\mu\nu}$ is called the Hartree-Fock density matrix.\footnote{This is the spin-AO-basis representation of the one-particle reduced density matrix of a Hartree-Fock determinant.}
+\item Show that the Hartree-Fock energy can be expanded in terms of spin-AO basis integrals as follows.
+\begin{align}
+&&
+  \ip{\F|\op{H}_e|\F}
+=
+  \sum_{\mu\nu}
+  h_{\mu\nu}D_{\nu\mu}
++
+  \fr{1}{2}
+  \sum_{\mu\nu\rho\si}
+  \ip{\xi_\mu\xi_\rho||\xi_\nu\xi_\si}
+  D_{\nu\mu}D_{\si\rho}
+\end{align}
+\end{enumerate}
+
+\end{document}

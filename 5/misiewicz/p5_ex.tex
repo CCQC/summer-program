@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath, centernot, fancyhdr, mathtools}
+\pagestyle{fancy}
+\rhead{Jonathon Misiewicz - Summer Program\\
+Project 5 Exercises}
+
+\begin{document}
+1. By definitions of $H_e$, the $\hat{h}$ operator and the $\hat{g}$ operator,\\ $H_e = \sum_i \hat{h}(i) + \sum_{i<j} \hat{g}(i,j)$. The expression follows immediately from application of Slater-Condon.\\
+
+2. Suppose two elements have opposite spins (off the diagonal blocks). Their spin components integrate to 0, so the matrix element is 0. Suppose two elements have the same spin (on the diagonal block). Their spin components integrate to 1, so the matrix element is just the spatial component, which is given by the corresponding entry in the spatial orbital basis.\\
+
+3. By extension of the above answer, for each two orbitals integrated together, their spin components must be the same for the integral to possibly be non-zero. Per the above logic, this creates a block-diagonal structure with respect to each pair of indices. (Indices integrated together are paired in chemist's notation!)\\
+
+4. The proof is unchanged from the restricted Hartree-Fock case.
+
+$f_{pq}  \coloneqq \langle \psi_p | \hat{f} | \psi_q \rangle$\\
+$\hat{f} = \hat{h} + \sum_i (\hat{J}_i - \hat{K}_i) \implies f_{pq} = \langle \psi_p | \hat{h} + \sum_i (\hat{J}_i - \hat{K}_i) | \psi_q \rangle =\\
+\langle \psi_p | \hat{h}| \psi_q \rangle + \langle \psi_p | \sum_i (\hat{J}_i - \hat{K}_i) | \psi_q \rangle =\\
+h_{pq} + \sum_i \langle \psi_p | (\hat{J}_i - \hat{K}_i) | \psi_q \rangle = h_{pq} + \sum_i \langle \psi_p \psi_ i || \psi_q \psi_i \rangle$\\
+
+5. The proof is unchanged from the restricted Hartree-Fock case.\\
+$f_{\mu\nu}  \coloneqq \langle \xi_\mu | \hat{f} | \xi_\nu \rangle\\
+\hat{f} = \hat{h} + \sum_i (\hat{J}_i - \hat{K}_i) \implies
+f_{\mu\nu} = \langle \xi_\mu | \hat{h} + \sum_i (\hat{J}_i - \hat{K}_i) | \xi_\nu \rangle =\\
+\langle \xi_\mu | \hat{h}| \xi_\nu \rangle + \langle \xi_\mu | \sum_i (\hat{J}_i - \hat{K}_i) | \xi_\nu \rangle =\\
+h_{\mu\nu} + \sum_i \langle \xi_p | (\hat{J}_i - \hat{K}_i) | \psi_q \rangle = h_{\mu\nu} + \sum_i \langle \xi_\mu \psi_ i || \xi_\nu \psi_i \rangle = \\
+h_{\mu\nu} + \sum_i \langle \xi_\mu \sum_\rho \xi_\rho C_{\rho i} || \xi_\nu \sum_\sigma \xi_\sigma C_{\sigma i} \rangle = \\
+h_{\mu\nu} + \sum_i \langle \xi_\mu \sum_\rho \xi_\rho || \xi_\nu \sum_\sigma \xi_\sigma C_{\sigma i} \rangle \sum_{\rho \sigma} C_{\rho i}^* C_{\sigma i}$\\
+
+Within the definition of D given, this is the result to be shown.\\
+
+6. $\langle \Phi | H_e | \Phi \rangle = \sum_i h_{ii} + \sum_{i < j} \langle ij || ij \rangle =\\
+\sum_i \langle \psi_i | h_i | \psi_i \rangle + \frac{1}{2} \sum_{i,j} \langle \psi_i \psi_j || \psi_i \psi_j \rangle =\\
+\sum_i \langle \sum_\mu \xi_\mu C_{\mu i} | h_i | \sum_\nu \xi_\nu C_{\nu i} \rangle + \frac{1}{2} \sum_{i,j} \langle \sum_\mu \xi_\mu C_{\mu i} \psi_j || \sum_\mu \xi_\mu C_{\mu i} \psi_j \rangle =\\
+\sum_i \langle \sum_\mu \xi_\mu | h_i | \sum_\nu \xi_\nu \rangle C_{\mu i}^* C_{\nu i} + \frac{1}{2} \sum_{i,j} \langle \sum_\mu \xi_\mu \psi_j || \sum_\nu \xi_\nu \psi_j \rangle C_{\mu i}^* C_{\nu i} =\\
+\sum_{\mu, \nu} \langle \xi_\mu | \sum_i h_i | \xi_\nu \rangle D_{\nu \mu} + \frac{1}{2} \sum_{i,j} \langle \xi_\mu \psi_j || \xi_\nu \psi_j \rangle D_{\nu \mu} =\\
+\sum_{\mu, \nu} h_{\mu \nu} D_{\nu \mu} + \frac{1}{2} \sum_{\rho \sigma} \langle \xi_\mu \psi_\rho || \xi_\nu \psi_\sigma \rangle D_{\nu \mu} D_{\sigma \rho}$
+
+We condense much of step 5 in the last step, our mixed AO and MO integral.
+\end{document}

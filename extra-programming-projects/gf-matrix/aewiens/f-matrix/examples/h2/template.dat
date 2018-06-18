@@ -1,0 +1,15 @@
+molecule h2 {
+H  
+H  1 B1
+
+B1 = 0.75000
+}
+
+set {
+	basis cc-pvdz
+	scf_type pk
+	e_convergence 12
+	d_convergence 12
+}
+
+energy('scf')

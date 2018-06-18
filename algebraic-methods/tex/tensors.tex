@@ -1,0 +1,524 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{xfrac}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\ensuremath{\underline{#1}}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+\newcommand{\NO}[1]{\ensuremath{{\bm{:}}#1{}{\bm{:}}}}
+\newcommand{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
+\usepackage{stackengine}
+\newcommand{\GNO}[1]{\setstackgap{S}{0.7pt}\ensuremath{\Shortstack{\textbf{.} \textbf{.} \textbf{.}}#1\Shortstack{\textbf{.} \textbf{.} \textbf{.}}}}
+\newcommand{\cmtr}[2]{\ensuremath{[\cdot,#2]^{#1}}}
+\newcommand{\cmtl}[2]{\ensuremath{[#2,\cdot]^{#1}}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+%contractions
+\usepackage{simplewick}
+\usepackage[nomessages]{fp}
+\newcommand{\ctr}[6][0]{\FPeval\height{1.0+#1*0.5}\ensuremath{\contraction[\height ex]{#2}{#3}{#4}{#5}}}
+\usepackage{calc}
+\makeatletter
+\def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
+\makeatother
+\newcommand{\halfphantom}[1]{\hspace{\widthof{#1}*\real{0.5}}}
+\newcommand{\fullctr}[1]{\ensuremath{\contraction[0.5ex]{}{\vphantom{#1}}{\hphantom{#1}}{}{}{}\contraction[0.5ex]{}{\vphantom{#1}}{\halfphantom{#1}}{}{}{}#1}}
+%math sections
+\usepackage{cleveref}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheoremstyle[spaceabove=10pt,spacebelow=10pt,bodyfont=\small]{mystyle}
+\theoremstyle{mystyle}
+\newtheorem{dfn}{Definition}
+\crefname{dfn}{definition}{definitions}
+\Crefname{dfn}{Def}{Defs}
+\newtheorem{thm}{Theorem}
+\crefname{thm}{theorem}{theorems}
+\Crefname{thm}{Thm}{Thms}
+\newtheorem{cor}{Corollary}
+\crefname{cor}{corollary}{corollaries}
+\Crefname{cor}{Cor}{Cors}
+\newtheorem{lem}{Lemma}
+\crefname{lem}{lemma}{lemmas}
+\Crefname{lem}{Lem}{Lems}
+\newtheorem{rmk}{Remark}
+\crefname{rmk}{remark}{remarks}
+\Crefname{rmk}{Rmk}{Rmks}
+\newtheorem{pro}{Proposition}
+\crefname{pro}{proposition}{propositions}
+\Crefname{pro}{Prop}{Props}
+\newtheorem{ex}{Example}
+\crefname{ex}{example}{exampls}
+\Crefname{ex}{Ex}{Exs}
+\newtheorem{ntt}{Notation}
+\crefname{ntt}{notation}{notations}
+\Crefname{ntt}{Notation}{Notations}
+
+\numberwithin{equation}{section}
+
+\usepackage{cancel}
+\usepackage{scrextend}
+
+%%%DOCUMENT%%%
+\begin{document}
+
+
+\newpage
+\section*{Tensors}
+
+\begin{dfn}
+\label{variances}
+\bmit{Covariance, contravariance, and invariance.}
+Let $\f$ be an arbitrary-valued (vector, scalar, etc.) linear function of $V$ and consider a change of basis $B\rightarrow\tl{B}$ defined by $\tl{e}_j=\sum_ie_i(\bo{T})_{ij}$ where $\bo{T}$ is invertible.\footnote{Using concepts introduced below, $\bo{T}$ can be identified as the coordinate matrix of a linear transformation $\op{T}$ that maps $e_i$ into $\tl{e}_i$.
+In this context, the form in which we have expressed the change of basis arises naturally as $\tl{e}_j=\op{T}e_j=\sum_ie_ie^i(\op{T}e_j)=\sum_ie_i(\bo{T})^i_j$ via resolution of the identity.}
+Let $S=\{\f(e_1),\ld,\f(e_n)\}$ be the set of values of $\f$ on $B$.
+This basis-dependent set can be characterised as follows.
+\begin{align*}
+&
+  \text{$S$ is \textit{covariant} with $B$ if it obeys the same transformation law as $B$:}
+&&\ts
+  \f(\tl{e}_j)
+=
+  \sum_i
+  \f(e_i)
+  (\bo{T})_{ij}
+\\[5pt]
+&
+  \text{$S$ is \textit{contravariant} to $B$ if it obeys the inverse transformation law of $B$:}
+&&\ts
+  \f(\tl{e}_i)
+=
+  \sum_j
+  (\bo{T}^{-1})_{ij}
+  \f(e_j)
+\end{align*}
+The elements of a \textit{covariant} set are typically denoted with subscript indices, $\f_i=\f(e_i)$, whereas the elements of a \textit{contravariant} set are typically denoted with superscript indices, $\f^i=\f(e_i)$.
+Abstract quantities such as vectors, functionals, and operators are called \textit{invariant} since they do not depend on the choice of basis.
+\end{dfn}
+
+\begin{ex}
+\label{contravariance-of-coordinates}
+\bmit{Vector coordinates are contravariant.}
+A vector $v$ is an \textit{invariant} quantity and can be expressed as $v=\sum_ie_iv^i$ or as $v=\sum_i\tl{e}_i\tl{v}^i$, $v^i$ and $\tl{v}^i$ being coordinates with respect to $B$ and $\tl{B}$, respectively.
+Using the fact that the basis vectors themselves form a \textit{covariant} set (by definition), we can show that the coordinates must form a \textit{contravariant} set:
+noting that
+$
+  \tl{e}_i
+=
+  \sum_k e_k(\bo{T})_{ki}
+\implies
+  \sum_i
+  \tl{e}_i(\bo{T}^{-1})_{ij}
+=
+  e_j
+$, the invariance of $v$ implies
+$
+  \sum_i\tl{e}_i\tl{v}^i
+=
+  \sum_je_jv^j
+=
+  \sum_{ji}
+  \tl{e}_i(\bo{T}^{-1})_{ij}v^j
+\implies
+  \tl{v}^i
+=
+  \sum_j
+  (\bo{T}^{-1})_{ij}v^j
+$
+where the second step follows from the fact that $\tl{B}$ is linearly independent.
+That is, the \textit{invariance} of $v=\sum_ie_iv^i$ requires that the \textit{covariance} of the basis is cancelled by the \textit{contravariance} of coordinates.
+\end{ex}
+
+\begin{dfn}
+\label{linear-functionals}
+\bmit{Linear functional.}
+A \textit{linear functional} $f:V\rightarrow\mb{C}$ is a scalar-valued function on $V$ that satisfies linearity, i.e. $f(v+w)=f(v)+f(w)$ and $f(cv)=cf(v)$ for all $c\in\mb{C}$ and all $v,w\in V$.
+\end{dfn}
+
+\begin{dfn}
+\label{dual-space}
+\bmit{Dual space $V^*$.}
+The \textit{dual space} $V^*$ of a vector space $V$ is the space of linear functionals on $V$, which itself forms a vector space with vector addition, $(f+g)\in V^*$, and scalar multiplication, $(cf)\in V^*$ defined by 
+\begin{align*}
+&&
+  (f+g)(v)
+\equiv
+  f(v)+g(v)
+&&
+  (cf)(v)
+\equiv
+  cf(v)
+\end{align*}
+for all $f,g\in V^*$, $v\in V$, and $c\in\mb{C}$.
+Its dimension is $\dim V^*=\dim V$, which follows from \Cref{dual-basis}.
+\end{dfn}
+
+
+\begin{pro}
+\label{dual-basis}
+\bmit{Basis for $V^*$ (canonical dual basis).}
+\textit{If $B=\{e_1,\ld,e_n\}$ is a basis for for $V$ then $B^*=\{e^1,\ld,e^n\}$, with elements $e^i\in V^*$ defined by $e^i(e_j)=\d_j^i$, is a basis for $V^*$.  This ``canonical dual basis'' transforms contravariantly relative to $B$.}
+\begin{addmargin}[1em]{0em}
+Proof: Let $f$ be an arbitrary element of $V^*$, let $v$ be an arbitrary element of $V$ whose basis expansion is $v=\sum_i e_iv^i$, and let $c_1,\ld,c_n$ denote scalar values, $c_i\in\mb{C}$.
+Also, note that the identity $f(v)=f\pr{\ts\sum_ie_iv^i}=\sum_i f(e_i)v^i$ holds for all $f\in V^*$ by linearity.
+Finally, note that the null vector $f_0$ in $V^*$ is defined by $f_0(v)=0$ for all $v\in V$.
+Therefore:
+\\[5pt]
+\begin{tabular}{ll}
+\bmit{1. $v^i=e^i(v)$.} &
+$e^i(v)=\sum_je^i(e_j)v^j=\sum_j\d_j^iv^j=v^i$
+\\[5pt]
+\bmit{2. $B^*$ spans the dual space.} &
+$f(v)=\sum_i f(e_i)v^i=\sum_i f(e_i)e^i(v)\implies f=\sum_if(e_i)e^i$
+\\[5pt]
+\bmit{3. $B^*$ is linearly independent.} &
+$\sum_i c_ie^i=f_0\implies 0=f_0(e_i)=\sum_jc_je^j(e_i)=\sum_jc_j\d_i^j=c_i$
+\end{tabular}
+\\[5pt]
+Point 2 shows that any $f\in V^*$ can be expanded as a linear combination of $B^*$, so that $\spn B^*=V^*$.
+Point 3 shows that $B^*$ is linearly independent since $c_1e^1+\cd+c_ne^n=f_0$ is only possible for $c_1=\cd=c_n=0$.
+This shows that $B^*$ is a basis for $V$, and also implies that $\dim V^*=\dim V$.
+Point 1 implies that $B^*$ transforms like the coordinates under change of basis, i.e. $B^*$ is contravariant to $B$ (see \Cref{contravariance-of-coordinates}).
+\end{addmargin}
+\end{pro}
+
+\begin{rmk}
+If $\ip{\cdot,\cdot}$ is an inner product on $V$, and $\bo{S}$ is the matrix of overlaps $\ip{e_i,e_j}=(\bo{S})_{ij}$ for the basis vectors, then elements of the dual basis can be explicitly written as $e^i=\sum_j(\bo{S}^{-1})_{ij}\ip{e_j,\cdot}$ so that $e^i(e_j)=\sum_k(\bo{S}^{-1})_{ik}\ip{e_k,e_j}=\d_j^i$.
+This shows that $\{\ip{e_i,\cdot}\}$ provides an alternative basis for the space of linear functionals.
+If the basis is orthonormal, we find that $e^i=\ip{e_i,\cdot}$ and the inner product basis becomes identical to the canonical dual basis.
+\end{rmk}
+
+\begin{dfn}
+\bmit{Linear operator.}
+A \textit{linear operator} $\op{T}:V\rightarrow V$ is a vector-valued function on $V$ that satisfies linearity, i.e. $\op{T}(v+w)=\op{T}(v)+\op{T}(w)$ and $\op{T}(cv)=c\op{T}(v)$ for all $c\in\mb{C}$ and all $v,w\in V$.
+Note that it is common practice to drop the parentheses around the argument and write  $\op{T}(v)$ as simply $\op{T}v$.
+The \textit{identity operator} is given by $\op{1}v=v$ for all $v\in V$ and the \textit{null operator} is given by $\op{0}v=0$ for all $v\in V$.
+\end{dfn}
+
+\begin{pro}
+\label{resolution-of-the-identity}
+\bmit{Resolution of the identity.}
+\textit{If $B$ is a basis for $V$ then the identity operator on $V$ can be expressed with respect to the $B$ as $\op{1}=\sum_i e_ie^i$ for $e_i\in B$ and $e^i\in B^*$.}
+\vspace{5pt}
+\begin{addmargin}[1em]{0em}
+Proof: Let $v=\sum_ie_iv^i$ be the expansion of $v$ with respect to $B$.
+Then, using point 1 under \Cref{dual-basis}, we find that $\op{1}(v)=v=\sum_ie_iv^i=\sum_ie_ie^i(v)$ holds for all $v\in V$ which implies $\op{1}=\sum_ie_ie^i$.
+\end{addmargin}
+\end{pro}
+
+\begin{rmk}
+\label{coordinate-matrix}
+\bmit{Coordinte matrix of a linear operator.}
+By applying two resolutions of the identity, any linear operator $\op{T}:V\rightarrow V$ can be decomposed in the basis as
+$
+  \op{T}
+=
+  \sum_{ij}
+  e_ie^i(\op{T}e_j)e^j
+$.
+Defining a matrix $\bo{T}$ with elements $T_j^i=e^i(\op{T}e_j)$, this decomposition is expressed as
+$
+  \op{T}
+=
+  \sum_{ij}
+  T_j^i
+  e_ie^j
+$,
+which identifies $\bo{T}$ as the \textit{coordinates} of $\op{T}$ in the space of vector-dual products, $\spn\{e_ie^j\ | e_i\in B, e^j\in B^*\}$.
+\end{rmk}
+
+\begin{rmk}
+Note that resolution of the identity gives a natural motivation for the coordinate-space operations defined in linear algebra.
+For example, if $\op{T}_1$ and $\op{T}_2$ are both linear operators on $V$ then $\op{T}_1\op{T}_2=\sum_{ijkl}(\bo{T}_1)_j^i(\bo{T}_2)_l^ke_ie^j(e_k)e^l=\sum_{ijl}(\bo{T}_1)_j^i(\bo{T}_2)_l^je_ie^l=\sum_{il}(\bo{T}_1\bo{T}_2)e_ie^l$ and we see that the coordinate matrix of $\op{T}_1\op{T}_2$ is the matrix product of coordinate matrices for $\op{T}_1$ and $\op{T}_2$.
+Similarly, the action of $\op{T}$ on a vector $v$ is given by $\op{T}v=\sum_{ij}T_j^ie_ie^j(v)=\sum_{ij}e_iT_j^iv^j$ so that the coordinates of $\op{T}v$ are elements of $\bo{T}\bo{v}$, the matrix product of $\bo{T}$ with $\bo{v}=[v^i]$, a one-column matrix of vector coordinates. 
+\end{rmk}
+
+\begin{dfn}
+\bmit{Direct sum $V\oplus V'$.}
+\label{vspace-direct-sum}
+A \textit{direct sum} of vector spaces $V$ and $V'$ is $\{ v\oplus v'\ |\  v\in V,  v'\in V'\}$, a new vector space with vector addition and scalar multiplication defined by
+\begin{align*}
+&&
+   v_1\oplus v_1' +  v_2\oplus v_2'
+=
+  ( v_1+ v_2)\oplus( v_1'+ v_2')
+&&
+  c( v\oplus v') = c v\oplus c v'\ .
+\end{align*}
+Its dimension is $\dim(V\oplus V')=\dim V + \dim V'$.
+If $\{ e_i\}$ is a basis for $V$ and $\{ e_{i'}'\}$ is a basis for $V'$ then $\{ e_i\oplus0\}\cup\{0\oplus e_{i'}'\}$ is a basis for $V\oplus V'$.
+\end{dfn}
+
+
+%DEFNITION%
+\begin{dfn}
+\bmit{Tensor product $V\otimes V'$.}
+\label{vspace-tensor-product}
+A \textit{tensor product} of vector spaces $V$ and $V'$ is $\{\sum v_i\otimes v_{i'}'\ |\  v_i\in V,  v_{i'}'\in V'\}$, a new vector space with vector addition and scalar multiplication defined by
+\begin{align*}
+&&
+   v_1\otimes v' +  v_2\otimes v'
+=
+  ( v_1+ v_2)\otimes v'
+&&
+   v\otimes v_1' +  v\otimes v_2'
+=
+   v\otimes( v_1'+ v_2')
+&&
+  c( v\otimes v')
+=
+  c v\otimes v'
+=
+   v\otimes c v'\ .
+\end{align*}
+Its dimension is $\dim(V\otimes V')=\dim V\cdot\dim V'$.
+If $\{ e_i\}$ is a basis for $V$ and $\{ e_{i'}'\}$ is a basis for $V'$ then $\{ e_i\otimes e_{i'}'\}$ is a basis for $V\otimes V'$.
+\end{dfn}
+
+\begin{dfn}
+\bmit{Tensor.}
+Most generally, a \textit{tensor} is a vector in a tensor product space.
+An \textit{$n\eth$ order tensor} is a vector in a product of $n$ vector spaces, i.e. a member of $V_1\otimes\cd\otimes V_n$
+When the product space has the form $V\otimes\cd\otimes V\otimes V^*\otimes\cd\otimes V^*$, we call its vectors \textit{tensors $V$}.
+Given the importance of subcategory, the definition of \textit{tensor} is sometimes restricted to mean only \textit{tensors on $V$}.
+The space of \textit{type-$(m,n)$ tensors on $V$} is composed of $m$ copies of $V$ and $n$ copies of $V^*$, sometimes denoted ${T}_n^m(V)$.
+A member $t$ of $T_n^m(V)$ can be expanded in the basis as
+\begin{align*}
+&&
+  t
+=
+  \sum_{\miniar{i_1\cd i_m\\j_1\cd j_n}}
+  t^{i_1\cd i_m}_{j_1\cd j_n}
+  e_{i_1}\otimes\cd\otimes e_{i_m}\otimes
+  e^{j_1}\otimes\cd\otimes e^{j_n}
+\end{align*}
+with a coordinate array $\bo{t}=[t^{i_1\cd i_m}_{j_1\cd j_n}]$ indexed by $m$ contravariant indices and $n$ covariant indices.
+In this terminology, the space of type-$(0,0)$ tensors on $V$ is given by $T_0^0(V)=\mb{C}$, the field of scalars.
+$V$ itself can be identified as the space of type-$(1,0)$ tensors, $T_0^1(V)=V$, and its dual $V^*$ is the space of type-$(0,1)$ tensors, $T_1^0(V)=V^*$.
+The space of type-$(1,1)$ tensors is isomorphic to the space of linear operators $\op{T}:V\rightarrow V$ via the mapping $\sum_{ij}T_j^ie_ie^j\leftrightarrow\sum_{ij}T_j^ie_i\otimes e^j$.
+More generally, $T_n^n(V)$ is isomorphic to the space of multilinear mappings from $\underset{\text{$n$ times}}{V\otimes\cd\otimes V}$ to itself.
+\end{dfn}
+
+\begin{rmk}
+Note that, working in the coordinate space over an implied basis, it is conventional to refer to the coordinate array $\bo{t}=[t^{i_1\cd i_m}_{j_1\cd j_n}]$ of a type-$(m,n)$ tensor $t\in T_n^m(V)$ as ``the tensor'', similar to the practice of referring to the coordinate array $\bo{v}=[v^i]$ of a vector $v\in V$ as ``the vector''.
+When using this language, keep in mind that $t, v$ and $\bo{t}, \bo{v}$ are, mathematically, very different kinds of objects: $t$ and $v$ are \textit{invariants}, whereas $\bo{v}$ is \textit{contravariant} and $\bo{t}$ is ``contravariant of order $m$ and covariant of order $n$.''
+In this context the intrinstic, basis-independent quantities $v$ and $t$ that these coordinates represent are sometimes referred to as ``the abstract tensor'' and ``the abstract vector'', respectively.
+\end{rmk}
+
+\begin{dfn}
+\bmit{Tensor product $t\otimes t'$.}
+The \textit{tensor product} of $t\in T_n^m(V)$ and $t'\in T_{n'}^{m'}(V)$ is $t\otimes t'\in T_{n+n'}^{m+m'}(V)$ given by
+\begin{align*}
+&&
+  t\otimes t'
+=
+  \sum_{\miniar{i_1\cd i_{m+m'}\\j_1\cd j_{n+n'}}}
+  (\bo{t})_{j_1\cd j_n}^{i_1\cd i_m}
+  (\bo{t}')_{j_{n+1}\cd j_{n+n'}}^{i_{m+1}\cd i_{m+m'}}
+  e_{i_1}\otimes\cd\otimes e_{i_{n+n'}}\otimes
+  e^{j_1}\otimes\cd\otimes e^{j_{m+m'}}
+\end{align*}
+where $\bo{t}$ and $\bo{t}'$ are the coordinate arrays of $t$ and $t'$.
+In coordinate representation, the tensor product becomes
+\begin{align*}
+&&
+  (\bo{t}\otimes\bo{t}')^{i_1\cd i_{m+m'}}_{j_1\cd j_{n+n'}}
+=
+  (\bo{t})_{j_1\cd j_n}^{i_1\cd i_m}
+  (\bo{t}')_{j_{n+1}\cd j_{n+n'}}^{i_{m+1}\cd i_{m+m'}}
+\end{align*}
+which is equivalent to a \textit{matrix Kronecker product} for $t,t'\in T_1^1(V)$.
+\end{dfn}
+
+\begin{dfn}
+\bmit{Tensor contraction.}
+A \textit{tensor contraction} on $T_1^1(V)$ is a mapping into $T_0^0(V)=\mb{C}$ which acts on basis elements as $e_i\otimes e^j\mapsto e^j(e_i)=\d_i^j$.
+Applied to $t\in T_1^1(V)$ with coordinates $\bo{t}=[t_j^i]$, this mapping takes the form
+\begin{align*}
+&&
+  t
+=
+  \sum_{ij}
+  t_j^i
+  e_i\otimes e^j
+\mapsto
+  \sum_{ij}
+  t_j^i
+  e^j(e_i)
+=
+  \sum_i
+  t_i^i
+\end{align*}
+which shows that this is equivalent to a \textit{matrix trace} in coordinate representation: $\tr(\bo{t})=\sum_i t_i^i$.
+Since it sums a covariant index with a contravariant index, it can be shown that this mapping gives the same result in any basis.\footnote{A change of basis $B\rightarrow\tl{B}$ given by $\tl{e}_i=\sum_je_j(\bo{T})_i^j$ transforms the coordinates of $\bo{t}$ into $\bo{\tl{t}}$ given by $\tl{t}_j^i=\sum_{kl}(\bo{T}^{-1})_k^it_l^k(\bo{T})_j^l$ according to the  co- and contra-variant transformation laws (see \Cref{variances}).  Therefore, $\tr(\bo{\tl{t}})=\sum_i\tl{t}_i^i=\sum_{ikl}(\bo{T}^{-1})_k^it_l^k(\bo{T})_i^l=\sum_{kl}t_l^k(\bo{T}\bo{T}^{-1})_k^l=\sum_k t_k^k=\tr(\bo{t})$ which shows that the trace is basis-invariant.}
+Generalized to elements of $T_n^m(V)$, a \textit{tensor contraction} is a mapping into $T_{n-1}^{m-1}(V)$ that acts on the basis as
+\begin{align*}
+&&
+  [\cd e_{i_{p-1}}\otimes e_{i_p}\otimes e_{i_{p+1}}\cd 
+  e^{j_{q-1}}\otimes e^{j_q}\otimes e^{j_{q+1}}\cd]
+\mapsto
+  e^{j_q}(e_{i_p})
+  [\cd e_{i_{p-1}}\otimes e_{i_{p+1}}\cd 
+  e^{j_{q-1}}\otimes e^{j_{q+1}}\cd]
+\end{align*}
+i.e. it represents a trace along one specific vector-dual pair.
+In coordinate representation, this mapping is simply
+\begin{align*}
+&&
+  t_{j_1\cd j_{q-1}j_qj_{q+1}\cd j_m}^{i_1\cd i_{p-1}i_pi_{p+1}\cd i_n}
+\mapsto
+  \sum_k
+  t_{j_1\cd j_{q-1}kj_{q+1}\cd j_m}^{i_1\cd i_{p-1}ki_{p+1}\cd i_n}\ .
+\end{align*}
+A commonly encountered form of tensor contraction is a contraction \textit{between} tensors $t$ and $t'$ in a tensor product $t\otimes t'$.
+For example, if $t$ and $t'$ are tensors in $T_1^1(V)$ then the following contraction of $t\otimes t'\in T_2^2(V)$
+\begin{align*}
+&&
+  \sum_{\miniar{i_1i_2\\j_1j_2}}
+  t_{j_1}^{i_1}t_{j_2}^{i_2}
+  e_{i_1}\otimes e_{i_2}\otimes e^{j_1}\otimes e^{j_2}
+\mapsto
+  \sum_{\miniar{i_1j_2}}
+  \sum_k
+  t_{k}^{i_1}t_{j_2}^{k}
+  e_{i_1}\otimes e^{j_2}
+\end{align*}
+is simply the matrix product of $t$ and $t'$.
+\end{dfn}
+
+\begin{ntt}
+\bmit{Einstein summation convention.}
+The \textit{Einstein summation convention} can be used to simplify algebraic manipulations by avoiding the use of summation symbols $\sum_{i_1i_2\cd }$.
+Since the summations which appear in tensor manipulations generally have the form $\sum_i a_ib^i$ where $\{a_i\}$ is a covariant set, $\{b^i\}$ is a contravariant set, and the sum $\sum_i$ runs over basis vector indices, this convention takes any index which appears twice in a product, once as a covariant index and once as a contravariant one, to be implicitly summed over: $\sum_i a_ib^i\rightarrow a_ib^i$.
+A vector $v\in V$ can then be represented as
+\begin{align*}
+&&
+  v
+=
+  e_iv^i
+\end{align*}
+where $e_i$ are basis vectors and $v^i$ are coordinates.
+More generally, an tensor $t\in T_n^m(V)$ is represented as follows.
+\begin{align*}
+&&
+  t
+=
+  t^{i_1\cd i_m}_{j_1\cd j_n}
+  e_{i_1}\otimes\cd\otimes e_{i_m}\otimes
+  e^{j_1}\otimes\cd\otimes e^{j_n}
+\end{align*}
+The coordinates of $t''\in T_1^1(V)$, the matrix product of $t$ and $t'\in T_1^1(V)$, are
+\begin{align*}
+&&
+  (\bo{t}'')_j^i
+=
+  (\bo{t})_j^k
+  (\bo{t}')_k^i
+\end{align*}
+and the trace of $t\in T_1^1(V)$ is $\tr(\bo{t})=t_k^k$.
+Note that the choice of symbol for a \textit{contracted} (implicitly summed) \textit{index} is arbitrary, whereas each \textit{free} (uncontracted) \textit{index} symbol must appear once in every term on the right- and left-hand sides of an equation, always with the same co- or contra-variance.
+Otherwise the equation is undefined.
+For example,
+\begin{align*}
+&&
+  a_{ij}^{kl}
+=
+  \fr{1}{2}
+  b_{ij}^{vx}c_{vx}^{kl}
++
+  \fr{1}{6}
+  d_{ijv}^{xyz}e_{xyz}^{klv}
+\end{align*}
+is a balanced equation with free indices $\miniar{kl\\ij}$.
+Each term is an element of $T_2^2(V)$, so the addition ($+$) and assignment ($=$) operations are well-defined.
+\end{ntt}
+
+
+\end{document}

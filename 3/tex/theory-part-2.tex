@@ -1,0 +1,505 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\ensuremath{\underline{#1}}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+\newcommand{\NO}[1]{\ensuremath{{\bm{:}}#1{}{\bm{:}}}}
+\newcommand{\cmtr}[2]{\ensuremath{[\cdot,#2]^{#1}}}
+\newcommand{\cmtl}[2]{\ensuremath{[#2,\cdot]^{#1}}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+%contractions
+\usepackage{simplewick}
+\usepackage[nomessages]{fp}
+\newcommand{\ctr}[6][0]{\FPeval\height{1.0+#1*0.5}\ensuremath{\contraction[\height ex]{#2}{#3}{#4}{#5}}}
+%math sections
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheoremstyle[spaceabove=10pt,spacebelow=10pt,bodyfont=\small]{mystyle}
+\theoremstyle{mystyle}
+\newtheorem{dfn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}{Corollary}
+\newtheorem{lem}{Lemma}
+\newtheorem{rmk}{Remark}
+\newtheorem{pro}{Proposition}
+\usepackage{calc}
+
+\title{Programming Project 3 Theory (Part 2)\\
+\textit{The Roothaan-Hall equations and the Pople-Nesbet equations}}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+\vspace{-2cm}
+
+\noindent
+\subsection*{Spin and spin-orbitals}
+
+A spin-orbital $\y$ can be decomposed as $\y(\bo{r},s)=\f(\bo{r})\w(s)$, where $\f(\bo{r})$ is a spatial orbital and $\w(s)$ is a spin function.
+Spin functions live in a two-dimensional space spanned by $\{\a(s),\b(s)\}$, which are orthonormal eigenfunctions of one component of $\op{\bo{S}}$, the spin angular momentum operator.
+\begin{align}
+&&
+  \op{S}_z\a
+=
+  +\fr{1}{2}\a
+&&
+  \op{S}_z\b
+=
+  -\fr{1}{2}\b
+&&
+  \ip{\a|\a}=\ip{\b|\b}=1
+&&
+  \ip{\a|\b}=\ip{\b|\a}=0
+\end{align}
+The ``spin-coordinate'' $s$ is either $+$ or $-$, identifying the component of $\w(s)$ along $\a(s)$ and $\b(s)$.
+You can think of it as the index of a coordinate vector in spin space
+\begin{align*}
+&&
+  \ma{\w(+)\\\w(-)}
+=
+  \ma{\ip{\a|\w}\\\ip{\b|\w}}
+\end{align*}
+so that $\a(+)=\b(-)=1$ and $\a(-)=\b(+)=0$.
+Using this spin coordinate, the inner product in spin space can be defined explicitly as $\ip{\w|\w'}=\sum_s\w^*(s)\w'(s)$.
+It is typical to refer to the inner product of spin functions as a ``spin integration''.
+
+A complete set of one-electron functions (spin-orbitals) comes in $\a,\b$-pairs.
+\begin{align}
+\label{spin-orb-general}
+&&
+	\y_{2p-1}(\bo{r},s)
+=
+  \f_{p_\a}(\bo{r})\a(s)
+&&
+  \y_{2p}(\bo{r},s)
+=
+  \f_{p_\b}(\bo{r})\b(s)
+\end{align}
+The spatial components of these functions can be expanded in terms of a set of AO basis functions $\{\x_\nu\}$ as 
+\begin{align}
+\label{space-orb}
+&&
+  \f_{p_\a}
+=
+  \sum_\mu \x_\mu C_{\mu p_\a}
+&&
+  \f_{p_\b}
+=
+  \sum_\mu \x_\mu C_{\mu p_\b}
+\end{align}
+which are atom-centered Gaussian functions (cc-pVDZ, STO-3G, etc.).
+
+
+\subsection*{Spin-integration of the canonical Hartree-Fock equations}
+
+For a system with $n_\a$ spin-up and $n_\b$ spin-down electrons, the spin-orbital canonical Hartree-Fock equation takes the form
+\begin{align}
+\label{canonical-hf}
+&
+  \op{f}\y_p
+=
+  \ev_p\y_p
+&&
+  \op{f}
+=
+  \op{h}
++
+  \sum_{i_\a}^{n_\a}
+  (\op{J}_{i_\a}-\op{K}_{i_\a})
++
+  \sum_{i_\b}^{n_\b}
+  (\op{J}_{i_\b}-\op{K}_{i_\b})\ .
+\end{align}
+This equation can be expanded in the spin basis as
+\begin{align*}
+  \ma{
+    \ip{\a|\op{f}|\a}&\ip{\a|\op{f}|\b}\\
+    \ip{\b|\op{f}|\a}&\ip{\b|\op{f}|\b}}
+  \ma{
+    \ip{\a|\y_p}\\
+    \ip{\b|\y_p}}
+=
+  \ev_p
+  \ma{
+    \ip{\a|\y_p}\\
+    \ip{\b|\y_p}}
+\end{align*}
+where we are integrating only over the spin coordinate.
+The operators in $\op{f}$ then become
+\begin{align*}
+&
+  \op{h}
+\mapsto
+  \ma{
+    \ip{\a|\op{h}|\a}&0\\
+    0&\ip{\b|\op{h}|\b}}
+&&
+  \op{J}_{i_\a}
+\mapsto
+  \ma{
+    \ip{\a|\op{J}_{i_\a}|\a}&0\\
+    0&\ip{\b|\op{J}_{i_\a}|\b}}
+&&
+  \op{K}_{i_\a}
+\mapsto
+  \ma{
+    \ip{\a|\op{K}_{i_\a}|\a}&0\\
+    0&\makebox[\widthof{\ip{\b|\op{K}_{i_\b}|\b}}]{0}}
+\\
+&
+&&
+  \op{J}_{i_\b}
+\mapsto
+  \ma{
+    \ip{\a|\op{J}_{i_\b}|\a}&0\\
+    0&\ip{\b|\op{J}_{i_\b}|\b}}
+&&
+  \op{K}_{i_\b}
+\mapsto
+  \ma{
+    \makebox[\widthof{\ip{\a|\op{K}_{i_\a}|\a}}]{0}&0\\
+    0&\ip{\b|\op{K}_{i_\b}|\b}}
+\end{align*}
+where the core and Coulomb operators can be evaluated simply using $\ip{\w|\op{h}|\w'}=\op{h}\ip{\w|\w'}$, since these operators do not act on spin coordinates.
+The exchange operator, however, does act on spin coordinates by its coordinate-swapping operation.
+Hence, for example,
+\begin{align*}
+  \op{K}_{i_\b}(\bo{r})\a(s)
+=
+  \ip{\f_{i_\b}(\bo{r}')|\op{g}(\bo{r},\bo{r}')|\cdot(\bo{r}')}
+  \ip{\b|\a}\
+  \f_{i_\b}(\bo{r})\b(s)
+=
+  0
+\end{align*}
+where the $\cdot$ represents ``fill in spatial function here''.
+This shows why $\ip{\a|\op{K}_{i_\b}|\a}=\ip{\b|\op{K}_{i_\b}|\a}=0$.
+The remaining components can be derived in the same way.
+
+Since all of the off-diagonal blocks in the spin basis vanish, we can separate equation \ref{canonical-hf} into two spin-integrated equations.
+\begin{align}
+\label{canonical-uhf-equation-alpha}
+&
+  \op{f}_\a \f_{p_\a}
+=
+  \ev_{p_\a} \f_{p_\a}
+&&
+  \op{f}_\a
+=
+  \op{h}
++
+  \sum_{i_\a}^{n_\a}
+  (\op{J}_{i_\a} - \op{K}_{i_\a})
++
+  \sum_{i_\b}^{n_\b}
+  \op{J}_{i_\b}
+\\
+\label{canonical-uhf-equation-beta}
+&
+  \op{f}_\b \f_{p_\b}
+=
+  \ev_{p_\b} \f_{p_\b}
+&&
+  \op{f}_\b
+=
+  \op{h}
++
+  \sum_{i_\a}^{n_\a}
+  \op{J}_{i_\a}
++
+  \sum_{i_\b}^{n_\b}
+  (\op{J}_{i_\b} - \op{K}_{i_\b})
+\end{align}
+
+
+\subsection*{RHF: The Roothaan-Hall Equations}
+
+Assuming a closed-shell system with $n_\a=n_\b=n/2$, we can impose the restriction that $\f_{i_\a}=\f_{i_\b}$ for each pair of electrons.
+Then equations \ref{canonical-uhf-equation-alpha} and \ref{canonical-uhf-equation-beta} collapse into a single expression.
+\begin{align*}
+  \op{f}_\textsc{r}\f_p
+=
+  \ev_p\f_p
+&&
+  \op{f}_\textsc{r}
+=
+  \op{h}
++
+  \sum_i^{n/2}
+  (2\op{J}_i - \op{K}_i)
+\end{align*}
+where the R stands for ``restricted''.
+Expanding $\f_p$ in the AO basis and projecting by $\x_\mu$, we get the Roothaan-Hall equations
+\begin{align*}
+  \sum_\nu
+  \ip{\x_\mu|\op{f}_\textsc{r}|\x_\nu}
+  C_{\nu p}
+=
+  \sum_\nu
+  \ip{\x_\mu|\x_\nu}C_{\mu p}\ev_p
+\end{align*}
+which can be written in matrix notation as
+\begin{align}
+\label{roothaan-hall}
+&
+  \bo{F}\bo{C}
+=
+  \bo{S}\bo{C}\bm{\ev}
+&&
+  F_{\mu\nu}
+=
+  \ip{\x_\mu|\op{f}_\textsc{r}|\x_\nu}
+&&
+  S_{\mu\nu}
+=
+  \ip{\x_\mu|\x_\nu}
+&&
+  (\bm{\ev})_{pq}
+=
+  \ev_p\d_{pq}\ .
+\end{align}
+Note that if the AO basis contains $m$ functions, then $\bo{C}=[C_{\mu p}]$ is an $m\times m$ matrix with each column vector containing the expansion coefficients for an orbital $\f_p$.
+Also, note that only the $n/2$ MOs of lowest energy ($\ev_p$) will be ``occupied'' -- the remaining virtual orbitals will not enter into the Coulomb and exchange parts of $\op{f}_\textsc{R}$.
+Expanding $\op{f}_\textsc{R}$ in its core, Coulomb, and exchange parts, we find
+\begin{align*}
+  F_{\mu\nu}
+=&\
+  \ip{\x_\mu|\op{h}|\x_\nu}
++
+  \sum_i^{n/2}
+  (2\ip{\x_\mu\f_i|\x_\nu\f_i}-\ip{\x_\mu\f_i|\f_i\x_\nu})
+\\
+=&\
+  \ip{\x_\mu|\op{h}|\x_\nu}
++
+  \sum_i^{n/2}
+  \sum_{\rho\si}^m
+  C_{\rho i}^*C_{\si i}
+  (2\ip{\x_\mu\x_\rho|\x_\nu\x_\si}-\ip{\x_\mu\x_\rho|\x_\si\x_\nu})
+\end{align*}
+which is conveniently given in terms of a ``density matrix'' $D_{\mu\nu}$.
+\begin{align}
+\label{rhf-ao-basis-fock}
+  F_{\mu\nu}
+=&\
+  \ip{\x_\mu|\op{h}|\x_\nu}
++
+  \sum_{\rho\si}^m
+  D_{\rho\si}
+  (2\ip{\x_\mu\x_\rho|\x_\nu\x_\si}-\ip{\x_\mu\x_\rho|\x_\si\x_\nu})
+&&
+  D_{\mu\nu}
+=
+  \sum_i^{n/2}
+  C_{\mu i}^*C_{\nu i}
+\end{align}
+
+
+\subsubsection*{Solving the Roothaan-Hall Equations}
+
+Equation \ref{roothaan-hall} would look like an ordinary eigenvalue problem if $\bo{S}$ were an identity matrix.
+This would be the case if the AO basis were orthogonal.
+We can get around this problem by an algebraic trick:
+if we multiply both sides of equation \ref{roothaan-hall} by $\bo{S}^{-\frac{1}{2}}$ and insert $\bo{I}=\bo{S}^{-\frac{1}{2}}\bo{S}^{\frac{1}{2}}$ between $\bo{F}$ and $\bo{C}$, we get
+\begin{align}
+\label{orthogonalized-roothaan-hall}
+&
+  \tl{\bo{F}}
+  \tl{\bo{C}}
+=
+  \tl{\bo{C}}\bm\ev
+&&
+  \tl{\bo{F}}
+=
+  \bo{S}^{-\frac{1}{2}}\bo{F}\bo{S}^{-\frac{1}{2}}
+&&
+  \tl{\bo{C}}
+=
+  \bo{S}^{\frac{1}{2}}\bo{C}\ .
+\end{align}
+This is equivalent to a transformation to an orthogonalized AO basis $\tl\x_\mu=\sum_\nu\x_\nu (\bo{S}^{-\frac{1}{2}})_{\nu\mu}$ which satisfies $\ip{\tl\x_\mu|\tl\x_\nu}=\d_{\mu\nu}$.
+After diagonalizing $\tl{\bo{F}}$, the ordinary MO coefficient matrix can be recovered as $\bo{C}=\bo{S}^{-\frac{1}{2}}\tl{\bo{C}}$.
+
+Recall, however, that equation \ref{orthogonalized-roothaan-hall} is still not an ordinary eigenvalue problem because $\bo{F}$ depends on the MOs via the density matrix $\bo{D}$.
+The standard procedure for solving the Roothan-Hall equations is as follows:
+\begin{enumerate}
+  \item Get integrals $\ip{\x_\mu|\x_\nu}, \ip{\x_\mu|\op{h}|\x_\nu}, \ip{\x_\mu\x_\nu|\x_\rho\x_\si}$ and form orthogonalizer $\bo{S}^{-\frac{1}{2}}$
+  \item Guess $\bo{D}=\bo{0}$
+  \item\label{loop} Build $\bo{F}$ (equation \ref{rhf-ao-basis-fock})
+  \item Diagonalize $\tl{\bo{F}}=\bo{S}^{-\frac{1}{2}}\bo{F}\bo{S}^{-\frac{1}{2}}$, giving $\tl{\bo{C}}$ and $\bm\ev$
+  \item Backtransform $\bo{C}=\bo{S}^{-\frac{1}{2}}\tl{\bo{C}}$
+  \item Form new density matrix $D_{\mu\nu}=\sum_i^{n/2} C_{\mu i}^*C_{\nu i}$
+  \item If the new $\bo{D}$ differs from the old $\bo{D}$ by more than a threshold, return to step \ref{loop}
+\end{enumerate}
+
+
+\subsection*{UHF: The Pople-Nesbet Equations}
+
+For open-shell systems of arbitrary $n_\a, n_\b$, we can solve equations \ref{canonical-uhf-equation-alpha} and \ref{canonical-uhf-equation-beta} without any spin restriction.
+By exactly the same procedure as was used for the Roothaan-Hall equations, we arrive at the Pople-Nesbet equations
+\begin{align*}
+&
+  \bo{F}^\a\bo{C}^\a
+=
+  \bo{S}\bo{C}^\a\bm\ev^\a
+&&
+  F_{\mu\nu}^\a
+=
+  \ip{\x_\mu|\op{f}_\a|\x_\nu}
+&&
+  S_{\mu\nu}
+=
+  \ip{\x_\mu|\x_\nu}
+&&
+  (\bm\ev^\a)_{p_\a q_\a}
+=
+  \ev_{p_\a}\d_{p_\a q_\a}
+\\
+&
+  \bo{F}^\b\bo{C}^\b
+=
+  \bo{S}\bo{C}^\b\bm\ev^\b
+&&
+  F_{\mu\nu}^\b
+=
+  \ip{\x_\mu|\op{f}_\b|\x_\nu}
+&&
+  S_{\mu\nu}
+=
+  \ip{\x_\mu|\x_\nu}
+&&
+  (\bm\ev^\b)_{p_\b q_\b}
+=
+  \ev_{p_\b}\d_{p_\b q_\b}
+\end{align*}
+where $\bo{C}^\a=[C_{\mu p_\a}]$ is an $m\times m$ matrix of MO coefficients for $\{\f_{p_\a}\}$ and $\bo{C}^\b=[C_{\mu p_\b}]$ is an $m\times m$ matrix of MO coefficients for $\{\f_{p_\b}\}$.
+Expanding the $\a$ and $\b$ Fock matrices as in equation \ref{rhf-ao-basis-fock}, we find
+\begin{align*}
+&
+  F_{\mu\nu}^\a
+=
+  \ip{\x_\mu|\op{h}|\x_\nu}
++
+  \sum_{\rho\si}
+  D_{\rho\si}^\a
+  \ip{\x_\mu\x_\rho||\x_\nu\x_\si}
++
+  \sum_{\rho\si}
+  D_{\rho\si}^\b
+  \ip{\x_\mu\x_\rho|\x_\nu\x_\si}
+&&
+  D_{\mu\nu}^\a
+=
+  \sum_{i_\a}^{n_\a} C_{\mu i_\a}^*C_{\nu i_\a}
+\\
+&
+  F_{\mu\nu}^\b
+=
+  \ip{\x_\mu|\op{h}|\x_\nu}
++
+  \sum_{\rho\si}
+  D_{\rho\si}^\a
+  \ip{\x_\mu\x_\rho|\x_\nu\x_\si}
++
+  \sum_{\rho\si}
+  D_{\rho\si}^\b
+  \ip{\x_\mu\x_\rho||\x_\nu\x_\si}
+&&
+  D_{\mu\nu}^\b
+=
+  \sum_{i_\b}^{n_\b} C_{\mu i_\b}^*C_{\nu i_\b}
+\end{align*}
+where $\bo{D}^\a$ and $\bo{D}^\b$ are the $\a$ and $\b$ density matrices.
+The procedure for solving the Pople-Nesbet equations is identical to the one given for RHF.
+However, note that one must solve the $\a$ and $\b$ equations simultaneously because each Fock operator depends on both $\bo{C}^\a$ and $\bo{C}^\b$ (via $\bo{D}^\a$ and $\bo{D}^\b$).
+
+\end{document}

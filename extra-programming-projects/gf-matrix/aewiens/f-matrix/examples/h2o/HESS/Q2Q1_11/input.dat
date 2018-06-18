@@ -1,0 +1,18 @@
+molecule h2o {
+O  
+H  1 B1
+H  1 B2 2 A2
+
+B1 =    1.095200000000
+B2 =    1.097845885000
+A2 =  109.286478897576
+}
+
+set {
+	basis cc-pvdz
+	scf_type pk
+	e_convergence 12
+	freeze_core true
+}
+
+energy('scf')

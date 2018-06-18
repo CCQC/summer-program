@@ -1,0 +1,23 @@
+molecule mol {
+   1 2
+   O 0.0 0.0 0.0
+   H 0.0 1.0 0.0
+   H 0.0 0.0 1.0
+}
+
+set {
+    BASIS         sto-3g
+    E_CONVERGENCE 10
+    SCF_TYPE      pk
+    MAXITER       50
+}
+
+basisname = psi4.get_global_option("BASIS")
+basisset = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
+mints = psi4.MintsHelper(basisset)
+
+# call RHF code
+from uhf import UHF
+uhf = UHF(mol, mints)
+uhf.compute_energy()
+

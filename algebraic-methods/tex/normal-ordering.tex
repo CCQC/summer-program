@@ -1,0 +1,1275 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{xfrac}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\ensuremath{\underline{#1}}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+\newcommand{\NO}[1]{\ensuremath{{\bm{:}}#1{}{\bm{:}}}}
+\newcommand{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
+\usepackage{stackengine}
+\newcommand{\GNO}[1]{\setstackgap{S}{0.7pt}\ensuremath{\Shortstack{\textbf{.} \textbf{.} \textbf{.}}#1\Shortstack{\textbf{.} \textbf{.} \textbf{.}}}}
+\newcommand{\cmtr}[2]{\ensuremath{[\cdot,#2]^{#1}}}
+\newcommand{\cmtl}[2]{\ensuremath{[#2,\cdot]^{#1}}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+%contractions
+\usepackage{simplewick}
+\usepackage[nomessages]{fp}
+\newcommand{\ctr}[6][0]{\FPeval\height{0.6+#1*0.5}\ensuremath{\contraction[\height ex]{#2}{#3}{#4}{#5}}}
+\newcommand{\ccr}[4]{\ctr[0.7]{#1}{#2}{#3}{#4}{}\ctr{#1}{#2}{#3}{#4}}
+\usepackage{calc}
+\makeatletter
+\def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
+\makeatother
+\newcommand{\halfphantom}[1]{\hspace{\widthof{#1}*\real{0.5}}}
+\newcommand{\fullctr}[1]{\ensuremath{\contraction[0.5ex]{}{\vphantom{#1}}{\hphantom{#1}}{}{}{}\contraction[0.5ex]{}{\vphantom{#1}}{\halfphantom{#1}}{}{}{}#1}}
+%math sections
+\usepackage{cleveref}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\declaretheoremstyle[spaceabove=10pt,spacebelow=10pt,bodyfont=\small]{mystyle}
+\theoremstyle{mystyle}
+\newtheorem{dfn}{Definition}[section]
+\crefname{dfn}{definition}{definitions}
+\Crefname{dfn}{Def}{Defs}
+\newtheorem{thm}{Theorem}[section]
+\crefname{thm}{theorem}{theorems}
+\Crefname{thm}{Thm}{Thms}
+\newtheorem{cor}{Corollary}[section]
+\crefname{cor}{corollary}{corollaries}
+\Crefname{cor}{Cor}{Cors}
+\newtheorem{lem}{Lemma}[section]
+\crefname{lem}{lemma}{lemmas}
+\Crefname{lem}{Lem}{Lems}
+\newtheorem{rmk}{Remark}[section]
+\crefname{rmk}{remark}{remarks}
+\Crefname{rmk}{Rmk}{Rmks}
+\newtheorem{pro}{Proposition}[section]
+\crefname{pro}{proposition}{propositions}
+\Crefname{pro}{Prop}{Props}
+\newtheorem{ntt}{Notation}[section]
+\crefname{ntt}{notation}{notations}
+\Crefname{ntt}{Notation}{Notations}
+\newcommand{\logbox}{\ensuremath{\text{\makebox[\widthof{exp}][c]{ln}}}}
+\newcommand{\expbox}{\ensuremath{\text{\makebox[\widthof{exp}][c]{exp}}}}
+
+\numberwithin{equation}{section}
+\usepackage{cancel}
+\usepackage{scrextend}
+
+\newcommand{\hole}{\circ}
+\newcommand{\ptcl}{\bullet}
+\newcommand{\circled}[1]{\raisebox{.5pt}{\textcircled{\raisebox{-.9pt}{#1}}}}
+
+
+
+\author{Andreas V. Copan}
+\date{}
+\title{Fock space algebraic methods:\\Normal ordering with respect to $\vac$ and $\F$}
+
+%%%DOCUMENT%%%
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\newpage
+\section{Fock space}
+
+\begin{dfn}
+\label{fock-space}
+\bmit{Fock space.}
+Let $\mc{H}$ be a complete one-particle Hilbert space, so that $\mc{H}^{\otimes n}=\underset{\text{$n$ times}}{\mc{H}\otimes\cd\otimes\mc{H}}$ is an $n$-particle Hilbert space.
+The space of candidate $n$-fermion wavefunctions in $\mc{H}^{\otimes n}$ is then $\mb{A}(\mc{H}^{\otimes n})$, its antisymmetric subspace.
+If $\{\y_p\}$ is a complete, orthonormal basis for $\mc{H}$, then
+\begin{align}
+\label{fock-basis}
+&&\ts
+  \F_{(p_1\cd p_n)}
+=
+  \fr{1}{\sqrt{n!}}
+  \sum_\pi^{\mr{S}_n}
+  \e_{\pi}
+  \y_{p_{\pi(1)}}\otimes\cd\otimes\y_{p_{\pi(n)}}
+\sp
+  \text{where }
+  p_1<\cd<p_n
+\end{align}
+is a complete, orthonormal basis for $\mb{A}(\mc{H}^{\otimes n})$.
+Represented as functions of space and spin coordinates, these basis vectors become Slater determinants.
+The \textit{fermionic Fock space} $F(\mc{H})$ over $\mc{H}$ is given by a direct sum of $\mb{A}(\mc{H}^{\otimes n})$ from $n=0$ to $n=\infty$, i.e. $F(\mc{H})=\mb{C}\oplus \mb{A}(\mc{H}^{\otimes 1})\oplus\mb{A}(\mc{H}^{\otimes 2})\oplus\mb{A}(\mc{H}^{\otimes 3})\oplus\cd$, which spans all possible fermionic wavefunctions.
+\end{dfn}
+
+\begin{dfn}
+\label{on-representation}
+\bmit{The occupation number representation of $F(\mc{H})$.}
+In the \textit{occupation number representation} of Fock space, the basis vectors (equation \ref{fock-basis}) are represented as lists of 1s and 0s
+\begin{align}
+\label{occupation-vector}
+&&
+  \kt{(p_1\cd p_n)}
+\equiv
+  \kt{n_1,n_2,n_3,\ld,n_{\infty}}
+\sp\text{where }
+  p_1<\cd<p_n
+\text{ and }
+  n_p
+=
+  \left\{\ar{
+    1 & \text{if $p\in(p_1\cd p_n)$}\\
+    0 & \text{if $p\notin(p_1\cd p_n)$}
+  }\right.
+\end{align}
+where $n_p=1$ when $\y_p$ is occupied and $n_p=0$ when $\y_p$ is unoccupied.
+The basis for $\mb{A}(\mc{H}^{\otimes n})$ is given by distributing $n$ 1s in the occupation vector in all possible ways.
+The state in which no spin-orbitals are occupied is called the \textit{vacuum state}, here denoted $\kt{\vac}$, which spans $\mc{H}^{\otimes0}$ ($=\mb{A}(\mc{H}^{\otimes0})=\mb{C}$, up to isomorphism).
+\end{dfn}
+
+
+\section{Particle-hole operators}
+
+\begin{dfn}
+\bmit{Particle-hole operators.}
+\textit{Particle-hole operators} include \textit{annihilation operators} and \textit{creation operators}.\\
+The \textit{annihilation operator} of $\y_p$ is a linear mapping $a_p:\mb{A}(\mc{H}^{\otimes n})\rightarrow\mb{A}(\mc{H}^{\otimes (n-1)})$ defined by
+\begin{align}
+&&
+\label{annihilation-operator}
+  a_p
+  \kt{\cd n_p\cd}
+=
+  (-)^{n_1+\cd+n_{p-1}}
+  \kt{\cd n_p-1\cd}
+\ \ \text{ if $n_p=1$}
+&&
+  a_p\kt{\cd n_p\cd}
+=
+  0
+\ \ \text{ if $n_p=0$}
+\end{align}
+and the \textit{creation operator} of $\y_p$ is a linear mapping $c_p:\mb{A}(\mc{H}^{\otimes n})\rightarrow\mb{A}(\mc{H}^{\otimes(n+1)})$ defined by
+\begin{align}
+\label{creation-operator}
+&&
+  c_p
+  \kt{\cd n_p\cd}
+=
+  (-)^{n_1+\cd+n_{p-1}}
+  \kt{\cd n_p+1\cd}
+\ \ \text{ if $n_p=0$}
+&&
+  c_p\kt{\cd n_p\cd}
+=
+  0
+\ \ \text{ if $n_p=1$.}
+\end{align}
+\end{dfn}
+
+\begin{pro}
+\label{particle-hole-adjoint-relation}
+\bmit{$c_p=a_p\dg$.}
+\textit{Creation and annihilation operators of a one-particle state $\y_p$ are adjoints of each other.}
+\\\hangindent1em
+Proof:
+$\ip{n_1'n_2'\cd|a_p[n_1n_2\cd]}$
+vanishes unless $n_p'=0$, $n_p=1$, and $n_q'=n_q$ for $q\neq p$, in which case it equals $(-)^{n_1+\cd+n_{p-1}}$.
+The same is true for 
+$\ip{c_p[n_1'n_2'\cd]|n_1n_2\cd}$.
+Therefore, $\ip{\Y|a_p\Y'}=\ip{c_p\Y|\Y'}$ for arbitrary linear combinations $\Y$ and $\Y'$ of the basis states, which implies $c_p=a_p\dg$ by the definition of adjoint.
+\end{pro}
+
+\begin{pro}
+\label{particle-hole-commutation-rules}
+\bmit{$[q,q']_+=\d_{q'q\dg}$.}
+\textit{Particle-hole operators $q$ and $q'$ anticommute unless $q'=q\dg$, for which $[q,q\dg]_+=1$.}
+\\\hangindent1em
+Proof:
+Let $q$ and $q'$ be arbitrary particle-hole operators acting on states $\y_p$ and $\y_{p'}$.
+First, suppose $p\neq p'$.
+Then
+\begin{align*}
+&&
+&
+  qq'\kt{\cd n_p\cd n_{p'}\cd}
+=
+  (-)^{n_p+\sum_{r=p+1}^{p'}n_r}\kt{\cd\ol{n_p}\cd\ol{n_{p'}}\cd}
+\\
+&&
+ \text{and}\ \ 
+&
+  q'q\kt{\cd n_p\cd n_{p'}\cd}
+=
+  (-)^{\ol{n_p}+\sum_{r=p+1}^{p'}n_r}\kt{\cd\ol{n_p}\cd\ol{n_{p'}}\cd}
+\end{align*}
+where $\ol{n_p}$ and $\ol{n_{p'}}$ are the occupations after operating $q$ and $q'$ on the state.
+Since $n_p$ and $\ol{n_p}$ differ by one, $qq'=-q'q$.
+Now, consider the case $p=p'$ which implies $q'\in\{q,q\dg\}$.
+If $q'=q$ then $qq'=-q'q=0$.
+In the final case, $q'=q\dg$, we have either $a_p\dg a_p\kt{\cd n_p\cd}=\kt{\cd n_p\cd}$ and $a_pa_p\dg\kt{\cd n_p\cd}=0$ if $n_p=1$ or vice versa if $n_p=0$, so that $(qq\dg+q\dg q)=1$.
+\end{pro}
+
+\begin{rmk}
+\label{fock-space-slater-determinants}
+\bmit{Representing Slater determinants in terms of particle-hole operators.}
+The Slater determinant $\F_{(p_1\cd p_n)}$ can be represented in $F(\mc{H})$ as
+\begin{align}
+&&
+\label{fock-space-determinant}
+  \kt{\F_{(p_1\cd p_n)}}
+=
+  a_{p_1}\dg\cd a_{p_n}\dg\kt{\vac}
+\end{align}
+which is equivalent to $\kt{(p_1\cd p_n)}$ for $p_1<\cd<p_n$, and is otherwise equivalent to $\e_\pi\kt{(p_{\pi(1)}\cd p_{\pi(n)})}$ for $\pi\in\mr{S}_n$ such that $p_{\pi(1)}<\cd<p_{\pi(n)}$.
+The actions of $a_p$ and $a_p\dg$ on $\F_{(p_1\cd p_n)}$ are given by
+\begin{align}
+\label{determinant-annihilation}
+&
+  a_p\F_{(p_1\cd p_n)}
+=
+  (-)^{k-1}
+  \F_{(p_1\cd \cancel{p_k}\cd p_n)}
+\ \ \text{if $p=p_k\in(p_1\cd p_n)$}
+&&
+  a_p\F_{(p_1\cd p_n)}
+=
+  0
+\ \ \text{if $p\notin(p_1\cd p_n)$}
+\\
+\label{determinant-creation}
+&
+  a_p\dg\F_{(p_1\cd p_n)}
+=
+  (-)^{k-1}
+  \F_{(p_1\cd p_{k-1}pp_k\cd p_n)}
+\ \ \text{if $p\notin(p_1\cd p_n)$}
+&&
+  a_p\dg\F_{(p_1\cd p_n)}
+=
+  0
+\ \ \text{if $p\in(p_1\cd p_n)$}
+\end{align}
+which follows from equation \ref{fock-space-determinant} and \Cref{particle-hole-commutation-rules}.
+\end{rmk}
+
+\begin{dfn}
+\label{normal-order}
+\bmit{$\vac$-normal order.}
+A string $q_1\etc q_n$ of particle-hole operators $q_i\in \{a_p\}\cup\{a_p\dg\}$ is in \textit{vacuum normal order} (or \textit{$\vac$-normal order}) when all of its creation operators lie to the left of all of its annihilation operators.
+That is, a string of particle-hole operators is in $\vac$-normal order if it has the form $a_{p_1}\dg\cd a_{p_m}\dg a_{r_1}\cd a_{r_{m'}}$.
+This guarantees that $\ip{\vac|q_1\etc q_n|\vac}=0$, i.e. its vacuum expectation value vanishes.
+\end{dfn}
+
+\begin{dfn}
+\label{particle-number-conserving-operators}
+\bmit{Particle-number conserving strings.}
+A string $q_1\etc q_n$ is \textit{particle-number conserving} if it contains the same number of creation and annihilation operators, and so maps each $m$-particle subspace $\mb{A}(\mc{H}^{\otimes m})$ into itself.
+\end{dfn}
+
+\begin{dfn}
+\bmit{Excitation operators.}
+Excitation operators are particle-number conserving strings in normal order, i.e. strings which have have the form $a_{p_1}\dg\cd a_{p_m}\dg a_{q_m}\cd a_{q_1}$ ($=a_{p_1}\dg a_{q_1}\cd a_{p_m}\dg a_{q_m}$ if $\{p_i\}\cap\{q_i\}=\O$).
+For a given reference determinant $\F$, excited determinants are given by $\F_{i_1\cd i_m}^{a_1\cd a_m}=a_{a_1}\dg\cd a_{a_m}\dg a_{i_m}\cd a_{i_1}\F$ where $i_1\cd i_m$ are occupied and $a_1\cd a_m$ are virtual indices with respect to $\F$.
+\end{dfn}
+
+\begin{rmk}
+\label{fock-space-operators}
+\bmit{The Fock space Hamiltonian.}
+The electronic Hamiltonian can be expressed in $F(\mc{H})$ as
+\begin{align*}
+&&
+  H_e
+=
+  \sum_{pq}
+  h_{pq} a_p\dg a_q
++
+  \fr{1}{2}
+  \sum_{pqrs}
+  \ip{pq|rs} a_p\dg a_q\dg a_sa_r
+\end{align*}
+where
+$
+  h_{pq}
+=
+  \ip{\y_p(1)|\op{h}(1)|\y_q(1)}
+$
+and
+$
+  \ip{pq|rs}
+=
+  \ip{\y_p(1)\y_q(2)|\op{g}(1,2)|\y_r(1)\y_s(2)}
+$
+are the one- and two-electron integrals.
+\end{rmk}
+
+
+\begin{dfn}
+\bmit{One-particle and one-hole density matrices.}
+The \textit{one-particle} and \textit{one-hole density matrices} of a state $\Y\in F(\mc{H})$ are given by $\g_{pq}\equiv\ip{\Y|a_q\dg a_p|\Y}$ and $\h_{pq}\equiv\ip{\Y|a_pa_q\dg|\Y}$, respectively.
+\end{dfn}
+
+
+
+\section{$\vac$-normal ordering}
+
+\begin{dfn}
+\bmit{$\vac$-normal ordering.}
+The \textit{$\vac$-normal ordering} of a string $q_1\cd q_n$ of particle-hole operators is the mapping $q_1\cd q_n\mapsto\NO{q_1\etc q_n}\equiv\e_\pi q_{\pi(1)}\etc q_{\pi(n)}$ where $\pi\in\mr{S}_n$ is a permutation that places the string in normal order.
+\end{dfn}
+
+\begin{dfn}
+\label{contraction}
+\bmit{$\vac$-normal contraction.}
+A pairwise \textit{$\vac$-normal contraction}, $\ctr{}{q}{_1}{q}{_2}q_1q_2$, of two particle-hole operators $q_1$ and $q_2$ is defined as $\ctr{}{q}{_1}{q}{_2}q_1q_2\equiv q_1q_2-\NO{q_1q_2}$.  This associates a scalar value with every pair in $\{a_p\}\cup\{a_p\dg\}$, of which the only non-trivial case is 
+$\ctr{}{a}{_p}{a}{_q\dg}a_p a_q\dg=a_pa_q\dg-\NO{a_pa_q\dg}=a_pa_q\dg+a_q\dg a_p=\d_{pq}$.
+All other \vac-normal contractions, including $\ctr{}{a}{_p\dg}{a}{_q}a_p\dg a_q$, are zero.
+\end{dfn}
+
+\begin{rmk}
+\bmit{Non-vanishing \vac-normal contractions are elements of the \vac\ one-hole density matrix.}
+Note that \vac-normal contractions can in general be identified with $\ctr{}{q}{_1}{q}{_2}q_1q_2=\ip{\vac|q_1q_2-\NO{q_1q_2}|\vac}=\ip{\vac|q_1q_2|\vac}$, since $\ip{\vac|\NO{q_1q_2}|\vac}=0$ and $\ctr{}{q}{_1}{q}{_2}q_1q_2$ is a scalar.
+The only non-trivial contractions are those with an annihilation operator on the left and a creation operator on the right, which are elements of the one-hole density matrix $\ctr{}{a}{_p}{a}{_q\dg}a_pa_q\dg=\ip{\vac|a_pa_q\dg|\vac}=\h_{pq}=\d_{pq}$ of the vacuum.
+\end{rmk}
+
+\begin{dfn}
+\bmit{$\vac$-normal ordering with contractions.}
+If $q_1\cd q_n$ is a string of particle-hole operators, its \textit{$\vac$-normal ordering with contraction $\ctr{}{q}{_i}{q}{_j}q_iq_j$} ($i<j$) is  defined as $\NO{\ctr{q_1\etc}{q}{_i\etc}{q}{_j\etc q_n}q_1\etc q_i\etc q_j\etc q_n}\equiv (-)^{j-i-1}\ctr{}{q}{_i}{q}{_j}q_iq_j\NO{q_1\cd\cancel{q_i}\cd\cancel{q_j}\cd q_n}$ where the phase factor corresponds to the signature of the permutation required to bring $q_i$ and $q_j$ together.
+$\vac$-normal-ordered products with multiple contractions are defined analogously.
+\end{dfn}
+
+\begin{ntt}
+\label{contraction-notation}
+Given a string $Q=q_1\cd q_n$ of particle-hole operators, let $\NO{Q(\ctr{}{q}{_i}{q}{_j}q_iq_j)}$ denote $\NO{\ctr{q_1\etc}{q}{_i\etc}{q}{_j\etc q_n}q_1\etc q_i\etc q_j\etc q_n}$.
+This is unambiguous for $i<j$.
+Let $\NO{\ol{Q}}$ denote the sum of all unique single, double, triple, etc. contractions, i.e.
+\begin{align*}
+&&
+  \NO{\ol{Q}}
+\equiv
+  \sum_{k=1}^{\floor{\sfrac{n}{2}}}
+  \sum^{\mr{Ctr}_k(Q)}_{\miniar{i_1\cd i_k\\j_1\cd j_k}}
+  \NO{Q(
+    \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+    \cd
+    \ctr{}{q}{_{i_k}}{q}{_{j_k}}q_{i_k}q_{j_k}
+  )}
+\end{align*}
+where $\mr{Ctr}_k(Q)$ runs over the unique sets of $k$ pairs of operator indices in $Q$ and $\floor{}$ is the floor function.
+Let $\NO{\ol{\ol{Q}}}$ denote the sum of all \textit{complete contractions} of $Q$, i.e. the terms in $\NO{\ol{Q}}$ in which all operators in the product are involved in a contraction.
+For a pair of particle-hole operator strings $Q$ and $Q'$, let $\NO{\ctr{}{Q}{}{Q}{'}QQ'}$ denote the sum of all \textit{cross contractions} between $Q$ and $Q'$ in $\NO{\ol{QQ'}}$, i.e. omitting any \textit{internal contractions} in $Q$ or $Q'$.
+Finally, let $\NO{\ccr{}{Q}{}{Q}{'}QQ'}$ denote the sum of \textit{complete cross contractions} between $Q$ and $Q'$ in $\NO{\ctr{}{Q}{}{Q}{'}QQ'}$, i.e. those in which every operator in $Q$ is contracted with an operator in $Q'$ and no uncontracted operators are left over.
+\end{ntt}
+
+
+\section{Wick's theorem}
+
+\begin{lem}
+\label{wick-lem}
+\bmit{$\NO{Q}q=\NO{Qq}+\sum_k\NO{\ctr{Q(}{q}{_k)}{q}{}Q(q_k)q}$}
+\\\hangindent1em
+Proof:
+We can assume without loss of generality that $Q$ is already in normal order so that $\NO{Q}=Q$.
+Let $n$ be the number of operators in $Q$.
+If $q$ is an annihilation operator then $\NO{Qq}=Qq$ and all of the contractions between $Q$ an $q$ vanish (see \Cref{contraction}), so the statement is trivially true.
+If $q$ is a creation operator then $\NO{Qq}=(-)^nqQ$, and
+\begin{align*}
+  Qq
+=
+  (-)^nqQ
++
+  \sum_{k=1}^n
+  (-)^{n-k}
+  q_1\etc [q_k,q]_+\etc q_n
+=
+  \NO{Qq}
++
+  \sum_{k=1}^n
+  \NO{\ctr{Q(}{q}{_k)}{q}{}Q(q_k)q}
+\end{align*}
+using the pull-through relation (see \Cref{pull-through}), the fact that $\NO{\ctr{Q(}{q}{_k)}{q}{}Q(q_k)q}=(-)^{n-k}q_1\etc \ctr{}{q}{_k}{}{q}q_kq\etc q_n$, and the fact that $\ctr{}{q}{_k}{q}{}q_kq = [q_k,q]_+$ when $q$ is a creation operator (see again \Cref{contraction}).
+\end{lem}
+
+\begin{thm}
+\label{wick-thm}
+\bmit{Wick's Theorem, $Q=\NO{Q}+\NO{\ol{Q}}$ (time-independent).}
+\textit{Any string $Q$ of particle-hole operators is equal to $\NO{Q}+\NO{\ol{Q}}$, its normal-ordered form plus the sum of all possible contractions.}
+\\\hangindent1em\hangafter2
+Proof:
+Let $Q=q_1\etc q_n$.
+The result holds for $n=2$ because $q_1q_2=\NO{q_1q_2}+\ctr{}{q}{_1}{q}{_2}q_1q_2$ follows immediately from \Cref{contraction}.
+Now, assume it holds for $Q$ with $n$ operators and consider $Qq$.
+By our inductive assumption $Qq=\NO{Q}q+\NO{\ol{Q}}q$.
+Applying \Cref{wick-lem} to $\NO{Q}q$, we find
+$
+  \NO{Q}q
+=
+  \NO{Qq}
++
+  \sum_i
+  \NO{\ctr{Q(}{q}{_i)}{q}{}Q(q_i)q}
+$.
+Expanding $\NO{\ol{Q}}q$ and applying \Cref{wick-lem} to each term gives
+\begin{align*}
+  \sum_{k=1}^{\floor{\sfrac{n}{2}}}
+  \sum^{\mr{Ctr}_k(Q)}_{\miniar{i_1\cd i_k\\j_1\cd j_k}}
+  \NO{Q(
+    \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+    \cd
+    \ctr{}{q}{_{i_k}}{q}{_{j_k}}q_{i_k}q_{j_k}
+  )}
+  q
+&=
+  \sum_{k=1}^{\floor{\sfrac{n}{2}}}
+  \sum^{\mr{Ctr}_k(Q)}_{\miniar{i_1\cd i_k\\j_1\cd j_k}}
+    \NO{Q(
+      \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+      \cd
+      \ctr{}{q}{_{i_k}}{q}{_{j_k}}q_{i_k}q_{j_k}
+    )
+    q}
+  +
+  \sum_{k=1}^{\floor{\sfrac{n}{2}}}
+  \sum^{\mr{Ctr}_k(Q)}_{\miniar{i_1\cd i_k\\j_1\cd j_k}}
+    \sum_{i\notin\{{\miniar{i_1\cd i_k\\j_1\cd j_k}}\}}
+    \NO{Q(
+      \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+      \cd
+      \ctr{}{q}{_{i_k}}{q}{_{j_k}}q_{i_k}q_{j_k}
+      \ctr{}{q}{_i)}{q}{}
+      q_i)q
+    }
+\\&=
+  \sum^{\mr{Ctr}_1(Q)}_{\miniar{i_1\\j_1}}
+    \NO{Q(
+      \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+    )
+    q}
+  +
+  \sum_{k=2}^{\floor{\sfrac{(n+1)}{2}}}
+  \sum^{\mr{Ctr}_k(Qq)}_{\miniar{i_1\cd i_k\\j_1\cd j_k}}
+    \NO{Qq(
+      \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+      \cd
+      \ctr{}{q}{_{i_k}}{q}{_{j_k}}q_{i_k}q_{j_k}
+      )
+    }
+\end{align*}
+and, combining these results, we find
+\begin{align*}
+  Qq
+=
+  \NO{Q}q
++
+  \NO{\ol{Q}}q
+=&\
+  \NO{Qq}
++
+  \sum_i
+  \NO{\ctr{Q(}{q}{_i)}{q}{}Q(q_i)q}
++
+  \sum^{\mr{Ctr}_1(Q)}_{\miniar{i_1\\j_1}}
+    \NO{Q(
+      \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+    )
+    q}
+  +
+  \sum_{k=2}^{\floor{\sfrac{(n+1)}{2}}}
+  \sum^{\mr{Ctr}_k(Qq)}_{\miniar{i_1\cd i_k\\j_1\cd j_k}}
+    \NO{Qq(
+      \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+      \cd
+      \ctr{}{q}{_{i_k}}{q}{_{j_k}}q_{i_k}q_{j_k}
+      )
+    }
+\\=&\
+  \NO{Qq}
++
+  \sum_{k=1}^{\floor{\sfrac{(n+1)}{2}}}
+  \sum^{\mr{Ctr}_k(Qq)}_{\miniar{i_1\cd i_k\\j_1\cd j_k}}
+    \NO{Qq(
+      \ctr{}{q}{_{i_1}}{q}{_{j_1}}q_{i_1}q_{j_1}
+      \cd
+      \ctr{}{q}{_{i_k}}{q}{_{j_k}}q_{i_k}q_{j_k}
+      )
+    }
+\end{align*}
+which is $\NO{Qq}+\NO{\ol{Qq}}$.
+So if the statement holds for strings of length $n$ it must also hold for strings of length $n+1$ and, by induction, the theorem holds for $Q$ of arbitary length.
+\end{thm}
+
+\begin{cor}
+\label{wick-product}
+\bmit{Wick's Theorem for operator products.}
+\textit{
+Given a pair $Q, Q'$ of particle-hole operator strings already in normal order, the product of their normal orderings is given by $\NO{Q}\NO{Q'}=\NO{QQ'}+\NO{\ctr{}{Q}{}{Q}{'}QQ'}$.}
+\\\hangindent1em\hangafter2
+Proof:
+By Wick's theorem $\NO{Q}\NO{Q'}=\NO{QQ'}+\NO{\ol{\pr{\NO{Q}\NO{Q'}}}}$.
+Since $\NO{Q}$ and $\NO{Q'}$ are in normal order their internal contractions in \NO{\ol{\pr{\NO{Q}\NO{Q'}}}} vanish, which implies $\NO{\ol{\pr{\NO{Q}\NO{Q'}}}}=\NO{\ctr{}{Q}{}{Q}{'}QQ'}$.
+\end{cor}
+
+\begin{cor}
+\label{wick-vacuum-expectation}
+\bmit{$\ip{\vac|Q|\vac}=\NO{\ol{\ol{Q}}}$.}
+\textit{The vacuum expectation value of a string of particle-hole operators equals the sum of its complete contractions.}
+\\\hangindent1em\hangafter2
+Proof:
+From Wick's theorem (\Cref{wick-thm}) we have that $Q=\NO{Q}+\NO{\ol{Q}}$.  Taking the vacuum expectation value of both sides gives $\ip{\vac|Q|\vac}=\NO{\ol{\ol{Q}}}$ since all terms with incompletely contracted operators have vanishing \vac\ expectation values.
+\end{cor}
+
+\begin{pro}
+\bmit{Sign rule for completely contracted products.}
+\textit{The phase factor of a completely contracted product is given by $(-)^{c}$ where $c$ is the number of crossings between contraction lines.}
+\\\hangindent1em\hangafter2
+Proof: Let $\e_\pi\NO{\ctr{}{q}{_{\pi(1)}}{q}{_{\pi(2)}}
+                     q_{\pi(1)}q_{\pi(2)}\cd
+                     \ctr{}{q}{_{\pi(2n-1)}}{q}{_{\pi(2n)}}
+                     q_{\pi(2n-1)}q_{\pi(2n)}}$
+be the disentangled form of a complete contraction of $q_1\cd q_{2n}$.
+The phase factor for the contraction, $\e_\pi$, is equal to the signature of the disentangling permutation, which is equal to the signature of its inverse (``re-entangling'') permutation.
+Consider re-entangling the product by transpositions of adjacent operators, noting that we only need transpositions involving operator pairs which are not contracted with each other.
+Since every operator has a contraction line overhead, each transposition changes the number of crossings by exactly $\pm1$.
+Therefore, $\e_\pi=(-)^c$ where $c$ is the number of crossings.
+\end{pro}
+
+
+\section{$\F$-normal ordering}
+
+\begin{rmk}
+\label{hp-isomorphism}
+\bmit{Hole-particle isomorphism.}
+Let $\F$, corresponding to the occupation vector $\kt{\underset{\text{$n$ times}}{1\cd 1}000\cd}$, be a reference determinant and consider the mapping $F(\mc{H})\rightarrow F(\mc{H})$ given by inverting the bits occupied in $\F$:
+\begin{align*}
+&&
+  \kt{n_1\cd n_n n_{n+1}n_{n+2}\cd}
+\mapsto
+  \kt{\ol{n}_1\cd \ol{n}_n n_{n+1}n_{n+2}\cd}
+\ \ \text{where} \ \ 
+  \ol{n}_i
+=
+  1
+-
+  n_i
+  \ .
+\end{align*}
+This mapping is invertible, so it defines an isomorphism.
+Physically, this corresponds to viewing the first $n$ states as \textit{hole states} rather than as \textit{particle states}.
+Collectively, these are referred to as \textit{quasiparticle states}.
+Under this isomorphism, $\kt{\vac}\mapsto\kt{\underset{\text{$n$ times}}{\ol{1}\cd \ol{1}}000\cd}$ becomes a state of $n$ holes and $\kt{\F}\mapsto\kt{\underset{\text{$n$ times}}{\ol{0}\cd \ol{0}}000\cd}$ becomes the \textit{quasiparticle vacuum}, in which all hole and particle states are unoccupied.
+\end{rmk}
+
+\begin{dfn}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+\label{qparticle-creation-annihilation-ops}
+\bmit{Quasiparticle creation and annihilation operators.}
+Let $\{b_p\}\cup\{b_p\dg\}$ be the \textit{quasiparticle creation and annihilation operators} that result from applying the isomorphism discussed in \Cref{hp-isomorphism}.
+These are related to the original set $\{a_p\}\cup\{a_p\dg\}$ of \textit{particle creation and annihilation operators} via
+\begin{align*}
+&&
+  a_i
+\mapsto
+  b_i\dg
+&&
+  a_i\dg
+\mapsto
+  b_i
+&&
+  a_a
+\mapsto
+  b_a
+&&
+  a_a\dg
+\mapsto
+  b_a\dg
+\end{align*}
+where $i$ and $a$ are occupied and virtual indices with respect to $\F$.
+$\{a_i\dg\}\cup\{a_a\}\mapsto\{b_p\}$ are therefore \textit{quasiparticle annihilation operators} and $\{a_i\}\cup\{a_a\dg\}\mapsto\{b_p\dg\}$ are \textit{quasiparticle creation operators}.
+\end{dfn}
+
+\begin{dfn}
+\bmit{$\F$-normal order.}
+A string $q_1\cd q_n$ of particle-hole operators $q_i\in\{a_p\}\cup\{a_p\dg\}$ is in \textit{$\F$-normal order} when all of its quasiparticle creation operators lie to the left of all of its quasiparticle annihilation operators.
+That is, it must map to a string of the form $b_{p_1}\dg\cd b_{p_m}\dg b_{r_1}\cd b_{r_{m'}}$ under the hole-particle isomorphism (\Cref{hp-isomorphism}) that makes $\F$ the quasiparticle vacuum.
+This quarantees that $\ip{\F|q_1\cd q_n|\F}=0$, i.e. its $\F$ expectation value vanishes.
+\end{dfn}
+
+\begin{dfn}
+\bmit{$\F$-normal ordering.}
+The \textit{$\F$-normal ordering} of a string $q_1\cd q_n$ of particle-hole operators is the mapping $q_1\cd q_n\mapsto\GNO{q_1\cd q_n}=\e_\pi q_{\pi(1)}\cd q_{\pi(n)}$ where $\pi\in\mr{S}_n$ is a permutation that places the string in $\F$-normal order.
+\end{dfn}
+
+
+\begin{dfn}
+\bmit{$\F$-normal contraction.}
+A pairwise \textit{$\F$-normal contraction} $\ctr{}{q}{_1}{q}{_2}q_1q_2$ is defined as $\ctr{}{q}{_1}{q}{_2}q_1q_2\equiv q_1q_2-\GNO{q_1q_2}$.
+For the quasiparticle operators of \Cref{qparticle-creation-annihilation-ops}, the only non-vanishing contraction is $\ctr{}{b}{_p}{b}{_q\dg}b_pb_q\dg=\d_{pq}$, which shows that $\ctr[0.5]{}{a}{_i\dg}{a}{_j}a_i\dg a_j=\d_{ij}$ and $\ctr{}{a}{_a}{a}{_b\dg}a_aa_b\dg=\d_{ab}$ are the non-vanishing $\F$-normal contractions of the orignal particle-hole operators.
+\end{dfn}
+
+\begin{rmk}
+\label{phi-opdm-ohdm}
+\bmit{Non-vanishing contractions are elements of the $\F$ one-particle and one-hole density matrices.}
+$\F$-normal contractions can in general be identified with $\ctr{}{q}{_1}{q}{_2}q_1q_2=\ip{\F|q_1q_2-\GNO{q_1q_2}|\F}=\ip{\F|q_1q_2|\F}$.
+Therefore, the non-vanishing contractions are elements of the $\F$ one-particle and one-hole density matrices
+\begin{align*}
+&&
+  \ctr[0.5]{}{a}{_p\dg}{a}{_q}a_p\dg a_q
+=
+  \ip{\F|a_p\dg a_q|\F}
+=
+  \g_{qp}
+&&
+  \ctr{}{a}{_p}{a}{_q\dg}a_p a_q\dg
+=
+  \ip{\F|a_p a_q\dg|\F}
+=
+  \h_{pq}
+\end{align*}
+depending whether the creation operator is on the right or left in the contraction.
+The one-particle density matrix of $\F$ is given by $\g_{pq}=0$ unless $p=q=i$ where $i$ is an occupied index, in which case $\g_{ii}=1$.
+The one-hole density matrix of $\F$ is given by $\h_{pq}=0$ unless $p=q=a$ where $a$ is a virtual index, in which case $\h_{aa}=1$.
+\end{rmk}
+
+\begin{dfn}
+\bmit{$\F$-normal ordering with contractions.}
+If $q_1\cd q_n$ is a string of particle-hole operators, its \textit{$\F$-normal ordering with contraction $\ctr{}{q}{_i}{q}{_j}q_iq_j$} ($i<j$) is  defined as $\GNO{\ctr{q_1\etc}{q}{_i\etc}{q}{_j\etc q_n}q_1\etc q_i\etc q_j\etc q_n}\equiv (-)^{j-i-1}\ctr{}{q}{_i}{q}{_j}q_iq_j\GNO{q_1\cd\cancel{q_i}\cd\cancel{q_j}\cd q_n}$.
+\end{dfn}
+
+\begin{rmk}
+\bmit{Wick's theorem for $\F$-normal ordering.}
+The isomorphism described in \Cref{hp-isomorphism} maps $\F$-normal ordered products with $\F$-normal contractions into $\vac$-normal ordered products with $\vac$-normal contractions.
+Therefore, Wick's theorem still holds as
+$
+  Q
+=
+  \GNO{Q}
++
+  \GNO{\ol{Q}}
+$
+with non-vanishing contractions
+$
+  \ctr[0.5]{}{a}{_p\dg}{a}{_q}a_p\dg a_q
+=
+  \g_{qp}
+$
+and
+$
+  \ctr{}{a}{_p}{a}{_q\dg}a_p a_q\dg
+=
+  \h_{pq}
+$.
+The corollaries $\GNO{Q}\GNO{Q'}=\GNO{QQ'}+\GNO{\ctr{}{Q}{}{Q}{'}QQ'}$ and $\ip{\F|Q|\F}=\GNO{\ol{\ol{Q}}}$ also still hold, since they follow directly from Wick's theorem.
+\end{rmk}
+
+\begin{rmk}
+\label{excitation-operator-wick-expansion}
+As an example, consider the $\Phi$-normal Wick expansion of $a_p\dg a_q$ and $a_p\dg a_q\dg a_sa_r$:
+\begin{align*}
+  a_p\dg a_q
+=&\
+  \GNO{a_p\dg a_q}
++
+  \GNO{\ctr{}{a}{_p\dg}{a}{_q}a_p\dg a_q}
+=
+  \GNO{a_p\dg a_q}
++
+  \g_{qp}
+\\
+  a_p\dg a_q\dg a_sa_r
+=&\
+  \GNO{a_p\dg a_q\dg a_sa_r}
++
+  \GNO{
+  \ctr[0.5]{}{a}{_p\dg a_q\dg}{a}{_sa_r}
+  a_p\dg a_q\dg a_sa_r
+  }
++
+  \GNO{
+  \ctr[0.5]{}{a}{_p\dg a_q\dg a_s}{a}{_r}
+  a_p\dg a_q\dg a_sa_r
+  }
++
+  \GNO{
+  \ctr[0.5]{a_p\dg}{a}{_q\dg}{a}{_sa_r}
+  a_p\dg a_q\dg a_sa_r
+  }
++
+  \GNO{
+  \ctr[0.5]{a_p\dg}{a}{_q\dg a_s}{a}{_r}
+  a_p\dg a_q\dg a_sa_r
+  }
++
+  \GNO{
+  \ctr[2]{}{a}{_p\dg a_q\dg a_s}{a}{_r}
+  \ctr[0.5]{a_p\dg}{a}{_q\dg}{a}{_sa_r}
+  a_p\dg a_q\dg a_sa_r
+  }
++
+  \GNO{
+  \ctr[2]{a_p\dg}{a}{_q\dg a_s}{a}{_r}
+  \ctr[0.5]{}{a}{_p\dg a_q\dg}{a}{_sa_r}
+  a_p\dg a_q\dg a_sa_r
+  }
+\\=&\
+  \GNO{a_p\dg a_q\dg a_sa_r}
+-
+  \g_{sp}
+  \GNO{a_q\dg a_r}
++
+  \g_{rp}
+  \GNO{a_q\dg a_s}
++
+  \g_{sq}
+  \GNO{a_p\dg a_r}
+-
+  \g_{rq}
+  \GNO{a_p\dg a_s}
++
+  \g_{rp}\g_{sq}
+-
+  \g_{sp}\g_{rq}
+\ \ .
+\end{align*}
+In general, an $m$-tuple excitation operator $a_{p_1}\dg\cd a_{p_m}\dg a_{q_m}\cd a_{q_1}$ can be expressed as a linear combination of $\F$-normal ordered $n$-tuple excitation operators $\GNO{a_{r_1}\dg\cd a_{r_n}\dg a_{s_n}\cd a_{s_1}}$ from $n=0$ to $n=m$.
+\end{rmk}
+
+
+
+\section{Kutzelnigg-Mukherjee tensor notation}
+
+\begin{ntt}
+\label{kutzelnigg-mukherjee-vacuum}
+\bmit{Kutzelnigg-Mukherjee tensor notation.}
+In \textit{Kutzelnigg-Mukherjee tensor notation} (\textit{KM notation}), indices which are covariant with respect to the spin-orbital basis $\{\y_p\}$ are written as superscripts, whereas contravariant indices are written as subscripts.
+Note that this reverses the usual convention in multilinear algebra.
+Furthermore, the Einstein summation convention is adopted, in which any pair of matching upper and lower indices in a product is implicitly summed over its index range.
+Indices $i,j,k,l,\cd$ count over occupied orbitals $\{\y_i\in\F\}$, indices $a,b,c,d,\cd$ count over virtual orbitals $\{\y_a\notin\F\}$, and indices $p,q,r,s,\cd$ count over the full spin-orbital basis $\{\y_p\in\mc{H}\}$.
+\end{ntt}
+
+\begin{ntt}
+\bmit{KM notation for particle-hole operators.}
+Annihilation operators ($a_p$) are contravariant and creation operators ($a_p\dg$) operators are covariant to the spin-orbital basis, so these are written as $a_p$ and $a^p$, respectively.
+\end{ntt}
+
+\begin{ntt}
+\bmit{KM notation for one-hole and one-particle density matrices.}
+The one-particle and one-hole density matrices of a state $\Y$ are written as $\g_q^p=\ip{\Y|a^pa_q|\Y}$ and $\h_p^q=\ip{\Y|a_pa^q|\Y}$, respectively.
+\end{ntt}
+
+\begin{ntt}
+\bmit{KM notation for excitation operators.}
+Excitation operators are given the following concise notation.
+\begin{align*}
+&&
+  a_{q_1\cd q_m}^{p_1\cd p_m}
+\equiv
+  a^{p_1}\cd a^{p_m}a_{q_m}\cd a_{q_1}
+\end{align*}
+$\Phi$-normal-ordered excitation operators are denoted with a tilde:
+$
+  \tl{a}_{q_1\cd q_m}^{p_1\cd p_m}
+\equiv
+  \GNO{a_{q_1\cd q_m}^{p_1\cd p_m}}
+$.
+\end{ntt}
+
+\begin{ntt}
+\bmit{KM notation for $H_e$.}
+The electronic Hamiltonian is expressed in KM notation as
+\begin{align*}
+&&
+  H_e
+=
+  h_p^q
+  a_q^p
++
+  \tfrac{1}{2}
+  g_{pq}^{rs}
+  a_{rs}^{pq}
+\sp \text{or}\sp
+  H_e
+=
+  h_p^q
+  a_q^p
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  a_{rs}^{pq}
+\end{align*}
+where $h_p^q\equiv\ip{\y_p(1)|\op{h}(1)|\y_q(1)}$ are the one-electron integrals, 
+$g_{pq}^{rs}\equiv\ip{\y_p(1)\y_q(2)|\op{g}(1,2)|\y_r(1)\y_s(2)}$
+are the two-electron integrals, and $\ol{g}_{pq}^{rs}\equiv g_{pq}^{rs}-g_{pq}^{sr}$ are the antisymmetrized two-electron integrals.
+\end{ntt}
+
+\begin{rmk}
+\label{excitation-operator-phase}
+Note that for normal-ordered products of excitation operators, the following rearrangements are valid.
+\begin{align*}
+&&
+  \NO{a_{q_1\cd q_m}^{p_1\cd p_m}
+      a_{s_1\cd s_n}^{r_1\cd r_n}}
+=
+  \NO{a_{q_1}^{p_1}\cd a_{p_m}^{p_m}
+      a_{s_1}^{r_1}\cd a_{s_n}^{r_n}}
+=
+  a_{q_1\cd q_ms_1\cd s_n}^{p_1\cd p_mr_1\cd r_n}
+\\
+&&
+  \GNO{\tl{a}_{q_1\cd q_m}^{p_1\cd p_m}
+       \tl{a}_{s_1\cd s_n}^{r_1\cd r_n}}
+=
+  \GNO{\tl{a}_{q_1}^{p_1}\cd \tl{a}_{p_m}^{p_m}
+       \tl{a}_{s_1}^{r_1}\cd \tl{a}_{s_n}^{r_n}}
+=
+  \tl{a}_{q_1\cd q_ms_1\cd s_n}^{p_1\cd p_mr_1\cd r_n}
+\end{align*}
+Furthermore, every one of these expressions is antisymmetric in its upper and lower indices -- for example,
+$
+  \NO{a_{q}^{p}a_{tu}^{rs}}
+=
+-
+  \NO{a_{q}^{r}a_{tu}^{ps}}
+=
+  \NO{a_{t}^{r}a_{qu}^{ps}}
+$.
+The phase factor for permutations of upper or lower indices is $(-)^t$ where $t$ is the number of transpositions required to restore the original pairing ($\miniar{p_i\\q_i}$ and $\miniar{r_i\\s_i}$) of upper and lower indices.
+When the pairs are permuted together, no change in sign appears: $a_{q_1\cd q_m}^{p_1\cd p_m}=a_{q_{\pi(1)}\cd q_{\pi(m)}}^{p_{\pi(1)}\cd p_{\pi(m)}}$ for all $\pi\in\mr{S}_m$.
+\end{rmk}
+
+\begin{ntt}
+\label{km-contraction-notation}
+\bmit{Notation for contractions.}
+It is convenient here to shift to the following notation for contractions
+\begin{align*}
+&&
+  a_{p^\hole}a^{q^\hole}
+\equiv
+  \ctr{}{a}{_p}{a}{^q}a_pa^q
+&&
+  a^{q^\hole}a_{p^\hole}
+\equiv
+-
+  \ctr{}{a}{_p}{a}{^q}a_pa^q
+&&
+  a^{p^\ptcl}a_{q^\ptcl}
+\equiv
+  \ctr{}{a}{^p}{a}{_q}a^pa_q
+&&
+  a_{q^\ptcl}a^{p^\ptcl}
+\equiv
+-
+  \ctr{}{a}{^p}{a}{_q}a^pa_q
+\end{align*}
+where $\hole$ indicates an \textit{$\h$-contraction} and $\ptcl$ indicates a \textit{$\g$-contraction} between operators with the same number of these symbols next to their indices.
+Note that $a_{p^\hole}^{q^\hole}=-\h_p^q$ ($=-\d_p^q$ for a $\vac$-normal contraction) and $a_{q^\ptcl}^{p^\ptcl}=\g_q^p$ ($=0$ for a $\vac$-normal contraction).
+This notation allows for contracted operators to be permuted arbitrarily with the other operators in a normal-ordered string, in contrast to $\ctr{}{a}{_p}{a}{^q}a_pa^q$ and $\ctr{}{a}{^p}{a}{_q}a^pa_q$ which are neither antisymmetric nor symmetric to interchange of their arguments.
+\end{ntt}
+
+\begin{ntt}
+\label{index-permutation-operator}
+\bmit{Index permutation operators.}
+Let $\op{P}^{(P_1/\cd/P_M)}_{(Q_1/\cd/Q_N)}$, where $P_i$ and $Q_i$ are sets of indices, denote an \textit{index permutation operator} which yields a sum over all permutations of the indices in $P_1\cd P_M$ and $Q_1\cd Q_M$ weighted by the permutation phases, omitting any permutations that involve transpositions within one of the blocks, $P_i$ or $Q_i$.
+\end{ntt}
+
+
+\begin{rmk}
+\label{km-notation-example}
+Repeating the examples from \Cref{excitation-operator-wick-expansion} using KM notation, we write
+\begin{align*}
+&&
+  a_q^p
+=&\
+  \GNO{a_q^p}
++
+  \GNO{a_{q^\ptcl}^{p^\ptcl}}
+&&=
+  \tl{a}_q^p
++
+  \g_q^p
+\\
+&&
+  a_{rs}^{pq}
+=&\
+  \GNO{a_{rs}^{pq}}
++
+  \GNO{a_{r^\ptcl s}^{p^\ptcl q}}
++
+  \GNO{a_{rs^\ptcl}^{p^\ptcl q}}
++
+  \GNO{a_{r^\ptcl s}^{pq^\ptcl}}
++
+  \GNO{a_{rs^\ptcl}^{pq^\ptcl}}
++
+  \GNO{a_{r^\ptcl s^{\ptcl\ptcl}}^{p^\ptcl q^{\ptcl\ptcl}}}
++
+  \GNO{a_{r^{\ptcl\ptcl} s^\ptcl}^{p^\ptcl q^{\ptcl\ptcl}}}
+&&=
+  \tl{a}_{rs}^{pq}
++
+  \op{P}_{(r/s)}^{(p/q)}
+  \tl{a}_s^q\g_r^p
++
+  \op{P}_{(r/s)}
+  \g_r^p\g_s^q
+\end{align*}
+where $\op{P}_{(r/s)}$ acts as $\op{P}_{(r/s)}f_{rs} = f_{rs} - f_{sr}$ and $\op{P}_{(r/s)}^{(p/q)}$ acts as $\op{P}_{(r/s)}^{(p/q)}f_{rs}^{pq}=\op{P}^{(p/q)}\op{P}_{(r/s)}f_{rs}^{pq}=f_{rs}^{pq}-f_{sr}^{pq}-f_{rs}^{qp}+f_{sr}^{qp}$.
+More complicated permutation operators appear in the $\F$-normal Wick expansions of higher excitation operators, such as
+\begin{align*}
+&&
+  a_{stu}^{pqr}
+=&\
+  \tl{a}_{stu}^{pqr}
++
+  \op{P}_{(s/tu)}^{(p/qr)}
+  \g_s^p\tl{a}_{tu}^{qr}
++
+  \op{P}_{(s/t/u)}^{(pq/r)}
+  \g_s^p
+  \g_r^q
+  \tl{a}_u^r
++
+  \op{P}_{(s/t/u)}
+  \g_s^p
+  \g_t^q
+  \g_u^r
+\end{align*}
+Where $\op{P}_{(p/q/r)}$ sums over all permutations of $pqr$: $\op{P}_{(p/q/r)}f_{pqr}=f_{pqr}-f_{prq}-f_{qpr}+f_{qrp}+f_{rpq}-f_{rqp}$, whereas $\op{P}_{(p/qr)}$ omits any permutations that involve transpose $q$ and $r$: $\op{P}_{(p/qr)}f_{pqr}=f_{pqr}-f_{qpr}-f_{rqp}$.
+\end{rmk}
+
+\begin{rmk}
+\label{phi-normal-expansion-of-hamiltonian}
+The Wick expansions for $a_q^p$ and $a_{rs}^{pq}$ can be used to write $H_e=h_p^qa_q^p+g_{pq}^{rs}a_{rs}^{pq}$ as
+\begin{align*}
+&&
+  H_e
+=
+  \ip{\F|H_e|\F}
++
+  f_p^q\tl{a}_q^p
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  \tl{a}_{rs}^{pq}
+\end{align*}
+where $\ip{\F|H_e|\F}=h_p^q\g_q^p+\frac{1}{2}\ol{g}_{pq}^{rs}\g_r^p\g_s^q=h_i^i+\frac{1}{2}\ol{g}_{ij}^{ij}$ is the Hartree-Fock energy expression and $f_p^q=h_p^q+\ol{g}_{pr}^{qs}\g_s^r=h_p^q+\ol{g}_{pi}^{qi}$ is the spin-orbital Fock matrix.
+\end{rmk}
+
+\begin{rmk}
+\bmit{Example: Derivation of Slater-Condon rules in KM notation.}
+Noting $a_{ijk\cd}^{abc\cd}=\tl{a}_{ijk\cd}^{abc\cd}$ since these excitation operators consist of only quasiparticle creation operators, Hamiltonian matrix elements $\ip{\F|H_e|\F_{ijk\cd}^{abc\cd}}$ can be evaluated from $\ip{\F|\tl{a}_q^p\tl{a}_{ijk\cd}^{abc\cd}|\F}$ and $\ip{\F|\tl{a}_{rs}^{pq}\tl{a}_{ijk\cd}^{abc\cd}|\F}$.
+According to Wick's theorem, $\ip{\F|\tl{a}_q^p\tl{a}_{ijk\cd}^{abc\cd}|\F}$ is equal to the complete cross-contractions between $\tl{a}_q^p$ and $\tl{a}_{ijk\cd}^{abc\cd}$, so that these matrix elements are as follows.
+\begin{align*}
+&
+  \ip{\F|\tl{a}_q^p|\F}
+=
+  0
+\\
+&
+  \ip{\F|\tl{a}_q^p\tl{a}_i^a|\F}
+=
+  \GNO{a_{q^\hole}^{p^\ptcl}a_{i^\ptcl}^{a^\hole}}
+=
+  \g_i^p\h_q^a
+\\
+&
+  \ip{\F|\tl{a}_q^p\tl{a}_{ij}^{ab}|\F}
+=
+  0
+\\
+\intertext{Beyond single excitations, the matrix elements vanish because there are no possible complete cross-contractions.
+Similarly, $\ip{\F|\tl{a}_{rs}^{pq}\tl{a}_{ijk\cd}^{abc\cd}|\F}$ is equal to the sum over complete cross-contractions between $\tl{a}_{rs}^{pq}$ and $\tl{a}_{ijk\cd}^{abc\cd}$.}
+&
+  \ip{\F|\tl{a}_{rs}^{pq}|\F}
+=
+  0
+\\
+&
+  \ip{\F|\tl{a}_{rs}^{pq}\tl{a}_i^a|\F}
+=
+  0
+\\
+&
+  \ip{\F|\tl{a}_{rs}^{pq}\tl{a}_{ij}^{ab}|\F}
+=
+  \GNO{a_{r^{\hole}s^{\hole\hole}}^{p^{\ptcl}q^{\ptcl\ptcl}}a_{i^{\ptcl}j^{\ptcl\ptcl}}^{a^{\hole}b^{\hole\hole}}}
++
+  \GNO{a_{r^{\hole}s^{\hole\hole}}^{p^{\ptcl}q^{\ptcl\ptcl}}a_{i^{\ptcl}j^{\ptcl\ptcl}}^{a^{\hole\hole}b^{\hole}}}
++
+  \GNO{a_{r^{\hole}s^{\hole\hole}}^{p^{\ptcl}q^{\ptcl\ptcl}}a_{i^{\ptcl\ptcl}j^{\ptcl}}^{a^{\hole}b^{\hole\hole}}}
++
+  \GNO{a_{r^{\hole}s^{\hole\hole}}^{p^{\ptcl}q^{\ptcl\ptcl}}a_{i^{\ptcl\ptcl}j^{\ptcl}}^{a^{\hole\hole}b^{\hole}}}
+=
+  \op{P}^{(a/b)}_{(i/j)}
+  \g^p_i\g^q_j\h_r^a\h_s^b
+\\
+&
+  \ip{\F|\tl{a}_{rs}^{pq}\tl{a}_{ijk\cd}^{abc\cd}|\F}
+=
+  0
+\end{align*}
+Beyond double excitations, no complete cross-contractions are possible and the matrix elements vanish.
+Using these results, the first Slater-Condon rule becomes tautological: $\ip{\F|H_e|\F}+f_p^q\ip{\F|\tl{a}_q^p|\F}+\tfrac{1}{4}\ol{g}_{pq}^{rs}\ip{\F|\tl{a}_{rs}^{pq}|\F}=\ip{\F|H_e|\F}$.
+The remaining Slater-Condon rules take the following form.
+\begin{align*}
+&&
+  \ip{\F|H_e|\F_i^a}
+=
+  f_p^q\g_i^p\h_q^a
+=
+  f_a^i
+&&
+  \ip{\F|H_e|\F_{ij}^{ab}}
+=
+  \tfrac{1}{4}\ol{g}_{pq}^{rs}
+  \pr{\op{P}^{(a/b)}_{(i/j)}
+  \g^p_i\g^q_j\h_r^a\h_s^b}
+=
+  \ol{g}_{ij}^{ab}
+&&
+  \ip{\F|H_e|\F_{ijk\cd}^{abc\cd}}
+=
+  0
+\end{align*}
+More general matrix elements $\ip{\F_I^A|H_e|\F_J^B}$ can be evaluated similarly by determining the complete cross-contractions of $\tl{a}_A^I\tl{a}_q^p\tl{a}_J^B$ and $\tl{a}_A^I\tl{a}_{rs}^{pq}\tl{a}_J^B$.
+\end{rmk}
+
+\begin{dfn}
+\bmit{$\F$-normal electronic Hamiltonian.}
+The \textit{$\F$-normal electronic Hamiltonian}, here denoted $H_c$, is defined as $H_c\equiv H_e-\ip{\F|H_e|\F}$.
+Using \Cref{phi-normal-expansion-of-hamiltonian}, it can be expressed as follows.
+\begin{align*}
+&&
+  H_c
+=
+  f_p^q
+  \tl{a}_q^p
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  \tl{a}_{rs}^{pq}
+\end{align*}
+$H_c$ shares the same eigenstates as $H_e$, but it has a vanishing $\F$ expectation value and its eigenvalues are correlation energies $E_c=E_e-\ip{\F|H_e|\F}$ with respect to $\F$.
+\end{dfn}
+
+\begin{rmk}
+\bmit{Example: Derivation of CI singles equations in KM notation.}
+The eigenvalue-shifted CI singles matrix $\ip{\F_i^a|H_e|\F_j^b}-\ip{\F|H_e|\F}\d_{ij}\d^{ab}$ is equivalent to $\ip{\F_i^a|H_c|\F_j^b}$.
+Its matrix elements can be determined from
+\begin{align*}
+&
+  \ip{\F|\tl{a}_a^i\tl{a}_q^p\tl{a}_j^b|\F}
+=
+  \GNO{a_{a^\hole}^{i^\ptcl}a_{q^{\hole\hole}}^{p^\hole}a_{j^\ptcl}^{b^{\hole\hole}}}
++
+  \GNO{a_{a^\hole}^{i^{\ptcl}}a_{q^{\ptcl}}^{p^{\ptcl\ptcl}}a_{j^{\ptcl\ptcl}}^{b^{\hole}}}
+=
+  \g^i_j\h_a^p\h_q^b
+-
+  \g_q^i\g_j^p\h_a^b
+\\
+&
+  \ip{\F|\tl{a}_a^i\tl{a}_{rs}^{pq}\tl{a}_j^b|\F}
+=
+  \GNO{
+    \tl{a}_{a^\hole}^{i^\ptcl}
+    \tl{a}_{r^{\ptcl}s^{\hole\hole}}^{p^{\hole}q^{\ptcl\ptcl}}
+    \tl{a}_{j^{\ptcl\ptcl}}^{b^{\hole\hole}}
+  }
++
+  \GNO{
+    \tl{a}_{a^\hole}^{i^\ptcl}
+    \tl{a}_{r^{\hole\hole}s^{\ptcl}}^{p^{\hole}q^{\ptcl\ptcl}}
+    \tl{a}_{j^{\ptcl\ptcl}}^{b^{\hole\hole}}
+  }
++
+  \GNO{
+    \tl{a}_{a^\hole}^{i^\ptcl}
+    \tl{a}_{r^{\ptcl}s^{\hole\hole}}^{p^{\ptcl\ptcl}q^{\hole}}
+    \tl{a}_{j^{\ptcl\ptcl}}^{b^{\hole\hole}}
+  }
++
+  \GNO{
+    \tl{a}_{a^\hole}^{i^\ptcl}
+    \tl{a}_{r^{\hole\hole}s^{\ptcl}}^{p^{\ptcl\ptcl}q^{\hole}}
+    \tl{a}_{j^{\ptcl\ptcl}}^{b^{\hole\hole}}
+  }
+=
+  \op{P}^{(p/q)}_{(r/s)}
+  \g^i_r\h^p_a\g^q_j\h^b_s
+\end{align*}
+which gives
+\begin{align*}
+  \ip{\F_i^a|H_c|\F_j^b}
+=
+  f_p^q
+  \pr{
+    \g^i_j\h_a^p\h_q^b
+  -
+    \g_q^i\g_j^p\h_a^b
+  }
++
+  \tfrac{1}{4}
+  \ol{g}_{pq}^{rs}
+  \pr{
+    \op{P}^{(p/q)}_{(r/s)}
+    \g^i_r\h^p_a\g^q_j\h^b_s
+  }
+=
+  f_a^b\g_j^i
+-
+  f_j^i\h_a^b
++
+  \ol{g}_{aj}^{ib}\ .
+\end{align*}
+Noting that $\g_j^i=\d_j^i$ and $\h_a^b=\d_a^b$ (see \Cref{phi-opdm-ohdm}), this can be simplified to
+$
+  \ip{\F_i^a|H_c|\F_j^b}
+=
+  f_a^b\d_j^i
+-
+  f_j^i\d_a^b
++
+  \ol{g}_{aj}^{ib}
+$.
+\end{rmk}
+
+
+\appendix
+
+\section{Derivation of the pull-through relation}
+
+\begin{pro}
+\label{pull-through}
+\bmit{Pull-through relation.}
+\textit{For arbitrary operators $x_1,\ld,x_n$ and $y$,
+\begin{align*}
+&&
+  x_1\etc x_ny
+=
+  (\mp)^n
+  yx_1\etc x_n
++
+  \sum_{k=1}^n(\mp)^{n-k}x_1\etc[x_k,y]_{\pm}\etc x_n
+\end{align*}
+where $[x,y]_{\pm}\equiv xy\pm yx$.}
+\\\hangindent1em\hangafter5
+Proof: 
+The $n=1$ case follows from the definition of the commutator brackets: $xy =\mp yx + [x,y]_{\pm}$.
+Now, assume it holds for $n$ and consider $n+1$.
+Since $x_1\etc x_{n+1}y=x_1\etc x_n(\mp yx_{n+1}+[x_{n+1},y]_{\pm})$, we find
+\begin{align*}
+  x_1\etc x_{n+1}y
+=&\
+\mp
+  \pr{
+    (\mp)^n
+    yx_1\etc x_n
+  +
+    \sum_{k=1}^n
+    (\mp)^{n-k}
+    x_1\etc [x_k,y]_{\pm}\etc x_n
+  }
+  x_{n+1}
++
+  x_1\etc x_n[x_{n+1},y]_{\pm}
+\\=&\
+  (\mp)^{n+1}
+  yx_1\etc x_n
++
+  \sum_{k=1}^{n+1}
+  (\mp)^{n+1-k}
+  x_1\etc[x_k,y]_{\pm}\etc x_{n+1}
+\end{align*}
+and, by induction, the result holds for all $n$.
+\end{pro}
+
+
+
+\end{document}
