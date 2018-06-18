@@ -1,0 +1,249 @@
+\documentclass[fleqn]{article}
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small}
+\lstset{literate={~} {$\sim$}{1}}
+\lstset{showstringspaces=false}
+\lstset{language=Python}
+\usepackage{scrextend}
+\newcommand{\linp}[1]{\lstinputlisting{#1}{}}
+\newcommand{\linl}[1]{\lstinline{#1}{}}
+
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\fd}[2]{\ensuremath{\frac{d #1}{d #2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\rad}{\ensuremath{\mr{rad}}}
+
+
+\title{Programming Project 1: Frequencies\\
+\textit{Computing frequencies and normal modes from the Hessian matrix}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-1cm}
+\noindent
+Write a script to read in a Hessian matrix, compute the corresponding frequencies and normal modes, and print them to a file in Jmol's \linl{.xyz} format.
+You should import your \linl{Molecule} class from Project 0 and make use of it in this script.
+
+\subsection*{Extra Files}
+\begin{center}
+\begin{tabular}{p{0.25\textwidth}@{}p{0.75\textwidth}}
+  \ul{file name} & \ul{description} \\
+  \linl{molecule.xyz}
+  & sample \linl{.xyz} file for H$_2$O \\ 
+  \linl{hessian.dat}
+  & sample Hessian matrix for H$_2$O \\
+  \linl{project1_answer.xyz}
+  & normal modes and frequencies for H$_2$O
+\end{tabular}
+\end{center}
+
+
+\subsection*{Equations}
+Let $N$ be the number of atoms and let $m_A$ and $(x_A, y_A, z_A)$ be the mass and Cartesian coordinates of the $A$\eth\ atom.
+\begin{align}
+\label{hessian-dfn}
+  (\bo{H})_{AB}
+=&\
+  \pd{^2E}{X_A\pt X_B}
+&
+  (X_{3A-2}, X_{3A-1}, X_{3A-0})=&\ (x_A, y_A, z_A)
+&&
+  \text{for $A\in\{1,\ld,N\}$}
+\\[5pt]
+\label{mwhessian-dfn}
+  (\bo{\tl{H}})_{AB}
+=&\
+  \fr{(\bo{H})_{AB}}{\sqrt{M_AM_B}}
+&
+  (M_{3A-2}, M_{3A-1}, M_{3A-0})=&\ (m_A, m_A, m_A)
+&&
+  \text{for $A\in\{1,\ld,N\}$}
+\\[5pt]
+\label{mwhessian-eigh}
+  \bo{\tl{H}}\hspace{2pt}\bm{\tl{q}}_A
+=&\
+  k_A\bm{\tl{q}}_A
+&&&&
+  \text{for $A\in\{1,\ld,N\}$}
+\\[5pt]
+\label{backtransform-eigvecs}
+  (\bm{q}_A)_B
+=&\
+  \fr{(\bm{\tl{q}}_A)_B}{\sqrt{M_B}}
+&&&&
+  \text{for $A, B\in\{1,\ld,N\}$}
+\end{align}
+\begin{align}
+\label{conversion}
+&
+  k_A \left[\fr{E_h\rad^2}{a_0^2u}\right]
+=
+  k_A \left(\fr{E_h[\mr{J}]}{a_0[\mr{m}]^2u[kg]}\right)
+  \left[\fr{\rad^2}{\mr{s}^2}\right]
+&&
+  \nu_A \left[\mr{Hz}\right]
+=
+  \fr{1}{2\pi}\left[\fr{\mr{cyc}}{\rad}\right]
+  \cdot
+  \sqrt{k_A \left[\fr{\rad^2}{\mr{s}^2}\right]}
+&&
+  \tl{\nu}_A \left[\mr{cm}^{-1}\right]
+=
+  \fr{\nu_A\left[\mr{Hz}\right]}{c\ [\mr{cm}/\mr{s}]}
+\end{align}
+
+
+
+\subsection*{Procedure}
+
+Steps 3.--7. should be implemented in a separate \linl{frequencies()} function that takes a \linl{Molecule} object and a \linl{numpy.array} Hessian matrix as arguments.
+\begin{enumerate}
+  \item read in the Hessian matrix (defined in equation \ref{hessian-dfn}) from \linl{hessian.dat}
+  \item build a \linl{Molecule} object from \linl{molecule.xyz}
+  \item build the mass-weighted Hessian matrix (equation \ref{mwhessian-dfn})
+  \item compute the eigenvalues ($k_A$) and eigenvectors ($\bm{\tl{q}}_A$) of the mass-weighted Hessian matrix (equation \ref{mwhessian-eigh})
+  \item un-mass-weight the eigenvectors (equation \ref{backtransform-eigvecs}) to get normal coordinates
+  \item determine the spatial frequencies $\tl{\n}_A$ in $\mr{cm}^{-1}$ from your force constants $k_A$, which are in atomic units (equation \ref{conversion})
+  \item write the normal modes to a file in \linl{.xyz} format, with frequencies neatly displayed in the comment lines
+\end{enumerate}
+After you are finished, check your answers against \linl{project1_answer.xyz} and then try visualizing the normal modes in Jmol.
+
+\newpage
+\subsubsection*{Description of \linl{.xyz} format for normal modes}
+The file format for visualizing a single normal mode in Jmol is
+\begin{addmargin}{5cm}{}
+\begin{lstlisting}[language=c++]
+N
+COMMENT LINE 1
+A1 x1 y1 z1   dx1 dy1 dz1
+A2 x2 y2 z2   dx2 dy2 dz2
+...                        
+AN xN yN zN   dxN dyN dzN
+\end{lstlisting}
+\end{addmargin}
+which amounts to a standard \linl{.xyz} geometry file (distance units \AA) with the displacement vector for each atom printed next to
+its Cartesian coordinates. For visualizing multiple motions, this format is
+simply repeated with an intervening empty line.
+\begin{addmargin}{5cm}{}
+\begin{lstlisting}[language=c++]
+N
+COMMENT LINE 1
+A1 x1 y1 z1   dx11 dy11 dz11
+A2 x2 y2 z2   dx12 dy12 dz12
+...                        
+AN xN yN zN   dx1N dy1N dz1N
+                           
+N                          
+COMMENT LINE 2             
+A1 x1 y1 z1   dx21 dy21 dz21
+A2 x2 y2 z2   dx22 dy22 dz22
+...                        
+AN xN yN zN   dx2N dy2N dz2N
+                           
+...                        
+                           
+N                          
+COMMENT LINE N             
+A1 x1 y1 z1   dxN1 dyN1 dzN1
+A2 x2 y2 z2   dxN2 dyN2 dzN2
+...                        
+AN xN yN zN   dxNN dyNN dzNN
+\end{lstlisting}
+\end{addmargin}
+
+\end{document}

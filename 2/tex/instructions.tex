@@ -1,0 +1,197 @@
+\documentclass[fleqn]{article}
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small}
+\lstset{literate={~} {$\sim$}{1}}
+\lstset{showstringspaces=false}
+\lstset{language=Python}
+\usepackage{scrextend}
+\newcommand{\linp}[1]{\lstinputlisting{#1}{}}
+\newcommand{\linl}[1]{\lstinline{#1}{}}
+
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\fd}[2]{\ensuremath{\frac{d #1}{d #2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\rad}{\ensuremath{\mr{rad}}}
+
+
+\title{Programming Project 2: Hessian\\
+\textit{Computing the Hessian matrix by finite differences}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-1cm}
+
+\noindent
+Compute the Hessian matrix of a molecule (equation \ref{hessian-dfn}) from single-point energies at displaced geometries.
+The default displacement size should be 0.005~$a_0$.
+You should import and use your \linl{Molecule} object from Project 0.
+Werever it makes sense, you may want to add methods to your \linl{Molecule} class in order to clean up your code.
+
+\subsection*{Extra Files}
+\begin{tabular}{p{0.25\textwidth}@{}p{0.75\textwidth}}
+  \ul{file name} & \ul{description} \\
+  \linl{project2_input.dat}
+  & sample RHF/cc-pVDZ input file for H$_2$O\\
+  \linl{template.dat}
+  & an template for generating input files; after reading this to a \linl{str}, you can fill in the geometry block using \linl{.format()}\\ 
+\end{tabular}
+
+
+\subsection*{Equations}
+Let $N$ be the number of atoms and let $(x_A, y_A, z_A)$ be the Cartesian coordinates of the $A$\eth\ atom.
+\begin{align}
+\label{hessian-dfn}
+  (\bo{H})_{AB}
+=&\
+  \pd{^2E}{X_A\pt X_B}
+&
+  (X_{3A-2}, X_{3A-1}, X_{3A-0})=&\ (x_A, y_A, z_A)
+&&
+  \text{for $A\in\{1,\ld,N\}$}
+\end{align}
+{\small
+\begin{align}
+\label{diagonal-elements}
+  \pd{^2E}{X_A^2}
+=&\
+  \fr{E(X_A+h)+E(X_A-h)-2E(X_A)}{h^2}
+&\text{for $X_A= X_B$}
+\\
+\nonumber
+  \pd{^2E}{X_A\pt X_B}
+=&\
+  \fr{1}{2h^2}
+  \left(E(X_A+h,X_B+h) + E(X_A-h,X_B-h) - E(X_A+h,X_B)-E(X_A-h,X_B)\right.
+\\&\
+\label{off-diagonal-elements}
+  \hphantom{\fr{1}{2h^2}(}
+  \left.- E(X_A,X_B+h) - E(X_A,X_B-h) + 2E(X_A,X_B)\right)
+&\text{for $X_A\neq X_B$}
+\end{align}}
+
+
+\subsection*{Procedure}
+
+\begin{enumerate}
+  \item build molecule object (\linl{mol}) from \linl{molecule.xyz}
+  \item build input file template (\linl{template}) from \linl{template.dat}
+  % function 1
+  \item\label{generate-inputs}
+  \linl{def generate_inputs(mol, template, disp_size = 0.005, directory = "DISPS"):}
+  \begin{enumerate}
+    \item make directories with input files for the reference geometry and for the $3N(3N+1)$ unique displacements needed to evaluate equations \ref{diagonal-elements} and \ref{off-diagonal-elements}
+  \end{enumerate}
+  % function 2
+  \item \linl{def run_jobs(mol, command = "psi4", directory = "DISPS"):}
+  \begin{enumerate}
+    \item walk through the directories created in step \ref{generate-inputs} and execute \linl{command} in each one
+  \end{enumerate}
+  % function 3
+  \item \linl{def build_hessian(mol, energy_prefix, disp_size = 0.005, directory = "DISPS"):}
+  \begin{enumerate}
+    \item write a helper function to grab the energy value (as a \linl{float}) immediately following \linl{energy_prefix} in an output file (for the given template, \linl{energy_prefix} should be \linl{"@DF-RHF Final Energy:"})
+    \item initialize an empty \linl{numpy.array} to hold the Hessian matrix
+    \item loop over elements of the Hessian (equation \ref{hessian-dfn}) and evaluate them using equations \ref{diagonal-elements} and \ref{off-diagonal-elements}
+    \item save the matrix to a file and return it at the end of the function
+  \end{enumerate}
+  \item import your \linl{frequencies} function from Project 1 and use it to calculate frequencies and normal modes from the return value of \linl{build_hessian}
+\end{enumerate}
+Possible extensions of this project: 1.~make it object-oriented; 2.~generalize it to work with programs other than \textsc{Psi4}; 3.~generalize it to allow cluster job submission as well as direct execution.
+
+
+\end{document}

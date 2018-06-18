@@ -1,0 +1,162 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{braket}
+\usepackage{cancel}
+\usepackage[margin=1in]{geometry}
+
+% my shorthand
+\newcommand{\vsp}{\vspace{0.2cm}}
+\newcommand{\suml}{\sum\limits}
+\newcommand{\boldh}{\ensuremath{\mathbf{\hat{h}}}}
+\newcommand{\boldg}{\ensuremath{\mathbf{\hat{g}}}}
+\newcommand{\no}{\cancel}
+
+\newcommand{\rh}{\ensuremath{\rho}}                % rho
+\newcommand{\sg}{\ensuremath{\sigma}}           % sigma
+
+\newcommand{\phisli}{\ensuremath{\suml^{n!}_{i=1} (-1)^{p_{i}} \, \mathcal{P}_i \left(\psi_1(1) ... \psi_n(n)\right)}}
+\newcommand{\phislj}{\ensuremath{\suml^{n!}_{j=1} (-1)^{p_{j}} \, \mathcal{P}_j \left(\psi_1(1) ... \psi_n(n)\right)}}
+
+
+% Remove the author and date fields and the space associated with them
+% from the definition of maketitle!
+\makeatletter
+\renewcommand{\@maketitle}{
+\newpage
+ \null
+ \vskip 2em%
+ \begin{center}%
+  {\LARGE \@title \par}%
+ \end{center}%
+ \par} \makeatother
+
+\title{\bf Programming Project 5 Exercises}
+
+\begin{document}
+\maketitle
+
+\vsp
+\noindent {\Large \bf 1. Derive $\Bra{\Phi} \mathcal{H} \Ket{\Phi} = \suml_i^n h_{ii} + \suml_{i<j}^n \bra{ij}\ket{ij}$.} 
+
+\section{Notation}
+$\mathcal{H} = \suml_i^n \hat{h}(i) + \suml_{i<j}^n \hat{g} (i,j)$ \vsp \\
+$\Phi = \frac{1}{\sqrt{n!}} \suml^{n!}_{i=1} (-1)^{p_{i}} \, \mathcal{P}_i \left(\psi_1(1) ... \psi_n(n)\right)$ \vsp \\
+$\mathcal{P}_i$ is a permutation operator that runs over all the n! permutations of electrons 1 ... n. \vsp \\
+$p_i$ is the number of transpositions required to restore a given permutation to its natural order 1 ... n. 
+
+
+\section{One-electron contribution}
+\subsection{Useful lemma}
+For a one-electron operator $\hat{h}$, \,$\Bra{\Phi_P} \suml_{k=1}^{n} \hat{h}(k) \Ket{\Phi_Q} = n \Bra{\Phi_P} \hat{h}(1) \Ket{\Phi_q}$ $\forall \, p,q$.  \\
+Proof: \vspace{-0.2cm}
+\begin{align*}
+\intertext{Since dummy variables are interchangeable in integration,}
+\int \mathrm{d}(1 ... k ... n) \,  \Phi_P^* (1 ... k ... n) \, \hat{h} (k) \, \Phi_Q (1 ... k ... n) &= \int \mathrm{d}(k ... 1 ... n) \, \Phi_P^* (k ... 1 ... n) \, \hat{h} (1) \, \Phi_Q (k ... 1 ... n) \\
+       &= \int \mathrm{d}(1 ... k ... n) \, \Phi_P^* (k ... 1 ... n) \, \hat{h} (1) \, \Phi_Q (k ... 1 ... n) \\
+       &= (-1) \int \mathrm{d}(1 ... k ... n)\,  \Phi_P^* (1 ... k ... n) \, \hat{h} (1)\, \Phi_Q (k ... 1 ... n) \\
+       &= (-1)^2 \int \mathrm{d}(1 ... k ... n) \, \Phi_P^* (1 ... k ... n) \, \hat{h} (1) \, \Phi_Q (1 ... k ... n) \\
+\intertext{where we have used the antisymmetry property of determinants. We exchange electrons 1 and k in each determinant, returning the negative value of that determinant.}
+\intertext{Rewriting in Dirac notation, what we have shown is that} 
+\Bra{\Phi_p} \hat{h} (k) \Ket{\Phi_Q}  &= \Bra{\Phi_P}  \hat{h} (k) \Ket{\Phi_q}.  \\
+\intertext{We can easily apply this result to the sum over all electrons in the system:}
+\Bra{\Phi_P} \suml_{k=1}^n \hat{h} (k) \Ket{\Phi_Q}  &= \suml_{k=1}^n \Bra{\Phi_P}  \hat{h} (k) \Ket{\Phi_Q}  \\
+									      &= \suml_{k=1}^n \Bra{\Phi_P}  \hat{h} (1) \Ket{\Phi_Q} \\
+									       &= n \Bra{\Phi_P}  \hat{h} (1) \Ket{\Phi_Q}.
+\end{align*}
+
+\subsection{Derivation}
+\begin{align*}
+\intertext{Expanding the determinants $\Phi$ in terms of the perturbation operator,}
+\Bra{\Phi} \suml_{i=1}^n \hat{h} \Ket{\Phi} &= \frac{1}{n!} \Bra{\phisli} \suml_{k=1}^{n} \hat{h} (k) \Ket{\phislj} \\
+&= \frac{1}{n!}\suml_{i,j}^{n!}(-1)^{p_{i}+p_{j}} \Bra{\mathcal{P}_i \left(\psi_1(1) ... \psi_n(n)\right)}\suml_{k=1}^{n} \hat{h} (k) \Ket{ \mathcal{P}_j \left(\psi_1(1) ... \psi_n(n)\right)}
+\intertext{Next, we use the orthogonality condition of the spin orbitals. Suppose that in permutations $\mathcal{P}_i\,$, $\, \mathcal{P}_j$ electron k is in orbitals $\psi_i$,$\psi_j$ respectively. Then $\Braket{\psi_i  (k) | \psi_j (k) } = \delta_{ij}$ by orthogonality, so the integral will vanish unless $i=j$ $\,\forall \,$ $i,j$. So we let $\mathcal{P}_i = \mathcal{P}_j$.}
+\Bra{\Phi} \suml_{i=1}^n \hat{h} \Ket{\Phi} &= \frac{1}{n!}\suml_{i=1}^{n!} (-1)^{2p_{i}} \Bra{\mathcal{P}_i \left(\psi_1(1) ... \psi_n(n)\right)}\suml_{k=1}^{n} \hat{h} (k) \Ket{ \mathcal{P}_i \left(\psi_1(1) ... \psi_n(n)\right)} \\
+\intertext{Now by lemma 2.1,} 
+\Bra{\Phi} \suml_{i=1}^n \hat{h} \Ket{\Phi} &= n \, \frac{1}{n!}\suml_{i=1}^{n!} \Bra{\mathcal{P}_i \left(\psi_1(1) ... \psi_n(n)\right)} \hat{h} (1) \Ket{ \mathcal{P}_i \left(\psi_1(1) ... \psi_n(n)\right)} \\
+       					  &= \frac{1}{(n-1)!} \suml_{k=1}^{n} \Bra{\psi_k (1)} \hat{h}(1) \Ket{\psi_k (1)} \suml_{i=1}^{(n-1)!}  \Braket{\mathcal{P}_i \left(\psi_1(1) ... \no{\psi_k(k)} ... \psi_n(n)\right)| \mathcal{P}_i \left(\psi_1(1) ...  \no{\psi_k(k)} ... \psi_n(n)\right)} \\
+					  &= \frac{1}{(n-1)!} \suml_{k=1}^{n} \Bra{\psi_k (1)} \hat{h}(1) \Ket{\psi_k (1)} \suml_{i=1}^{(n-1)!} (1) \, \, \mbox{ by orthogonality.} \\
+					  &= \frac{(n-1)!}{(n-1)!} \suml_{k=1}^{n} \Bra{\psi_k (1)} \hat{h}(1) \Ket{\psi_k (1)} \\
+					  &= \suml_{k=1}^{n} \Bra{\psi_k } \hat{h} \Ket{\psi_k }  \, \, \, \blacksquare.
+\end{align*}
+
+\newpage
+
+
+\section{Two-electron contribution}
+\subsection{Useful lemma}
+For a two-electron operator $\hat{g}$, \, $\Bra{\Phi_P} \, \suml^n_{i<j} \hat{g} (1,2) \, \Ket{\Phi_Q} = \frac{n(n-1)}{2} \Bra{\Phi_P} \,\hat{g} (j,k) \, \Ket{\Phi_Q}$. \\
+Proof (same logic as 1.1.1): \vsp \\
+\begin{align*}
+\int \mathrm{d}(1,2 ... j,k ... n) \,  \Phi_P^* (1,2 ... j,k ... n) \, \hat{g} (j,k)& \, \Phi_Q (1,2 ... j,k ... n) = \\
+&=  \int \mathrm{d}(j,k ... 1,2... n) \, \Phi_P^* (j,k ... 1,2... n) \, \hat{g} (1,2) \, \Phi_Q (j,k ... 1,2 ... n) \\
+       &= \int \mathrm{d}(1,2 ... j,k ... n)  \Phi_P^* (j,k ... 1,2... n)\, \hat{g} (1,2) \, \Phi_Q (j,k ... 1,2 ... n) \\
+       &= -\int \mathrm{d}(1,2 ... j,k ... n)  \Phi_P^* (1,2 ... j,k ... n)\, \hat{g} (1,2) \,\Phi_Q (j,k ... 1,2 ... n) \\
+       &= \int \mathrm{d}(1,2 ... j,k ... n)  \Phi_P^* (1,2 ... j,k ... n)\, \hat{g} (1,2) \,\Phi_Q (1,2 ... j,k ... n) \\
+\intertext{where we have again used interchangeability of dummy variables and antisymmetry of determinants.}
+\intertext{Rewriting in Dirac notation, what we have shown is that} 
+\Bra{\Phi_p} \hat{g} (j,k) \Ket{\Phi_Q}  &= \Bra{\Phi_P}  \hat{g} (1,2) \Ket{\Phi_q}.  \\
+\intertext{We can easily apply this result to the sum over all distinct pairs of electrons in the system:}
+\Bra{\Phi_P} \suml_{i<j}^n \hat{g} (j,k) \Ket{\Phi_Q}  &= \suml_{j<k}^n \Bra{\Phi_P}  \hat{g} (j,k) \Ket{\Phi_Q}  \\
+									      &= \suml_{j<k}^n \Bra{\Phi_P}  \hat{g} (1,2) \Ket{\Phi_Q} \\
+									       &= \frac{n(n-1)}{2} \Bra{\Phi_P}  \hat{g} (1,2) \Ket{\Phi_Q}.
+\end{align*}
+
+\newpage
+
+\subsection{Derivation}
+\begin{align*}
+\Bra{\Phi}  \, \suml^n_{i<j} \, \hat{g} (i,j) \, \Ket{\Phi} &= \frac{1}{n!}  \Bra{\suml^{n!}_{k=1} (-1)^{p_k}\mathcal{P}_k (\psi_1(1) ... \psi_n(n))} \, \suml^n_{i<j} \, \hat{g} (i,j) \ \Ket{\suml^{n!}_{l=1} (-1)^{p_l}\mathcal{P}_l (\psi_1(1) ... \psi_n(n))} \\
+&= \frac{1}{n!} \suml^{n!}_{k=1} \suml^{n!}_{l=1}  (-1)^{p_k + p_l}  \, \Bra{\mathcal{P}_k (\psi_1(1) ... \psi_n(n))} \, \suml^n_{i<j} \, \hat{g} (i,j) \ \Ket{\mathcal{P}_l (\psi_1(1) ... \psi_n(n))} 
+\intertext{By lemma 3.1,}
+&= \frac{n(n-1)}{2n!} \suml^{n!}_{k=1} \suml^{n!}_{l=1}  (-1)^{p_k + p_l}  \, \Bra{\mathcal{P}_k (\psi_1(1) ... \psi_n(n))} \, \hat{g} (1,2) \ \Ket{\mathcal{P}_l (\psi_1(1) ... \psi_n(n))} \\
+\intertext{Since $\hat{g}$ only acts on electrons 1 and 2, we can separate this integral into two separate products, where the first factor is the sum over all possible orbital occupations of electrons 1 and 2, and the second is the sum over all permutations of electrons 3...n in the remaining orbitals:}
+\Bra{\Phi}  \, \suml^n_{i<j} \, \hat{g} (i,j) \, \Ket{\Phi} &= \frac{1}{2(n-2)!} \suml_{i,j}^n \left[\bra{\psi_i (1) \psi_j (2)} \hat{g}(1,2) \ket{\psi_i(1) \psi_j (2)} - \bra{\psi_i (1) \psi_j (2)} \hat{g}(1,2) \ket{\psi_i(2) \psi_j (1)} \right] \\
+&\times \suml^{(n-2)!}_{k=1} \suml^{(n-2)!}_{l=1}  (-1)^{p_k + p_l}  \, \Braket{\mathcal{P}_k (\psi_1(1) ... \no{\psi_i(i)} ... \no{\psi_j(j)} ...\psi_n(n)) | \mathcal{P}_l (\psi_1(1) ...  ... \no{\psi_i(i)} ... \no{\psi_j(j)} ...\psi_n(n))}  \\
+\intertext{Because the basis set is orthonormal, each term will integrate to 0 unless the permutations $\mathcal{P}_k$ and $\mathcal{P}_l$ are identical, so $k=l$.}
+&= \frac{1}{2(n-2)!} \suml_{i<j}^n 2 \bra{\psi_i(1)\psi_j(2)}  \ket{\psi_i(1)\psi_j(2)} \suml^{(n-2)!}_{k=1} \suml^{(n-2)!}_{l=1}  (-1)^{p_k + p_l} \delta_{kl}\\
+&= \frac{1}{(n-2)!} \suml_{i<j}^n \bra{ij}  \ket{ij} \suml^{(n-2)!}_{k=1} (-1)^{2p_k} \delta_{kk} \\
+&= \frac{1}{(n-2)!} \suml_{i<j}^n \bra{ij}  \ket{ij} \suml^{(n-2)!}_{k=1} (1) \\
+&= \frac{(n-2)!}{(n-2)!} \suml_{i<j}^n \bra{ij}  \ket{ij} \\
+&= \suml_{i<j}^n \bra{ij}  \ket{ij}  \,\,\, \blacksquare . \\
+\end{align*}
+
+
+\newpage
+
+%%%%%% problem 2
+\section*{2. Write the one-electron integrals $\mathbf{S}$, $\mathbf{T}$, and $\mathbf{V}$ (spin AO basis) in terms of $\mathbf{\bar{S}}$,  $\mathbf{\bar{T}}$, and $\mathbf{\bar{V}}$ (spatial AO basis).}
+Let $\mathbf{\bar{S}}$, $\mathbf{\bar{T}}$, and $\mathbf{\bar{V}}$ be one-electron integral matrices with respect to the spatial AO basis \{$\chi_i$ \}. \\
+Let $\mathbf{S}$, $\mathbf{T}$, and $\mathbf{V}$ be one-electron integral matrices with respect to the spin AO basis \{$\xi_\mu$ \} = \{$\chi_\mu \alpha$ \} $\cup$ \{$\chi_\mu \beta$ \}. \\
+
+\newpage
+
+%%%%%% problem 5
+\section*{5. Show that $\mathbf{f_{\mu \nu} = h_{\mu \nu} + \suml_{\rho \sigma} \bra{\xi_\mu \xi_\rho} \ket{\xi_\nu \xi_\sigma} D_{\sigma \rho}}$.}
+First define the density matrix \, $D_{\mu \nu} = \suml_{i=1}^n C_{\mu i} C^*_{\nu i}$, \\
+where $C_{\mu p}$ are the expansion coefficients of $\psi_p$ in the previously defined spin-AO basis \{$ \xi_\mu$\}. \vsp \\
+Now consider the matrix element
+
+\begin{align*}
+f_{\mu \nu} &= \bra{\xi_{\mu}} \hat{f} \ket{\xi_{\nu}} \\
+		  &=  \bra{\xi_{\mu}} \hat{h} \ket{\xi_{\nu}} + \suml_{i}  \bra{\xi_{\mu}} \hat{J}_i \ket{\xi_{\nu}} -  \bra{\xi_{\mu}} \hat{K}i \ket{\xi_{\nu}} \\
+		  &=  \bra{\xi_{\mu}} \hat{h} \ket{\xi_{\nu}} + \suml_{i}  \bra{\xi_{\mu} \psi_i}\ket{\xi_{\nu} \psi_i} \\
+		  &=  \bra{\xi_{\mu}} \hat{h} \ket{\xi_{\nu}} + \suml_{i} \suml_{\rh \sg} \bra{\xi_{\mu} \xi_{\rh} C_{\rh i}}\ket{\xi_{\nu} \xi_{\sg} C_{\sg i}} \\
+		  &=  \bra{\xi_{\mu}} \hat{h} \ket{\xi_{\nu}} + \suml_{i} \suml_{\rh \sg}  C_{\sg i} C_{\rh i}^* \bra{\xi_{\mu} \xi_{\rh} }\ket{\xi_{\nu} \xi_{\sg} } \\
+		   &=  h_{\mu \nu} + \suml_{i} \suml_{\rh \sg}  D_{\sg \rh}  \bra{\xi_{\mu} \xi_{\rh} }\ket{\xi_{\nu} \xi_{\sg} } \, \, \blacksquare. \\
+\end{align*}
+
+
+%%%%%% problem 6
+\section*{6. Show that $\Bra{\Phi}\mathcal{H} \Ket{\Phi} = \suml_{\mu \nu} h_{\mu \nu} D_{\nu \mu} + \frac{1}{2} \suml_{\mu \nu \rh \sg} \bra{\xi_\mu \xi_\rho} \ket{\xi_\nu \xi_\sigma} D_{\nu \mu} D_{\sigma \rho}.$}
+As we derived in problem 1, 
+\begin{align*}
+\Bra{\Phi} \mathcal{H} \Ket{\Phi} &= \suml_i^n \Bra{\psi_i} \hat{h} \Ket{\psi_i} + \frac{1}{2} \suml_{ij} \bra{\psi_i \psi_j}\ket{\psi_i \psi_j} \\
+		      &=\suml_i\suml_{\mu \nu}\Bra{\xi_{\mu} C_{\mu i}} \hat{h} \Ket{\xi_{\nu} C_{\nu i}}+\frac{1}{2} \suml_{ij}\suml_{\mu \nu \rh \sg}\bra{\xi_{\mu}C_{\mu i}\xi_{\rh}C_{\rh j} }\ket{\xi_{\nu} C_{\nu i} \xi_{\rh}C_{\sg j}}\\
+		      &=\suml_i\suml_{\mu \nu}C^*_{\mu i}C_{\nu i}\Bra{\xi_{\mu}} \hat{h} \Ket{\xi_{\nu}}+\frac{1}{2} \suml_{ij}\suml_{\mu \nu \rh \sg}C^*_{\mu i}C_{\nu i}C^*_{\rh j}C_{\sg j}\bra{\xi_{\mu}\xi_{\rh} }\ket{\xi_{\nu}\xi_{\rh}}\\
+		      &=\suml_{\mu \nu}D_{\nu \mu}\Bra{\xi_{\mu}} \hat{h} \Ket{\xi_{\nu}}+\frac{1}{2} \suml_{\mu \nu \rh \sg}D_{\nu \mu}D_{\sg \rh}\bra{\xi_{\mu}\xi_{\rh} }\ket{\xi_{\nu}\xi_{\rh}}\\
+		      &=\suml_{\mu \nu}D_{\nu \mu} h_{\mu \nu} +\frac{1}{2} \suml_{\mu \nu \rh \sg}D_{\nu \mu}D_{\sg \rh}\bra{\xi_{\mu}\xi_{\rh} }\ket{\xi_{\nu}\xi_{\rh}} \, \, \blacksquare. \\
+\end{align*}
+\end{document}

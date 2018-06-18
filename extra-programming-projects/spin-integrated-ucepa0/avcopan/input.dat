@@ -1,0 +1,37 @@
+# ground state H2O
+
+molecule mol {
+  1 2
+  O
+  H 1 0.9
+  H 1 0.9 2 104.0
+}
+
+set {
+  reference     uhf
+  basis         cc-pvdz
+  e_convergence 13
+  scf_type      pk
+  guess         gwh
+  mp2_type      conv
+  maxiter       80
+}
+# run
+basisname = psi4.core.get_global_option("BASIS")
+basisset  = psi4.core.BasisSet.build(mol, "BASIS", basisname)
+mints     = psi4.core.MintsHelper(basisset)
+
+# call spin-integrated UHF code
+import sys
+sys.path.insert(0, '.')
+sys.path.insert(0, '../../spin-integrated-uhf/avcopan/')
+from uhf import UHF
+uhf = UHF(mol, mints)
+uhf.compute_energy()
+
+# call CEPA0 code here
+from cepa0 import CEPA0
+cepa0 = CEPA0(uhf)
+cepa0.compute_energy()
+
+energy('lccd')

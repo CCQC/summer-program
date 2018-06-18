@@ -1,0 +1,61 @@
+\documentclass[11pt]{article}
+\usepackage{mystyle}
+
+\title{Programming Project 0: Molecule Class\\ \textit{Do you want to build a molecule?}}
+\date{}
+\begin{document}
+\maketitle
+
+This programming project will teach you the basics of how to properly implement
+a simple molecule class. In doing so, you will learn how to program in Python
+and how to employ proper coding techniques.
+
+To begin, we will first need to make a Python molecule class
+
+\linp[firstline=3, lastline=7]{../jevandezande/molecule.py}
+
+This tells us that we have a new class called Molecule, and the docstring (that
+thing in between the triple quotes) gives us a little information about it. Next
+we need to write a function to be run every time we create a new molecule.
+
+\linp[firstline=9, lastline=16]{../jevandezande/molecule.py}
+
+The function \linl{__init__} is run every time a new molecule is created.
+It takes three arguments, \linl{self} (which is a standin for the name of
+the new object, such as mol in \linl{mol = Molecule(geom_str)}),
+\linl{geom_str} (which is a string of the geometry), and units (which
+default to Angstrom). The function then reads the geometry string and sets the
+units. Thus we need to write a function to actually read the geometry and save
+it in a usable form. Here is a stub detailing how it should be implemented.
+
+\linp[firstline=35, lastline=44]{../jevandezande/molecule.py}
+
+Now that we have saved our geometry, it would be nice to be able to get
+information about our molecule. There are some built-in functions in Python
+that you may have run across. \linl{len(mylist)} will return you the
+length of \linl{mylist}. I would recommend glancing over all the
+available built-in functions (https://docs.python.org/3/library/functions.htm).
+We can override the function \linl{len} to allow us to get the length
+of our molecule. Here is how to start.
+
+\linp[firstline=29, lastline=32]{../jevandezande/molecule.py}
+
+Once you have figured how to return the length of the molecule, we need to make
+a nice way to print it. To do so, we will need to overide the built-in function
+\linl{str}. We will want it to look just like the original xyz file. Here is some
+starter code; you will need to review the string format function to determine
+how to use it.
+
+\linp[firstline=18, lastline=23]{../jevandezande/molecule.py}
+
+Finally, we would like to be able to convert from Angstrom to Bohr, and back.
+This can be achieved by multiplying or dividing, respectively, by 1.889725989
+each of the coordinates. Since we are using a numpy array, this is very easy,
+but I will leave it to you to figure out how to accomplish this in one line
+for each function.
+
+Now that you are done, look at my code, available in the GitHub repo under
+jevandezande. How does yours compare? See if you can understand some of the
+tricks I used to simplify my code.
+
+\end{document}

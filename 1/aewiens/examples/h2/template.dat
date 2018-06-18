@@ -1,0 +1,9 @@
+molecule {{
+{:s}
+units bohr
+}}
+
+set e_convergence 11
+set basis         cc-pVDZ
+energy('scf')
+

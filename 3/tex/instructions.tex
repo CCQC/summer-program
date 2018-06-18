@@ -1,0 +1,247 @@
+\documentclass[11pt]{article}
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small}
+\lstset{literate={~} {$\sim$}{1}}
+\lstset{showstringspaces=false}
+\lstset{language=Python}
+\usepackage{scrextend}
+\newcommand{\linp}[1]{\lstinputlisting{#1}{}}
+\newcommand{\linl}[1]{\lstinline{#1}{}}
+
+\usepackage[cm]{fullpage}
+\usepackage{mathtools} %includes amsmath
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{url}
+%greek letters
+\renewcommand{\a}{\alpha}    %alpha
+\renewcommand{\b}{\beta}     %beta
+\newcommand{\g}{\gamma}      %gamma
+\newcommand{\G}{\Gamma}      %Gamma
+\renewcommand{\d}{\delta}    %delta
+\newcommand{\D}{\Delta}      %Delta
+\newcommand{\e}{\varepsilon} %epsilon
+\newcommand{\ev}{\epsilon}   %epsilon*
+\newcommand{\z}{\zeta}       %zeta
+\newcommand{\h}{\eta}        %eta
+\renewcommand{\th}{\theta}   %theta
+\newcommand{\Th}{\Theta}     %Theta
+\newcommand{\io}{\iota}      %iota
+\renewcommand{\k}{\kappa}    %kappa
+\newcommand{\la}{\lambda}    %lambda
+\newcommand{\La}{\Lambda}    %Lambda
+\newcommand{\m}{\mu}         %mu
+\newcommand{\n}{\nu}         %nu %xi %Xi %pi %Pi
+\newcommand{\p}{\rho}        %rho
+\newcommand{\si}{\sigma}     %sigma
+\newcommand{\siv}{\varsigma} %sigma*
+\newcommand{\Si}{\Sigma}     %Sigma
+\renewcommand{\t}{\tau}      %tau
+\newcommand{\up}{\upsilon}   %upsilon
+\newcommand{\f}{\phi}        %phi
+\newcommand{\F}{\Phi}        %Phi
+\newcommand{\x}{\chi}        %chi
+\newcommand{\y}{\psi}        %psi
+\newcommand{\Y}{\Psi}        %Psi
+\newcommand{\w}{\omega}      %omega
+\newcommand{\W}{\Omega}      %Omega
+%ornaments
+\newcommand{\eth}{\ensuremath{^\text{th}}}
+\newcommand{\rst}{\ensuremath{^\text{st}}}
+\newcommand{\ond}{\ensuremath{^\text{nd}}}
+\newcommand{\ord}[1]{\ensuremath{^{(#1)}}}
+\newcommand{\dg}{\ensuremath{^\dagger}}
+\newcommand{\bigo}{\ensuremath{\mathcal{O}}}
+\newcommand{\tl}{\ensuremath{\tilde}}
+\newcommand{\ol}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newcommand{\op}[1]{\ensuremath{\hat{#1}}}
+\newcommand{\ot}{\ensuremath{\otimes}}
+\newcommand{\wg}{\ensuremath{\wedge}}
+%text
+\newcommand{\tr}{\ensuremath{\hspace{1pt}\mathrm{tr}\hspace{1pt}}}
+\newcommand{\Alt}{\ensuremath{\mathrm{Alt}}}
+\newcommand{\sgn}{\ensuremath{\mathrm{sgn}}}
+\newcommand{\occ}{\ensuremath{\mathrm{occ}}}
+\newcommand{\vir}{\ensuremath{\mathrm{vir}}}
+\newcommand{\spn}{\ensuremath{\mathrm{span}}}
+\newcommand{\vac}{\ensuremath{\mathrm{vac}}}
+\newcommand{\bs}{\ensuremath{\text{\textbackslash}}}
+\newcommand{\im}{\ensuremath{\mathrm{im}\hspace{1pt}}}
+\renewcommand{\sp}{\hspace{30pt}}
+%dots
+\newcommand{\ld}{\ensuremath{\ldots}}
+\newcommand{\cd}{\ensuremath{\cdots}}
+\newcommand{\vd}{\ensuremath{\vdots}}
+\newcommand{\dd}{\ensuremath{\ddots}}
+\newcommand{\etc}{\ensuremath{\mathinner{\mkern-1mu\cdotp\mkern-2mu\cdotp\mkern-2mu\cdotp\mkern-1mu}}}
+%fonts
+\newcommand{\bmit}[1]{{\bfseries\itshape\mathversion{bold}#1}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mb}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\mf}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\mr}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\bo}[1]{\ensuremath{\mathbf{#1}}}
+%styles
+\newcommand{\ts}{\textstyle}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\phsub}{\ensuremath{_{\phantom{p}}}}
+\newcommand{\phsup}{\ensuremath{^{\phantom{p}}}}
+%fractions, derivatives, parentheses, brackets, etc.
+\newcommand{\pr}[1]{\ensuremath{\left(#1\right)}}
+\newcommand{\brk}[1]{\ensuremath{\left[#1\right]}}
+\newcommand{\fr}[2]{\ensuremath{\dfrac{#1}{#2}}}
+\newcommand{\pd}[2]{\ensuremath{\frac{\partial#1}{\partial#2}}}
+\newcommand{\fd}[2]{\ensuremath{\frac{d #1}{d #2}}}
+\newcommand{\pt}{\ensuremath{\partial}}
+\newcommand{\br}[1]{\ensuremath{\langle#1|}}
+\newcommand{\kt}[1]{\ensuremath{|#1\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\langle#1\rangle}}
+\newcommand{\NO}[1]{\ensuremath{{\bm{:}}#1{}{\bm{:}}}}
+\usepackage{stackengine}
+\newcommand{\GNO}[1]{\setstackgap{S}{0.7pt}\ensuremath{\Shortstack{\textbf{.} \textbf{.} \textbf{.}}#1\Shortstack{\textbf{.} \textbf{.} \textbf{.}}}}
+\newcommand{\cmtr}[2]{\ensuremath{[\cdot,#2]^{#1}}}
+\newcommand{\cmtl}[2]{\ensuremath{[#2,\cdot]^{#1}}}
+\newcommand{\floor}[1]{\ensuremath{\left\lfloor#1\right\rfloor}}
+\newcommand{\ceil}[1]{\ensuremath{\left\lceil#1\right\rceil}}
+%structures
+\newcommand{\eqn}[1]{(\ref{#1})}
+\newcommand{\ma}[1]{\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}
+\newcommand{\ar}[1]{\ensuremath{\begin{matrix}#1\end{matrix}}}
+\newcommand{\miniar}[1]{\ensuremath{\begin{smallmatrix}#1\end{smallmatrix}}}
+
+\title{Programming Project 3: RHF\\
+\textit{Restricted Hartree-Fock}}
+\author{}
+\date{}
+\begin{document}
+
+\maketitle
+\vspace{-2cm}
+
+\subsection*{Extra Files}
+\begin{tabular}{p{0.25\textwidth}@{}p{0.75\textwidth}}
+  \ul{file name} & \ul{description} \\
+  \linl{project3_input.dat}
+  & shows how to get \textsc{Psi4}'s one- and two-electron integrals as \linl{numpy.array}s\\
+\end{tabular}
+
+
+\subsection*{Equations}
+\bmit{Integrals.}
+Let $\{\x_1,\cd,\x_m\}$ be spatial AO basis functions.
+\begin{gather}
+\begin{aligned}
+\label{oei}
+  S_{\mu\nu}
+=&\
+  \ip{\x_{\mu}|\x_{\nu}}
+&&
+  T_{\mu\nu}
+=
+  -\tfrac{1}{2}\ip{\x_{\mu}|\nabla_1^2|\x_{\nu}}
+&&
+  V_{\mu\nu}
+=
+  \sum_A\ip{\x_{\mu}|\fr{Z_A}{|\bo{r}_1-\bo{R}_A|}|\x_{\nu}}
+\end{aligned}\\
+\begin{aligned}
+\label{tei}
+  (\x_\mu\x_\nu|\x_\rho\x_\si)
+=
+  \ip{\x_\mu\x_\rho|\x_\nu\x_\si}
+=
+  \ip{\x_\mu(1)\x_\rho(2)|\fr{1}{r_{12}}|\x_\nu(1)\x_\si(2)}
+\end{aligned}
+\end{gather}
+
+\noindent
+\bmit{Working equations.}
+\begin{gather}
+\begin{aligned}
+\label{core-hamiltonian-and-density}
+  h_{\mu\nu}
+=&\
+  T_{\mu\nu}+V_{\mu\nu}
+\sp
+  D_{\mu\nu}
+=
+  2
+  \sum_{i=1}^{n_\text{occ}}
+  C_{\mu i} C_{\nu i}^*
+\end{aligned}\\
+\begin{aligned}
+\label{fock-matrix}
+  f_{\mu\nu}
+=&\
+  h_{\mu\nu}
++
+  v_{\mu\nu}
+\sp
+  v_{\mu\nu}
+=
+  \sum_{\rho\si}
+  (\ip{\x_\mu\x_\rho|\x_\nu\x_\si} - \tfrac{1}{2}\ip{\x_\mu\x_\rho|\x_\si\x_\nu})
+  D_{\si\rho}
+\end{aligned}\\
+\begin{aligned}
+\label{energy}
+  E
+=&\
+  E_e
++
+  V_\mathrm{Nu}
+&&\sp
+  E_e
+=
+  \sum_{\mu\nu}
+  (h_{\mu\nu}+\tfrac{1}{2}v_{\mu\nu})D_{\nu\mu}
+\end{aligned}\\
+\begin{aligned}
+\label{orthogonalizer}
+&
+  \bo{\tl{f}}\bo{\tl{C}}
+=
+  \bo{\tl{C}}\bm\ev
+&&\sp
+  \bo{\tl{f}}
+=
+  \bo{X}\bo{f}\bo{X}
+&&\sp
+  \bo{C}
+=
+  \bo{X}
+  \bo{\tl{C}}
+&&\sp
+  \bo{X}
+=
+  \bo{S}^{-\frac{1}{2}}
+\end{aligned}
+\end{gather}
+
+
+\subsection*{Procedure}
+
+\bmit{Initialization.}
+\begin{enumerate}
+  \item Read in nuclear repulsion energy ($V_\mathrm{Nu}$) from the \linl{Molecule} object and integrals from \linl{MintsHelper}
+  \item Form orthogonalizer $\bo{X}$ (eq. \ref{orthogonalizer})
+  \item Set $D_{\mu\nu}=0$ as starting guess\footnote{This is the ``core'' guess, because $f_{\mu\nu}$ becomes the core Hamiltonian $h_{\mu\nu}$}
+\end{enumerate}
+
+\noindent
+\bmit{Iteration to self-consistency.}
+\begin{enumerate}
+  \item\label{loop} Build Fock matrix (eq.~\ref{fock-matrix})
+  \item Transform $\bo{f}\mapsto\bo{\tl{f}}$ to orthogonalized AO basis (eq.~\ref{orthogonalizer})
+  \item Diagonalize $\bo{\tl{f}}$, yielding orbital energies $\ev_p$ and MO coefficients $\tl{C}_{\mu p}$ (eq.~\ref{orthogonalizer})
+  \item Backtransform $\bo{\tl{C}}\mapsto\bo{C}$ to original AO basis (eq.~\ref{orthogonalizer})
+  \item Build density matrix $\bo{D}$ (eq.~\ref{core-hamiltonian-and-density})
+  \item Evaluate energy (eq.~\ref{energy}).
+  \item If the energy is not converged, return to step \ref{loop}.
+\end{enumerate}
+
+
+
+\end{document}

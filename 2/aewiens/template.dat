@@ -1,0 +1,12 @@
+molecule {{
+{:s}
+units bohr
+}}
+
+set {{
+    basis cc-pvdz
+    e_convergence 12
+    d_convergence 12
+    }}
+
+energy('scf')

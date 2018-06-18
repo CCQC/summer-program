@@ -1,0 +1,81 @@
+\documentclass[fleqn,11pt]{article}
+\usepackage{mystyle}
+
+\title{Programming Project 7 Exercises}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+  \item Identify the structure of the CI Hamiltonian matrix
+\begin{align}
+&&
+  \bo{H}
+=
+  [\ip{\F_P|\op{H}_e|\F_Q}],
+\ \ 
+  \F_P\in\{\F,\F_i^a,\F_{ij}^{ab},\F_{ijk}^{abc},\ld\}
+\end{align}
+  when the determinant basis is truncated at single-substitutions, $\{\F,\F_i^a\}$.
+  Assuming a canonical Hartree-Fock reference determinant, how does Brillouin's theorem affect the structure of this matrix?
+  \item Explain why the Hartree-Fock energy $E_0=\ip{\F|\op{H}_e|\F}$ is an eigenvalue of the CIS Hamiltonian.
+\begin{align}
+&&
+  \bo{H}\bo{c}_0
+=
+  E_0\bo{c}_0
+\end{align}
+  What is $\bo{c}_0$?
+  \item
+  Eigenvalues and eigenvectors of the CIS Hamiltonian
+\begin{align}
+&&
+  \bo{H}\bo{c}_K
+=
+  E_K\bo{c}_K
+\end{align}
+approximate the exact (full-CI) electronic excited states of a molecule.
+  Specifically, by the \textit{Hylleraas-Undheim theorem},\footnote{See Helgaker, \textit{Molecular Electronic-Structure Theory}, p.116} each truncated CI eigenvalue provides a variational upper bound to a specific full-CI eigenvalue, approaching the latter as the basis of diagonalization is extended.
+  Let $\bo{\tl{H}}$ be the CIS Hamiltonian shifted by $-E_0$ times the identity, $\bo{I}=[\d_{PQ}]$, with $\F$ removed from the determinant basis.
+\begin{align}
+&&
+  \bo{\tl{H}}
+=
+  [H_{PQ}-E_0\d_{PQ}]
+=
+  [\ip{\F_P|\op{H}_e-E_0|\F_Q}],
+\ \ 
+  \F_P\in\{\F_i^a\}
+\end{align}
+  Explain why the eigenvalues of this matrix
+\begin{align}
+&&
+  \bo{\tl{H}}\bo{c}_K
+=
+  \la_K\bo{c}_K
+\end{align}
+are given by $\la_K=E_K-E_0$, where $E_K$ is a CIS excited state energy.
+  That is, diagonalizing $\bo{\tl{H}}$ gives us the CIS excitation energies, $\D E_K=E_K-E_0$, directly.
+  \item Using Slater's rules, show that $\ip{\F_i^a|\op{H}_e|\F_j^b}$ is equal to
+  \begin{enumerate}
+    \item \makebox[\widthof{$E_0\d_{ij}\d_{ab}+f_{ab}\d_{ij}-f_{ij}\d_{ab}+\ip{aj||ib}$}][r]{$\ip{aj||ib}$} when $i\neq j$ and $a\neq b$
+    \item \makebox[\widthof{$E_0\d_{ij}\d_{ab}+f_{ab}\d_{ij}-f_{ij}\d_{ab}+\ip{aj||ib}$}][r]{$f_{ab}\d_{ij}+\ip{aj||ib}$} when $i=j$ and $a\neq b$
+    \item \makebox[\widthof{$E_0\d_{ij}\d_{ab}+f_{ab}\d_{ij}-f_{ij}\d_{ab}+\ip{aj||ib}$}][r]{$-f_{ij}\d_{ab}+\ip{aj||ib}$} when $i\neq j$ and $a=b$
+    \item \makebox[\widthof{$E_0\d_{ij}\d_{ab}+f_{ab}\d_{ij}-f_{ij}\d_{ab}+\ip{aj||ib}$}][r]{$E_0\d_{ij}\d_{ab}+f_{ab}\d_{ij}-f_{ij}\d_{ab}+\ip{aj||ib}$} when $i=j$ and $a=b$
+  \end{enumerate}
+  \item Assuming a canonical Hartree-Fock reference, show that the matrix elements of $\bo{\tl{H}}$ are given by the following expression.
+\begin{align}
+&&
+  \ip{\F_i^a|\op{H}_e-E_0|\F_j^b}
+=
+  (\ev_a-\ev_i)\d_{ij}\d_{ab}
++
+  \ip{aj||ib}
+\end{align}
+\end{enumerate}
+
+
+\end{document}

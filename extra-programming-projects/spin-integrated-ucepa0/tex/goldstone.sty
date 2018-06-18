@@ -1,0 +1,231 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{goldstone}
+\RequirePackage{tikz,kvoptions,etoolbox}
+\SetupKeyvalOptions{family=size,prefix=size@}
+\DeclareStringOption[0.85]{scale}[0.85]
+\ProcessKeyvalOptions*
+
+\usetikzlibrary{fit}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.pathreplacing}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+\tikzset{
+  ->-/.style={
+    semithick,
+    decoration={
+      markings,
+      mark=at position #1 with {
+        \draw (-0.03,-0.05)--(+0.03,0)--(-0.03,+0.05);
+      }
+    },
+    postaction={decorate}
+  },
+  -<-/.style={
+    semithick,
+    decoration={
+      markings,
+      mark=at position #1 with {
+        \draw (+0.03,-0.05)--(-0.03,0)--(+0.03,+0.05);
+      }
+    },
+    postaction={decorate}
+  },
+  ->-/.default=0.5,
+  -<-/.default=0.5,
+  overhang/.style={
+    semithick,
+    line cap=round,
+    shorten >=-0.17cm,
+    shorten <=-0.17cm,
+    decoration={
+      markings,% switch on markings
+      mark=at position 0 with {\coordinate (start) at (0,0);},
+      mark=at position 1 with {% hack to make 0-length line horizontal -- only works
+        \coordinate (end) at (0.00001,0);% for \draw[overhang], not \node[overhang]
+        \draw [semithick,line cap=round,shorten >=-0.17cm,shorten <=0.17cm]
+          (start)--(end)--(start);
+      }
+    },
+    postaction={decorate}
+  },
+  sawtooth/.style={
+    decoration={zigzag, segment length=0.2cm,amplitude=1pt},
+    decorate
+  },
+  wiggly/.style={
+    decoration={snake, segment length=0.2cm,amplitude=1pt},
+    decorate
+  },
+  smalldot/.style={
+    inner sep=0pt,
+    circle,
+    minimum size=0.3ex,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \draw[draw=#1,fill=#1] (0,0) circle (0.15ex);
+      \end{pgfonlayer}
+    }
+  },
+  smalldot/.default={black},
+  dot/.style={
+    inner sep=0pt,
+    circle,
+    minimum size=0.66ex,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \draw[draw,fill=#1] (0,0) circle (0.33ex);
+      \end{pgfonlayer}
+    }
+  },
+  ddot/.style={
+    inner sep=0pt,
+    circle,
+    minimum size=0.9ex,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \draw[draw,double,fill=#1] (0,0) circle (0.45ex);
+      \end{pgfonlayer}
+    }
+  },
+  dot/.default={black},
+  ddot/.default={black},
+  flexdot/.style 2 args={
+    inner sep=0pt,
+    circle,
+    minimum size=2*#1,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \draw[draw,fill=#2] (0,0) circle (#1);
+      \end{pgfonlayer}
+    }
+  },
+  flexddot/.style 2 args={
+    inner sep=0pt,
+    circle,
+    minimum size=2*#1,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \draw[draw,double,fill=#2] (0,0) circle (#1);
+      \end{pgfonlayer}
+    }
+  },
+  flexdot/.default={0.33ex}{black},
+  flexddot/.default={0.45ex}{black},
+  ex/.style={
+    path picture={
+      \draw(path picture bounding box.south east)--(path picture bounding box.north west)
+           (path picture bounding box.south west)--(path picture bounding box.north east);
+    }
+  },
+  plus/.style={
+    path picture={
+      \draw(path picture bounding box.south)--(path picture bounding box.north)
+           (path picture bounding box.east) --(path picture bounding box.west) ;
+    }
+  },
+  circlex/.style={
+    inner sep=0pt,
+    circle,
+    minimum size=0.25cm,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \draw[ex,fill=white] (0,0) circle (0.125cm);
+      \end{pgfonlayer}
+    }
+  },
+  circlep/.style={
+    inner sep=0pt,
+    circle,
+    minimum size=0.25cm,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \draw[plus,fill=white] (0,0) circle (0.125cm);
+      \end{pgfonlayer}
+    }
+  },
+  squarex/.style={
+    inner sep=0pt,
+    minimum size=0.333cm,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \node[draw,fill=white,ex,regular polygon, regular polygon sides=4, minimum width=0.333cm] at (0,0) {};
+      \end{pgfonlayer}
+    }
+  },
+  squarep/.style={
+    inner sep=0pt,
+    minimum size=0.333cm,
+    path picture={
+      \begin{pgfonlayer}{foreground}
+        \node[draw,fill=white,plus,regular polygon, regular polygon sides=4, minimum width=0.333cm] at (0,0) {};
+      \end{pgfonlayer}
+    }
+  },
+  framenodes/.style args={#1:#2}{
+    draw=#1,
+    rounded corners=5pt,
+    inner sep=5pt,
+    fit=#2
+  },
+  partial ellipse/.style args={#1:#2:#3}{
+    insert path={+ (#1:#3) arc (#1:#2:#3)}
+  },
+  flexdotted/.style args={#1per #2}{%
+    line cap=round,
+    dash pattern=on 0 off #2/#1
+  },
+  flexdotted/.default={15 per 1cm}
+}
+\newcommand{\padborder}[1]{
+  \draw[line width=#1,opacity=0] (current bounding box.south east) rectangle
+                                 (current bounding box.north west);
+}
+\newcommand{\frameit}[1]{
+  \renewcommand*{\do}[1]{
+    \ifstrequal{##1}{top}{
+      \def\applypadding{}
+    }{}
+    \ifstrequal{##1}{bottom}{
+      \def\applypadding{}
+    }{}
+  }
+  \docsvlist{#1}
+  \ifdefined\applypadding
+    \padborder{5pt};
+  \else
+    % don't do anything
+  \fi
+  \coordinate (tl) at (current bounding box.north west);
+  \coordinate (tr) at (current bounding box.north east);
+  \coordinate (bl) at (current bounding box.south west);
+  \coordinate (br) at (current bounding box.south east);
+  \renewcommand*{\do}[1]{
+    \ifstrequal{##1}{top}{
+      \draw[double, thick] (tl) --(tr);
+    }{}
+    \ifstrequal{##1}{bottom}{
+      \draw[double, thick] (bl)--(br);
+    }{}
+  }
+  \docsvlist{#1}
+}
+\newcommand{\diagram}[2][none]{
+  \begin{tikzpicture}[baseline=-2.5pt,scale=\size@scale,every node/.style={scale=\size@scale,font=\small}]
+    #2
+    \frameit{#1};
+  \end{tikzpicture}
+}
+\newcommand{\interaction}[5]{
+  \draw[#5] #3 to ++(#1-1,0);
+  \foreach \i in {1,...,#1}{
+    \node[#4] (#2\i) at ($#3 + (\i-1,0)$){};
+  }
+}
+
+\endinput

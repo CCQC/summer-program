@@ -1,0 +1,34 @@
+# doublet H2O+
+
+molecule mol {
+  1 2
+  O
+  H 1 0.96
+  H 1 0.96 2 104.5
+}
+
+set {
+  basis sto-3g
+  e_convergence 12
+  scf_type pk
+  maxiter 50
+  reference uhf
+}
+
+basisname = psi4.core.get_global_option("BASIS")
+basisset  = psi4.core.BasisSet.build(mol, "BASIS", basisname)
+mints     = psi4.core.MintsHelper(basisset)
+
+# Call your Hartree-Fock code here
+import sys
+sys.path.insert(0, '.')
+
+from uhf import UHF
+
+uhf = UHF(mol, mints)
+uhf.compute_energy()
+
+# check your answer
+print('Compare to:')
+print('{:28.15f}'.format(energy('scf')))
+
