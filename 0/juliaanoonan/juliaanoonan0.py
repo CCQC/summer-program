@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, '../../extra-files')
 import masses  #provides functions get_mass and get_charge
-import numpy  #lets me make an array later
+import numpy as np#lets me make an array later
 
 class Molecule:
 
@@ -11,7 +11,7 @@ class Molecule:
         self.xyz = xyzfile
 
         self.natom = int(lines[0]) #first line = num of atoms
-        
+
         if len(lines) != (self.natom + 2):
             print("Error: incorrectly formatted xyz file")
             return
@@ -24,7 +24,7 @@ class Molecule:
         self.labels = []
         for line in lines[2:]:  #from the third line to the end
             self.labels = self.labels + [line[0]] #append the first character
-            
+
         self.masses = [masses.get_mass(i) for i in self.labels] #creates a list of the masses
 
         self.charges = [masses.get_charge(i) for i in self.labels] #creates a list of the charges
@@ -36,7 +36,7 @@ class Molecule:
             for i in range(len(newline)):
                 newline[i] = float(newline[i])  #converting to float
             fgeoms = fgeoms + [newline]  #a list of lists of the xyz values
-        self.geoms = numpy.array(fgeoms)  #making an array out of the list of lists
+        self.geoms = np.array(fgeoms)  #making an array out of the list of lists
 
     def to_bohr(self):
         if self.units == "Angstrom":
@@ -50,14 +50,24 @@ class Molecule:
 
 
     def xyz_string(self):
-        with open(self.xyz,"r") as f:
-            thestring = f.read()  #reads the file in a string
-        return thestring
+        string = ""
+        string += "{:d} \n".format(self.natom)
+        string += "{:} \n".format(self.units)
+        geoms = np.ndarray.copy(self.geoms)
+        geoms = np.ndarray.tolist(geoms)
+        for i in range(len(self.labels)):
+            string += "{:}  ".format(self.labels[i])
+            for j in range(3):
+                string += "{:<20.15f}".format(geoms[i][j])
+            string += '\n'
+        return string
 
     def copy(self):
-        molecule = Molecule(self.xyz)
-        return molecule
-        
+       with open("new.xyz",'w+') as f:
+            f.write(self.xyz_string())
+       molecule = Molecule("new.xyz")
+       return molecule
+
 if __name__ == "__main__":
     water = Molecule("../../extra-files/molecule.xyz")  #create the water
     print(water.units)  #printing the member variables
@@ -83,5 +93,3 @@ if __name__ == "__main__":
     water.to_bohr() #changing water's units
     print(water5.units) #but water5 is unchanged!
 
-            
-         
