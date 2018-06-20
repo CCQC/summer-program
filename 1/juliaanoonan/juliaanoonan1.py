@@ -9,7 +9,6 @@ import masses
 def frequencies(mol,Hess):
 
 #3 build the mass-weighted Hessian (do simple example to convince yourself)
-
     mas = np.array(np.repeat(mol.masses, 3) ** -0.5)
     mas = np.diag(mas)
     MwH = mas @ Hess @ mas
@@ -58,7 +57,7 @@ def frequencies(mol,Hess):
             z = coord[3]
            # x, y, z = [coord][1], coord[2], coord[3]
             dx, dy, dz = Q[j:j+7:3,i]   #getting these from the eigenvectors in normal coords
-            line = '{:<3}{:>15}{:>15}{:>15}{:>25}{:>25}{:>25}'.format(mol.labels[j],x,y,z,dx,dy,dz)
+            line = '{:<3}{:>15}{:>15}{:>15}{:>25.20f}{:>25.20f}{:>25.20f}'.format(mol.labels[j],x,y,z,dx,dy,dz)
             out += line+'\n'
         out += '\n'
 
@@ -71,7 +70,6 @@ def frequencies(mol,Hess):
 if __name__ == '__main__':
     sys.path.insert(0, '../../0/juliaanoonan')
     from juliaanoonan0 import Molecule
-    sys.path.insert(0, '../../extra-files')
 
 #1 read in and build the Hessian
 
