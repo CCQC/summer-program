@@ -20,22 +20,21 @@ class Molecule(object):
 	
 	def read(self, geom_str):
 		#Read in the file containing the geometry of the molecule in question
-		print("\n" + "MOLECULE INFORMATION" + "\n")
+		#print("\n" + "MOLECULE INFORMATION" + "\n")
 		geom = []
 		self.labels = []
 		self.masses = []
 		self.charges = []
 		lines = geom_str.strip().splitlines()
 		self.natom = int(lines[0])
-		print("Number of atoms: " + str(self.natom) + "\n")
-		print("Units are currently in: " + self.units + "\n")
+		#print("Number of atoms: " + str(self.natom) + "\n")
+		#print("Units are currently in: " + self.units + "\n")
 		for line in lines[2:]:
 			atom, x, y, z = line.split() 
 			self.labels.append(atom) 
 			geom.append([float(x), float(y), float(z)])
 		self.geom = np.array(geom)	
-		print("Atoms: " + str(self.labels)+ "\n")
-		
+		#print("Atoms: " + str(self.labels)+ "\n")
 		#Reading in the masses and charges of the atoms from the .xyz file
 		
 		for x in self.labels:
@@ -43,14 +42,26 @@ class Molecule(object):
 			self.charges.append(get_charge(x))
 		y = 0
 		for x in self.labels:
-			print("Mass of " + x + " is: " + str(self.masses[y]))
-			print("Charge of " + x + " is: " + str(self.charges[y]))
+			#print("Mass of " + x + " is: " + str(self.masses[y]))
+			#print("Charge of " + x + " is: " + str(self.charges[y]))
 			y += 1
-		print("\n")
-		print("Molecular Geometry in: " + self.units + "\n")
-		print(self.geom)
+		#print("\n")
+		#print("Molecular Geometry in: " + self.units + "\n")
+		#print(self.geom)
 
+		return self.geom, self.natom, self.labels	
 
+	def xyz_string(self):
+		string = ''
+		i=0
+		string += str(self.natom) + '\n' + str(self.units) + '\n'
+		for n in self.labels:
+			string += n + "  " + str(self.geom[i]) + '\n'
+			i+=1
+		print(string)
+		return string
+
+	
 	#UNIT CONVERSION FUNCTIONS
 
 	def to_bohr(self):
@@ -72,15 +83,14 @@ class Molecule(object):
 	#Create fresh copy of Molecule object
 	
 	def copy(self):
-		x = Molecule(self.read(geom_str))
-		return x			
+		return Molecule(self.xyz_string(), self.units)			
 		
 #Used to test the functions above
 
 if __name__ == "__main__":	
 	file1 = open("../../extra-files/molecule.xyz").read()
 	mol = Molecule(file1, "Angstrom")
-	
+	mol.xyz_string()	
 	#Testing unit conversion functions
 	mol.to_bohr()
 	print("\n" + "Units have now been converted to: " + mol.units)
