@@ -1,9 +1,5 @@
 #This is the first code I've ever written in python... maybe it works! 
-<<<<<<< HEAD
-#Ryan Maynard
-=======
 #By Ryan Maynard
->>>>>>> eb020fabe0d3c916959d7f72da6bd4165d494b37
 import copy
 import numpy
 from masses import get_charge, get_mass
@@ -26,14 +22,15 @@ class Molecule:
         geom = []
         #here I am breaking up the "pieces" inside the list "info" which is a list consisting of each line of the xyz file
         for piece in info[2:]:
-            piece = piece.split()
-            #This appends the first string (the actual atom label) to the list "atom_label"
-            atom_labels.append(piece[0])
-            #I made a "temporary list" to help myself think through the process of converting the string coordinates in the mini-list to floats so that they can be used later in out to_bohr and to_angstrom functions 
-            temp_list = [float(x) for x in piece[1:]]
-            #I then appended to the fittingly-named list, "geom"
-            geom.append(temp_list)
-        
+            if not piece.strip():
+                piece = piece.split()
+                #This appends the first string (the actual atom label) to the list "atom_label"
+                atom_labels.append(piece[0])
+                #I made a "temporary list" to help myself think through the process of converting the string coordinates in the mini-list to floats so that they can be used later in out to_bohr and to_angstrom functions 
+                temp_list = [float(x) for x in piece[1:]]
+                #I then appended to the fittingly-named list, "geom"
+                geom.append(temp_list)
+            
         self.atom_labels = atom_labels
         self.geom = numpy.array(geom)
         
@@ -48,24 +45,20 @@ class Molecule:
         if self.units == "angstrom" or "Angstrom" or "Angstroms" or "angstroms":
             self.geom = self.geom*1.8897259886
             self.units = "Bohr"
-            return self.geom
 
 
     #opposite of to_bohr
     def to_angstrom(self):
         if self.geom == "bohr" or "Bohr" or "Bohrs" or "bohrs":
             angstrom_geom = self.geom/1.8897259886
+            selg.geom = angstrom_geom
             self.units = "Angstrom"
-            return self.geom
-            return self.units
 
 #this just returns the initial string with "new line" stripped
     def xyz_string(self):
-        new_file = open("New_File.xyz", "w")
-        for line in self.info:
-            new_file.write("%s\n" % line)
-        new_file.close()
-
+                print(self.num_atoms)
+                print(self.units)
+                print(self.geom)
 
     def copy(self): 
         new_copy = copy.deepcopy(self)
@@ -76,7 +69,7 @@ class Molecule:
 if __name__ == "__main__":
 
 #I added some spaces and labels because it made me able to think through the process better and ensure the correct data was printing where desired 
-    my_mol = Molecule("o-benzyne.xyz")
+    my_mol = Molecule("molecule.xyz")
     print("Units = " + my_mol.units)
     print( )
     print("Number of Atoms = " + my_mol.num_atoms)
