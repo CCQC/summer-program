@@ -51,7 +51,7 @@ class Molecule:
     def to_angstrom(self):
         if self.geom == "bohr" or "Bohr" or "Bohrs" or "bohrs":
             angstrom_geom = self.geom/1.8897259886
-            selg.geom = angstrom_geom
+            self.geom = angstrom_geom
             self.units = "Angstrom"
 
 #this just returns the initial string with "new line" stripped
