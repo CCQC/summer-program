@@ -22,7 +22,7 @@ class Molecule:
         geom = []
         #here I am breaking up the "pieces" inside the list "info" which is a list consisting of each line of the xyz file
         for piece in info[2:]:
-            if not piece.strip():
+            if not piece == " ":
                 piece = piece.split()
                 #This appends the first string (the actual atom label) to the list "atom_label"
                 atom_labels.append(piece[0])
