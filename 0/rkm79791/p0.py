@@ -56,9 +56,8 @@ class Molecule:
 
 #this just returns the initial string with "new line" stripped
     def xyz_string(self):
-                print(self.num_atoms)
-                print(self.units)
-                print(self.geom)
+        New_String = str(self.num_atoms) + "\n" + str(self.units) + "\n" + str(self.geom) 
+        return New_String
 
     def copy(self): 
         new_copy = copy.deepcopy(self)
