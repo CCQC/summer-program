@@ -20,6 +20,8 @@ class MP2:
 		self.C     = uhf.C
 		self.uhf   = uhf
 		self.df    = int( options['MP2']['df'] )
+
+		self.G     = uhf.G - uhf.G.transpose(( 0,1,3,2 ))
 		self.Gmo   = self.transformTEI( uhf.G, uhf.C )	
 
 		self.dfBasisName = ""
@@ -116,4 +118,3 @@ if __name__ == '__main__':
 	mp2 = MP2( config )
 	print( mp2.psiMP2(config) )
 	print( mp2.computeEnergy() )
-	#print( "{:.12f}".format( mp2.computeEnergy() ) )

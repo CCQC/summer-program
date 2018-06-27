@@ -2,8 +2,9 @@
 
 import copy
 import numpy
+import os
 import sys
-sys.path.insert(0, '../../extra-files')
+sys.path.insert(0, os.path.join(sys.path[0], "..", "..", "extra-files"))
 import masses
 
 def filename_to_lines(filename):
