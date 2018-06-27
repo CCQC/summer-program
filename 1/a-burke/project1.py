@@ -13,20 +13,23 @@ import scipy.constants as sci
 import math
 
 #Read in hessian matrix
-h = open('../../extra-files/hessian.dat').read()
+with open('../../extra-files/hessian.dat') as h:
+	h = h.read()
 h = h.split()
 for i in range(len(h)):
-    h[i] = float(h[i])
+	h[i] = float(h[i])
 h = np.array(h)
 
-geometry = open('../../extra-files/molecule.xyz').read()
+with open('../../extra-files/molecule.xyz') as geometry:
+	geometry = geometry.read()
 temp = []
 geometry = geometry.split()	
 temp.append(geometry)
 
 
 #Read in molecule.xyz
-geom = open('../../extra-files/molecule.xyz').read()
+with open('../../extra-files/molecule.xyz') as geom:
+	geom = geom.read()
 
 #Build a Molecule object from molecule.xyz
 mol = Molecule(geom, "Angstrom")
@@ -68,35 +71,29 @@ def frequencies(mol, h):
 	x=''
 	q = np.array(q)
 	y = mol.natom
-	b = 3
-	c = 4
-	d = 5
-	num = 0
-	val = 0
-	val1 = 1
-	val2 = 2
 	for i in range(len(con)):
+		s = str(con[i])
 		x += "\n"
 		x += str(y) + "\n"	
-		x += '{:f}\n'.format(con[i])
-		val = 0
-		val1 = 1
-		val2 = 2
-		a = 0
-		b = 3
-		c = 4
-		d = 5
+		if s[-1] == 'j':
+			s = s.replace('j','i')
+			x += s + '\n'
+		elif s[0] == '(':
+			for n in s:
+				s = s.replace('(','')
+				s = s.replace(')','')
+				s = s.replace('+0j','')
+			x += s + '\n'
+		val,val1,val2 = 0,1,2
+		a,b,c,d = 0,3,4,5
 		for j in range(len(mol.labels)):
-			x += str(mol.labels[j]) + "  "
-			x += str(temp[a][b]) +   "  " + str(temp[a][c]) + "  " + str(temp[a][d]) + "  " +  str(q[num][val]) + "  " + str(q[num][val1]) + "  " + str(q[num][val2])
+			x += str(mol.labels[j]) + "  " + str(temp[a][b]) +   "  " + str(temp[a][c]) + "  " + str(temp[a][d]) + "  " +  str(q[i][val]) + "  " + str(q[i][val1]) + "  " + str(q[i][val2]) + '\n'
 			b += 4
 			c += 4
 			d += 4
 			val += 3
 			val1 += 3
 			val2 += 3
-			x += '\n'
-		num += 1
 	
 	file = open('output.dat', 'w')
 	file.write(str(x))
