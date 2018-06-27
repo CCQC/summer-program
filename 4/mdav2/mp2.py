@@ -6,7 +6,6 @@ import rhf
 
 def mp2(C, g, e, nocc):
 #Calculates mp2 (moller-plesset @ 2nd order) correlation energy.
-#ONLY WORKS FOR RHF REFERENCE
 #Takes in a coefficient matrix (C), two-electron integrals (g),
 #orbital energies (e), and an occupation number (nocc)
     phi = np.einsum('pQRS,pP->PQRS',

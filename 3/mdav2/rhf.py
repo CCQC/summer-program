@@ -28,7 +28,6 @@ def rhf(mol, basis='sto-3g', dE_crit=1E-6, iterlim=100):
     g = np.asarray(mints.ao_eri())
     h = T + V
 
-#is there a mistake here? VVVVVVVVVV
 #form two-e int. (g) and transpose (gt) in physicists notation
     g = g.transpose(0,2,1,3)
     gt = g.transpose(0,1,3,2)
@@ -73,5 +72,15 @@ if __name__ == "__main__":
     H 1 0.96
     H 1 0.96 2 104.5 
     """)
-    E, msg, C, g, e, nocc = rhf(mol, basis='sto-3g', iterlim=500) 
+    #silence psi4 and make scf_type pk to match this code
+    psi4.core.be_quiet()
+    psi4.set_options({'scf_type':'pk'})
+
+    E, msg, C, g, e, nocc = rhf(mol, basis='sto-3g', iterlim=500, dE_crit=1E-8) 
+    psi_energy=psi4.energy('scf/sto-3g',molecule=mol)
+    dE=E-psi_energy
+    psi_match=abs(dE)<1E-6 #agreement between psi4 and this code?
+
     print("E: {}\nMessage: {}".format(E, msg)) 
+    print("PSI4_E: {}\n".format(psi_energy))
+    print("dE: {}\nMatch: {}\n".format(dE,psi_match))
