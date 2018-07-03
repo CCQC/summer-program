@@ -40,7 +40,6 @@ class rhf(object):
 
 
         self.h = self.T + self.V
-        np.save("g",self.g)
 
         # form nu 
 
@@ -56,11 +55,11 @@ class rhf(object):
 
         self.iter = 0
 
-        self.nonConvergence = True
+        self.Convergence = False
 
     def toconverge(self):  #could easily add parameter of level of convergence
 
-        while self.nonConvergence:
+        while self.Convergence != True:
 
             self.oldf = np.copy(self.f)
             self.oldD = np.copy(self.D)
@@ -101,8 +100,8 @@ class rhf(object):
             print(self.E)
 
             if self.iter > 1:  # so that it has at least two cycles to get away from zero
-               if abs(self.E - self.oldE) < 0.0000000001:
-                   self.nonConvergence = False
+               if abs(self.E - self.oldE) < 0.0000000001 and np.allclose(self.oldD, self.D, rtol=1e-04, atol=1e-07, equal_nan=True):
+                   self.Convergence = True
 
             self.iter += 1
 
