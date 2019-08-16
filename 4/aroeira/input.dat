@@ -13,9 +13,9 @@ set {
 }
 
 
-basisname = psi4.get_global_option("BASIS")
-basisset = psi4.BasisSet.pyconstruct_orbital(mol, "BASIS", basisname)
-mints = psi4.MintsHelper(basisset)
+basisname = psi4.core.get_global_option("BASIS")
+basis = psi4.core.BasisSet.build(mol, target=str(basisname), key='basis')
+mints = psi4.core.MintsHelper(basis) 
 
 # call RHF code
 from proj4 import MP2
@@ -23,8 +23,8 @@ mp2 = MP2(mol, mints)
 mp2.compute_energy()
 mp2.mp2_energy()
 
-print 'HF Energy: ' + str(mp2.ehf)
-print 'MP2 ENergy: ' + str(mp2.emp2)
-print 'Total Energy: ' + str(mp2.ehf + mp2.emp2)
+print('HF Energy: ' + str(mp2.ehf))
+print('MP2 ENergy: ' + str(mp2.emp2))
+print('Total Energy: ' + str(mp2.ehf + mp2.emp2))
 
 

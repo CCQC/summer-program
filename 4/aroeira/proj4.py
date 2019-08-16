@@ -31,10 +31,10 @@ class RHF:
             self.nelec += int(mol.Z(A))
         if mol.multiplicity() != 1 or self.nelec % 2:
             raise Exception("This code only allows closed-shell molecules")
-        self.ndocc = self.nelec / 2
+        self.ndocc = int(self.nelec / 2)
 
-        self.maxiter = psi4.get_global_option('MAXITER')
-        self.e_convergence = psi4.get_global_option('E_CONVERGENCE')
+        self.maxiter = psi4.core.get_global_option('MAXITER')
+        self.e_convergence = psi4.core.get_global_option('E_CONVERGENCE')
         self.nbf = mints.basisset().nbf()
         self.vu = np.matrix(np.zeros((self.nbf, self.nbf)))
     
@@ -57,9 +57,9 @@ class RHF:
             G = 2*self.g - self.g.swapaxes(2,3)
             self.vu = np.einsum('upvq,qp->uv', G, D) 
             E1 = np.sum((2 * np.array(h) + np.array(self.vu))*np.array(D.T)) + self.V_nuc
-            psi4.print_out('Iteration {:<d}   {:.10f}    {:.10f}\n'.format(count, E1, E1-E0))
+            psi4.core.print_out('Iteration {:<d}   {:.10f}    {:.10f}\n'.format(count, E1, E1-E0))
             if abs(E1 - E0) < self.e_convergence:
-                psi4.print_out('\nFinal HF Energy: {:<5.10f}'.format(E1))
+                psi4.core.print_out('\nFinal HF Energy: {:<5.10f}'.format(E1))
                 self.C = C
                 self.epsi = e
                 self.ehf = E1
@@ -67,7 +67,7 @@ class RHF:
             else:
                 E0 = E1
         else:
-            psi4.print_out('\n:(   Does not converge   :(')
+            psi4.core.print_out('\n:(   Does not converge   :(')
 
 class MP2(RHF):
 
@@ -80,6 +80,6 @@ class MP2(RHF):
                     for B in range(self.ndocc, len(self.epsi)):
                         E2 += (self.G[I, J, A, B]*(2*self.G[I, J, A, B] - self.G[I, J, B, A]))/(self.epsi[I] + self.epsi[J] - self.epsi[A] - self.epsi[B])
         self.emp2 = E2
-        psi4.print_out('\nMP2 Energy: {:<5.10f}'.format(self.emp2))
-        psi4.print_out('\nTotal Energy: {:<5.10f}'.format(self.ehf + self.emp2))
+        psi4.core.print_out('\nMP2 Energy: {:<5.10f}'.format(self.emp2))
+        psi4.core.print_out('\nTotal Energy: {:<5.10f}'.format(self.ehf + self.emp2))
         return self.emp2
