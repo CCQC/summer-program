@@ -1,0 +1,32 @@
+import sys
+sys.path.append('.')
+
+molecule mol {
+0 1
+O       
+H 1 0.989562
+H 1 0.989562 2 99.984796
+symmetry c1
+}
+
+set { 
+basis sto-3g
+e_convergence 1.e-10
+maxiter 100
+scf_type pk
+}
+
+energy('scf')
+e_rhf = variable('SCF TOTAL ENERGY')
+
+basisname = psi4.core.get_global_option('basis')
+basis = psi4.BasisSet.build(mol,'BASIS', basisname)
+mints = psi4.MintsHelper(basis)
+e_conv = psi4.core.get_global_option('e_convergence')
+maxiter = psi4.core.get_global_option('maxiter')
+
+from rhf import RHF
+
+rhf = RHF(mol,mints)
+rhf.optimize_energy(e_conv,maxiter,True)
+print('PSI4 Final Energy: {:> 20.14f}'.format(e_rhf))

@@ -1,0 +1,60 @@
+#!/bin/python
+
+import sys
+import numpy as np
+from numpy import linalg as LA
+from scipy import linalg as SLA
+
+class UMP2(object):
+        def __init__(self,uhf):
+                # Alpha #
+                self.Ca = uhf.Ca   # Alpha MO coefficients from Fock diagonalization
+                self.nrga = uhf.nrga   # Alpha energies from Fock diagonalization
+                self.nalpha =uhf.nalpha   # Number of alpha spin orbitals
+                # Beta #
+                self.Cb = uhf.Cb   # Beta MO coefficients from Fock diagonalization
+                self.nrgb = uhf.nrgb   # Beta energies from Fock diagonalization
+                self.nbeta = uhf.nbeta   # Number of beta spin orbitals
+                # General #
+                self.G = uhf.g   # Electron-electron repulsion integrals
+                self.nbf = uhf.norb   # Number of (spatial) orbitals = number of basis functions
+
+        def ao2mo(self):
+                # Alpha #
+                CoccA_conj = np.conj(self.Ca[:,:self.nalpha])   # Complex conjugate of the occupied alpha MO coefficients
+                CvirA = self.Ca[:,self.nalpha:]   # Virtual alpha MO coefficients
+                self.ijabA = np.einsum('mnrs,mi,nj,ra,sb -> ijab', self.G, CoccA_conj, CoccA_conj, CvirA, CvirA)   # Creates the integral representing double excitations
+                # Beta #
+                CoccB_conj = np.conj(self.Cb[:,:self.nbeta])   # Complex conjugate of the occupied beta MO coefficients
+                CvirB = self.Cb[:,self.nbeta:]   # Virtual beta MO coefficients
+                self.ijabB = np.einsum('mnrs,mi,nj,ra,sb -> ijab', self.G, CoccB_conj, CoccB_conj, CvirB, CvirB)   # Creates the integral representing double excitations
+
+        def ump2_energy(self):
+                self.ao2mo()
+                # Alpha # 
+                abijA = np.transpose(self.ijabA,(2,3,0,1))   # Conjugate of the MO integral
+                EoccA = self.nrga[:self.nalpha]   # Orbital energies of occupied orbitals
+                EvirA = self.nrga[self.nalpha:]   # Orbital energies of virtual orbitals
+                # Beta #
+                abijB = np.transpose(self.ijabB,(2,3,0,1))   # Conjugate of the MO integral
+                EoccB = self.nrgb[:self.nbeta]   # Orbital energies of occupied orbitals
+                EvirB = self.nrgb[self.nbeta:]   # Orbital energies of virtual orbitals
+                # General #
+                nocc = self.nalpha + self.nbeta
+                nvirA = self.nbf - self.nalpha
+                nvir = (2 * self.nbf) - (nocc)
+                ijab = np.zeros((nocc,nocc,nvir,nvir))
+                ijab[:self.nalpha,:self.nalpha,:nvirA,:nvirA] = self.ijabA
+                ijab[self.nalpha:,self.nalpha:,nvirA:,nvirA:] = self.ijabB
+                abij = np.zeros((nvir,nvir,nocc,nocc))
+                abij[:nvirA,:nvirA,:self.nalpha,:self.nalpha] = abijA
+                abij[nvirA:,nvirA:,self.nalpha:,self.nalpha:] = abijB
+                Eocc = np.append(EoccA,EoccB)
+                Evir = np.append(EvirA,EvirB) 
+                E_2 = 0
+                for i in range(nocc):   # Nested loop represents all possible double excitations
+                        for j in range(nocc): 
+                                for a in range(nvir):
+                                        for b in range(nvir):
+                                                E_2 += (ijab[i,j,a,b] * (abij[a,b,i,j] - abij[b,a,i,j])) / (Eocc[i] + Eocc[j] - Evir[a] - Evir[b])
+                return E_2   # Total MP2 Correlation Energy

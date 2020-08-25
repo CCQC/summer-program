@@ -1,0 +1,47 @@
+import sys
+sys.path.append('.')
+
+molecule mol {
+0 1
+O       
+H 1 0.989562
+H 1 0.989562 2 99.984796
+symmetry c1
+}
+
+set { 
+basis sto-3g
+e_convergence 1.e-10
+maxiter 100
+scf_type pk
+mp2_type conv
+}
+
+energy('mp2')
+e_rhf = variable('SCF TOTAL ENERGY')
+e_mp2 = variable('MP2 TOTAL ENERGY')
+e_corrmp2 = variable('MP2 CORRELATION ENERGY')
+
+basisname = psi4.core.get_global_option('basis')
+basis = psi4.BasisSet.build(mol,'BASIS', basisname)
+mints = psi4.MintsHelper(basis)
+e_conv = psi4.core.get_global_option('e_convergence')
+maxiter = psi4.core.get_global_option('maxiter')
+
+sys.path.append('../../3/emitchell/')
+from rhf import RHF
+rhf = RHF(mol,mints)
+E_rhf = rhf.optimize_energy(e_conv,maxiter,False)
+print('RHF Energy:  {:> 20.14f}'.format(E_rhf))
+print('PSI4 Energy: {:> 20.14f}'.format(e_rhf))
+print('')
+
+from mp2 import MP2
+mp2 = MP2(rhf)
+E_mp2 = mp2.mp2_energy()
+print('MP2 Correlation Energy:  {:> 20.14f}'.format(E_mp2))
+print('PSI4 Correlation Energy: {:> 20.14f}'.format(e_corrmp2))
+print('')
+
+print('MP2 Total Energy:  {:> 20.14f}'.format(E_rhf + E_mp2))
+print('PSI4 Total Energy: {:> 20.14f}'.format(e_mp2))
