@@ -1,0 +1,45 @@
+import sys
+sys.path.append('.')
+
+molecule mol {
+1 2
+O
+H 1 0.999 
+H 1 0.999 2 109.3
+}
+
+set { 
+basis sto-3g
+reference uhf
+e_convergence 1.e-10
+maxiter 500
+scf_type pk
+}
+
+energy('mp2')
+e_uhf = variable('SCF TOTAL ENERGY')
+e_ump2 = variable('MP2 TOTAL ENERGY')
+e_corrump2 = variable('MP2 CORRELATION ENERGY')
+
+basisname = psi4.core.get_global_option('basis')
+basis = psi4.BasisSet.build(mol,'BASIS', basisname)
+mints = psi4.MintsHelper(basis)
+e_conv = psi4.core.get_global_option('e_convergence')
+maxiter = psi4.core.get_global_option('maxiter')
+
+sys.path.append('../../5/emitchell/')
+from uhf import UHF
+uhf = UHF(mol,mints)
+E_uhf = uhf.optimize_energy(e_conv,maxiter,False)
+print('PSI4 Final Energy: {:> 20.14f}'.format(e_uhf))
+print('')
+
+from ump2 import UMP2
+ump2 = UMP2(uhf)
+E_ump2 = ump2.ump2_energy()
+print('UMP2 Correlation Energy:  {:> 20.14f}'.format(E_ump2))
+print('PSI4 Correlation Energy: {:> 20.14f}'.format(e_corrump2))
+print('')
+
+print('UMP2 Total Energy:  {:> 20.14f}'.format(E_uhf + E_ump2))
+print('PSI4 Total Energy: {:> 20.14f}'.format(e_ump2))

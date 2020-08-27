@@ -1,0 +1,33 @@
+import sys
+sys.path.append('.')
+
+molecule mol {
+1 2
+O
+H 1 0.999 
+H 1 0.999 2 109.3
+}
+
+set { 
+basis sto-3g
+reference uhf
+e_convergence 1.e-10
+maxiter 100
+scf_type pk
+}
+
+basisname = psi4.core.get_global_option('basis')
+basis = psi4.BasisSet.build(mol,'BASIS', basisname)
+mints = psi4.MintsHelper(basis)
+e_conv = psi4.core.get_global_option('e_convergence')
+maxiter = psi4.core.get_global_option('maxiter')
+
+sys.path.append('../../5/emitchell/')
+from uhf import UHF
+uhf = UHF(mol,mints)
+E_uhf = uhf.optimize_energy(e_conv,maxiter,False)
+print('')
+
+from cis import CIS
+cis = CIS(uhf)
+cis.get_energy(True,10)
