@@ -110,6 +110,9 @@ class Molecule(object):
 		if self.units != other.units:
 			sys.exit("Error: Files must have same units to be combined.")
 		self.labels = self.labels + other.labels
+		for i, j in enumerate(other.geom):
+                        for l, k in enumerate(j):
+                                other.geom[i][l] = str(float(k) + 1)
 		self.geom = np.concatenate((self.geom,other.geom), axis=0)
 		self.masses += other.masses
 		self.charges += other.charges

@@ -51,6 +51,6 @@ class CIS(object):
                         print("  {:5}  | {:^10}  |  {:s} (contributions above {:2.1f}%)".format("State","Energy","Excitations",lim))
                         print("-" * 72)
                         for i in range(len(Ek)):
-                                print("  {:5}  | {: 10.5f}  |{:s}".format(i,Ek[i],w[i]))
+                                print("  {:5}  | {: 10.5f}  |{:s}".format(i+1,Ek[i],w[i]))
                         print("-" * 72)
                 return Ek
