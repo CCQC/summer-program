@@ -78,15 +78,16 @@ tutorial](http://git-scm.com/book/en/v2/Getting-Started-About-Version-Control).
 
 A few helpful hints
 * The usual workflow is
-    - `git pull`
+    - `git fetch`
+    - `git rebase` or `git merge`
     - do some work
     - `git add my_files.ext`
     - `git commit -m "My message"`
     - `git push`
-* Always remember to use `git pull` before doing a `git push`, otherwise it 
+* Always remember to use `git fetch` and merge the incoming changes before doing a `git push`, otherwise it 
 may give you an error message if your local repository is not up to date with
 the one on github.
-* If you forgot to `git pull` before you committed your work and you did not
+* If you forgot to `git fetch` and merge the incoming changes before you committed your work and you did not
 edit the same files as anyone else (e.g. you only worked in your directory),
 run `git rebase` and it will reorganize commits to remove the unecessary merge.
 * When commiting code, always provide at least a one-line summary of the
